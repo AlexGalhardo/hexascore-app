@@ -63,8 +63,8 @@ VALUES ($1, 'game', $2, $3, $4, '2020-05-01', $5, $6)`,
 	page.HasProp("sections.1.pool", 0)
 }
 
-// TestHome_Trending30d: the carousel ranks new ratings over the last 30 days, then fills with the most rated items;
-// activity 40 days ago does not count (owner round 2026-11-01 item 26).
+// TestHome_Trending30d: with no snapshot yet (or FLAG_TRENDING_V2 off) the carousel ranks new ratings over the last 30
+// days, then fills with the most rated items; activity 40 days ago does not count (owner round 2026-11-01 item 26).
 func TestHome_Trending30d(t *testing.T) {
 	app := vukemtest.New(
 		t,
@@ -133,4 +133,68 @@ VALUES ($1, current_date - 40, 'game', 9000, 60)`, id)
 		PropEquals("trending.game.items.4.title", "Trend 4").
 		PropEquals("trending.game.items.4.basis", "prior").
 		HasProp("trending.movie.items", 0)
+}
+
+// homeSnapshotApp creates three games and a 7-day snapshot that ranks them in reverse creation order (pinned, trend,
+// prior), which the most-rated fallback would never produce.
+func homeSnapshotApp(t *testing.T, env map[string]string) *vukemtest.App {
+	t.Helper()
+
+	env["DATABASE_URL"] = pgtest.Database(t, "")
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env})
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	exec := func(q string, args ...any) {
+		t.Helper()
+
+		if _, err := db.ExecContext(t.Context(), q, args...); err != nil {
+			t.Fatalf("%s: %v", q, err)
+		}
+	}
+
+	exec(`INSERT INTO data_sources (code, name, licence, url) VALUES ('hexascore', 'x', 'proprietary', 'https://x')`)
+
+	ids := make([]string, 3)
+
+	for i := range ids {
+		ids[i] = uuid.NewV7().String()
+		exec(`INSERT INTO items (id, type, slug, wikidata_qid, release_date) VALUES ($1, 'game', $2, $3, '2020-05-01')`,
+			ids[i], fmt.Sprintf("snap-%d", i), fmt.Sprintf("Q%d", 8500+i))
+		exec(`INSERT INTO item_translations (item_id, locale, title, title_source) VALUES ($1, 'en', $2, 'hexascore')`,
+			ids[i], fmt.Sprintf("Snap %d", i))
+	}
+
+	for rank, basis := range []string{"pinned", "trend", "prior"} {
+		exec(`INSERT INTO trending_snapshots (computed_at, item_type, window_days, rank, item_id, trend_score, basis)
+VALUES (date_trunc('hour', now()), 'game', 7, $1, $2, 10, $3)`, rank+1, ids[2-rank], basis)
+	}
+
+	return app
+}
+
+// TestHome_TrendingFromSnapshot: the carousel is the latest 7-day snapshot, in rank order, with its basis (RFC-002).
+func TestHome_TrendingFromSnapshot(t *testing.T) {
+	app := homeSnapshotApp(t, map[string]string{})
+
+	app.Client(t).Inertia("").Get("/").AssertOK().AssertInertia("Home/Index").
+		HasProp("trending.game.items", 3).
+		PropEquals("trending.game.items.0.title", "Snap 2").
+		PropEquals("trending.game.items.0.basis", "pinned").
+		PropEquals("trending.game.items.1.title", "Snap 1").
+		PropEquals("trending.game.items.1.basis", "trend").
+		PropEquals("trending.game.items.2.title", "Snap 0").
+		PropEquals("trending.game.items.2.basis", "prior")
+}
+
+// TestHome_TrendingFlagOffRestoresMostRated: FLAG_TRENDING_V2=false is the rollback of RFC-002 section 8.
+func TestHome_TrendingFlagOffRestoresMostRated(t *testing.T) {
+	app := homeSnapshotApp(t, map[string]string{"FLAG_TRENDING_V2": "false"})
+
+	app.Client(t).Inertia("").Get("/").AssertOK().AssertInertia("Home/Index").
+		HasProp("trending.game.items", 3).
+		PropEquals("trending.game.items.0.title", "Snap 0")
 }

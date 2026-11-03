@@ -19,7 +19,7 @@ func (r *rig) snapshot(typ string) []string {
 	r.t.Helper()
 
 	rows, err := r.db.QueryContext(r.ctx, `SELECT rank, item_id::text, trend_score, basis FROM trending_snapshots
-WHERE item_type = $1 AND computed_at = $2 ORDER BY rank`, typ, now.Truncate(time.Hour))
+WHERE item_type = $1 AND window_days = 30 AND computed_at = $2 ORDER BY rank`, typ, now.Truncate(time.Hour))
 	if err != nil {
 		r.t.Fatal(err)
 	}

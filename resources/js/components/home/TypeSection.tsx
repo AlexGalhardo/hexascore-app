@@ -13,7 +13,7 @@ import Carousel from "./Carousel";
 
 export interface TrendingEntry extends Highlight {
 	rank: number;
-	basis: "trend" | "prior";
+	basis: "trend" | "prior" | "pinned";
 	/** Localized name of the item's primary genre, null when it has none. */
 	genre: string | null;
 }
@@ -168,7 +168,9 @@ function TrendCard({
 						<span
 							className={`text-2xl font-semibold group-hover:text-bg ${ACCENT_TEXT[type]}`}
 						>
-							{t("home.trendingRank", { rank: item.rank })}
+							{item.basis === "prior"
+								? t("home.trendingPopular")
+								: t("home.trendingRank", { rank: item.rank })}
 						</span>
 						<ScoreBadge score={item.score} size="md" />
 					</span>

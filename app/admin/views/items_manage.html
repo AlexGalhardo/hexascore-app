@@ -43,6 +43,30 @@
 	<button type="submit" class="button">Save link</button>
 </form>
 
+<h2>Trending</h2>
+<p class="muted">A pin puts the item first on the landing page of its type; a ban removes it from every trending list and the API. Both apply at the next hourly run. An empty date has no end.</p>
+{{if not .Trending}}<p class="muted">No pin or ban.</p>{{end}}
+<table>
+	<thead><tr><th>Kind</th><th>Until</th><th>Reason</th><th></th></tr></thead>
+	<tbody>
+	{{range .Trending}}
+	<tr>
+		<td>{{.Kind}}</td><td>{{if .Until}}{{.Until}}{{else}}no end{{end}}</td><td>{{.Reason}}</td>
+		<td><form method="post" action="/admin/items/{{$.Item.ID}}/trending/{{.ID}}/delete">{{csrfField}}<button type="submit" class="button danger">Remove</button></form></td>
+	</tr>
+	{{end}}
+	</tbody>
+</table>
+<form method="post" action="/admin/items/{{.Item.ID}}/trending" class="stack">
+	{{csrfField}}
+	<label>Kind
+		<select name="kind"><option value="pinned">Pin</option><option value="banned">Ban</option></select>
+	</label>
+	<label>Until (YYYY-MM-DD, optional) <input name="until" maxlength="10" placeholder="2026-12-31"></label>
+	<label>Reason <input name="reason" maxlength="200"></label>
+	<button type="submit" class="button">Save</button>
+</form>
+
 <h2>Merge into another item</h2>
 <p>Moves translations, entities, editions, links and user data to the target and deletes this item. It cannot be undone.</p>
 <form method="post" action="/admin/items/{{.Item.ID}}/merge" class="stack">

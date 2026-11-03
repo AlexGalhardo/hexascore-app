@@ -107,5 +107,6 @@ func All() []schema.Migration {
 		m20261102240000CreateCoverHashes(),
 		m20261102250000CreateIngestCostDaily(),
 		m20261102260000PartitionSourceRecordHistory(),
+		m20261103000000AddTrendingV2(),
 	}
 }

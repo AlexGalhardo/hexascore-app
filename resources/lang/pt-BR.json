@@ -724,6 +724,7 @@
     "popularType": "Populares: {type}",
     "popular": "Popular",
     "trendingRank": "#{rank} em alta",
+    "trendingPopular": "Popular",
     "carousel": {
       "label": "{type} em alta",
       "previous": "Slide anterior",
@@ -1656,6 +1657,8 @@
       "burst": "Um pico repentino de avaliações em um título limita temporariamente novas avaliações de contas recentes e exibe um aviso. A equipe revisa o pico e aprova ou exclui as avaliações afetadas.",
       "capsTitle": "Limites diários",
       "caps": "Cada conta pode adicionar um número limitado de novas avaliações e edições por dia.",
+      "trendingTitle": "Como funciona o em alta",
+      "trending": "A página inicial mostra, para cada categoria, os 12 itens que mais ganham atenção nesta semana. Cada dia soma pontos por novas avaliações (6 cada), concluídos (5), em andamento (4), adições a listas públicas (3,2), quero experimentar (3) e visualizações e cliques de busca, que valem metade e crescem por um logaritmo para que só o tráfego não leve um item longe. Dias mais antigos pesam menos, caindo pela metade a cada 3,5 dias, e lançamentos dos últimos 90 dias recebem um pequeno bônus, assim como a popularidade em alta no TMDB, IGDB, Open Library e Wikidata. Os itens são comparados com os da mesma categoria, então uma categoria mais lenta também preenche sua fileira. Um item entra com atividade de pelo menos 5 contas e uma pontuação claramente acima do nível típico da categoria, mantém o lugar por até 72 horas depois de se qualificar pela última vez, e aparecem no máximo 2 itens por franquia e 4 por gênero. Contas com menos de 7 dias pesam pouco; contas banidas e contas internas de teste não pesam nada. Quando menos de 12 itens se qualificam, os demais ficam marcados como Popular. A equipe pode fixar ou ocultar um item.",
       "versionsTitle": "Histórico de versões",
       "versions": "Mudanças na fórmula são anunciadas com pelo menos 14 dias de antecedência. A versão ativa é a versão 1."
     }

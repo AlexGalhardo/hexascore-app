@@ -94,6 +94,7 @@ type pageData struct {
 	Panel         panelData
 	Item          models.Item
 	Affiliates    []affiliateRow
+	Trending      []trendingRow
 	Ready         bool
 	Sources       []sourceRow
 	Runs          []runRow
@@ -212,6 +213,10 @@ func (h CatalogHandlers) Manage(c *web.Ctx) error {
 	}
 
 	if err := rows.Err(); err != nil {
+		return err
+	}
+
+	if d.Trending, err = h.trendingOverrides(c.Context(), id); err != nil {
 		return err
 	}
 

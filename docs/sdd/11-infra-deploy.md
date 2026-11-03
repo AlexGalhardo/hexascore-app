@@ -67,6 +67,8 @@ Retention: `ingest_host_state` holds one row per key (`web`, `worker`, `host:<na
 
 Retention: `ingest_job_keys` holds one row per automatic ingest dispatch and day; `run.Prune` (ingest prune task) deletes rows older than 7 days; no user data.
 
+Retention: `trending_snapshots` keeps 90 days, both windows (`recommend.prune_trending`, 04:45); `item_popularity_external` keeps 35 days (the home score reads today and 7 days back; same task); `trending_overrides` rows are deleted a year after their end date, open-ended ones stay (same task); `trending_overrides.admin_id` is an admin's users.id kept as a bare id (the purge keeps the users row). No user content.
+
 Retention of the operational tables without a prune of their own (audit T-17): job `ops.prune_retention` daily at 04:55, batches of 5,000 rows, windows in `config/retention.go`, each overridable with `RETENTION_<TABLE>_DAYS`.
 
 | Table | Kept | Column |

@@ -158,6 +158,10 @@ func Admin(r *router.Router, app *vukem.App) error {
 		Name("admin.items.affiliate.save").Use(moderator...)
 	r.Post("/admin/items/{id}/affiliate-links/{store}/delete", catalogH.DeleteAffiliateLink).
 		Name("admin.items.affiliate.delete").Use(moderator...)
+	r.Post("/admin/items/{id}/trending", catalogH.SaveTrendingOverride).
+		Name("admin.items.trending.save").Use(moderator...)
+	r.Post("/admin/items/{id}/trending/{override}/delete", catalogH.DeleteTrendingOverride).
+		Name("admin.items.trending.delete").Use(moderator...)
 	r.Post("/admin/items/{id}/merge", catalogH.Merge).Name("admin.items.merge").Use(moderator...)
 	applier := community.Applier{DB: acc.DB, Queue: q, Now: app.Now}
 	catalogH.Editor = &applier

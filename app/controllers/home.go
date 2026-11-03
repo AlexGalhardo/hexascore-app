@@ -16,11 +16,14 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/foryou"
+	"github.com/AlexGalhardo/hexascore-app/app/recommend/trending"
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
-// Home trending carousel (owner round 2026-11-01 item 26): the 12 most rated items per type over the last 30 days,
-// filled with the most rated items overall when fewer were rated in the window, held 5 minutes.
+// Home trending carousel (owner round 2026-11-01 item 26, RFC-002): the latest 7-day snapshot of each type, 12 items,
+// held 5 minutes and forgotten by ComputeTrending when a new snapshot lands. Until the first snapshot exists, or with
+// FLAG_TRENDING_V2 off, the carousel falls back to the 12 most rated items of the last 30 days (filled with the most
+// rated overall).
 const (
 	trendingTTL  = 5 * time.Minute
 	trendingDays = 30
@@ -67,9 +70,20 @@ func Home(app *vukem.App) web.HandlerFunc {
 				return err
 			}
 
-			trend, err = cache.Remember(c.Context(), store, "home:trending30:v1:"+locale, trendingTTL,
+			v2 := true
+
+			if ff, ferr := app.Flags(); ferr == nil {
+				v2 = ff.Enabled(c.Context(), trending.V2Flag)
+			}
+
+			key := trending.HomeCacheKey(locale)
+			if !v2 {
+				key += ":v1" // the rollback list must not serve, or be served by, the snapshot cache entry
+			}
+
+			trend, err = cache.Remember(c.Context(), store, key, trendingTTL,
 				func(ctx context.Context) (map[string]trendingSection, error) {
-					return homeTrending(ctx, db.SQL(), app.Now(), locale)
+					return homeTrending(ctx, db.SQL(), app.Now(), locale, v2)
 				})
 			if err != nil {
 				return err
@@ -146,13 +160,14 @@ func homeTrending(
 	db catalog.Querier,
 	now time.Time,
 	locale string,
+	v2 bool,
 ) (map[string]trendingSection, error) {
 	out := make(map[string]trendingSection, len(homeTypes))
 
 	for _, typ := range homeTypes {
 		sec := trendingSection{ComputedAt: now.UTC().Format(time.RFC3339), Items: []trendingEntry{}}
 
-		entries, err := mostRatedWindow(ctx, db, typ, now, trendingDays, trendingTop)
+		entries, err := homeEntries(ctx, db, typ, now, v2)
 		if err != nil {
 			return nil, err
 		}
@@ -233,6 +248,28 @@ ORDER BY ie.item_id, ie.position, e.slug`, "{"+strings.Join(ids, ",")+"}", local
 type windowEntry struct {
 	ID    string
 	Basis string
+}
+
+// homeEntries is the ranked list of one type: the latest 7-day snapshot (basis trend, prior or pinned), or the
+// most-rated list when the flag is off or no snapshot has been written yet.
+func homeEntries(ctx context.Context, db catalog.Querier, typ string, now time.Time, v2 bool) ([]windowEntry, error) {
+	if v2 {
+		_, rows, err := trending.Latest(ctx, db, typ, trending.HomeWindow)
+		if err != nil {
+			return nil, err
+		}
+
+		if len(rows) > 0 {
+			out := make([]windowEntry, len(rows))
+			for i, r := range rows {
+				out[i] = windowEntry{ID: r.ItemID, Basis: r.Basis}
+			}
+
+			return out, nil
+		}
+	}
+
+	return mostRatedWindow(ctx, db, typ, now, trendingDays, trendingTop)
 }
 
 // mostRatedWindow ranks typ by new ratings over the last days UTC days ending at the day of now ("trend"), then

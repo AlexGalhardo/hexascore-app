@@ -15,11 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **trending:** Flagged seed accounts no longer count in the trending signals or in the collaborative-filtering gate (OQ-07)
 - **a11y:** The Details links on the item page are 24 px touch targets again (Lighthouse target-size)
 - **web:** The render cache keys pages by their locale prefix again: `/pt-br/...` and `/es/...` no longer serve the English (or Spanish) copy rendered first
 
 ### Changed
 
+- **trending:** The landing carousel is the 7-day snapshot of score v2 (12 per type, entry and exit rules with a 72-hour cooldown, at most 2 per franchise and 4 per genre, a quality floor, admin pins and bans from the item page); `FLAG_TRENDING_V2=false` restores the most-rated list; quiet slots are labelled "Popular" and the formula is explained on /how-score-works
 - **ui:** Cards (landing rows, category grids, trending) have a soft grey edge instead of a category colour, and buttons, inputs and cards share one radius scale (`rounded-md` controls, `rounded-lg` cards, `rounded-sm` covers and badges); native controls follow the theme, text selection uses the brand colour and headings balance their line breaks
 - **catalog:** Canonical genres: one translated list per category (en, pt-BR, es) replaces the Wikidata genre labels; `genres:canonicalize` relinks the items and keeps the source links hidden in `item_genre_sources`; the rules cover the most used labels of the production dry run (85% of links before, more now: LGBTQ+, educational, telenovela, tokusatsu, science fiction and fantasy games); listing filters show the translated names and the public `/{type}/genres` endpoints take `locale` and return `name`
 - **api:** The API reference groups operations under games, movies, series, books and catalog, and every operation has a one-sentence description; the Python SDK modules follow the new tags

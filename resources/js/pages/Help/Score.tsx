@@ -14,6 +14,7 @@ const topics = [
 	"release",
 	"burst",
 	"caps",
+	"trending",
 	"versions",
 ];
 

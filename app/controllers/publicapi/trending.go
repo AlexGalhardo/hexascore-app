@@ -57,7 +57,7 @@ func (h *Controller) trending(c *web.Ctx, typ string, in TrendingInput) (Trendin
 		return TrendingJSON{}, err
 	}
 
-	at, rows, err := trending.Latest(c.Context(), h.DB, typ)
+	at, rows, err := trending.Latest(c.Context(), h.DB, typ, trending.APIWindow)
 	if err != nil {
 		return TrendingJSON{}, err
 	}

@@ -91,13 +91,15 @@ FROM items i
 LEFT JOIN item_activity_daily a ON a.item_id = i.id AND a.day > $2::date - $3::int AND a.day <= $2::date
 WHERE i.type = $1 AND i.visibility = 'public' AND i.release_status = 'released'
   AND (i.release_date IS NULL OR i.release_date <= $2::date)
+  AND NOT EXISTS (SELECT 1 FROM trending_overrides o WHERE o.item_id = i.id AND o.kind = 'banned'
+    AND (o.until IS NULL OR o.until > $5))
   AND (a.item_id IS NOT NULL OR i.release_date > $2::date - 180
     OR i.id IN (SELECT id FROM items WHERE type = $1 AND visibility = 'public' AND release_status = 'released'
       AND (release_date IS NULL OR release_date <= $2::date) ORDER BY popularity_prior DESC, id LIMIT $4))
 ORDER BY i.id, d`
 
-func candidates(ctx context.Context, q Querier, typ string, today time.Time, window int) ([]Candidate, error) {
-	rows, err := q.QueryContext(ctx, candidatesSQL, typ, today, window, ListSize)
+func candidates(ctx context.Context, q Querier, typ string, today, at time.Time, window int) ([]Candidate, error) {
+	rows, err := q.QueryContext(ctx, candidatesSQL, typ, today, window, ListSize, at)
 	if err != nil {
 		return nil, fmt.Errorf("trending candidates %s: %w", typ, err)
 	}
@@ -153,7 +155,7 @@ func candidates(ctx context.Context, q Querier, typ string, today time.Time, win
 // (trend ranks first, then the prior fill). Nothing is stored; the home page uses it with 7 days and 3 entries
 // (SDD 08 section 7.2 "Home window").
 func Window(ctx context.Context, q Querier, typ string, now time.Time, windowDays, n int) ([]Entry, error) {
-	cands, err := candidates(ctx, q, typ, now.UTC().Truncate(24*time.Hour), windowDays)
+	cands, err := candidates(ctx, q, typ, now.UTC().Truncate(24*time.Hour), now.UTC(), windowDays)
 	if err != nil {
 		return nil, err
 	}
@@ -163,36 +165,66 @@ func Window(ctx context.Context, q Querier, typ string, now time.Time, windowDay
 	return entries[:min(n, len(entries))], nil
 }
 
-// Snapshot writes the top lists for the hour of now, one transaction for the four types, so readers see either the
-// previous snapshot or the whole new one (SDD 08 §7.3). Running it again within the hour yields identical rows.
+// Snapshot writes the top lists for the hour of now, one transaction for the four types and both windows, so readers
+// see either the previous snapshot or the whole new one (SDD 08 §7.3). The 30-day list (score v1) feeds the API and
+// the for-you fallback; the 7-day list (score v2, RFC-002) feeds the landing page. Running it again within the hour
+// yields identical rows.
 func Snapshot(ctx context.Context, db *database.DB, now time.Time) error {
 	at := now.UTC().Truncate(time.Hour)
 	today := at.Truncate(24 * time.Hour)
 
 	err := db.Tx(ctx, func(tx *database.Tx) error {
 		for _, typ := range Types {
-			cands, err := candidates(ctx, tx, typ, today, WindowDays)
+			cands, err := candidates(ctx, tx, typ, today, at, WindowDays)
 			if err != nil {
 				return err
 			}
 
 			entries, eligible := Pick(cands)
 
-			fresh, err := write(ctx, tx, typ, at, entries)
+			rows := make([]HomeEntry, len(entries))
+			for i, e := range entries {
+				rows[i] = HomeEntry{Entry: e}
+			}
+
+			fresh, err := write(ctx, tx, typ, APIWindow, at, rows)
 			if err != nil {
 				return err
 			}
 
-			prior := 0
+			slog.InfoContext(ctx, "trending snapshot written", "type", typ, "window", APIWindow, "eligible", eligible,
+				"prior", count(entries, "prior"), "churn", float64(fresh)/ListSize)
 
-			for _, e := range entries {
-				if e.Basis == "prior" {
-					prior++
-				}
+			home, err := homeCandidates(ctx, tx, typ, today, at)
+			if err != nil {
+				return err
 			}
 
-			slog.InfoContext(ctx, "trending snapshot written", "type", typ, "eligible", eligible, "prior", prior,
-				"churn", float64(fresh)/ListSize)
+			list := PickHome(home, at)
+
+			fresh, err = write(ctx, tx, typ, HomeWindow, at, list)
+			if err != nil {
+				return err
+			}
+
+			slog.InfoContext(
+				ctx,
+				"trending snapshot written",
+				"type",
+				typ,
+				"window",
+				HomeWindow,
+				"candidates",
+				len(home),
+				"trend",
+				countHome(list, "trend"),
+				"pinned",
+				countHome(list, "pinned"),
+				"prior",
+				countHome(list, "prior"),
+				"churn",
+				float64(fresh)/HomeListSize,
+			)
 		}
 
 		return nil
@@ -204,16 +236,68 @@ func Snapshot(ctx context.Context, db *database.DB, now time.Time) error {
 	return nil
 }
 
-// write replaces the rows of (at, typ) and returns how many entries were not in the previous snapshot.
-func write(ctx context.Context, tx *database.Tx, typ string, at time.Time, entries []Entry) (int, error) {
-	if _, err := tx.ExecContext(ctx, `DELETE FROM trending_snapshots WHERE computed_at = $1 AND item_type = $2`,
-		at, typ); err != nil {
+func count(entries []Entry, basis string) int {
+	n := 0
+
+	for _, e := range entries {
+		if e.Basis == basis {
+			n++
+		}
+	}
+
+	return n
+}
+
+func countHome(entries []HomeEntry, basis string) int {
+	n := 0
+
+	for _, e := range entries {
+		if e.Basis == basis {
+			n++
+		}
+	}
+
+	return n
+}
+
+// write replaces the rows of (at, typ, window) and returns how many entries were not in the previous snapshot of the
+// same window.
+func write(
+	ctx context.Context,
+	tx *database.Tx,
+	typ string,
+	window int,
+	at time.Time,
+	entries []HomeEntry,
+) (int, error) {
+	if _, err := tx.ExecContext(ctx, `DELETE FROM trending_snapshots WHERE computed_at = $1 AND item_type = $2
+AND window_days = $3`, at, typ, window); err != nil {
 		return 0, err
 	}
 
 	for _, e := range entries {
-		if _, err := tx.ExecContext(ctx, `INSERT INTO trending_snapshots (computed_at, item_type, rank, item_id,
-trend_score, basis) VALUES ($1, $2, $3, $4, $5, $6)`, at, typ, e.Rank, e.ID, float32(e.Score), e.Basis); err != nil {
+		var z, entered, met any
+
+		if window == HomeWindow {
+			z, entered, met = float32(e.Z), nullTime(e.EnteredAt), nullTime(e.MetAt)
+		}
+
+		if _, err := tx.ExecContext(
+			ctx,
+			`INSERT INTO trending_snapshots (computed_at, item_type, window_days, rank, item_id,
+trend_score, basis, z, entered_at, met_at, weak_runs) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+			at,
+			typ,
+			window,
+			e.Rank,
+			e.ID,
+			float32(e.Score),
+			e.Basis,
+			z,
+			entered,
+			met,
+			e.WeakRuns,
+		); err != nil {
 			return 0, err
 		}
 	}
@@ -221,12 +305,21 @@ trend_score, basis) VALUES ($1, $2, $3, $4, $5, $6)`, at, typ, e.Rank, e.ID, flo
 	var fresh int
 
 	err := tx.QueryRowContext(ctx, `SELECT count(*) FROM trending_snapshots s
-WHERE s.computed_at = $1 AND s.item_type = $2
-  AND NOT EXISTS (SELECT 1 FROM trending_snapshots p WHERE p.item_type = s.item_type AND p.item_id = s.item_id
-    AND p.computed_at = (SELECT max(computed_at) FROM trending_snapshots WHERE item_type = $2 AND computed_at < $1))`,
-		at, typ).Scan(&fresh)
+WHERE s.computed_at = $1 AND s.item_type = $2 AND s.window_days = $3
+  AND NOT EXISTS (SELECT 1 FROM trending_snapshots p WHERE p.item_type = s.item_type AND p.window_days = s.window_days
+    AND p.item_id = s.item_id AND p.computed_at =
+      (SELECT max(computed_at) FROM trending_snapshots WHERE item_type = $2 AND window_days = $3 AND computed_at < $1))`,
+		at, typ, window).Scan(&fresh)
 
 	return fresh, err
+}
+
+func nullTime(t time.Time) any {
+	if t.IsZero() {
+		return nil
+	}
+
+	return t
 }
 
 // AgeSeconds is the age of the newest snapshot, read by the A14 in-app check (SDD 12 section 7.5).
@@ -247,5 +340,6 @@ func AgeSeconds(ctx context.Context, db *database.DB, now time.Time) (float64, e
 // Locales are the UI locales whose home payload is cached per type.
 var Locales = []string{"en", "pt-BR", "es"}
 
-// CacheKey is the cache entry of the home trending payload of one type and locale; the hourly job forgets it.
-func CacheKey(typ, locale string) string { return "trending:v1:" + typ + ":" + locale }
+// HomeCacheKey is the cache entry of the landing page's trending payload (all four types) for one locale; the hourly
+// job forgets it when a new snapshot lands, so the home never serves a list older than the last run.
+func HomeCacheKey(locale string) string { return "home:trending:v2:" + locale }

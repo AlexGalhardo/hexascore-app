@@ -87,10 +87,25 @@ create index on item_activity_daily (item_type, day);
 
 create table trending_snapshots (           -- 90 days
   computed_at timestamptz not null, item_type text not null,
-  rank smallint not null check (rank between 1 and 10),
+  window_days smallint not null default 30 check (window_days in (7, 30)),   -- 30 API (score v1, 10 ranks), 7 home (score v2, 12 ranks)
+  rank smallint not null check (rank between 1 and 12),
   item_id uuid not null references items(id) on delete cascade,
-  trend_score real not null, basis text not null check (basis in ('trend','prior')),
-  primary key (computed_at, item_type, rank), unique (computed_at, item_type, item_id));
+  trend_score real not null, basis text not null check (basis in ('trend','prior','pinned')),
+  z real, entered_at timestamptz, met_at timestamptz,                         -- 7-day window only: cooldown state read by the next run
+  weak_runs smallint not null default 0,
+  primary key (computed_at, item_type, window_days, rank),
+  unique (computed_at, item_type, window_days, item_id));
+
+create table trending_overrides (           -- admin pins and bans (RFC-002 section 4)
+  id bigint generated always as identity primary key,
+  item_id uuid not null references items(id) on delete cascade,
+  kind text not null check (kind in ('pinned','banned')), until timestamptz,   -- NULL = no end
+  reason text not null default '', admin_id bigint, created_at timestamptz not null default now());
+
+create table item_popularity_external (     -- 35 days; written by the refresh job (RFC-001 CW-04), never shown or exported
+  item_id uuid not null references items(id) on delete cascade,
+  day date not null, source text not null check (source in ('tmdb','igdb','openlibrary','wikidata')),
+  value double precision not null check (value >= 0), primary key (item_id, day, source));
 
 -- No trending_exclusions table: exclusion is SDD 01 items.visibility <> 'public' (open issue 08-3).
 
@@ -218,6 +233,32 @@ Home window (owner decision 2026-10-31): the home shows the trending of the last
 
 Burst example, item Y on day 0: 300 views and 60 ratings from accounts younger than 7 days with no status. Each rating weighs 0.175 × 0.25 (burst shadow), so `ratings_new_w = 2.625`. That gives `T = 57.07 + 15.75 = 72.8` and `A = 2.625`: not eligible. Unweighted, the same activity would score `T = 417.1`.
 
+#### 7.2.1 Home window, score v2 (RFC-002, `app/recommend/trending/scorev2.go`, `pickhome.go`)
+
+The 7-day window stored with `window_days = 7` (12 ranks per type) feeds the landing page; the 30-day list above keeps feeding the API and the for-you fallback. With `a ∈ {0..6}` and `D(a) = 2^(−a/3.5)`:
+
+```text
+U_d = 6·ratings_new_w + 1·ratings_updated_w + 3·want_w + 4·in_progress_w + 5·completed_w + 1·dropped_w
+    + 3.2·list_adds_w                                  (weight 4, reliability 0.8)
+Q_d = 5 · ln(1 + views + 2·search_clicks)              (weight 10, reliability 0.5)
+T_i = Σ_a D(a)·(U_d + Q_d) + 4.8·external_delta + 3·max(0, 1 − days_since_release/90)
+A_i = Σ_a (ratings_new_w + want_w + in_progress_w + completed_w + list_adds_w)
+z_i = (T_i − median) / MAD                             per type, over the items with A ≥ 1, clipped to ±10
+```
+
+`external_delta` is the mean over sources of `ln(value today / value 7 days ago)` from `item_popularity_external`, clipped to [−1, 2]; a source without both readings contributes 0. Suggestions do not count in the home score. Flagged seed accounts (`users.is_seed`) weigh 0 in every rollup column, like banned ones (OQ-07); the social signals of RFC-002 stay out until `FLAG_SOCIAL` has data.
+
+Worked example (golden test): 40 views, 3 new-rating and 2 want weight today, 100 views and 4 completions 3 days ago, external delta +0.4 gives `T = 68.3`, `A = 9`. A burst of 300 views with `ratings_new_w = 2.6` gives `T = 44.1`, `A = 2.6`: below the entry floor.
+
+Rules, applied by `PickHome` with the previous 7-day snapshot of the type:
+
+- Eligible pool: `visibility = 'public'`, released (or announced with a date within 90 days), not banned (`trending_overrides`), and a provisional quality floor of 60 until RFC-001 stores a quality score: cover 25, English synopsis 25, pt-BR title 15, es title 15, release date 20.
+- Enter: `A ≥ 5` and `z ≥ 0.5`, or pinned. Stay: an item on the list keeps its slot for up to 72 h after it last met the entry rule (`met_at`), and leaves after two consecutive runs with `z < 0` (`weak_runs`). Rank changes inside the list are free.
+- Order: pins first in pin order (basis `pinned`), then `(z desc, T desc, popularity_prior desc, id)` (basis `trend`), then the prior fill of §7.3 (basis `prior`, shown as "Popular").
+- Diversity: at most 2 items per franchise (`item_entities` role `franchise`, else `series`) and 4 per primary genre; the next-ranked item takes a skipped slot. Pins are never skipped but count towards the caps.
+- Pins and bans live in `trending_overrides`, set from `/admin/items/{id}/manage` (audited, one active override per kind and item) and applied at the next hourly run. A ban also removes the item from the 30-day list and from `Latest`.
+- The home reads the latest 7-day snapshot (`home:trending:v2:{locale}`, 5 minutes, forgotten by `ComputeTrending`). `FLAG_TRENDING_V2=false`, or no snapshot yet, restores the most-rated list of the last 30 days.
+
 ### 7.3 Snapshot and cold start
 
 Per type, in one transaction:
@@ -227,7 +268,7 @@ Per type, in one transaction:
 3. Fill the remaining ranks (`prior`) by `F_i = ln(1 + popularity_prior) + 3·max(0, 1 − days_since_release/180)`. For example, 80 sitelinks released 30 days ago gives 6.89, and a classic with 200 sitelinks gives 5.30.
 4. Upsert with `computed_at = date_trunc('hour', now())`.
 
-Whole-day decay keeps reruns within an hour identical. After commit the job invalidates `trending:v1:{type}`. On failure, readers keep the last snapshot. A snapshot older than 3 h raises an alert.
+Whole-day decay keeps reruns within an hour identical. After commit the job invalidates `home:trending:v2:{locale}` for the three locales (the earlier `trending:v1:{type}` keys were never written, so the invalidation did nothing; audit T-09). On failure, readers keep the last snapshot. A snapshot older than 3 h raises an alert.
 
 ### 7.4 Similar items
 

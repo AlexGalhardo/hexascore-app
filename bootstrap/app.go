@@ -33,6 +33,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/listeners"
 	"github.com/AlexGalhardo/hexascore-app/app/logging"
 	appmail "github.com/AlexGalhardo/hexascore-app/app/mail"
+	"github.com/AlexGalhardo/hexascore-app/app/recommend/trending"
 	"github.com/AlexGalhardo/hexascore-app/app/scheduler"
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 	"github.com/AlexGalhardo/hexascore-app/app/ssr"
@@ -137,7 +138,12 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 		}),
 		vukem.WithFlags(
 			append(
-				[]flags.AnyFlag{community.SubmissionsFlag, community.TrustedModeratorsFlag, social.Flag},
+				[]flags.AnyFlag{
+					community.SubmissionsFlag,
+					community.TrustedModeratorsFlag,
+					social.Flag,
+					trending.V2Flag,
+				},
 				run.All()...)...),
 		vukem.WithViews(resources.Views()),
 		vukem.WithViewFuncs(template.FuncMap{

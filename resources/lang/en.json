@@ -724,6 +724,7 @@
     "popularType": "Popular {type}",
     "popular": "Popular",
     "trendingRank": "#{rank} trending",
+    "trendingPopular": "Popular",
     "carousel": {
       "label": "Trending {type}",
       "previous": "Previous slide",
@@ -1656,6 +1657,8 @@
       "burst": "A sudden spike of ratings on one title temporarily limits new ratings from young accounts and shows a notice. Staff review the burst and either approve or exclude the affected ratings.",
       "capsTitle": "Daily limits",
       "caps": "Each account can add a limited number of new ratings and edits per day.",
+      "trendingTitle": "How trending works",
+      "trending": "The landing page shows, for each category, the 12 items gaining the most attention this week. Each day adds points for new ratings (6 each), finished (5), in progress (4), public list additions (3.2), want-to-try (3) and page views and search clicks, which count half and grow by a logarithm so traffic alone cannot carry an item. Older days weigh less, halving every 3.5 days, and releases from the last 90 days get a small bonus, as does rising popularity on TMDB, IGDB, Open Library and Wikidata. Items are compared with others of the same category, so a slow category still fills its row. An item enters with activity from at least 5 accounts and a score clearly above its category's typical level, keeps its place for up to 72 hours after it last qualified, and at most 2 items per franchise and 4 per genre appear. Accounts under 7 days old weigh little; banned and internal test accounts weigh nothing. When fewer than 12 items qualify, the rest are labelled Popular. Editors can pin or hide an item.",
       "versionsTitle": "Version history",
       "versions": "Formula changes are announced at least 14 days before they apply. The active version is version 1."
     }
