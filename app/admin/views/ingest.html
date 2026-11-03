@@ -1,5 +1,5 @@
 {{define "content"}}
-<div class="toolbar"><h1>{{.Title}}</h1><a href="/admin/ingest/reviews">Match reviews</a></div>
+<div class="toolbar"><h1>{{.Title}}</h1><a href="/admin/ingest/reviews">Match reviews</a> <a href="/admin/ingest/conflicts">Item conflicts</a></div>
 <h2>Last run per job</h2>
 {{if not .Runs}}<p class="muted">No runs yet.</p>{{else}}
 <table>

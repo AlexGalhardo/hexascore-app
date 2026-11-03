@@ -179,8 +179,8 @@ func TestProvidersStepFetchesParsesAndRemembers(t *testing.T) {
 	film := r.item("movie", "public", "603")
 	series := r.item("series", "public", "10")
 	broken := r.item("movie", "public", "700")
-	r.item("movie", "hidden", "603") // not public: never asked
-	r.item("book", "public", "603")  // not a film or series
+	r.item("movie", "hidden", "604") // not public: never asked
+	r.item("book", "public", "605")  // not a film or series
 	r.item("movie", "public", "6x3") // not a TMDB id
 
 	failed, changed := r.runToEnd()

@@ -29,6 +29,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/moderation"
 	"github.com/AlexGalhardo/hexascore-app/app/offers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/entities"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/resolve"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
 )
 
@@ -118,6 +119,7 @@ type pageData struct {
 	LockTargets   []string
 	Reviews       []entities.OpenReviewRow
 	FieldReviews  []store.OpenReview
+	Conflicts     []resolve.OpenConflict
 	Ingest        IngestStatus
 }
 

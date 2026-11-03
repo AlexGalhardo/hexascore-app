@@ -11,6 +11,7 @@ import (
 	"github.com/AlexGalhardo/vukem/uuid"
 
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/editions"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/resolve"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
 )
@@ -108,7 +109,31 @@ func (n Normalizer) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.R
 		id := ""
 
 		// One bad record must not roll back the chunk: it is recorded and the run goes on.
+		held := false
+
 		err = isolate(ctx, tx, func() error {
+			// Entity resolution (RFC-001 section 5 C): an external id another item owns is dropped, and a new item
+			// that duplicates another is held for an admin instead of created. The worker never merges items. It runs
+			// in the savepoint, so a record the database rejects while it is recorded costs only that record.
+			dec, rerr := resolve.Evaluate(ctx, tx, resolve.Input{
+				QID: qid, Type: item.Type, Title: item.Titles["en"], Year: releaseYear(item),
+				External: item.ExternalIDs, Existing: old != nil,
+			})
+			if rerr != nil {
+				return rerr
+			}
+
+			for _, key := range dec.Drop {
+				delete(item.ExternalIDs, key)
+				delete(item.Provenance, "external_ids."+key)
+			}
+
+			if dec.Hold {
+				held = true
+
+				return nil
+			}
+
 			var serr error
 
 			id, serr = n.saveOne(ctx, tx, old, item, now)
@@ -131,6 +156,12 @@ func (n Normalizer) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.R
 
 		if err := run.ClearFailure(ctx, tx, JobName, qid); err != nil {
 			return res, err
+		}
+
+		if held {
+			res.Skipped++
+
+			continue
 		}
 
 		ids[qid], items[qid] = id, item
@@ -481,4 +512,13 @@ func (Normalizer) saveEditions(
 	}
 
 	return nil
+}
+
+// releaseYear is the year of the item's release date, 0 when it has none.
+func releaseYear(it *Item) int {
+	if it.ReleaseDate == nil {
+		return 0
+	}
+
+	return it.ReleaseDate.Year()
 }

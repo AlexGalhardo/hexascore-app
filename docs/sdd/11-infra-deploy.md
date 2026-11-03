@@ -69,6 +69,8 @@ Retention: `ingest_job_keys` holds one row per automatic ingest dispatch and day
 
 Retention: `offers.prune` (daily 03:05) deactivates TMDB-sourced offers past `expires_at` (ADR 0006, 180 days) and deletes them 30 days later; offers from every other source are never deleted, because a deactivated row is the tombstone that stops `offers.derive` from creating it again; `stores` is reference data (a few dozen rows); `offer_clicks` keeps 400 days (same task). No user data: `offer_clicks` has no user id and no IP (LGPD).
 
+Retention: `item_conflicts` keeps one row per contested QID and kind (a few thousand at most), open or decided, and is not pruned; `resolved_by` is an admin's users.id kept as a bare id (the purge keeps the users row). No user content.
+
 Retention: `offer_source_checks` holds one row per item and source, upserted in place and deleted with the item; no prune task needed, no user data.
 
 Retention: `trending_snapshots` keeps 90 days, both windows (`recommend.prune_trending`, 04:45); `item_popularity_external` keeps 35 days (the home score reads today and 7 days back; same task); `trending_overrides` rows are deleted a year after their end date, open-ended ones stay (same task); `trending_overrides.admin_id` is an admin's users.id kept as a bare id (the purge keeps the users row). No user content.

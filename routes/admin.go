@@ -224,6 +224,9 @@ func Admin(r *router.Router, app *vukem.App) error {
 	r.Get("/admin/ingest/field-reviews", fieldReviewsH.List).Name("admin.ingest.field_reviews").Use(modMW...)
 	r.Post("/admin/ingest/field-reviews/{id}", fieldReviewsH.Resolve).
 		Name("admin.ingest.field_reviews.resolve").Use(modMW...)
+	conflictsH := admin.ItemConflictHandlers{Pages: catalogH, DB: acc.DB, Authorize: reviewsH.Authorize}
+	r.Get("/admin/ingest/conflicts", conflictsH.List).Name("admin.ingest.conflicts").Use(modMW...)
+	r.Post("/admin/ingest/conflicts/{id}", conflictsH.Resolve).Name("admin.ingest.conflicts.resolve").Use(modMW...)
 	ingestH := admin.IngestHandlers{
 		Pages: catalogH, DB: acc.DB, Queue: q, Flags: ff, Now: app.Now,
 		AuthorizeView: func(c *web.Ctx) error {
