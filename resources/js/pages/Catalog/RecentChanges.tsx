@@ -37,7 +37,7 @@ function show(raw: string): string {
 
 const th = "py-2 pr-4 text-left text-xs font-bold tracking-[0.1em] text-muted uppercase";
 const tab =
-	"-mb-px inline-flex min-h-11 items-center border-b-2 px-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
+	"-mb-px inline-flex min-h-11 items-center border-b-2 px-1 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
 
 export default function RecentChanges({ target, entries, page, nextPage }: Props) {
 	const t = useT();
@@ -98,7 +98,7 @@ export default function RecentChanges({ target, entries, page, nextPage }: Props
 				</p>
 			) : (
 				<table className="mt-8 w-full border-collapse text-sm max-md:block">
-					<thead className="border-b-2 border-fg max-md:sr-only">
+					<thead className="border-b border-border max-md:sr-only">
 						<tr>
 							<th className={th}>{t("community.recent.columns.date")}</th>
 							<th className={th}>{t("community.recent.columns.field")}</th>

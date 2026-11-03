@@ -11,7 +11,7 @@ export default function Footer() {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const link =
-		"inline-flex min-h-11 items-center justify-center rounded-md px-2.5 text-[15px] hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg md:text-[13px]";
+		"inline-flex min-h-11 items-center justify-center rounded-md px-2.5 text-[15px] hover:bg-hover outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-[13px]";
 	const links: [string, string][] = [
 		[localized("/about", locale), "footer.about"],
 		[localized("/terms", locale), "footer.terms"],
@@ -24,7 +24,7 @@ export default function Footer() {
 
 	// Language lives in the navbar only (design v1, round 2 item 14).
 	return (
-		<footer className="mt-12 border-t border-fg">
+		<footer className="mt-12 border-t border-border">
 			<div className="shell flex flex-col items-center gap-2 pt-4 pb-6 md:min-h-[72px] md:flex-row md:gap-6 md:py-0">
 				<nav aria-label={t("footer.label")} className="w-full md:w-auto">
 					<ul className="flex flex-col items-center md:flex-row md:gap-6">

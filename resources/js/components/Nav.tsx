@@ -31,12 +31,12 @@ export const APP_ICON = "/icons/app-icon.svg";
 // The brand as written, whatever the casing of APP_NAME in the environment (owner 2026-11-02).
 export const BRAND = "HexaScore";
 
-const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
+const focus = "outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
 // Hover inverts the colours, a square of the ink colour with page-coloured text, in both themes (owner 2026-11-02).
-const item = `inline-flex min-h-11 items-center rounded-md px-2.5 hover:bg-fg hover:text-bg ${focus}`;
+const item = `inline-flex min-h-11 items-center rounded-md px-2.5 text-fg/80 transition-colors hover:bg-hover hover:text-fg ${focus}`;
 // Pressed: 1 px down onto an inset shadow (the move is dropped under prefers-reduced-motion).
-export const iconButton = `inline-flex size-11 shrink-0 items-center justify-center rounded-md transition-[background-color,box-shadow,translate] duration-100 hover:bg-fg hover:text-bg active:translate-y-px active:bg-surface active:shadow-pressed motion-reduce:transition-none motion-reduce:active:translate-y-0 ${focus}`;
-const menuItem = `flex min-h-11 w-full items-center gap-2.5 px-3 text-left text-[15px] hover:bg-fg hover:text-bg ${focus}`;
+export const iconButton = `inline-flex size-11 shrink-0 items-center justify-center rounded-md transition-[background-color,box-shadow,translate] duration-100 hover:bg-hover active:translate-y-px active:bg-surface active:shadow-pressed motion-reduce:transition-none motion-reduce:active:translate-y-0 ${focus}`;
+const menuItem = `flex min-h-11 w-full items-center gap-2.5 px-3 text-left text-[15px] hover:bg-hover ${focus}`;
 
 function setCookie(name: string, value: string) {
 	// biome-ignore lint/suspicious/noDocumentCookie: a plain preference cookie, read server-side
@@ -265,7 +265,7 @@ export default function Nav() {
 	const language = (
 		<Dropdown
 			label={t("nav.language")}
-			triggerClassName={`inline-flex min-h-11 items-center gap-1 rounded-md px-2 text-sm font-bold hover:bg-fg hover:text-bg aria-expanded:bg-fg aria-expanded:text-bg ${focus}`}
+			triggerClassName={`inline-flex min-h-11 items-center gap-1 rounded-md px-2 text-sm font-bold hover:bg-hover aria-expanded:bg-fg aria-expanded:text-bg ${focus}`}
 			trigger={
 				<>
 					{LOCALE_LABELS[locale] ?? "EN"}
@@ -280,9 +280,9 @@ export default function Nav() {
 	return (
 		<header
 			data-scrolled={scrolled || undefined}
-			className="sticky top-0 z-50 border-b border-fg bg-bg transition-shadow motion-reduce:transition-none data-scrolled:shadow-nav dark:data-scrolled:shadow-nav-dark"
+			className="sticky top-0 z-50 border-b border-border bg-bg/80 backdrop-blur-md supports-[backdrop-filter]:bg-bg/70 transition-shadow motion-reduce:transition-none data-scrolled:shadow-nav dark:data-scrolled:shadow-nav-dark"
 		>
-			<div className="shell flex h-14 items-center gap-2 lg:h-[72px] lg:gap-7">
+			<div className="shell flex h-14 items-center gap-2 lg:h-16 lg:gap-7">
 				<Link
 					href={localized("/", locale)}
 					className={`${item} shrink-0 gap-2 font-display text-2xl font-bold lg:text-[28px]`}
@@ -314,7 +314,7 @@ export default function Nav() {
 						<Link
 							href={feedHref}
 							aria-current={here === "/feed" ? "page" : undefined}
-							className={`hidden min-h-11 items-center rounded-md border-l border-border pl-7 pr-2.5 text-[15px] font-medium hover:bg-fg hover:text-bg aria-[current=page]:font-bold xl:inline-flex ${focus}`}
+							className={`hidden min-h-11 items-center rounded-md border-l border-border pl-7 pr-2.5 text-[15px] font-medium hover:bg-hover aria-[current=page]:font-bold xl:inline-flex ${focus}`}
 						>
 							{t("social.feed.title")}
 						</Link>
@@ -361,7 +361,7 @@ export default function Nav() {
 							<div className="flex items-center gap-1">
 								<Dropdown
 									label={t("nav.account")}
-									triggerClassName={`inline-flex min-h-11 items-center gap-2 rounded-md pl-1 pr-1 hover:bg-fg hover:text-bg ${focus}`}
+									triggerClassName={`inline-flex min-h-11 items-center gap-2 rounded-md pl-1 pr-1 hover:bg-hover ${focus}`}
 									panelClassName="w-64"
 									trigger={avatar}
 								>
@@ -379,7 +379,7 @@ export default function Nav() {
 								<div className="flex items-center gap-4">
 									<Dropdown
 										label={t("nav.more")}
-										triggerClassName={`inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-md px-2 hover:bg-fg hover:text-bg ${focus}`}
+										triggerClassName={`inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-md px-2 hover:bg-hover ${focus}`}
 										trigger={
 											<>
 												<Icon name="menu" />

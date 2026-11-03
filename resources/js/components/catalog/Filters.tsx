@@ -80,7 +80,7 @@ export default function Filters({
 		<form
 			method="get"
 			action={action}
-			className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-2 border-b border-fg py-3 lg:grid-cols-1 lg:gap-4 lg:border-b-0 lg:py-4"
+			className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-2 border-b border-border py-3 lg:grid-cols-1 lg:gap-4 lg:border-b-0 lg:py-4"
 		>
 			{/* Entity filters from links ride along when the form is applied. */}
 			{active.map((a) => (

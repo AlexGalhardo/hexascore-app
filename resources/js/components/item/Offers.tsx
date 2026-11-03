@@ -24,7 +24,7 @@ export interface OffersData {
 
 const STORAGE_KEY = "offers-country";
 const LINK =
-	"inline-flex min-h-11 items-center rounded-md border border-border bg-surface px-3 text-[15px] font-semibold hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
+	"inline-flex min-h-11 items-center rounded-md border border-border bg-surface px-3 text-[15px] font-semibold hover:bg-hover outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
 const SELECT =
 	"min-h-11 rounded-md border border-field bg-field-bg px-3 text-[15px] text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
 

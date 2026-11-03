@@ -61,7 +61,7 @@ export default function ResultGroup({ hits, searchId, group, q, offset = 0 }: Pr
 						<Link
 							href={hit.path}
 							onClick={() => reportClick(searchId, hit, offset + i + 1, group)}
-							className="font-display text-lg leading-snug font-bold hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+							className="font-display text-lg leading-snug font-bold hover:text-primary outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 						>
 							{highlight(hit.title, q)}
 						</Link>
