@@ -103,6 +103,10 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 		WeeklyOn(time.Sunday, "02:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:covers-gc", coversGC(app)).DailyAt("02:30").In(saoPaulo).WithoutOverlapping()
 
+	// RFC-003: no network, so any quiet hour; before the 04:00-05:30 window of scores, prunes and asserts.
+	s.Func("ingest:offers-daily", startChain(app, ingest.OffersDaily)).
+		DailyAt("03:45").In(saoPaulo).WithoutOverlapping()
+
 	s.Func("ingest:dq-daily", startChain(app, ingest.DQDaily)).
 		DailyAt("05:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:frontend-fields", startChain(app, ingest.FrontendFields)).

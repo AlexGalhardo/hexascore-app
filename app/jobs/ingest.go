@@ -25,6 +25,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/httpx"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/igdb"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/offers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/openlibrary"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/rollback"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
@@ -190,6 +191,7 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		"fetch.entities":     fetch.Step(wd.Entities(), client, app.Now),
 		"fetch.youtube":      fetch.Step(&trailers.Connector{}, client, app.Now),
 		backfill.EditionsJob: backfill.Editions{}.Step,
+		offers.DeriveJob:     offers.Derive{}.Step,
 		// workaround: Serialise (DQ-I-12) stays nil until the API probe exists; Stat is nil without a bucket.
 		dq.Job:       dq.Asserts{Stat: stat}.Step,
 		rollback.Job: rollback.Step,
