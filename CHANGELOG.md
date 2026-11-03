@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **nav:** The navbar uses the footer's background and text colours in light and dark themes.
+
 - **item:** Where to watch (films and series) and where to play (games) show offers from every country at once, with no country selector, so a service listed in one country appears for every visitor.
 
 - **ui:** Cover images are shown whole at every size (no cropping); the space left around them takes the card colour.
