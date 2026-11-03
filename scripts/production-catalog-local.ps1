@@ -10,6 +10,7 @@ $root = Split-Path -Parent $PSScriptRoot
 $seedDir = Join-Path $root '.local-seeds'
 $schemaFile = Join-Path $seedDir 'production-schema.dump'
 $dataFile = Join-Path $seedDir 'production-catalog.dump'
+$pruneFile = Join-Path $root 'scripts/production-catalog-prune.sql'
 $previewDb = 'hexascore_prod_preview'
 $tables = @(
     'data_sources', 'items', 'item_translations', 'item_alt_titles',
@@ -127,7 +128,11 @@ function Restore-Catalog {
         Invoke-Checked docker @('exec', $container, 'pg_restore', '-U', 'hexascore', '-d', $previewDb,
             '--no-owner', '--no-acl', '--exit-on-error', '--single-transaction', '--section=post-data',
             '/tmp/production-schema.dump')
-        Invoke-Checked docker @('exec', $container, 'rm', '-f', '/tmp/production-schema.dump', '/tmp/production-catalog.dump')
+        # Local preview keeps 1000 items per type; the full export stays untouched in .local-seeds.
+        Invoke-Checked docker @('cp', $pruneFile, "${container}:/tmp/production-prune.sql")
+        Invoke-Checked docker @('exec', $container, 'psql', '-U', 'hexascore', '-d', $previewDb,
+            '-v', 'ON_ERROR_STOP=1', '-f', '/tmp/production-prune.sql')
+        Invoke-Checked docker @('exec', $container, 'rm', '-f', '/tmp/production-schema.dump', '/tmp/production-catalog.dump', '/tmp/production-prune.sql')
         Invoke-Checked docker @('exec', $container, 'psql', '-U', 'hexascore', '-d', $previewDb,
             '-Atc', 'SELECT count(*) FROM items')
         Write-Host "Restored production catalogue data into local database $previewDb"
