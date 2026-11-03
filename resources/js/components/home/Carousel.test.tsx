@@ -16,26 +16,26 @@ const current = () =>
 		.getAllByRole("group", { hidden: true })
 		.findIndex((group) => group.getAttribute("aria-hidden") === "false");
 
-test("slides advance on their own every six seconds and pause while the carousel is hovered", () => {
+test("slides advance on their own every two seconds and pause while the carousel is hovered", () => {
 	vi.useFakeTimers();
 	try {
 		render(<Carousel label="Upcoming games" slides={slides} />);
 		expect(current()).toBe(0);
-		act(() => vi.advanceTimersByTime(6000));
+		act(() => vi.advanceTimersByTime(2000));
 		expect(current()).toBe(1);
 		const region = screen.getByRole("region", { name: "Upcoming games" });
 		fireEvent.mouseEnter(region);
-		act(() => vi.advanceTimersByTime(12000));
+		act(() => vi.advanceTimersByTime(4000));
 		expect(current()).toBe(1);
 		fireEvent.mouseLeave(region);
-		act(() => vi.advanceTimersByTime(6000));
+		act(() => vi.advanceTimersByTime(2000));
 		expect(current()).toBe(2);
 	} finally {
 		vi.useRealTimers();
 	}
 });
 
-test("arrow keys, swipes and the revealed arrow buttons navigate the slides", () => {
+test("arrow keys and swipes navigate the slides, with no buttons", () => {
 	render(<Carousel label="Upcoming games" slides={slides} />);
 	const region = screen.getByRole("region", { name: "Upcoming games" });
 	fireEvent.keyDown(region, { key: "ArrowRight" });
@@ -45,8 +45,5 @@ test("arrow keys, swipes and the revealed arrow buttons navigate the slides", ()
 	fireEvent.touchStart(region, { touches: [{ clientX: 300 }] });
 	fireEvent.touchEnd(region, { changedTouches: [{ clientX: 200 }] });
 	expect(current()).toBe(1);
-	fireEvent.click(screen.getByRole("button", { name: "home.carousel.next" }));
-	expect(current()).toBe(2);
-	fireEvent.click(screen.getByRole("button", { name: "home.carousel.previous" }));
-	expect(current()).toBe(1);
+	expect(screen.queryByRole("button")).toBeNull();
 });
