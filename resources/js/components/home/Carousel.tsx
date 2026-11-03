@@ -43,6 +43,7 @@ export default function Carousel({
 			onBlur={(e) => {
 				if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false);
 			}}
+			// biome-ignore lint/a11y/noNoninteractiveTabindex: the carousel region takes arrow keys (WAI-ARIA APG)
 			tabIndex={0}
 			className="group grid gap-3 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
 			onKeyDown={(e) => {
