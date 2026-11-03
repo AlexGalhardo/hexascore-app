@@ -37,7 +37,7 @@ export default function ReviewForm({ itemId, source = "", spoiler = false }: Pro
 					rows={5}
 					required
 					onChange={(e) => setBody(e.target.value)}
-					className="mt-1 block w-full rounded-xs border border-border bg-bg p-2"
+					className="mt-1 block w-full rounded-md border border-border bg-bg p-2"
 					aria-describedby="review-help"
 				/>
 			</label>

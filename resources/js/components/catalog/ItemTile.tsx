@@ -5,25 +5,17 @@ import CoverThumb from "../CoverThumb";
 import ScoreBadge from "../ui/ScoreBadge";
 import type { Highlight } from "./SectionHighlights";
 
-// Full class names so Tailwind keeps them: one border colour per category (theme tokens in app.css).
-export const CATEGORY_BORDER: Record<Highlight["type"], string> = {
-	game: "border-cat-game",
-	movie: "border-cat-movie",
-	series: "border-cat-series",
-	book: "border-cat-book",
-};
-
 /**
- * Vertical item card for grids (landing "More …" rows, category grids), bordered in its category colour:
- * the cover, then one row of fixed height so tiles never shift: title (one line, truncated) on the left,
- * the score badge on the right.
+ * Vertical item card for grids (landing "More …" rows, category grids): the cover, then one row of fixed
+ * height so tiles never shift: title (one line, truncated) on the left, the score badge on the right.
+ * The edge is a soft grey hairline (owner 2026-11-03): the category is shown by its icon, not the border.
  */
 export default function ItemTile({ item, href }: { item: Highlight; href: string }): ReactElement {
 	return (
 		<li className="grid content-start">
 			<Link
 				href={href}
-				className={`group grid gap-2 border-2 bg-surface p-2 shadow-ledge-secondary hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${CATEGORY_BORDER[item.type]}`}
+				className="group grid gap-2 rounded-lg border border-border bg-surface p-2 shadow-ledge-secondary hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
 			>
 				<CoverThumb cover={item.cover} alt="" size="card" />
 				<span

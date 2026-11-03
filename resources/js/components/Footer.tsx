@@ -11,7 +11,7 @@ export default function Footer() {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const link =
-		"inline-flex min-h-11 items-center justify-center rounded-xs px-2.5 text-[15px] hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg md:text-[13px]";
+		"inline-flex min-h-11 items-center justify-center rounded-md px-2.5 text-[15px] hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg md:text-[13px]";
 	const links: [string, string][] = [
 		[localized("/about", locale), "footer.about"],
 		[localized("/terms", locale), "footer.terms"],

@@ -19,7 +19,7 @@ function node(n: MdNode, key: number): ReactNode {
 			return <br key={key} />;
 		case "code":
 			return (
-				<code key={key} className="rounded-xs bg-surface px-1">
+				<code key={key} className="rounded-sm bg-surface px-1">
 					{n.text}
 				</code>
 			);

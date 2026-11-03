@@ -70,7 +70,7 @@ function CommentForm({
 					rows={2}
 					required
 					onChange={(e) => setBody(e.target.value)}
-					className="block w-full rounded-xs border border-border bg-bg p-2"
+					className="block w-full rounded-md border border-border bg-bg p-2"
 				/>
 			</label>
 			<Btn type="submit" disabled={body.trim() === ""}>

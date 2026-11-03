@@ -149,7 +149,7 @@ function SearchPalette({ open, onOpenChange, returnFocus }: Props) {
 							onKeyDown={onKeyDown}
 							className="h-14 min-w-0 flex-1 bg-transparent text-[17px] outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
 						/>
-						<BaseDialog.Close className="inline-flex min-h-11 shrink-0 items-center rounded-xs px-2 text-sm font-semibold text-primary hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg">
+						<BaseDialog.Close className="inline-flex min-h-11 shrink-0 items-center rounded-md px-2 text-sm font-semibold text-primary hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg">
 							<span className="sm:hidden">{t("search.palette.close")}</span>
 							<kbd className="hidden h-[22px] items-center rounded-sm border border-border bg-surface px-1.5 font-sans text-xs font-semibold text-muted sm:inline-flex">
 								Esc

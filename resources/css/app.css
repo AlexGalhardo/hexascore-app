@@ -20,20 +20,6 @@
 @theme {
 	--font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 	--font-display: var(--font-sans);
-
-	/* Category border colours (games green, movies blue, series orange, books purple); dark variants below.
-	   3:1 against --hs-bg and --hs-surface for UI components (WCAG 1.4.11). */
-	--color-cat-game: oklch(0.5 0.14 150);
-	--color-cat-movie: oklch(0.5 0.17 255);
-	--color-cat-series: oklch(0.56 0.15 50);
-	--color-cat-book: oklch(0.5 0.2 300);
-}
-
-.dark {
-	--color-cat-game: oklch(0.74 0.16 150);
-	--color-cat-movie: oklch(0.72 0.14 250);
-	--color-cat-series: oklch(0.76 0.15 55);
-	--color-cat-book: oklch(0.74 0.15 300);
 }
 
 /* Derived from the colour tokens (no new hues): button ledges (2 px at rest, 1 px pressed) over a
@@ -63,9 +49,23 @@
 }
 
 @layer base {
+	/* Native controls (scrollbars, date and number inputs, selects, autofill) follow the theme, not the OS. */
+	:root {
+		color-scheme: light;
+	}
+	:root.dark {
+		color-scheme: dark;
+	}
+	/* Text selection uses the brand colour, so a selection reads as part of the design. */
+	::selection {
+		background-color: var(--color-primary);
+		color: var(--color-on-primary);
+	}
 	h1,
-	h2 {
+	h2,
+	h3 {
 		font-family: var(--font-display);
+		text-wrap: balance;
 	}
 	/* AppLayout moves focus to the new <h1> after a visit for screen readers; it is not a control. */
 	h1[tabindex="-1"]:focus {

@@ -112,7 +112,7 @@ export default function StarRating({
 				aria-labelledby={`${name}-label`}
 				aria-describedby={describedBy}
 				aria-disabled={disabled || undefined}
-				className="flex w-fit cursor-pointer rounded-xs outline-offset-2 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary aria-disabled:cursor-not-allowed"
+				className="flex w-fit cursor-pointer rounded-md outline-offset-2 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary aria-disabled:cursor-not-allowed"
 				onKeyDown={onKeyDown}
 				onPointerLeave={() => setHover(null)}
 			>

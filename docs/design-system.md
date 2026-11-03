@@ -198,7 +198,7 @@ All files are under `resources/js/components/` unless stated. Props are the Type
 
 **ItemTile** (`catalog/ItemTile.tsx`). Vertical grid card (landing "More …" rows; meant for category grids).
 
-- Props: `item: Highlight`, `href`. One link: `CoverThumb card`, then a footer `grid-cols-[2fr_1fr]` with `min-h-16` (no layout shift): title (`line-clamp-2`) and year on the left, `ScoreBadge size="fill"` filling the right third with the number centred.
+- Props: `item: Highlight`, `href`. One link: `rounded-lg border border-border bg-surface p-2 shadow-ledge-secondary` (a soft grey 1 px edge, not a category colour; owner 2026-11-03), then `CoverThumb card` and a fixed-height footer `grid-cols-[1fr_auto] h-8` (no layout shift): the title (one line, truncated) on the left and `ScoreBadge size="xs"` on the right.
 
 **ShelfCard** (`library/ShelfCard.tsx`). Card used by Library, list pages and public profile tabs.
 

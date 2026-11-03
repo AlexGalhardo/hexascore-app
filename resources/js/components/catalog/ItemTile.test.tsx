@@ -39,8 +39,8 @@ const item: Highlight = {
 	cover: null,
 };
 
-// Owner decisions 2026-11-02: no year, title and score on one row, category-coloured border.
-test("the tile footer holds the truncating title and the score on one row, with a category border", () => {
+// Owner decisions 2026-11-02: no year, title and score on one row. 2026-11-03: soft grey edge, not a category colour.
+test("the tile footer holds the truncating title and the score on one row, with a soft grey edge", () => {
 	render(
 		<ul>
 			<ItemTile item={item} href="/movies/bigbug" />
@@ -48,7 +48,9 @@ test("the tile footer holds the truncating title and the score on one row, with 
 	);
 	const link = screen.getByRole("link");
 	expect(link.getAttribute("href")).toBe("/movies/bigbug");
-	expect(link.className).toContain("border-cat-movie");
+	expect(link.className).toContain("rounded-lg");
+	expect(link.className).toContain("border-border");
+	expect(link.className).not.toContain("border-cat-");
 	const footer = link.querySelector("[data-tile-footer]");
 	expect(footer?.className).toContain("grid-cols-[1fr_auto]");
 	const [title, badge] = [...(footer?.children ?? [])];
@@ -65,5 +67,5 @@ test("an item without a score keeps the footer and the accessible no-score label
 		</ul>,
 	);
 	expect(screen.getByRole("img", { name: "score.none" }).textContent).toBe("–");
-	expect(screen.getByRole("link").className).toContain("border-cat-book");
+	expect(screen.getByRole("link").className).toContain("border-border");
 });

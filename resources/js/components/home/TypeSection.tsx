@@ -6,7 +6,7 @@ import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
 import CategoryIcon from "../CategoryIcon";
 import CoverThumb from "../CoverThumb";
-import ItemTile, { CATEGORY_BORDER } from "../catalog/ItemTile";
+import ItemTile from "../catalog/ItemTile";
 import { type Highlight, SECTION_PATHS, type Section } from "../catalog/SectionHighlights";
 import ScoreBadge from "../ui/ScoreBadge";
 import Carousel from "./Carousel";
@@ -155,7 +155,7 @@ function TrendCard({
 			{/* The whole card is the link; hover inverts it like the navbar and footer links (owner 2026-11-02). */}
 			<Link
 				href={`${base}/${item.slug}?from=trending`}
-				className={`group flex h-full gap-4 border-2 bg-surface p-3 shadow-ledge-secondary hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${CATEGORY_BORDER[type]}`}
+				className="group flex h-full gap-4 rounded-lg border border-border bg-surface p-3 shadow-ledge-secondary hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
 			>
 				<CoverThumb cover={item.cover} alt="" size="trend" priority={eager} />
 				{/* Two rows (owner 2026-11-02): the title across the column, then the rank at the far left and the

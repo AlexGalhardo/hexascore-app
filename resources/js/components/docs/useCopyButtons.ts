@@ -1,7 +1,7 @@
 import { type RefObject, useEffect } from "react";
 
 const BUTTON =
-	"absolute top-2 right-2 rounded-xs border border-bg/40 bg-fg px-2.5 py-1 font-sans text-xs font-semibold text-bg hover:bg-bg hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bg";
+	"absolute top-2 right-2 rounded-sm border border-bg/40 bg-fg px-2.5 py-1 font-sans text-xs font-semibold text-bg hover:bg-bg hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bg";
 
 /**
  * Adds a copy button to every <pre> inside `root` (the docs body arrives as built HTML, so the buttons are DOM

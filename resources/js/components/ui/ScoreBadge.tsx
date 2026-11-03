@@ -53,7 +53,7 @@ export default function ScoreBadge({
 					? t("score.none")
 					: t("score.outOf", { score: formatScore(score, locale) })
 			}
-			className={`inline-flex shrink-0 items-center justify-center rounded-xs font-bold text-on-score tabular-nums ${FILL[scoreBand(score)]} ${SIZE[size]}`}
+			className={`inline-flex shrink-0 items-center justify-center rounded-sm font-bold text-on-score tabular-nums ${FILL[scoreBand(score)]} ${SIZE[size]}`}
 		>
 			{formatScore(score, locale)}
 		</span>
