@@ -205,7 +205,7 @@ function SearchPalette({ open, onOpenChange, returnFocus }: Props) {
 													width={32}
 													height={48}
 													loading="lazy"
-													className="aspect-[2/3] w-8 shrink-0 bg-surface object-cover"
+													className="aspect-[2/3] w-8 shrink-0 object-contain"
 												/>
 											) : (
 												<span className="aspect-[2/3] w-8 shrink-0 border border-border bg-surface" />

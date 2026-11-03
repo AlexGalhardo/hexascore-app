@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **ui:** Cover images are shown whole at every size (no cropping); the space left around them takes the card colour.
+
 - **item:** Where to watch moved into the Details card, below the action buttons, and its labels are now served to the page (the `offers.` namespace was missing from the page translations).
 
 - **home:** Landing carousels show 6 upcoming poster cards per row (12 in total); slides advance automatically every two seconds, pausing on hover or focus and when reduced motion is on; no arrow buttons; navigation is by arrow keys and swipe. Each carousel heading uses the trending label style, and each card shows its release date in the top-right corner.

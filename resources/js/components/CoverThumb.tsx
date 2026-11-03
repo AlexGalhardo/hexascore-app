@@ -33,7 +33,7 @@ const BOX: Record<CoverSize, string> = {
 	card: "w-full h-auto aspect-[2/3]",
 };
 
-// CoverThumb is the list-row cover (32×48 or 44×64; "lg" for the item page, shown whole (object-contain)), 96w/600w sources, lazy.
+// CoverThumb is the list-row cover (32×48 or 44×64; "lg" for the item page), shown whole at every size, 96w/600w sources, lazy.
 // The item page cover passes priority for eager loading with high fetch priority.
 // Without a cover it keeps the same box so the row does not shift.
 export default function CoverThumb({
@@ -71,8 +71,8 @@ export default function CoverThumb({
 			loading={priority ? "eager" : "lazy"}
 			fetchPriority={priority ? "high" : "auto"}
 			decoding="async"
-			// The whole cover (lg) leaves letterbox bands: transparent, so they take the colour around the box (owner 2026-11-02).
-			className={`shrink-0 rounded-sm bg-surface object-cover ${BOX[size]}`}
+			// Every cover is shown whole (object-contain); the transparent letterbox takes the colour of the card around it.
+			className={`shrink-0 rounded-sm object-contain ${BOX[size]}`}
 		/>
 	);
 }
