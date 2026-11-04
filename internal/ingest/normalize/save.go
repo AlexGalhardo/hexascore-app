@@ -12,6 +12,7 @@ import (
 
 	"github.com/AlexGalhardo/vukem/database"
 
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/entities"
 )
 
@@ -252,6 +253,11 @@ VALUES ($1, $2, NULLIF($3, ''), $4, $5) ON CONFLICT DO NOTHING`,
 		if err != nil {
 			return fmt.Errorf("save credit %s %s: %w", c.Role, c.QID, err)
 		}
+	}
+
+	// The genres Wikidata names become the canonical ones now, so a new ingest never shows a source label.
+	if err := catalog.CanonicalizeItemGenres(ctx, ex, id); err != nil {
+		return err
 	}
 
 	for _, l := range rel.Links {

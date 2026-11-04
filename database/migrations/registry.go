@@ -115,5 +115,6 @@ func All() []schema.Migration {
 		m20261103030000CreateLLMUsage(),
 		m20261103040000AddItemVerification(),
 		m20261103040100AddItemsVerifyIdx(),
+		m20261104000000CanonicalizeGenres(),
 	}
 }

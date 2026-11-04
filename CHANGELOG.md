@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **catalog:** The canonical genres are permanent: migration `20261104000000_canonicalize_genres` repairs every item whose genres still show Wikidata labels or lost their canonical link (the same repair as `genres:canonicalize`, as SQL), and the normaliser now canonicalises each item it saves, so a new ingest no longer brings the source labels back and the command no longer needs to be run by hand
 - **ingest:** An item whose alternative titles differ only in case or accents no longer fails its whole relations step (the insert now ignores any unique conflict, not only the exact title)
 - **ingest:** The worker heartbeat counts as stale after 8 minutes instead of 3: it queues behind two running ingest chunks of up to 5 minutes, so a busy worker was reported stale
 - **ratings:** Unreleased item pages explain when ratings open and disable guest and member rating controls; the existing server gate remains authoritative
