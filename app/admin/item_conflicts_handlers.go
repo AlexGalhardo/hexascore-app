@@ -34,10 +34,7 @@ func (h ItemConflictHandlers) List(c *web.Ctx) error {
 		return err
 	}
 
-	d := h.Pages.newPage("Item conflicts")
-	d.Conflicts = rows
-
-	return h.Pages.render(c, "ingest_conflicts", d)
+	return h.Pages.react(c, "Admin/IngestConflicts", map[string]any{"conflicts": rows})
 }
 
 // Resolve handles POST /admin/ingest/conflicts/{id}: allow the item in or dismiss it.

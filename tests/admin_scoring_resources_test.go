@@ -45,31 +45,22 @@ func TestAdminScoringResourcesReadOnly(t *testing.T) {
 	plainC := browserFor(t, app, plain)
 
 	pages := map[string]string{
-		"/admin/score-bursts":           "volume",
-		"/admin/rating-flags":           "burst_hold",
-		"/admin/score-actions":          "burst_approved",
-		"/admin/score-formula-versions": "1",
+		"/admin/r/score-bursts":           "volume",
+		"/admin/r/rating-flags":           "burst_hold",
+		"/admin/r/score-actions":          "burst_approved",
+		"/admin/r/score-formula-versions": "1",
 	}
 	for path, see := range pages {
 		adminC.Get(path).AssertOK().AssertSee(see)
 		plainC.Get(path).AssertNotFound()
 	}
 
-	adminC.Get("/admin/score-bursts/1").AssertOK()
-	adminC.Get("/admin/score-actions/1").AssertOK()
-	adminC.Get("/admin/score-formula-versions/1").AssertOK()
+	adminC.Get("/admin/r/score-bursts/1").AssertOK()
+	adminC.Get("/admin/r/score-actions/1").AssertOK()
+	adminC.Get("/admin/r/score-formula-versions/1").AssertOK()
 
-	// The composite key cannot be addressed by one id: no detail page.
-	adminC.Get("/admin/rating-flags/" + itoa(plain.ID)).AssertForbidden()
-
+	// The old write routes are gone: a POST finds no handler.
 	for path := range pages {
-		id := "/1"
-		if path == "/admin/rating-flags" {
-			id = "/" + itoa(plain.ID)
-		}
-
-		adminC.PostForm(path, url.Values{"x": {"1"}}).AssertForbidden()
-		adminC.PostForm(path+id, url.Values{"x": {"1"}}).AssertForbidden()
-		adminC.PostForm(path+id+"/delete", url.Values{}).AssertForbidden()
+		adminC.PostForm(path, url.Values{"x": {"1"}}).AssertStatus(405)
 	}
 }

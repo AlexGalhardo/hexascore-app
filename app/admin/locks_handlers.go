@@ -26,11 +26,7 @@ func (h ModerationHandlers) Locks(c *web.Ctx) error {
 		return err
 	}
 
-	d := h.Pages.newPage("Catalogue locks")
-	d.Locks = locks
-	d.LockTargets = auditTargets
-
-	return h.Pages.render(c, "locks", d)
+	return h.Pages.react(c, "Admin/Locks", map[string]any{"locks": locks, "targets": auditTargets})
 }
 
 // CreateLock handles POST /admin/locks: target, target_id, field (empty or "*" locks the record), reason and an

@@ -1,14 +1,10 @@
 import { Link, usePage } from "@inertiajs/react";
-import { type ReactElement, useEffect, useMemo, useState } from "react";
 
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
-import CategoryIcon from "../CategoryIcon";
-import CoverThumb from "../CoverThumb";
 import ItemTile from "../catalog/ItemTile";
 import { type Highlight, SECTION_PATHS, type Section } from "../catalog/SectionHighlights";
-import ScoreBadge from "../ui/ScoreBadge";
 import Carousel from "./Carousel";
 
 export interface TrendingEntry extends Highlight {
@@ -28,90 +24,77 @@ export const ACCENT_TEXT: Record<ItemType, string> = {
 	book: "text-accent-book",
 };
 
-const PER_SLIDE = 3;
+const PER_SLIDE = 4;
 const MORE = 12;
 
-/** n distinct items of pool in random order (partial Fisher-Yates); rng is injectable for tests. */
-export function pickRandom<T>(pool: readonly T[], n: number, rng: () => number = Math.random): T[] {
-	const a = [...pool];
-	const k = Math.min(n, a.length);
-	for (let i = 0; i < k; i++) {
-		const j = i + Math.floor(rng() * (a.length - i));
-		[a[i], a[j]] = [a[j], a[i]];
-	}
-	return a.slice(0, k);
-}
-
-// One home block per item type (owner round 2026-11-01 item 26): a carousel of the 12 trending items of the last
-// 30 days, 3 per slide, then 12 "More …" tiles. The server sends a pool and the page picks 12 at random after
-// hydration: the anonymous landing HTML is cached, so the first paint shows the pool's first 12 and only then
-// reshuffles into the same fixed grid (no layout shift).
+// One block per type: upcoming releases in the carousel and released 30-day trending in the grid.
 export default function TypeSection({
 	section,
-	trending,
+	upcoming = [],
 }: {
 	section: Section;
-	trending: TrendingEntry[];
+	upcoming?: Highlight[];
 }) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const type = section.type;
 	const base = localized(`/${SECTION_PATHS[type]}`, locale);
 	const num = new Intl.NumberFormat(locale);
-	const candidates = useMemo(() => {
-		const shown = new Set(trending.map((i) => i.id));
-		return section.pool.filter((i) => !shown.has(i.id));
-	}, [section.pool, trending]);
-	const [others, setOthers] = useState(() => candidates.slice(0, MORE));
-	useEffect(() => setOthers(pickRandom(candidates, MORE)), [candidates]);
-	if (trending.length === 0 && others.length === 0) return null;
+	const others = section.pool.slice(0, MORE);
+	if (upcoming.length === 0 && others.length === 0) return null;
 
 	return (
 		<section aria-labelledby={`home-${type}`} className="grid gap-5">
-			{/* Three zones (owner round 2026-11-01 item 23): 1fr auto 1fr keeps the count centred whatever
-			    the name and link widths; below sm the zones stack. */}
 			<div
 				data-section-header=""
-				className="grid min-w-0 gap-y-1 sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-x-4"
+				className="flex min-w-0 flex-wrap items-center justify-between gap-3"
 			>
 				<div className="flex min-w-0 items-center gap-3">
-					<CategoryIcon type={type} className={`size-7 ${ACCENT_TEXT[type]}`} />
-					<h2 id={`home-${type}`} className="text-3xl font-bold">
-						<Link href={base}>{t(`catalog.title.${type}`)}</Link>
+					<h2
+						id={`home-${type}`}
+						className="text-xs font-semibold tracking-widest text-muted uppercase"
+					>
+						<Link href={base}>
+							{t("home.mostWaited", { type: t(`catalog.title.${type}`) })}
+						</Link>
 					</h2>
 				</div>
-				<span className="text-xl font-semibold text-muted tabular-nums sm:text-center">
-					{t("home.titles", { count: section.count, n: num.format(section.count) })}
-				</span>
 				<Link
 					href={base}
 					className="text-sm font-semibold text-primary underline-offset-2 hover:underline sm:justify-self-end sm:text-right"
 				>
-					{t(`home.seeAll.${type}`)} <span aria-hidden="true">→</span>
+					{t(`home.seeAll.${type}`, {
+						count: section.count,
+						n: num.format(section.count),
+					})}
 				</Link>
 			</div>
 
-			{trending.length > 0 && (
+			{upcoming.length > 0 && (
 				<Carousel
-					label={t("home.carousel.label", { type: t(`catalog.title.${type}`) })}
+					label={t("home.mostWaited", { type: t(`catalog.title.${type}`) })}
 					slides={Array.from(
-						{ length: Math.ceil(trending.length / PER_SLIDE) },
+						{ length: Math.ceil(upcoming.slice(0, MORE).length / PER_SLIDE) },
 						(_, n) => ({
-							key: trending[n * PER_SLIDE].id,
+							key: upcoming[n * PER_SLIDE].id,
 							node: (
 								<ol
 									start={n * PER_SLIDE + 1}
-									className="grid gap-4 md:grid-cols-3 md:gap-5"
+									className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-4 md:gap-x-6 lg:gap-x-8"
 								>
-									{trending
-										.slice(n * PER_SLIDE, (n + 1) * PER_SLIDE)
+									{upcoming
+										.slice(n * PER_SLIDE, Math.min((n + 1) * PER_SLIDE, MORE))
 										.map((item) => (
-											<TrendCard
+											<ItemTile
 												key={item.id}
 												item={item}
-												type={type}
-												base={base}
-												eager={n === 0}
+												href={`${base}/${item.slug}`}
+												coverSize="compact"
+												badge={
+													<span className="rounded-sm bg-[#ff7a1a] px-2.5 py-1.5 text-sm font-bold text-black">
+														{formatUpcomingRelease(item, locale)}
+													</span>
+												}
 											/>
 										))}
 								</ol>
@@ -120,11 +103,16 @@ export default function TypeSection({
 					)}
 				/>
 			)}
+			{upcoming.length === 0 && (
+				<p className="rounded-sm border border-border bg-surface p-5 text-sm text-muted">
+					{t("home.noUpcoming")}
+				</p>
+			)}
 
 			{others.length > 0 && (
 				<div className="grid gap-3">
 					<h3 className="text-xs font-semibold tracking-widest text-muted uppercase">
-						{t(`home.more.${type}`)}
+						{t("home.trending30Days", { type: t(`catalog.title.${type}`) })}
 					</h3>
 					<ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-6 md:gap-x-5">
 						{others.map((item) => (
@@ -137,43 +125,15 @@ export default function TypeSection({
 	);
 }
 
-function TrendCard({
-	item,
-	type,
-	base,
-	eager,
-}: {
-	item: TrendingEntry;
-	type: ItemType;
-	base: string;
-	/** Only the first slide's covers load eagerly (the LCP candidate). */
-	eager: boolean;
-}): ReactElement {
-	const t = useT();
-	return (
-		<li key={item.id}>
-			{/* The whole card is the link; hover inverts it like the navbar and footer links (owner 2026-11-02). */}
-			<Link
-				href={`${base}/${item.slug}?from=trending`}
-				className="group flex h-full gap-4 rounded-lg border border-border bg-surface p-3 shadow-ledge-secondary hover:bg-hover outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-			>
-				<CoverThumb cover={item.cover} alt="" size="trend" priority={eager} />
-				{/* Two rows (owner 2026-11-02): the title across the column, then the rank at the far left and the
-				score at the far right. */}
-				<span className="grid min-w-0 flex-1 content-between gap-3">
-					<span className="font-display text-2xl leading-tight font-bold md:text-[28px]">
-						{item.title}
-					</span>
-					<span className="flex items-center justify-between gap-3">
-						<span className={`text-2xl font-semibold  ${ACCENT_TEXT[type]}`}>
-							{item.basis === "prior"
-								? t("home.trendingPopular")
-								: t("home.trendingRank", { rank: item.rank })}
-						</span>
-						<ScoreBadge score={item.score} size="md" />
-					</span>
-				</span>
-			</Link>
-		</li>
-	);
+function formatUpcomingRelease(item: Highlight, locale: string): string {
+	if (!item.releaseDate || item.releasePrecision === "unknown") return String(item.year ?? "");
+	const date = new Date(`${item.releaseDate}T00:00:00Z`);
+	if (Number.isNaN(date.getTime())) return String(item.year ?? "");
+	if (item.releasePrecision === "year") return String(date.getUTCFullYear());
+	const month = new Intl.DateTimeFormat(locale, { month: "long", timeZone: "UTC" }).format(date);
+	const namedMonth = month[0].toLocaleUpperCase(locale) + month.slice(1);
+	const year = date.getUTCFullYear();
+	if (item.releasePrecision === "month") return `${namedMonth} ${year}`;
+	const day = new Intl.DateTimeFormat(locale, { day: "2-digit", timeZone: "UTC" }).format(date);
+	return `${day} ${namedMonth} ${year}`;
 }

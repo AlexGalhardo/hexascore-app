@@ -1,30 +1,50 @@
 import { Link } from "@inertiajs/react";
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 
-import CoverThumb from "../CoverThumb";
+import CoverThumb, { type CoverSize } from "../CoverThumb";
 import ScoreBadge from "../ui/ScoreBadge";
 import type { Highlight } from "./SectionHighlights";
 
 /**
  * Vertical item card for grids (landing "More …" rows, category grids): the cover, then one row of fixed
- * height so tiles never shift: title (one line, truncated) on the left, the score badge on the right.
+ * height so tiles never shift. The score badge sits in the top-right corner; the title is screen-reader text only,
+ * unless a footer is given (upcoming cards show the release date there).
  * The edge is a soft grey hairline (owner 2026-11-03): the category is shown by its icon, not the border.
  */
-export default function ItemTile({ item, href }: { item: Highlight; href: string }): ReactElement {
+export default function ItemTile({
+	item,
+	href,
+	badge,
+	footer,
+	coverSize = "card",
+}: {
+	item: Highlight;
+	href: string;
+	/** null hides the badge; undefined shows the score. */
+	badge?: ReactNode | null;
+	/** Replaces the item title in the bottom strip. */
+	footer?: ReactNode;
+	coverSize?: CoverSize;
+}): ReactElement {
 	return (
 		<li className="grid content-start">
 			<Link
 				href={href}
-				className="group grid gap-2 rounded-lg border border-border bg-surface p-2 shadow-ledge-secondary hover:bg-hover outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+				className="group relative block overflow-hidden rounded-sm border border-border bg-surface hover:border-fg outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 			>
-				<CoverThumb cover={item.cover} alt="" size="card" />
-				<span
-					data-tile-footer=""
-					className="grid h-8 grid-cols-[1fr_auto] items-center gap-2"
-				>
-					<span className="truncate font-display text-sm font-bold">{item.title}</span>
-					<ScoreBadge score={item.score} size="xs" />
-				</span>
+				<CoverThumb cover={item.cover} alt="" size={coverSize} />
+				{badge !== null && (
+					<span className="absolute top-2 right-2">
+						{badge ?? <ScoreBadge score={item.score} size="sm" />}
+					</span>
+				)}
+				{footer ? (
+					<span className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/85 to-transparent p-2 pt-7 font-display text-sm font-bold text-white">
+						{footer}
+					</span>
+				) : (
+					<span className="sr-only">{item.title}</span>
+				)}
 			</Link>
 		</li>
 	);

@@ -97,7 +97,7 @@ func TestReportResolveNotifies(t *testing.T) {
 		AssertNotFound()
 	adminC.PostForm("/admin/reports/"+id+"/resolve", url.Values{"outcome": {"user_banned"}}).AssertUnprocessable()
 	adminC.PostForm("/admin/reports/"+id+"/resolve", url.Values{"outcome": {"list_hidden"}, "adminNote": {"spam"}}).
-		AssertRedirect("/admin/reports/" + id)
+		AssertRedirect("/admin/r/reports/" + id)
 
 	if n := r.count(`SELECT count(*) FROM lists WHERE id = $1 AND hidden`, list.ID); n != 1 {
 		t.Fatal("list not hidden")
@@ -145,7 +145,7 @@ func TestReportResolveBansUser(t *testing.T) {
 	}
 
 	browserFor(t, r.app, admin).PostForm("/admin/reports/"+id+"/resolve", url.Values{"outcome": {"user_banned"}}).
-		AssertRedirect("/admin/reports/" + id)
+		AssertRedirect("/admin/r/reports/" + id)
 
 	if !reload(t, r.app, bad.ID).BannedAt.Valid {
 		t.Fatal("user not banned")
@@ -169,9 +169,10 @@ VALUES ($1, 'Ana', 'ana@example.com', 'bug', 'this is a message with more than t
 		t.Fatal(err)
 	}
 
-	browserFor(t, app, member).Get("/admin/contact-messages").AssertNotFound()
-	browserFor(t, app, admin).Get("/admin/contact-messages").AssertOK()
-	browserFor(t, app, admin).PostForm("/admin/contact-messages/"+id, url.Values{"handled": {"false", "true"}})
+	browserFor(t, app, member).Get("/admin/r/contact-messages").AssertNotFound()
+	browserFor(t, app, admin).Get("/admin/r/contact-messages").AssertOK()
+	browserFor(t, app, admin).PostForm("/admin/r/contact-messages/"+id+"/handled", url.Values{"handled": {"true"}}).
+		AssertRedirect("/admin/r/contact-messages/" + id)
 
 	var handled bool
 	if err := db.QueryRowContext(t.Context(), `SELECT handled FROM contact_messages WHERE id = $1`, id).

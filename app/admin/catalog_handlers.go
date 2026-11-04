@@ -1,12 +1,9 @@
 package admin
 
 import (
-	"bytes"
 	"context"
 	"database/sql"
-	"embed"
 	"errors"
-	"io/fs"
 	"net/http"
 	"net/url"
 	"strings"
@@ -19,7 +16,6 @@ import (
 	"github.com/AlexGalhardo/vukem/orm"
 	"github.com/AlexGalhardo/vukem/queue"
 	"github.com/AlexGalhardo/vukem/uuid"
-	"github.com/AlexGalhardo/vukem/view"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
@@ -33,25 +29,14 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
 )
 
-//go:embed views
-var viewsRoot embed.FS
-
-// ViewsFS holds the template overrides of the panel (layout, show page) and the pages of CatalogHandlers.
-func ViewsFS() (fs.FS, error) { return fs.Sub(viewsRoot, "views") }
-
 var affiliateStores = map[string]bool{"amazon": true, "mercadolivre": true, "steam": true, "gog": true}
 
-const (
-	maxAffiliateURL = 2048
-	panelCSP        = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; " +
-		"form-action 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'"
-)
+const maxAffiliateURL = 2048
 
 // CatalogHandlers serve the item management pages and the ingestion status page behind the panel gate and CSRF.
 type CatalogHandlers struct {
 	Accounts *accounts.Accounts
 	Queue    *queue.Queue
-	Views    *view.Engine
 	// Authorize is the panel gate check (404 for non-admins).
 	Authorize func(c *web.Ctx) error
 	// FlagsURL is the vukem feature-flags page; empty when no flag is registered.
@@ -146,19 +131,6 @@ func (h CatalogHandlers) newPage(title string) pageData {
 	}}
 }
 
-func (h CatalogHandlers) render(c *web.Ctx, name string, d pageData) error {
-	var buf bytes.Buffer
-	if err := h.Views.Render(c.Context(), &buf, name, d); err != nil {
-		return errs.Wrap(http.StatusInternalServerError, err)
-	}
-
-	c.SetHeader("Cache-Control", "no-store")
-	c.SetHeader("X-Frame-Options", "DENY")
-	c.SetHeader("Content-Security-Policy", panelCSP)
-
-	return c.Blob(http.StatusOK, "text/html; charset=utf-8", buf.Bytes())
-}
-
 func (h CatalogHandlers) actor(c *web.Ctx) (models.User, error) {
 	if err := h.Authorize(c); err != nil {
 		return models.User{}, err
@@ -237,7 +209,11 @@ func (h CatalogHandlers) Manage(c *web.Ctx) error {
 
 	d.OfferKinds, d.OfferCountries = offerKinds, append([]string{offers.Everywhere}, offers.Countries...)
 
-	return h.render(c, "items_manage", d)
+	return h.react(c, "Admin/ItemManage", map[string]any{
+		"item":       map[string]any{"id": d.Item.ID, "type": d.Item.Type, "slug": d.Item.Slug},
+		"affiliates": d.Affiliates, "trending": d.Trending, "offers": d.Offers, "stores": d.Stores,
+		"offerKinds": d.OfferKinds, "offerCountries": d.OfferCountries,
+	})
 }
 
 func audit(ctx context.Context, ex database.Executor, actor models.User, record, action string,
@@ -438,7 +414,7 @@ func (h CatalogHandlers) Ingestion(c *web.Ctx) error {
 
 	d.Ready = recs.Valid && runs.Valid
 	if !d.Ready {
-		return h.render(c, "ingestion", d)
+		return h.react(c, "Admin/IngestSources", map[string]any{"ready": false})
 	}
 
 	var err error
@@ -450,7 +426,7 @@ func (h CatalogHandlers) Ingestion(c *web.Ctx) error {
 		return err
 	}
 
-	return h.render(c, "ingestion", d)
+	return h.react(c, "Admin/IngestSources", map[string]any{"ready": true, "sources": d.Sources, "runs": d.Runs})
 }
 
 func loadSources(ctx context.Context, db *sql.DB) ([]sourceRow, error) {

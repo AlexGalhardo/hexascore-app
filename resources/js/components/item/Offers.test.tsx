@@ -44,7 +44,7 @@ const data = (over: Partial<OffersData> = {}): OffersData => ({
 });
 
 test("groups the links by kind and sends each through /go with the sponsored rel", () => {
-	render(<Offers offers={data()} type="movie" title="The Matrix" locale="en" />);
+	render(<Offers offers={data()} type="movie" />);
 
 	const stream = screen.getByRole("group", { name: "offers.kinds.stream" });
 	const link = within(stream).getByRole("link", { name: /Netflix/ });
@@ -60,61 +60,24 @@ test("groups the links by kind and sends each through /go with the sponsored rel
 	).toBeTruthy();
 });
 
-test("the country switch changes the list and keeps the choice in the URL", () => {
-	render(<Offers offers={data()} type="movie" title="The Matrix" locale="en" />);
-
-	const select = screen.getByRole("combobox", { name: "offers.country" }) as HTMLSelectElement;
-	expect(select.value).toBe("BR");
-
-	select.value = "US";
-	select.dispatchEvent(new Event("change", { bubbles: true }));
-
-	expect(screen.getByRole("link", { name: /Tubi TV/ })).toBeTruthy();
-	expect(screen.queryByRole("link", { name: /Netflix/ })).toBeNull();
-	expect(window.location.search).toBe("?country=US");
+test("offers from every country show for any visitor, one link per store and kind", () => {
+	render(<Offers offers={data()} type="movie" />);
+	expect(screen.queryByRole("combobox")).toBeNull();
+	expect(screen.getByRole("link", { name: /Tubi TV/ }).getAttribute("href")).toBe("/go/o3");
+	expect(screen.getAllByRole("link", { name: /Netflix/ })).toHaveLength(1);
 });
 
-test("a country in the URL wins over the locale default", () => {
-	window.history.replaceState(null, "", "/movies/the-matrix?country=US");
-	render(<Offers offers={data()} type="movie" title="The Matrix" locale="en" />);
-
-	expect((screen.getByRole("combobox") as HTMLSelectElement).value).toBe("US");
-	expect(screen.getByRole("link", { name: /Tubi TV/ })).toBeTruthy();
-});
-
-test("an unknown country in the URL is ignored", () => {
-	window.history.replaceState(null, "", "/movies/the-matrix?country=XX");
-	render(<Offers offers={data()} type="movie" title="The Matrix" locale="en" />);
-
-	expect((screen.getByRole("combobox") as HTMLSelectElement).value).toBe("BR");
-});
-
-test("with nothing known it says so and offers the JustWatch search for films and series", () => {
-	const empty = data({ defaultCountry: "PT", attribution: [] });
-	render(<Offers offers={empty} type="series" title="Dark & Co" locale="pt-BR" />);
-
-	expect(screen.getByText(/offers.none/)).toBeTruthy();
-
-	const search = screen.getByRole("link", { name: "offers.searchJustWatch" });
-	expect(search.getAttribute("href")).toBe(
-		"https://www.justwatch.com/pt/search?q=Dark%20%26%20Co",
-	);
-	expect(search.getAttribute("rel")).toBe("noopener noreferrer nofollow");
-});
-
-test("games and books get no JustWatch search", () => {
-	render(
-		<Offers offers={data({ defaultCountry: "PT" })} type="game" title="Portal" locale="en" />,
-	);
-
-	expect(screen.getByText(/offers.none/)).toBeTruthy();
-	expect(screen.queryByRole("link", { name: "offers.searchJustWatch" })).toBeNull();
+test("with no offers anywhere it renders nothing, for films, series and games", () => {
+	const empty = data({ byCountry: {} });
+	for (const type of ["movie", "series", "game"] as const) {
+		const { container, unmount } = render(<Offers offers={empty} type={type} />);
+		expect(container.innerHTML).toBe("");
+		unmount();
+	}
 });
 
 test("the commission and Amazon lines appear only when asked for, the credit when a source is listed", () => {
-	const { rerender } = render(
-		<Offers offers={data()} type="movie" title="The Matrix" locale="en" />,
-	);
+	const { rerender } = render(<Offers offers={data()} type="movie" />);
 	expect(screen.queryByText("offers.commission")).toBeNull();
 	expect(screen.queryByText("offers.amazon")).toBeNull();
 	expect(screen.getByText("offers.justwatch")).toBeTruthy();
@@ -123,8 +86,6 @@ test("the commission and Amazon lines appear only when asked for, the credit whe
 		<Offers
 			offers={data({ commission: true, amazonAssociate: true, attribution: [] })}
 			type="book"
-			title="Dune"
-			locale="en"
 		/>,
 	);
 	expect(screen.getByText("offers.commission")).toBeTruthy();

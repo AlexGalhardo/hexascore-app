@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **admin:** A progress bar sweeps across the top and the content dims while an admin page loads (after a 120 ms delay, so fast pages do not flash).
+
+- **admin:** Every admin screen is now a React page in the new shell: ingestion and its runs, source records, the match, field and conflict review queues, the catalogue audit with revert, locks, item management (fields, affiliate links, offers, trending, merge), the moderation queue, detail, metrics and bulk result, and read-only list and detail screens for users, score bursts, rating flags, score actions, formula versions, reports, contact messages, items, job runs, ingest failures, data quality results, the audit log and the feature flags (`/admin/r/<slug>`, an allow-list of columns). Actions post to the same endpoints and show the server's message inline. Feature flags are changed from the flags screen and contact messages are marked handled from their detail page, both recorded in the audit log.
+
+- **admin:** A new React admin dashboard at `/admin/overview` (Inertia, TanStack Query, shadcn-style components over Base UI) with a sidebar, light and dark themes, headline counts, worker heartbeat and recent ingestion runs. It sits behind the panel guard (2FA, CSRF, ability) and refreshes every 30 seconds. The framework's own panel is no longer mounted: `/admin`, `/admin/_flags`, `/admin/_audit` and `/admin/<resource>` redirect to the React screens (ADR 0026, VF-083).
+
+- **catalog:** Upcoming releases within 90 days on the landing, 30-day activity ranking for released items, and a where-to-watch provider filter for movie and series listings
+- **ui:** A grouped footer with a disabled newsletter preview and a catalogue demo seed with future releases for each category
 - **catalog:** Where to watch or buy on every item page: streaming, rent, buy and free-with-ads providers from TMDB (display only, with the JustWatch credit), Steam, GOG, Epic, Google Play, App Store and Amazon links derived from the catalogue ids, a country switch that follows the locale, and `/go/{id}` as the only exit (rate limited, uncached, no user id or IP counted); affiliate tags are added at the redirect when `AFFILIATE_*_TAG` is set
 - **admin:** The item manage page lists, deactivates, restores and adds offers, and pins or bans an item on the trending lists; `/admin/ingest/conflicts` holds items that duplicate another until an admin allows or dismisses them
 - **catalog:** The normaliser no longer creates an item whose external id another item owns or whose English title and year match another item; unique indexes on the external ids back the rule
@@ -19,14 +27,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **ratings:** Unreleased item pages explain when ratings open and disable guest and member rating controls; the existing server gate remains authoritative
+- **ui:** The navbar bottom border uses the same light border token as the catalogue cards
+- **ingest:** A cancelled refresh stops before opening a batch and between cover checks
 - **trending:** Flagged seed accounts no longer count in the trending signals or in the collaborative-filtering gate (OQ-07)
 - **a11y:** The Details links on the item page are 24 px touch targets again (Lighthouse target-size)
 - **web:** The render cache keys pages by their locale prefix again: `/pt-br/...` and `/es/...` no longer serve the English (or Spanish) copy rendered first
 
 ### Changed
 
-- Web UI experiment: shadcn/ui components and a Vercel-like neutral theme (ADR 0026), web only.
+- Web UI experiment: shadcn/ui components and a Vercel-like neutral theme (ADR 0027), web only.
 - **trending:** The landing carousel is the 7-day snapshot of score v2 (12 per type, entry and exit rules with a 72-hour cooldown, at most 2 per franchise and 4 per genre, a quality floor, admin pins and bans from the item page); `FLAG_TRENDING_V2=false` restores the most-rated list; quiet slots are labelled "Popular" and the formula is explained on /how-score-works
+- **home:** Release date badges on the landing carousel are larger, with bigger text, for easier reading.
+
+- **catalog:** Grid and category cover images fill their card, and the score badge is slightly larger.
+
+- **home:** Upcoming carousel cards show the release date as a bright orange badge with black text in the top-right corner.
+
+- **catalog:** Item cards in the grids and category pages no longer show the title on the cover; the score stays in the top-right corner, and the title is kept for screen readers.
+
+- **home:** Landing carousel covers fill their box (cropped to cover), and each card's footer shows only the release date; the title stays available to screen readers.
+
+- **home:** Landing carousels show four cards per slide in a four-column grid, with the twelve upcoming cards spread over three slides.
+
+- **item:** The where-to-watch and where-to-play block is hidden when an item has no offers, instead of showing an empty message.
+
+
+- **item:** Where to watch (films and series) and where to play (games) show offers from every country at once, with no country selector, so a service listed in one country appears for every visitor.
+
+- **ui:** Cover images are shown whole at every size (no cropping); the space left around them takes the card colour.
+
+- **item:** Where to watch moved into the Details card, below the action buttons, and its labels are now served to the page (the `offers.` namespace was missing from the page translations).
+
+- **home:** Landing carousels show 6 upcoming poster cards per row (12 in total); slides advance automatically every two seconds, pausing on hover or focus and when reduced motion is on; no arrow buttons; navigation is by arrow keys and swipe. Each carousel heading uses the trending label style, and each card shows its release date in the top-right corner.
+
+- **item:** On unreleased items, logged-in users can only use "want" and "add to list"; the other status buttons are disabled and the time-to-beat block is hidden. Clearing an existing status stays allowed.
+
+- **trending:** The landing carousels show upcoming announcements with their known release-date precision instead of scores and advance only when a visitor navigates; the released 30-day ranking fills the grids below them. The 7-day score v2 snapshots remain available to the API
+- **ui:** Narrower site container, flatter and squarer catalogue cards, permanent navbar shadow, item verdict labels, shorter runtime display, and Amazon links below eligible book and game covers
 - **ui:** Cards (landing rows, category grids, trending) have a soft grey edge instead of a category colour, and buttons, inputs and cards share one radius scale (`rounded-md` controls, `rounded-lg` cards, `rounded-sm` covers and badges); native controls follow the theme, text selection uses the brand colour and headings balance their line breaks
 - **catalog:** Canonical genres: one translated list per category (en, pt-BR, es) replaces the Wikidata genre labels; `genres:canonicalize` relinks the items and keeps the source links hidden in `item_genre_sources`; the rules cover the most used labels of the production dry run (85% of links before, more now: LGBTQ+, educational, telenovela, tokusatsu, science fiction and fantasy games); listing filters show the translated names and the public `/{type}/genres` endpoints take `locale` and return `name`
 - **api:** The API reference groups operations under games, movies, series, books and catalog, and every operation has a one-sentence description; the Python SDK modules follow the new tags

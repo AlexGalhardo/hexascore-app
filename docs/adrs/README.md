@@ -29,4 +29,5 @@ Format: [MADR](https://adr.github.io/madr/) (title, status, context, decision, a
 | [0023](0023-analytics-consent.md) | Analytics with one cookie banner: GA4 only after consent, cookieless Umami for everyone | accepted |
 | [0024](0024-redis-deferred.md) | Redis deferred: Postgres and process memory stay the only stores until a named trigger fires | accepted |
 | [0025](0025-mongodb-rejected.md) | MongoDB rejected: raw source payloads stay in Postgres `jsonb` | accepted |
-| [0026](0026-shadcn-ui-vercel-theme.md) | shadcn/ui components and a Vercel-like web theme (experiment, amends D-22) | accepted |
+| [0026](0026-admin-react-shadcn.md) | Admin panel moves to React with shadcn-style components over Base UI | accepted |
+| [0027](0027-shadcn-ui-vercel-theme.md) | shadcn/ui components and a Vercel-like web theme (public site, extends 0026) | accepted |

@@ -55,7 +55,13 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 		}
 
 		props := inertia.Props{
-			"item":          pageItem(page.Item),
+			"item": pageItem(page.Item),
+			"unreleased": scoring.RatedBeforeRelease(
+				h.app.Now().UTC(),
+				page.RatingReleaseDate,
+				page.RatingReleasePrecision,
+				page.RatingReleaseStatus,
+			),
 			"ratingSummary": webRatingSummary{RatingSummary: page.RatingSummary},
 			"entities":      page.Entities,
 			"editions":      page.Editions,

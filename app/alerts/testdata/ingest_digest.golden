@@ -1,5 +1,7 @@
-<b>Ingest digest</b> 02/11 14:30 (last 30 min)
+<b>Ingest digest</b> 02/11 14:30 (last 5 min)
 Created 12 · updated 340 · failed 3 · covers 25 · rate limited 2
 Backlog: 4 queued, 1 running
+Catalogue: 100 books · 200 movies · 50 series (350 of 1,000,000)
+Worker: beat 42s ago
 Errors: wikidata/http_5xx ×3, tmdb/timeout ×1, a&lt;b/x&amp;y ×1
 LLM: $1.23 this month, projected $9.80 (alert at $18.00)

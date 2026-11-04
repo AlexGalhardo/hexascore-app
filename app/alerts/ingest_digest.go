@@ -8,10 +8,12 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
+
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
 )
 
 // IngestWindow is how often the ingestion digest runs and how far back it looks (RFC-001 section 8).
-const IngestWindow = 30 * time.Minute
+const IngestWindow = 5 * time.Minute
 
 // LLMAlertUSD is the projected monthly LLM spend that gets flagged in the digest (RFC-001: US$18 of the US$20 ceiling).
 const LLMAlertUSD = 18.0
@@ -28,15 +30,14 @@ type IngestSummary struct {
 	// Created counts items inserted in the window; Updated the records changed by runs that ended in it.
 	Created, Updated, Failed, Covers, RateLimited int
 	Queued, Running                               int
-	Errors                                        []IngestError
+	// Books, Movies and Series are the catalogue totals; the 1,000,000-item run is followed through them.
+	Books, Movies, Series int
+	// HeartbeatAge is how long ago the worker last beat; HeartbeatOK is false when it never did.
+	HeartbeatAge time.Duration
+	HeartbeatOK  bool
+	Errors       []IngestError
 	// LLMMonthUSD is the month-to-date spend from ingest_cost_daily; LLMProjectedUSD extrapolates it to the month.
 	LLMMonthUSD, LLMProjectedUSD float64
-}
-
-// Quiet reports a window with nothing to say: no change, no error, nothing waiting.
-func (s IngestSummary) Quiet() bool {
-	return s.Created == 0 && s.Updated == 0 && s.Failed == 0 && s.Covers == 0 && s.RateLimited == 0 &&
-		len(s.Errors) == 0 && s.Queued == 0 && s.Running == 0
 }
 
 // BuildIngestSummary reads the tables for the window ending at at. It only reads.
@@ -90,6 +91,18 @@ LIMIT 5`, s.Since, at)
 		return s, err
 	}
 
+	if err := db.QueryRowContext(ctx, `SELECT count(*) FILTER (WHERE type = 'book'), count(*) FILTER (WHERE type = 'movie'),
+  count(*) FILTER (WHERE type = 'series') FROM items`).
+		Scan(&s.Books, &s.Movies, &s.Series); err != nil {
+		return s, fmt.Errorf("ingest digest: totals: %w", err)
+	}
+
+	if beat, ok, err := ingest.ReadWorkerHeartbeat(ctx, db); err != nil {
+		return s, err
+	} else if ok {
+		s.HeartbeatOK, s.HeartbeatAge = true, at.Sub(beat)
+	}
+
 	day := at.In(saoPaulo)
 
 	if err := db.QueryRowContext(ctx, `SELECT coalesce(sum(llm_usd), 0)::float8 FROM ingest_cost_daily
@@ -117,6 +130,20 @@ func FormatIngest(s IngestSummary) string {
 	fmt.Fprintf(&b, "Created %d · updated %d · failed %d · covers %d · rate limited %d\n",
 		s.Created, s.Updated, s.Failed, s.Covers, s.RateLimited)
 	fmt.Fprintf(&b, "Backlog: %d queued, %d running\n", s.Queued, s.Running)
+	fmt.Fprintf(&b, "Catalogue: %d books · %d movies · %d series (%d of 1,000,000)\n",
+		s.Books, s.Movies, s.Series, s.Books+s.Movies+s.Series)
+
+	if s.HeartbeatOK {
+		fmt.Fprintf(&b, "Worker: beat %s ago", s.HeartbeatAge.Round(time.Second))
+
+		if s.HeartbeatAge > ingest.WorkerStaleAfter {
+			b.WriteString(" <b>STALE</b>")
+		}
+
+		b.WriteString("\n")
+	} else {
+		b.WriteString("Worker: <b>no heartbeat</b>\n")
+	}
 
 	if len(s.Errors) > 0 {
 		parts := make([]string, len(s.Errors))
@@ -142,16 +169,10 @@ func FormatIngest(s IngestSummary) string {
 	return b.String()
 }
 
-// scheduledSend reports the two windows a digest goes out even when quiet: the first half hour after 08:00 and 20:00.
-func scheduledSend(at time.Time) bool {
-	t := at.In(saoPaulo)
-
-	return (t.Hour() == 8 || t.Hour() == 20) && t.Minute() < 30
-}
-
-// SendIngestDigest posts the digest to the ops chat unless the window is quiet (08:00 and 20:00 always go). With a
-// nil notifier (Telegram unset) it sends nothing. It reports whether a message went out.
-func SendIngestDigest(ctx context.Context, db database.Executor, n *Notifier, at time.Time, force bool) (bool, error) {
+// SendIngestDigest posts the digest to the ops chat every time it runs, quiet or not: while the catalogue is being
+// filled, a missing message is the signal that something stopped. With a nil notifier (Telegram unset) it sends
+// nothing. It reports whether a message went out.
+func SendIngestDigest(ctx context.Context, db database.Executor, n *Notifier, at time.Time, _ bool) (bool, error) {
 	if n == nil {
 		return false, nil
 	}
@@ -159,10 +180,6 @@ func SendIngestDigest(ctx context.Context, db database.Executor, n *Notifier, at
 	s, err := BuildIngestSummary(ctx, db, at)
 	if err != nil {
 		return false, err
-	}
-
-	if s.Quiet() && !force && !scheduledSend(at) {
-		return false, nil
 	}
 
 	if err := n.SendOps(ctx, FormatIngest(s)); err != nil {

@@ -77,7 +77,7 @@ test("logged out: score block with explanation, chips, disabled stars and a log 
 	auth = null;
 	render(<Show {...props} />);
 	expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("World of Warcraft");
-	expect(screen.getByText(/item.band.high/)).toBeTruthy();
+	expect(screen.getByText(/item.verdict.excellent/)).toBeTruthy();
 	expect(screen.getByText(/item.scoreFrom.*1,482/)).toBeTruthy();
 	expect(screen.getAllByRole("link", { name: "MMORPG" })[0].getAttribute("href")).toBe(
 		"/games?genre=mmorpg&per=40&sort=-popularity",
@@ -115,6 +115,27 @@ test("logged in: enabled stars, overall preview, save and status picker", () => 
 	expect(screen.queryByRole("link", { name: "item.loginToRate" })).toBeNull();
 });
 
+test("unreleased item explains the missing score and blocks guest and member rating controls", () => {
+	auth = null;
+	const guest = render(<Show {...props} unreleased />);
+	expect(screen.getByText("item.unreleased")).toBeTruthy();
+	expect(screen.getByTestId("score-block").textContent).toContain("item.unreleasedHint");
+	expect(screen.queryByText(/item.verdict.excellent/)).toBeNull();
+	expect(
+		(screen.getByRole("button", { name: "item.loginToRate" }) as HTMLButtonElement).disabled,
+	).toBe(true);
+	expect(screen.queryByRole("link", { name: "item.loginToRate" })).toBeNull();
+	expect(screen.getAllByRole("radio").every((r) => (r as HTMLInputElement).disabled)).toBe(true);
+	guest.unmount();
+
+	auth = { user: { id: "u1" } };
+	render(<Show {...props} unreleased me={{ rating: null, status: null, timeToBeat: null }} />);
+	expect(screen.getAllByRole("radio").every((r) => (r as HTMLInputElement).disabled)).toBe(true);
+	expect(
+		(screen.getByRole("button", { name: "ratings.save" }) as HTMLButtonElement).disabled,
+	).toBe(true);
+});
+
 test("three columns: actions under the cover, title and synopsis before the score card and rating form", () => {
 	auth = null;
 	render(
@@ -128,12 +149,7 @@ test("three columns: actions under the cover, title and synopsis before the scor
 	const names = [...actions.querySelectorAll("a, button")]
 		.filter((el) => !el.closest("section"))
 		.map((el) => el.textContent);
-	expect(names).toEqual([
-		"item.seeUserScores",
-		"lists.addToList",
-		"community.suggest.link",
-		"community.recent.link",
-	]);
+	expect(names).toEqual(["item.seeUserScores", "lists.addToList"]);
 	for (const el of [...actions.querySelectorAll("a, button")].filter(
 		(e) => !e.closest("section"),
 	)) {

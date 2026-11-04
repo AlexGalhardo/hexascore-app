@@ -45,6 +45,7 @@ func Home(app *vukem.App) web.HandlerFunc {
 	return func(c *web.Ctx) error {
 		sections := make([]catalog.SectionHighlights, 0, len(homeTypes))
 		trend := map[string]trendingSection{}
+		upcoming := map[string][]catalog.Highlight{}
 
 		db, err := app.DB()
 		if err != nil {
@@ -56,6 +57,10 @@ func Home(app *vukem.App) web.HandlerFunc {
 			// catalog tables exist only on Postgres (VF-033).
 			if db.Dialect().Name() == "postgres" {
 				if s, err = catalog.Highlights(c.Context(), db, typ, i18n.Locale(c.Context())); err != nil {
+					return err
+				}
+				upcoming[typ], err = catalog.Upcoming(c.Context(), db, typ, i18n.Locale(c.Context()))
+				if err != nil {
 					return err
 				}
 			}
@@ -90,7 +95,7 @@ func Home(app *vukem.App) web.HandlerFunc {
 			}
 		}
 
-		props := inertia.Props{"sections": sections, "trending": trend}
+		props := inertia.Props{"sections": sections, "trending": trend, "upcoming": upcoming}
 
 		if db.Dialect().Name() == "postgres" {
 			once.Do(func() {

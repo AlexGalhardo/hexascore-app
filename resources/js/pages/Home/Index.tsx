@@ -2,14 +2,12 @@ import { Link, usePage } from "@inertiajs/react";
 import CoverThumb, { type Cover } from "../../components/CoverThumb";
 import ForYouListView, { type ForYouList } from "../../components/catalog/ForYouList";
 import { SECTION_PATHS, type Section } from "../../components/catalog/SectionHighlights";
-import TypeSection, { type TrendingEntry } from "../../components/home/TypeSection";
+import TypeSection from "../../components/home/TypeSection";
 import Seo from "../../components/Seo";
 import ScoreBadge from "../../components/ui/ScoreBadge";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
-
-type Trending = Partial<Record<Section["type"], { computedAt: string; items: TrendingEntry[] }>>;
 
 interface FriendRated {
 	nickname: string;
@@ -21,12 +19,14 @@ interface FriendRated {
 // personal lists above them when present.
 export default function Index({
 	sections,
-	trending,
+	upcoming,
 	forYou,
 	friends,
 }: {
 	sections: Section[];
-	trending: Trending;
+	upcoming?: Partial<
+		Record<Section["type"], import("../../components/catalog/SectionHighlights").Highlight[]>
+	>;
 	forYou?: Partial<Record<Section["type"], ForYouList>>;
 	/** Deferred (group `personal`) while the flag `social` is on. */
 	friends?: FriendRated[];
@@ -87,7 +87,7 @@ export default function Index({
 					<TypeSection
 						key={section.type}
 						section={section}
-						trending={trending[section.type]?.items ?? []}
+						upcoming={upcoming?.[section.type] ?? []}
 					/>
 				))}
 			</div>

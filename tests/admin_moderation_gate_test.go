@@ -4,7 +4,6 @@ package tests
 
 import (
 	"context"
-	"strings"
 	"testing"
 	"time"
 
@@ -54,9 +53,9 @@ func TestModerationGate(t *testing.T) {
 
 	body := browserFor(t, off, makeUser(t, off, "shell@example.com", "admin", true)).
 		Get("/admin/moderation").AssertOK().Body()
-	if want := `<nav class="sidebar"`; !strings.Contains(body, want) ||
-		!strings.Contains(body, `href="/admin/moderation"`) {
-		t.Fatalf("moderation page is not inside the admin layout with a sidebar link: %s", body)
+	// Pages named Admin/* are drawn inside the admin shell (resources/js/app.tsx), which owns the sidebar.
+	if got, _ := inertiaPage(t, body); got != "Admin/Moderation" {
+		t.Fatalf("moderation page component = %q, want Admin/Moderation", got)
 	}
 }
 

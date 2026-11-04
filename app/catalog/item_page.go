@@ -66,14 +66,17 @@ type TimeToBeat struct {
 
 // ItemPage is everything Catalog/Show needs that is not user specific.
 type ItemPage struct {
-	Item          ItemDetail              `json:"item"`
-	RatingSummary RatingSummary           `json:"ratingSummary"`
-	Entities      map[string][]EntityLink `json:"entities"`
-	Editions      []Edition               `json:"editions,omitempty"`
-	EditionCount  int                     `json:"editionCount,omitempty"`
-	TimeToBeat    *TimeToBeat             `json:"timeToBeat,omitempty"`
-	Trailers      []models.Trailer        `json:"trailers"`
-	Cover         *Cover                  `json:"cover"`
+	Item                   ItemDetail              `json:"item"`
+	RatingReleaseDate      *time.Time              `json:"-"`
+	RatingReleasePrecision string                  `json:"-"`
+	RatingReleaseStatus    string                  `json:"-"`
+	RatingSummary          RatingSummary           `json:"ratingSummary"`
+	Entities               map[string][]EntityLink `json:"entities"`
+	Editions               []Edition               `json:"editions,omitempty"`
+	EditionCount           int                     `json:"editionCount,omitempty"`
+	TimeToBeat             *TimeToBeat             `json:"timeToBeat,omitempty"`
+	Trailers               []models.Trailer        `json:"trailers"`
+	Cover                  *Cover                  `json:"cover"`
 }
 
 // LoadItemPage reads the public item of typ and slug in locale, falling back
@@ -89,6 +92,7 @@ func LoadItemPage(ctx context.Context, db Querier, typ, slug, locale string) (It
 		synLic   sql.NullString
 		synURL   sql.NullString
 		release  sql.NullTime
+		status   string
 		runtime  sql.NullInt64
 		pages    sql.NullInt64
 		limited  sql.NullTime
@@ -103,7 +107,7 @@ func LoadItemPage(ctx context.Context, db Querier, typ, slug, locale string) (It
 		thumbKey sql.NullString
 	)
 
-	err := db.QueryRowContext(ctx, `SELECT i.id::text, i.wikidata_qid, i.release_date, i.release_precision, i.runtime_minutes, i.page_count,
+	err := db.QueryRowContext(ctx, `SELECT i.id::text, i.wikidata_qid, i.release_date, i.release_precision, i.release_status, i.runtime_minutes, i.page_count,
   coalesce(t.title, te.title, i.original_title, i.slug), coalesce(t.title_source, te.title_source, 'hexascore'),
   coalesce(t.synopsis, te.synopsis), coalesce(t.synopsis_source, te.synopsis_source),
   coalesce(t.synopsis_licence, te.synopsis_licence), coalesce(t.synopsis_source_url, te.synopsis_source_url),
@@ -115,7 +119,7 @@ LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $3
 LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
 WHERE i.type = $1 AND i.slug = $2 AND i.visibility = 'public'`, typ, slug, locale).
 		Scan(
-			&src.ID, &src.WikidataQID, &release, &src.ReleasePrecision, &runtime, &pages,
+			&src.ID, &src.WikidataQID, &release, &src.ReleasePrecision, &status, &runtime, &pages,
 			&title, &tsrc, &syn, &synSrc, &synLic, &synURL,
 			&sum.RatingCount, &score, &cats[0], &cats[1], &cats[2], &cats[3], &cats[4], &cats[5],
 			&conf, &version, &limited, &unusual, &trailers, &coverKey, &thumbKey)
@@ -143,7 +147,10 @@ WHERE i.type = $1 AND i.slug = $2 AND i.visibility = 'public'`, typ, slug, local
 	}
 	if release.Valid {
 		src.ReleaseDate = &Sourced[time.Time]{Value: release.Time, Source: tsrc.String}
+		page.RatingReleaseDate = &release.Time
 	}
+	page.RatingReleasePrecision = src.ReleasePrecision
+	page.RatingReleaseStatus = status
 	if runtime.Valid {
 		src.RuntimeMinutes = &Sourced[int]{Value: int(runtime.Int64), Source: tsrc.String}
 	}

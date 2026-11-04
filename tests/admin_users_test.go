@@ -105,8 +105,7 @@ func TestAdminPanelAccess(t *testing.T) {
 
 	admin := makeUser(t, app, adminEmail, "admin", true)
 	c := browserFor(t, app, admin)
-	c.Get("/admin").AssertOK().AssertSee("Dashboard")
-	c.Get("/admin/users").AssertOK().AssertSee("user@example.com")
+	c.Get("/admin").AssertRedirect("/admin/overview")
 }
 
 func TestSecurity_A01_AdminRoleNotEditableInPanel(t *testing.T) {
@@ -120,27 +119,19 @@ func TestSecurity_A01_AdminRoleNotEditableInPanel(t *testing.T) {
 	id := itoa(target.ID)
 	c.PostForm("/admin/users/"+id, url.Values{
 		"role": {"admin"}, "email": {"evil@example.com"}, "password": {"x"}, "banned_at": {"2026-01-01T00:00"},
-	})
+	}).AssertStatus(405)
 
 	got := reload(t, app, target.ID)
 	if got.Role != "user" || got.Email != "target@example.com" || got.Password != "unused" || got.BannedAt.Valid {
 		t.Fatalf("crafted POST changed the user: %+v", got)
 	}
 
-	// Reason and expiry only make sense on a ban.
-	c.PostForm("/admin/users/"+id, url.Values{"banReason": {"spam"}})
+	// The panel has no user write routes: creation, edit and deletion do not exist.
+	c.PostForm("/admin/users", url.Values{"banReason": {"x"}}).AssertStatus(405)
+	c.PostForm("/admin/users/"+id+"/delete", url.Values{}).AssertStatus(405)
 
-	if reload(t, app, target.ID).BanReason != nil {
-		t.Fatal("ban reason stored on a user who is not banned")
-	}
-
-	// Panel creation and deletion are denied.
-	c.PostForm("/admin/users", url.Values{"banReason": {"x"}}).AssertForbidden()
-	c.PostForm("/admin/users/"+id+"/delete", url.Values{}).AssertForbidden()
-
-	// A non-admin never reaches the panel or the ban action.
+	// A non-admin never reaches the ban action.
 	plain := browserFor(t, app, target)
-	plain.PostForm("/admin/users/"+id, url.Values{"banReason": {"x"}}).AssertNotFound()
 	plain.PostForm("/admin/users/"+itoa(admin.ID)+"/ban", url.Values{}).AssertNotFound()
 
 	if reload(t, app, admin.ID).BannedAt.Valid {
@@ -306,7 +297,7 @@ func TestAdminCLI(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	browserFor(t, app, reload(t, app, u.ID)).Get("/admin").AssertOK()
+	browserFor(t, app, reload(t, app, u.ID)).Get("/admin").AssertRedirect("/admin/overview")
 
 	if _, err := acc.SetRole(t.Context(), "grantee@example.com", "user"); err != nil {
 		t.Fatal(err)
@@ -360,87 +351,5 @@ func TestResetTwoFactorCLI(t *testing.T) {
 
 	if err := acc.ResetTwoFactor(t.Context(), "nobody@example.com", "x"); err == nil {
 		t.Fatal("unknown email accepted")
-	}
-}
-
-func TestAdminEditsBanReason(t *testing.T) {
-	t.Parallel()
-
-	app := newAdminApp(t, nil)
-	admin := makeUser(t, app, adminEmail, "admin", true)
-	target := makeUser(t, app, "target@example.com", "user", true)
-
-	acc, err := accounts.New(app.App)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if err := acc.Ban(t.Context(), admin.ID, target.ID, "first", nil); err != nil {
-		t.Fatal(err)
-	}
-
-	c := browserFor(t, app, admin)
-	c.PostForm("/admin/users/"+itoa(target.ID), url.Values{"banReason": {"second"}})
-
-	got := reload(t, app, target.ID)
-	if got.BanReason == nil || *got.BanReason != "second" || !got.BannedAt.Valid || got.BanExpiresAt.Valid {
-		t.Fatalf("edit not applied cleanly: %+v", got)
-	}
-}
-
-// The panel form's "banned" checkbox bans and unbans in the save's transaction
-// (VF-046): same sessions, account event and dispatch as the ban routes.
-func TestAdminFormBansAndUnbans(t *testing.T) {
-	t.Parallel()
-
-	fake := events.NewFake()
-	app := newAdminApp(t, fake)
-	admin := makeUser(t, app, adminEmail, "admin", true)
-	target := makeUser(t, app, "target@example.com", "user", true)
-	id := itoa(target.ID)
-	c := browserFor(t, app, admin)
-
-	// Reason and expiry without a ban are refused and not stored.
-	c.PostForm("/admin/users/"+id, url.Values{"banReason": {"spam"}})
-
-	if reload(t, app, target.ID).BanReason != nil {
-		t.Fatal("ban reason stored on a user who is not banned")
-	}
-
-	c.PostForm("/admin/users/"+id, url.Values{"banned": {"false", "true"}, "banReason": {"spam"}})
-
-	got := reload(t, app, target.ID)
-	if !got.BannedAt.Valid || got.BanReason == nil || *got.BanReason != "spam" {
-		t.Fatalf("ban not stored: %+v", got)
-	}
-
-	if n := len(events.Dispatched[accounts.UserBanned](fake)); n != 1 {
-		t.Fatalf("user.banned dispatched %d times, want 1", n)
-	}
-
-	assertEvent(t, app, target.ID, "banned", admin.ID)
-
-	// An edit that omits the checkbox keeps the ban.
-	c.PostForm("/admin/users/"+id, url.Values{"banReason": {"second"}})
-
-	if got := reload(t, app, target.ID); !got.BannedAt.Valid || *got.BanReason != "second" {
-		t.Fatalf("reason edit changed the ban: %+v", got)
-	}
-
-	c.PostForm("/admin/users/"+id, url.Values{"banned": {"false"}})
-
-	if got := reload(t, app, target.ID); got.BannedAt.Valid || got.BanReason != nil {
-		t.Fatalf("unban not stored: %+v", got)
-	}
-
-	if n := len(events.Dispatched[accounts.UserUnbanned](fake)); n != 1 {
-		t.Fatalf("user.unbanned dispatched %d times, want 1", n)
-	}
-
-	// Banning yourself or another admin rolls the whole save back.
-	c.PostForm("/admin/users/"+itoa(admin.ID), url.Values{"banned": {"false", "true"}, "banReason": {"x"}})
-
-	if got := reload(t, app, admin.ID); got.BannedAt.Valid || got.BanReason != nil {
-		t.Fatalf("admin banned themselves: %+v", got)
 	}
 }

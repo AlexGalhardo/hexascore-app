@@ -34,6 +34,12 @@ type auditView struct {
 	Targets []string
 }
 
+// auditRowView adds what the template called as a method: whether the row can still be reverted.
+type auditRowView struct {
+	moderation.AuditRow
+	Revertible bool `json:"revertible"`
+}
+
 // Audit renders GET /admin/catalog-audit (viewCatalogAudit): the audit log with the revert form (SDD 04 section 6).
 func (h ModerationHandlers) Audit(c *web.Ctx) error {
 	if err := authorizeOr403(h.AuthorizeAudit, c); err != nil {
@@ -54,12 +60,16 @@ func (h ModerationHandlers) Audit(c *web.Ctx) error {
 		v.NextURL = "/admin/catalog-audit?" + q.Encode()
 	}
 
-	d := h.Pages.newPage("Catalogue audit")
-	d.Audit = v
-	d.CanRevert = h.AuthorizeRevert != nil && h.AuthorizeRevert(c) == nil
-	d.RevertReasons = community.RevertReasons
+	rows := make([]auditRowView, 0, len(v.Page.Rows))
+	for _, r := range v.Page.Rows {
+		rows = append(rows, auditRowView{AuditRow: r, Revertible: r.Revertible()})
+	}
 
-	return h.Pages.render(c, "catalog_audit", d)
+	return h.Pages.react(c, "Admin/CatalogAudit", map[string]any{
+		"rows": rows, "filter": v.Filter, "nextUrl": v.NextURL, "sources": v.Sources, "targets": v.Targets,
+		"canRevert":     h.AuthorizeRevert != nil && h.AuthorizeRevert(c) == nil,
+		"revertReasons": community.RevertReasons,
+	})
 }
 
 // auditFilter reads the list filters shared by the page and the exports.

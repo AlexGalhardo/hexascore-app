@@ -83,6 +83,7 @@ type ListParams struct {
 	RelationSources []string           // non-nil: relation filters match only item_entities rows from these sources (API)
 	Genre           string             // genre entity slug
 	Platform        string             // platform entity slug
+	Watch           string             // streaming provider store code, web movie/series only
 	Year            int                // 0 = any
 	MinScore        *float64           // stars
 	MaxScore        *float64           // stars
@@ -180,6 +181,15 @@ WHERE ie.item_id = i.id AND e.kind = ? AND `+key+srcCond+")", append([]any{kind,
 	}
 	if p.Platform != "" {
 		entity("platform", p.Platform)
+	}
+	if p.Watch != "" {
+		if (p.Type != "movie" && p.Type != "series") || len(p.Watch) > 80 ||
+			!utf8.ValidString(p.Watch) || strings.ContainsRune(p.Watch, 0) {
+			return nil, fmt.Errorf("%w: watch provider", ErrInvalidQuery)
+		}
+		b.add(`EXISTS (SELECT 1 FROM offers o JOIN stores s ON s.code = o.store AND s.active
+WHERE o.item_id = i.id AND o.store = ? AND o.active AND o.kind IN ('stream','free','rent')
+  AND (o.expires_at IS NULL OR o.expires_at > now()) AND o.verify_status <> 'gone')`, p.Watch)
 	}
 	if p.Year != 0 {
 		if p.Year < 1800 || p.Year > 2100 {
@@ -393,12 +403,12 @@ func listPage(
 // lookup); malformed numbers are ErrInvalidQuery. Limit stays 0 (default).
 func ParseListQuery(get func(string) string, typ string) (ListParams, error) {
 	p := ListParams{
-		Type: typ, Genre: get("genre"), Platform: get("platform"),
+		Type: typ, Genre: get("genre"), Platform: get("platform"), Watch: get("watch"),
 		Sort: get("sort"), Cursor: get("cursor"),
 	}
 
 	// PostgreSQL rejects NUL and invalid UTF-8 in text parameters (SQLSTATE 22021), which would be a 500.
-	for _, v := range []string{p.Genre, p.Platform, p.Sort, p.Cursor} {
+	for _, v := range []string{p.Genre, p.Platform, p.Watch, p.Sort, p.Cursor} {
 		if !utf8.ValidString(v) || strings.ContainsRune(v, 0) {
 			return p, ErrInvalidQuery
 		}

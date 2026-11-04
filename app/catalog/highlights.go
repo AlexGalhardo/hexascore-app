@@ -8,21 +8,22 @@ import (
 	"strings"
 )
 
-// PoolSize is how many items each landing block sends for the "More …" grid; the client shows a random 12 of them
-// after hydration, so the cached HTML stays identical for every visitor (owner round 2026-11-01 item 26).
-const PoolSize = 36
+// PoolSize is the number of released trending items shown in each landing block.
+const PoolSize = 12
 
 // Highlight is one ranked landing row. Score is nil until the item has 5
 // counted ratings (SDD 02 read gate).
 type Highlight struct {
-	ID          string   `json:"id"`
-	Type        string   `json:"type"`
-	Slug        string   `json:"slug"`
-	Title       string   `json:"title"`
-	Year        *int     `json:"year"`
-	Score       *float64 `json:"score"`
-	RatingCount int      `json:"ratingCount"`
-	Cover       *Cover   `json:"cover"`
+	ID               string   `json:"id"`
+	Type             string   `json:"type"`
+	Slug             string   `json:"slug"`
+	Title            string   `json:"title"`
+	Year             *int     `json:"year"`
+	ReleaseDate      *string  `json:"releaseDate,omitempty"`
+	ReleasePrecision string   `json:"releasePrecision"`
+	Score            *float64 `json:"score"`
+	RatingCount      int      `json:"ratingCount"`
+	Cover            *Cover   `json:"cover"`
 }
 
 // SectionHighlights is one item type's landing section: the public item count and the recommendation pool.
@@ -32,8 +33,8 @@ type SectionHighlights struct {
 	Pool  []Highlight `json:"pool"`
 }
 
-// Highlights loads the public item count and the pool of typ: the best scored items, then the most rated ones
-// until PoolSize. Titles fall back from locale to en, then to the original title.
+// Highlights loads the public item count and the most active released items over 30 days.
+// popularity_prior carries external source popularity when on-site activity is sparse.
 func Highlights(ctx context.Context, db Querier, typ, locale string) (SectionHighlights, error) {
 	out := SectionHighlights{Type: typ, Pool: []Highlight{}}
 
@@ -43,40 +44,55 @@ func Highlights(ctx context.Context, db Querier, typ, locale string) (SectionHig
 		return out, fmt.Errorf("count highlights: %w", err)
 	}
 
-	seen := map[string]bool{}
-	for _, b := range []struct{ sort, gate string }{
-		{"-score", " AND " + visibleScore},
-		{"-rating_count", ""},
-	} {
-		field, _, _ := ParseSort(b.sort)
-		q := `SELECT i.id, i.type, i.slug,
+	q := `WITH activity AS (
+  SELECT item_id, sum(views + 3*search_clicks + 5*want_w) AS hype
+  FROM item_activity_daily WHERE day > CURRENT_DATE - 30 GROUP BY item_id
+)
+SELECT i.id, i.type, i.slug,
   coalesce(t.title, te.title, i.original_title, i.slug),
-  extract(year FROM i.release_date)::int,
+  extract(year FROM i.release_date)::int, to_char(i.release_date, 'YYYY-MM-DD'), i.release_precision,
   ` + starsScore + `,
+  i.rating_count, i.cover_key, i.cover_thumb_key
+FROM items i
+LEFT JOIN activity a ON a.item_id = i.id
+LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
+LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
+WHERE i.type = $1 AND i.visibility = 'public' AND i.release_status = 'released'
+  AND (i.release_date IS NULL OR i.release_date <= CURRENT_DATE)
+ORDER BY coalesce(a.hype, 0) DESC,
+  i.popularity_prior DESC, i.rating_count DESC, i.id
+LIMIT ` + strconv.Itoa(PoolSize)
+	rows, err := db.QueryContext(ctx, q, typ, locale)
+	if err != nil {
+		return out, fmt.Errorf("highlights trending: %w", err)
+	}
+	out.Pool, err = scanHighlights(rows)
+	if err != nil {
+		return out, err
+	}
+
+	return out, nil
+}
+
+// Upcoming ranks public announcements in the next three calendar months by external popularity and on-site intent.
+func Upcoming(ctx context.Context, db Querier, typ, locale string) ([]Highlight, error) {
+	rows, err := db.QueryContext(ctx, `SELECT i.id, i.type, i.slug,
+  coalesce(t.title, te.title, i.original_title, i.slug),
+  extract(year FROM i.release_date)::int, to_char(i.release_date, 'YYYY-MM-DD'), i.release_precision, `+starsScore+`,
   i.rating_count, i.cover_key, i.cover_thumb_key
 FROM items i
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
 LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
-WHERE i.type = $1 AND i.visibility = 'public'` + b.gate + `
-ORDER BY ` + sortFields[field].desc + ` DESC, i.id DESC LIMIT ` + strconv.Itoa(PoolSize)
-
-		rows, err := db.QueryContext(ctx, q, typ, locale)
-		if err != nil {
-			return out, fmt.Errorf("highlights %s: %w", b.sort, err)
-		}
-		got, err := scanHighlights(rows)
-		if err != nil {
-			return out, err
-		}
-		for _, h := range got {
-			if len(out.Pool) < PoolSize && !seen[h.ID] {
-				seen[h.ID] = true
-				out.Pool = append(out.Pool, h)
-			}
-		}
+WHERE i.type = $1 AND i.visibility = 'public' AND i.release_status = 'announced'
+  AND i.release_date > CURRENT_DATE AND i.release_date <= (CURRENT_DATE + INTERVAL '3 months')::date
+ORDER BY (0.7 * i.popularity_prior + 10 * ln(1 +
+  (SELECT count(*) FROM item_status s WHERE s.item_id = i.id AND s.status = 'want'))) DESC,
+  i.release_date, i.id
+LIMIT 12`, typ, locale)
+	if err != nil {
+		return nil, fmt.Errorf("upcoming highlights: %w", err)
 	}
-
-	return out, nil
+	return scanHighlights(rows)
 }
 
 func scanHighlights(rows *sql.Rows) ([]Highlight, error) {
@@ -85,12 +101,27 @@ func scanHighlights(rows *sql.Rows) ([]Highlight, error) {
 	got := []Highlight{}
 	for rows.Next() {
 		var h Highlight
-		var full, thumb sql.NullString
-		err := rows.Scan(&h.ID, &h.Type, &h.Slug, &h.Title, &h.Year, &h.Score, &h.RatingCount, &full, &thumb)
+		var full, thumb, releaseDate sql.NullString
+		err := rows.Scan(
+			&h.ID,
+			&h.Type,
+			&h.Slug,
+			&h.Title,
+			&h.Year,
+			&releaseDate,
+			&h.ReleasePrecision,
+			&h.Score,
+			&h.RatingCount,
+			&full,
+			&thumb,
+		)
 		if err != nil {
 			return nil, fmt.Errorf("scan highlight: %w", err)
 		}
 		h.Cover = NewCover(full, thumb)
+		if releaseDate.Valid {
+			h.ReleaseDate = &releaseDate.String
+		}
 		got = append(got, h)
 	}
 
@@ -105,7 +136,7 @@ func HighlightsByID(ctx context.Context, db Querier, ids []string, locale string
 
 	rows, err := db.QueryContext(ctx, `SELECT i.id, i.type, i.slug,
   coalesce(t.title, te.title, i.original_title, i.slug),
-  extract(year FROM i.release_date)::int,
+  extract(year FROM i.release_date)::int, to_char(i.release_date, 'YYYY-MM-DD'), i.release_precision,
   `+starsScore+`,
   i.rating_count, i.cover_key, i.cover_thumb_key
 FROM unnest($1::uuid[]) WITH ORDINALITY AS w(id, n)

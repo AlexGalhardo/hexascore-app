@@ -1,9 +1,10 @@
-import { type ChangeEvent, type ReactElement, useEffect, useState } from "react";
+import type { ReactElement } from "react";
 
 import { useT } from "../../lib/useT";
 
 export interface OfferView {
 	id: string;
+	store?: string;
 	name: string;
 	kind: string;
 	/** Day (UTC, YYYY-MM-DD) the offer was last confirmed. */
@@ -22,76 +23,51 @@ export interface OffersData {
 	attribution: string[];
 }
 
-const STORAGE_KEY = "offers-country";
 const LINK =
 	"inline-flex min-h-11 items-center rounded-md border border-border bg-surface px-3 text-[15px] font-semibold hover:bg-hover outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
-const SELECT =
-	"min-h-11 rounded-md border border-field bg-field-bg px-3 text-[15px] text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
 
-/** The first country named by the URL, then the one remembered, that the page offers. */
-function chosenCountry(countries: string[]): string | null {
-	const fromUrl = new URLSearchParams(window.location.search).get("country");
-	let remembered: string | null = null;
-	try {
-		remembered = localStorage.getItem(STORAGE_KEY);
-	} catch {
-		/* storage blocked: the URL and the default still work */
-	}
-	return [fromUrl, remembered].find((c) => c !== null && countries.includes(c)) ?? null;
-}
+// Same order as the server (app/offers kindOrder): subscriptions and free first, physical last.
+const KIND_ORDER = ["stream", "free", "rent", "buy", "buy_digital", "mobile", "physical", "read"];
 
 /**
- * Where to watch or buy (RFC-003 section 4). The server sends every country, so the cached HTML is the same for all
- * visitors; the first render uses the locale's country and an effect applies the URL or the remembered choice.
+ * Worldwide view of the offers: every country's offers are merged, so a title on a service in one country shows
+ * for every visitor. A store and kind appear once; the default country's link wins when several have it.
  */
+export function worldwideOffers(offers: OffersData): OfferView[] {
+	const order = [
+		offers.defaultCountry,
+		...offers.countries.filter((c) => c !== offers.defaultCountry),
+	];
+	const seen = new Map<string, OfferView>();
+	for (const country of order) {
+		for (const offer of offers.byCountry[country] ?? []) {
+			const key = `${offer.kind}|${offer.store ?? offer.name}`;
+			if (!seen.has(key)) seen.set(key, offer);
+		}
+	}
+	return [...seen.values()].sort(
+		(a, b) => KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind),
+	);
+}
+
+/** Where to watch (films and series) or where to play (games), the same worldwide list for every visitor. Renders nothing without offers. */
 export default function Offers({
 	offers,
 	type,
-	title,
 }: {
 	offers: OffersData;
 	type: "game" | "movie" | "series" | "book";
-	title: string;
-	/** Reserved for date formatting; names come from the catalogues so the server and client markup match. */
-	locale?: string;
-}): ReactElement {
+}): ReactElement | null {
 	const t = useT();
-	const [country, setCountry] = useState(offers.defaultCountry);
-
-	useEffect(() => {
-		const picked = chosenCountry(offers.countries);
-		if (picked) setCountry(picked);
-	}, [offers.countries]);
-
-	const change = (e: ChangeEvent<HTMLSelectElement>) => {
-		const next = e.target.value;
-		setCountry(next);
-		try {
-			localStorage.setItem(STORAGE_KEY, next);
-		} catch {
-			/* storage blocked */
-		}
-		const url = new URL(window.location.href);
-		url.searchParams.set("country", next);
-		window.history.replaceState(window.history.state, "", url);
-	};
-
-	const list = offers.byCountry[country] ?? [];
+	const list = worldwideOffers(offers);
+	if (list.length === 0) return null;
 	const kinds = [...new Set(list.map((o) => o.kind))];
-	const canSearch = type === "movie" || type === "series";
 
 	return (
 		<div className="grid gap-4">
-			<label className="flex flex-wrap items-center gap-3 text-sm font-semibold">
-				{t("offers.country")}
-				<select value={country} onChange={change} className={SELECT}>
-					{offers.countries.map((c) => (
-						<option key={c} value={c}>
-							{t(`offers.countryNames.${c}`)}
-						</option>
-					))}
-				</select>
-			</label>
+			<h3 className="text-xs font-semibold tracking-widest text-muted uppercase">
+				{t(type === "game" ? "offers.titlePlay" : "offers.titleWatch")}
+			</h3>
 
 			{kinds.map((kind) => (
 				<fieldset key={kind} className="m-0 grid min-w-0 gap-2 border-0 p-0">
@@ -122,21 +98,6 @@ export default function Offers({
 					</ul>
 				</fieldset>
 			))}
-
-			{list.length === 0 && (
-				<p className="text-muted">
-					{t("offers.none", { country: t(`offers.countryNames.${country}`) })}{" "}
-					{canSearch && (
-						<a
-							href={`https://www.justwatch.com/${country.toLowerCase()}/search?q=${encodeURIComponent(title)}`}
-							rel="noopener noreferrer nofollow"
-							className="text-primary hover:underline"
-						>
-							{t("offers.searchJustWatch")}
-						</a>
-					)}
-				</p>
-			)}
 
 			{offers.commission && <p className="text-sm text-muted">{t("offers.commission")}</p>}
 			{offers.amazonAssociate && <p className="text-sm text-muted">{t("offers.amazon")}</p>}

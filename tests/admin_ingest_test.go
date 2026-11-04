@@ -149,7 +149,7 @@ func TestAdminIngestPanelResources(t *testing.T) {
 	app := ingestAdminApp(t, map[string]string{})
 	admin := browserFor(t, app, makeUser(t, app, "ingest-panel@example.com", models.RoleAdmin, true))
 
-	for _, p := range []string{"/admin/job-runs", "/admin/ingest-failures", "/admin/dq-results"} {
+	for _, p := range []string{"/admin/r/job-runs", "/admin/r/ingest-failures", "/admin/r/dq-results"} {
 		admin.Get(p).AssertOK()
 	}
 }

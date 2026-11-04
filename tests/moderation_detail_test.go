@@ -44,8 +44,8 @@ func TestSecurity_Community_A03_DiffEscapesHTML(t *testing.T) {
 		t.Fatalf("after value rendered as markup: %s", body)
 	}
 
-	if !strings.Contains(body, "&lt;script&gt;alert(1)&lt;/script&gt;") {
-		t.Fatalf("after value not rendered as text: %s", body)
+	if !strings.Contains(inertiaProp(t, body, "Admin/ModerationDetail", "detail"), "<script>alert(1)</script> New") {
+		t.Fatalf("after value missing from the page data: %s", body)
 	}
 }
 
@@ -187,7 +187,18 @@ VALUES ('`+id+`','merge','item','00000000-0000-0000-0000-0000000000aa','movie','
 	}
 
 	admin := browserFor(t, app, makeUser(t, app, "d6-admin@example.com", models.RoleAdmin, true))
-	admin.Get("/admin/moderation/" + id).AssertOK().AssertSee(`name="confirm_title"`)
+	// The typed-title field is drawn for a merge suggestion; the page needs to say it is one.
+	if got := inertiaProp(
+		t,
+		admin.Get("/admin/moderation/"+id).AssertOK().Body(),
+		"Admin/ModerationDetail",
+		"detail",
+	); !strings.Contains(
+		got,
+		`"kind":"merge"`,
+	) {
+		t.Fatalf("detail is not a merge suggestion: %s", got)
+	}
 	admin.WithHeader("Accept", "application/json").
 		PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}}).AssertStatus(422)
 	admin.PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}, "confirm_title": {"a"}}).

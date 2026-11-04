@@ -115,10 +115,10 @@ function SearchPalette({ open, onOpenChange, returnFocus }: Props) {
 				<BaseDialog.Popup
 					initialFocus={input}
 					finalFocus={returnFocus}
-					className="fixed inset-0 z-[60] flex flex-col bg-bg text-fg outline-none sm:inset-x-0 sm:top-[12vh] sm:bottom-auto sm:mx-auto sm:max-h-[76vh] sm:w-[calc(100%-2rem)] sm:max-w-[640px] sm:rounded-xl sm:border sm:border-border sm:shadow-lg"
+					className="fixed inset-0 z-[60] flex flex-col bg-bg text-fg outline-none sm:inset-x-0 sm:top-[12vh] sm:bottom-auto sm:mx-auto sm:max-h-[76vh] sm:w-[calc(100%-2rem)] sm:max-w-[640px] sm:rounded-md sm:border sm:border-fg sm:shadow-[0_4px_0_var(--color-border)]"
 				>
 					<BaseDialog.Title className="sr-only">{t("search.title")}</BaseDialog.Title>
-					<search className="flex items-center gap-2 border-b border-border px-4">
+					<search className="flex items-center gap-2 border-b border-fg px-4">
 						<svg
 							aria-hidden="true"
 							viewBox="0 0 24 24"
@@ -205,7 +205,7 @@ function SearchPalette({ open, onOpenChange, returnFocus }: Props) {
 													width={32}
 													height={48}
 													loading="lazy"
-													className="aspect-[2/3] w-8 shrink-0 bg-surface object-cover"
+													className="aspect-[2/3] w-8 shrink-0 object-contain"
 												/>
 											) : (
 												<span className="aspect-[2/3] w-8 shrink-0 border border-border bg-surface" />

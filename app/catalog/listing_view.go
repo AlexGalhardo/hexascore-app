@@ -20,7 +20,7 @@ func Summaries(ctx context.Context, db Querier, ids []string, locale string) ([]
 
 	rows, err := db.QueryContext(ctx, `SELECT i.id, i.type, i.slug,
   coalesce(t.title, te.title, i.original_title, i.slug),
-  extract(year FROM i.release_date)::int,
+  extract(year FROM i.release_date)::int, to_char(i.release_date, 'YYYY-MM-DD'), i.release_precision,
   `+starsScore+`,
   i.rating_count, i.cover_key, i.cover_thumb_key
 FROM unnest($1::uuid[]) WITH ORDINALITY AS o(id, n)
@@ -42,6 +42,29 @@ type Facet struct {
 	Count int    `json:"count"`
 	// Canonical marks a HexaScore genre (owner 2026-11-02): its translated name is ours, so the API may show it.
 	Canonical bool `json:"-"`
+}
+
+// WatchFacets lists official services with live movie or series viewing offers.
+func WatchFacets(ctx context.Context, db Querier, typ string) ([]Facet, error) {
+	rows, err := db.QueryContext(ctx, `SELECT s.code, s.name, count(DISTINCT o.item_id)
+FROM stores s JOIN offers o ON o.store = s.code AND o.active
+JOIN items i ON i.id = o.item_id AND i.type = $1 AND i.visibility = 'public'
+WHERE s.active AND o.kind IN ('stream','free','rent')
+  AND (o.expires_at IS NULL OR o.expires_at > now()) AND o.verify_status <> 'gone'
+GROUP BY s.code, s.name ORDER BY count(DISTINCT o.item_id) DESC, s.name LIMIT 100`, typ)
+	if err != nil {
+		return nil, fmt.Errorf("watch facets: %w", err)
+	}
+	defer rows.Close()
+	out := []Facet{}
+	for rows.Next() {
+		var f Facet
+		if err := rows.Scan(&f.Slug, &f.Name, &f.Count); err != nil {
+			return nil, fmt.Errorf("scan watch facet: %w", err)
+		}
+		out = append(out, f)
+	}
+	return out, rows.Err()
 }
 
 // Facets lists the genres and platforms used by public items of typ, most used first, named in locale; non-nil

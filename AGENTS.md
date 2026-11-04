@@ -1,123 +1,30 @@
-# HexaScore (vukem rewrite): guide for AI agents
+# HexaScore: guide for AI agents
 
-HexaScore (hexascore.app) is a catalogue, rating and recommendation platform for games, movies, series and books, with a paid read-only public API and an Android app. This repository is the Go rewrite on the [vukem](https://vukem.dev) framework; it replaces the Next.js app kept on branch `legacy` of `github.com/AlexGalhardo/hexascore-app`.
+HexaScore is a catalogue, rating and recommendation platform for games, films, series and books. This repository is its Go rewrite on vukem; the legacy Next.js app is on branch `legacy`.
 
-This file is the single source of truth for every coding agent. `CLAUDE.md` only points here.
+## Start here
 
-## Session start (mandatory)
+1. Read [ROADMAP.md](ROADMAP.md), then [docs/ROADMAP-V1.md](docs/ROADMAP-V1.md) and [docs/BACKLOG.md](docs/BACKLOG.md) for milestones and task order.
+2. Check the latest [review snapshot](docs/review/) and relevant [design documents](docs/sdd/), [ADRs](docs/adrs/) and [owner decisions](docs/brainstorming.md) before changing behavior.
+3. Read every matching rule in [.agents/rules/](.agents/rules/) before editing; read the applicable skill in [.agents/skills/](.agents/skills/) when its description fits. Rules are not loaded automatically.
+4. For Railway operations, follow [.agents/skills/use-railway/SKILL.md](.agents/skills/use-railway/SKILL.md) and [the Railway runbooks](docs/runbooks/). Never deploy unless the owner explicitly asks. A push to `main` deploys production.
 
-1. Read this file and [ROADMAP.md](ROADMAP.md) (status table and the dated status lines); the latest state snapshot is in [docs/review/](docs/review/).
-2. Read [.agents/skills/use-railway/SKILL.md](.agents/skills/use-railway/SKILL.md) and follow it for every Railway command. The skill is vendored from [railwayapp/railway-skills](https://github.com/railwayapp/railway-skills) commit `526e95524e964ed326689cbac4464d97a58ab81c` (`use-railway` 1.7.0). Also read [Grok Build + Railway](https://railway.com/agents/grok): Railway MCP is `https://mcp.railway.com`, and a deploy is a plan the owner approves before `railway up`.
-3. If you are one of the team workers (senior, intern), your system prompt is [PROMPT-WORKERS.md](PROMPT-WORKERS.md) and your brief is `.orchestration/briefs/<role>.md`; claim work only through `.orchestration/queue/TASKS.md` (tickets in `.orchestration/queue/tasks/<ID>.md`). If you are the orchestrator, follow `PROMPT-WORKERS.md` §0 (session start). Otherwise take the first open row of `docs/BACKLOG.md` in milestone order (`docs/ROADMAP-V1.md`) unless the owner names another.
-4. `graphify` is a CLI (`graphify query "<question>"`) when `graphify-out/graph.json` exists. It is not required to start.
+## Working rules
 
-Railway rules that override the skill's deploy-from-cwd shortcut: do not run `railway up`, `railway up -y`, or `railway up --new` unless the owner explicitly asks to deploy. A push to `origin/main` deploys production: only the orchestrator pushes, and only after the full local gate (Q-A21 below). Run the CLI from this repo, pass the linked project, environment, and service explicitly, and never print variable values. Agents cannot write production variables or merge or push to production (the permission classifier blocks it): prepare the exact command and hand it to the owner; secrets go through `--stdin` or the Railway dashboard, never through chat. A `staging` environment exists since 2026-11-01 (owner request): small seed data only, no production secrets, no analytics, `noindex`; do not add regions or resize volumes without an explicit yes.
+- Keep repository code, comments and docs in English; chat with the owner in pt-BR. Put UI text in the `en`, `pt-BR` and `es` catalogues.
+- Treat [brainstorming decisions](docs/brainstorming.md) and [ADRs](docs/adrs/) as final: update the decision, then the SDD, then code when a change is approved.
+- Prefer native vukem features. Do not add Go/npm dependencies without owner approval and an ADR. Pin exact versions; never use `latest` or prereleases.
+- Use official [vukem documentation](https://vukem.dev/docs) for framework facts. Do not invent APIs; record undocumented gaps in the local framework feedback process.
+- Make surgical changes. Do not weaken security defaults. Update owning docs and `CHANGELOG.md` when behavior, commands or conventions change.
+- Follow the acceptance commands in [ROADMAP.md](ROADMAP.md). Run focused checks for the task; the full release gate is in [the local CI script](scripts/ci/local.sh).
+- Use Conventional Commits per [.agents/rules/commits.md](.agents/rules/commits.md). Never rewrite history or force-push. Workers do not push; only the orchestrator may push `main`, after the required gate.
+- Never commit `go.work` or a local `replace` directive. Keep `legacy` immutable and never delete it.
+- Before production data changes, get owner approval and follow the relevant [runbook](docs/runbooks/).
 
-## Where things live
+## Project map
 
-| Path | What |
-| --- | --- |
-| `docs/brainstorming.md` | owner decisions D-xx and architect decisions A-xx; final unless edited first |
-| `docs/web-research.md` | competitor research with sources |
-| `docs/sdd/` | one design document per domain; `open-issues.md` is the triage of their open points |
-| `docs/adrs/` | architecture decision records (MADR) |
-| `docs/setups/` | setup guides: local with and without Docker (Windows, Linux/macOS), Ubuntu VPS self-hosting guide and script |
-| `architect-feedback-and-roadmap.md` | architect's assessment and executive summary (local only: being moved out of git, owner item 3 of 2026-11-01) |
-| `docs/review/` | state snapshots for architect reviews (latest: [2026-11-01](docs/review/2026-11-01-architect-brief.md)) |
-| `ROADMAP.md` | phases, tasks, subtasks, microtasks with acceptance criteria |
-| `docs/ROADMAP-V1.md`, `docs/BACKLOG.md` | milestones to the public v1.0 with exit criteria, and the prioritised task list (P0-P3, estimates, acceptance) from the 2026-11-02 architect audit; `ROADMAP.md` phase P8 mirrors them |
-| `docs/audit/` | architect audit 2026-11-02: project map, web test report, technical review, cleanup ledger (nothing is deleted before it is listed there), final report |
-| `docs/rfcs/` | RFC-001 catalogue worker, RFC-002 trending, RFC-003 offers (where to watch/buy) |
-| `docs/data/SOURCES.md` | data-source matrix: access, licence, limits, cost, decision per source |
-| `docs/OPEN-QUESTIONS.md` | owner decisions the audit could not take (OQ-xx); older gates stay in `docs/orchestration/QUESTIONS.md` |
-| `vukem-feedback.md` | open framework bugs, gaps and DX feedback (VF-xxx); remove an entry once it is resolved on vukem `main` (owner, 2026-10-31); local only and gitignored since the 2026-11-02 history rewrite |
-| `CHANGELOG.md` | Keep a Changelog; generated per release, `[Unreleased]` edited by hand only before release |
-| `legacy/` (sibling folder, not in this repo) | read-only Next.js reference; history on branch `legacy` |
-| `vukem/` (sibling folder, own git) | framework checkout for local `go.work`/`replace` only, never committed |
-| `PROMPT-WORKERS.md` | system prompt of the execution team (orchestrator, senior, intern): rules, ticket and report formats, isolation, standby cycle, autonomy limits, cost control (local only and gitignored since the 2026-11-02 history rewrite; rewritten by the audit) |
-| `.agents/rules/` | coding rules for every agent, whatever the AI provider (owner, 2026-11-01: one provider-agnostic folder instead of `.claude/` and `.grok/`); each file's `paths:` front matter says which files it governs |
-| `.agents/skills/` | skills (`<name>/SKILL.md` plus references), project-owned and vendored |
-| `.orchestration/` | `queue/TASKS.md` (single task board), `briefs/`, `reports/`, `handoff/`; local working state, gitignored and purged from history (owner, 2026-11-01) |
-| `docs/orchestration/` | `BOARD.md` (readable mirror of the queue) and `QUESTIONS.md` (owner gates and answers) |
-| `apps/mobile` | Android Expo app (SDK 58, NativeWind). Do not commit `android/` or `ios/` |
-
-## Rules
-
-- Rules and skills are not loaded automatically by any tool: before editing a file, read every `.agents/rules/*.md` whose `paths:` front matter matches it (files without `paths:` apply everywhere), and load a skill by reading `.agents/skills/<name>/SKILL.md` when its description fits the task.
-- Language: everything in this repository is English (code, identifiers, comments, docs, commits). Chat with the owner in pt-BR. UI strings in `en`, `pt-BR`, `es` only through the i18n catalogues.
-- Framework facts come from <https://vukem.dev/docs> (cite the page); the local `vukem/docs` folder is not a reference. Never invent a vukem API: write `[NOT IN VUKEM DOCS]` and add an entry to `vukem-feedback.md`.
-- Native vukem subsystems first; a third-party Go or npm dependency needs the owner's yes and an ADR. Pinned exact versions only (no `^`, no `latest`, no pre-releases); Docker images with fixed tags or digests.
-- Decisions in `docs/brainstorming.md` and `docs/adrs/` are final; to change one, edit the decision first, then the SDD, then the code.
-- Test first. A microtask is done only when its acceptance commands in `ROADMAP.md` pass. Prefer the specific test, lint and typecheck over the whole suite; the full gate runs before a PR.
-- Security defaults are never weakened; every security behaviour has a `TestSecurity_<Axx>_<Behaviour>` test (vukem convention).
-- Surgical changes: touch only what the task needs; no speculative abstractions; comment only the why.
-- Git: Conventional Commits in the vukem style (`type(scope): lowercase imperative subject`, as on <https://github.com/AlexGalhardo/vukem/commits/main/>); feature branches `agent/<role>/<task-id>` merged into local `main` by the orchestrator after review (owner rule 2026-10-29: do not wait for CI to merge or start the next task); never rewrite history or force-push (the one owner-approved rewrite was done on 2026-11-02); branch `legacy` is immutable and is never deleted, even in a branch cleanup. The repo hook rejects git's default merge message: use `chore(scope): merge <branch> into main`.
-- Releases follow the vukem pattern (`vX.Y.Z` tags, generated changelog, GitHub release). On 2026-11-02 the owner had the history rewritten once (internal files purged, subjects normalised, the PR #65 squash replaced by the full history) and the series rebuilt on `main` as v0.1.0–v0.37.0, about 35 non-merge commits each, the sideload APK on v0.37.0; the pre-rewrite refs and releases are in a local bundle outside the repo (`backup-history-2026-11-02`). The next release range starts from the commit whose tree matches the highest tag ([release-range](docs/runbooks/release-range.md)). `v1.0.0` = parity with the legacy app and successful cutover.
-- CHANGELOG.md and the GitHub releases are always in sync (owner, 2026-11-02): every `vX.Y.Z` release body equals its `## [X.Y.Z]` section, every section has a release, and every released section is the minimal git-cliff list: `### Group` headings and one line per commit ending in its linked short hash, as in the earlier releases, never hand-written prose. `scripts/release.sh` writes the section with git-cliff, `release.yml` publishes it, and `changelog-sync.yml` runs `bun scripts/release/check-sync.ts` (sync and format) on every release event and weekly. Fixing a released section means regenerating it with git-cliff and running `gh release edit vX.Y.Z --notes-file <section>` in the same change; never delete or renumber a release without updating CHANGELOG.md ([release-range](docs/runbooks/release-range.md#keeping-releases-in-sync)).
-- Flow change Q-A21 (owner, 2026-11-01, temporary): no PR for now, the orchestrator pushes straight to `main` after the full local gate, with linear history; the `protect-main` ruleset (26251847) is disabled meanwhile. PR-first returns when the owner says so (re-enable with `gh api -X PUT repos/AlexGalhardo/hexascore-app/rulesets/26251847 -f enforcement=active`).
-- Release gate (owner rule 2026-10-31): before opening any release PR, run every job of `.github/workflows/ci.yml` locally, in parallel, on the exact release commit (`scripts/ci/local.sh` does this in one command), and open the PR only when all of them pass: lint (golangci-lint run and `fmt --diff`, Biome, `tsc`, markdownlint, `scripts/openapi-check.sh`, `bun run openapi:lint`, commitlint on the range since the last tag), tests (`go test -tags integration ./...` on Postgres, `bun test scripts/ci/migration-policy.test.ts`, SDK typecheck and tests), migrations round trip, deps (osv-scanner, `bun audit`), govulncheck, Docker build plus `scripts/infra/check-image.sh` and the `/up` smoke test, OpenAPI (`--image` diff, Redocly, client codegen), Lighthouse, and mobile lint/typecheck/test. Schemathesis is out of the gate and of GitHub Actions (owner, 2026-11-02, for speed): run `qa/schemathesis/ci.sh <image>` by hand when the public or app API changes. Playwright e2e is excluded (owner, 2026-10-31): the CI `e2e` job runs only when the repo variable `RUN_E2E` is `true` (unset, so skipped) and is not part of the release gate. Lighthouse budgets are LCP 2500 ms and script 170 KB (Q-A20); on a Windows host with Kaspersky, Lighthouse numbers are invalid, so measure in the `lhci-runner:local` Linux container against `localhost`. The same gate applies before every direct push under Q-A21; a red CI run after a push is a process failure. Owner pause (2026-11-03, for faster iteration): the CI jobs `lint`, `test`, `setup-windows`, `build` (so `openapi` too) and `lighthouse` run only when the repo variable `RUN_SLOW_CI` is `true`; the local gate above is unchanged and still runs them, so run it before every push to `main`; set the variable to `true` to bring the full CI back.
-- Host limits (learned 2026-11-01): the dev host is memory-starved (it crashed once): run one heavy job at a time, golangci with `-j 2 --allow-parallel-runners` (or `--allow-serial-runners` when several workers lint), no parallel QA stacks unless told. Docker Desktop has no `--network host` (Schemathesis/k6 use the app's network namespace or `host.docker.internal` plus the original `Host` header). Windows' 260-char path limit breaks the SDK's ninja 1.10.2 under bun's isolated `node_modules`: build Android with ninja ≥ 1.13 through a Gradle init script (see the mobile runbook).
-- Documentation: update the SDD, `CHANGELOG.md` and this file in the same change when behaviour, commands or conventions change. Never claim a file was updated without editing it.
-- Team (owner, 2026-10-31; revised by the architect 2026-11-02): one orchestrator (Opus, reviews every delivery with the checklist in `PROMPT-WORKERS.md` §3.4 and is the only one who merges to local `main`) plus two persistent workers in standby, a senior (Sonnet) and an intern (Haiku), as defined in `PROMPT-WORKERS.md`. Parallel workers need the owner's explicit yes in each session. Workers never push; only the orchestrator pushes `main` (that deploys Railway production), after the gate. Shared files (`routes/web.go`, `Nav.tsx`, `app.css`, the locale catalogues, `TASKS.md`) are where parallel workers collide: keep edits there to one small block and list them in the report. Never `bun install` inside a worktree whose `node_modules` is a junction to the main checkout, and unlink junctions before `git worktree remove` (a recursive delete can follow them).
-- vukem work (bugs and features the app exposes) is a senior task in the sibling `vukem/` checkout, reviewed by the orchestrator, merged by PR with green CI; vukem releases only on the owner's request. Never commit a `replace` directive or `go.work` in this repository.
-
-## Commands (fill in as the codebase appears; keep in sync with ROADMAP tasks)
-
-| Command | Purpose |
-| --- | --- |
-| `vukem serve` | development server with Vite HMR |
-| `vukem build` + `bun run build:ssr` | production build (Go binary, Vite assets, SSR bundle) |
-| `go test ./...` | unit and integration tests (Postgres via `docker compose`) |
-| `golangci-lint run` | Go lint and format check |
-| `golangci-lint run --build-tags integration ./...` | Go lint incl. integration tests (CI pins v2.15.0) |
-| `bunx commitlint --from <base-sha> --to <head-sha>` | Conventional Commits check on a commit range (CI `lint`; PR title via stdin) |
-| `bun run build:docs` | re-render `resources/docs/*.md` (and the `pt-BR/`, `es/` translations) into the committed `docs.json`, `docs.pt-BR.json`, `docs.es.json` (a vitest test fails when stale) |
-| `bun run lint` / `bun run typecheck` / `bun run test` | TypeScript lint, types, unit tests |
-| `bun run --cwd apps/mobile lint` / `typecheck` / `test` | Android app (Biome, `tsc`, Jest). `catalogues` recopies the bundled i18n namespaces |
-| `bunx eas-cli@27.2.0 build` / `submit` / `update` (in `apps/mobile`) | mobile release with EAS: follow `docs/runbooks/mobile-release.md` (skill `hexascore-mobile-release`); owner confirms version, every submit and production OTA; CI: manual `mobile-release.yml` |
-| `vukem openapi:export -prefix /api/v1` (or `/app/v1`) | export an OpenAPI document; `scripts/openapi-check.sh` diffs both against the goldens (`--image` exports from a built image; CI `openapi`), `--write` refreshes them |
-| `scripts/ci/local.sh [--only a,b] [--skip a,b] [--base REV] [--tree] [--keep]` | release gate in one command: every `ci.yml` job except e2e, in parallel, on a clean checkout of HEAD, with its own databases, ports and compose project; one log per job in `.ci-local/logs/`, summary table, exit 1 if any job fails (needs Docker, the compose Postgres on 5433, go, bun, golangci-lint; `setup-windows` runs only on Windows) |
-| `qa/schemathesis/ci.sh [image]` | manual only (not in CI or the gate since 2026-11-02): migrate the CI Postgres, insert a PRO-plan key and an app token, run Schemathesis 4.29.0 against that image (Linux `--network host`) |
-| `bun run openapi:lint` | Redocly lint of both goldens (`redocly.yaml`; CI `lint`) |
-| `bun run sdk:generate` / `bun run sdk:generate:python` | regenerate `sdks/ts/src/gen` and `sdks/python/hexascore` from `openapi/api-v1.json` (TS tests: `cd sdks/ts && bun test`; Python needs `uv`: `cd sdks/python && uv run pytest -q`) |
-| `bun run e2e` | Playwright + axe against a built container (CI `e2e`: `scripts/ci/qa-up.sh` loads `image.tar`, seeds DemoCatalog, uploads traces on failure) |
-| `bunx --bun @lhci/cli@0.15.1 autorun` | Lighthouse budgets in `lighthouserc.cjs` (base URL from `E2E_BASE_URL`, default `localhost`) on the five DemoCatalog URLs (CI `lighthouse`; `@lhci/cli` is not a package.json dependency) |
-| `bun run --cwd apps/mobile bundle:check` | builds the Android release JS bundle (`expo export:embed`) and fails if it is missing or empty; part of CI `mobile` and the `mobile-v*` tag build |
-| sideload APK | local Gradle release build for owner testing: `docs/runbooks/mobile-release.md` ("Local sideload APK"); signed with a test key outside git, never the store key; attached to the latest GitHub release |
-| `docker compose up -d --wait` | local Postgres 18.6 (127.0.0.1:5433) and RustFS (127.0.0.1:9000/9001), both healthy |
-| `setups/setup-windows.ps1 [-NoServices]` | idempotent Windows setup: tools, `core.hooksPath .githooks` (commit-msg Conventional Commits check), `.env`, `APP_KEY`, compose stack, `bun install`, `vukem migrate`; `-NoServices` skips compose and migrate (CI Windows job) |
-| push to `main` | Railway service `app` (source `AlexGalhardo/hexascore-app`, branch `main`) builds and deploys automatically; `.github/workflows/ci.yml` reports regressions after the fact |
-| `railway up --service app --detach` | manual deploy of the working tree to Railway project `hexascore`, environment `production` (<https://hexascore.app>, also <https://www.hexascore.app>, the paid API at <https://api.hexascore.app/v1> and <https://app-production-785f.up.railway.app>; DNS on Vercel nameservers since the 2026-10-31 cutover; healthcheck `/up`, pre-deploy `/app/app migrate`). DNS: zone `hexascore.app` on Cloudflare since 2026-11-01 (nameservers `cruz`/`junade.ns.cloudflare.com`, every record "DNS only", proxy off per D-28); mail: Resend sends as `noreply@` (records on `send`), Cloudflare Email Routing receives `support@` and `privacy@`, DMARC `p=none` |
-| `railway redeploy --service app --environment staging -y` | staging at <https://staging.hexascore.app> (Railway domain <https://app-staging-9215.up.railway.app>; DNS: owner step in the [staging runbook](docs/runbooks/staging.md)): same `app` service on `main` (a push to `main` deploys both environments), own `Postgres-cOb3` and bucket `hexascore-staging`, `SEO_NOINDEX=true`, `MAIL_MAILER=log`, billing placeholder, no analytics; seed with `railway ssh ... -- /app/app db:seed --class DemoCatalog --force` from PowerShell, then `admin:revoke` the demo admins ([staging runbook](docs/runbooks/staging.md)) |
-| `railway ssh --service app --environment production -- /app/app <command>` | run a console command in production (for example `seed:mark`, `covers:rekey`); always `--dry-run` first, then the real run, then a dry run again as the check; production data changes need the owner's yes |
-| `./app hexascore:import-legacy --stage all --dry-run` | legacy import plan and pre-flight over schema `legacy_import`; without `--dry-run` it imports stage by stage from checkpoints (SDD 11 §7.6); the `twofactor` stage needs `--stdin` fed by `scripts/legacy/twofactor-export.ts` |
-| `./app hexascore:cutover-verify [--counts-only] [--sample-pct N]` | read-only cutover check after the import: counts, id-sample md5, cover keys on the `S3_*` bucket, orphan FKs, SQL vs Go scores (SDD 11 §7.6 step 6); exit 1 names the failed tables |
-| `./app seed:mark --email-suffix @example.test --legacy-prefix seed-user- [--dry-run]` / `./app seed:purge [--dry-run] [--batch 500] --confirm` | flag the fake legacy seed users (`users.is_seed`, never able to sign in), later delete them in batches and queue the score recompute and search refresh of the items they touched (SDD 11 §7.6) |
-| `./app backup:restore <key> --target-url <url>` / `./app backup:drill` | restore an encrypted dump and replay newer account deletions; monthly restore drill into `hexascore_drill` (runbook `docs/runbooks/restore.md`; tests need `pg_dump`/`pg_restore`, skipped when absent) |
-| `./app alerts:test [message]` | send one message to the Telegram page chat and report whether the Bot API accepted it (needs `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`) |
-| `./app backup:offsite` | mail `ADMIN_EMAILS` the 7-day signed link to this month's encrypted monthly dump (day 1, 07:00; runbook `docs/runbooks/restore.md` "Off-site copy") |
-| `./app covers:rekey [--dry-run] [--batch 500]` | copy item covers to their slug keys `covers/{section}/{slug}[-t].webp` on the `S3_*` bucket and point the rows at them; idempotent, old objects deleted by `covers.gc` after 30 days (owner round 2026-11-01 item 18) |
-| `./app genres:canonicalize [--dry-run] [--top 40]` | link every item to its canonical genre (one translated list per category in `app/catalog/genres.go`, code = slug) and move the source genre links (Wikidata labels such as "comedy film") to `item_genre_sources`, hidden; labels no rule maps are listed so the rules can grow. Idempotent; production: dry run, real run, dry run again, with the owner's yes; new ingests add source genres again until the next run |
-| `./app hexascore:predeploy` | pre-deploy entry point: drop `INVALID` index leftovers, then `migrate` (runbook `docs/runbooks/migrations.md`) |
-| `./app admin:grant <email>` / `admin:revoke <email>` / `user:reset-2fa <email> --reason "<text>"` | role changes and manual 2FA reset (account_events with actor NULL, `data.cli=true`); admins are users with `role = admin`, not `ADMIN_EMAILS` |
-| `scripts/release.sh vX.Y.Z [--since <rev>]` | changelog section via git-cliff (`.config/cliff.toml`) from the commit whose tree matches the highest tag (not `git describe`; [release-range](docs/runbooks/release-range.md)), compare links, `chore(release)` commit and tag; needs git-cliff installed (`scoop install git-cliff` / `brew install git-cliff`) |
-| `setups/setup-unix.sh` | same setup for Linux and macOS |
-
-## Stripe settings
-
-`STRIPE_MODE=sandbox|live` selects one of two variable sets: `STRIPE_KEY_<MODE>`, `STRIPE_WEBHOOK_SECRET_<MODE>`, `STRIPE_PRICE_HOBBY_<MODE>`, `STRIPE_PRICE_PRO_<MODE>` (owner, 2026-11-02). Production runs `live`, staging and local `sandbox`; production refuses to boot without the mode, with a key of the other mode or with a `pk_` key (`config/billing.go`, `TestSecurity_A05_StripeModeAndKeyMustMatch`).
-
-## Optional integrations (vukem v0.36.0+)
-
-All off while their variables are unset; names in `.env.example`, owner steps in [docs/analytics-acess.md](docs/analytics-acess.md).
-
-- Analytics and verification: `UMAMI_WEBSITE_ID`, `UMAMI_DOMAINS`, `GA_MEASUREMENT_ID`, `GOOGLE_SITE_VERIFICATION`, `BING_SITE_VERIFICATION` render through `{{analytics}}` in `app.html`. GA4 waits for the cookie banner's Accept (ADR 0023); Umami is cookieless.
-- SEO: `INDEXNOW_KEY` (key file `/{key}.txt`, job `seo.indexnow_changes` every minute), `BING_WEBMASTER_API_KEY` (client config only). `/llms.txt` and `/llms-full.txt` are always served.
-- Turnstile: `TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` (+ `TURNSTILE_HOSTNAME`) protect `POST /signup`, `/login`, `/contact` and enable the scrape-guard step-up at `POST /turnstile` (ADR 0016 amendment). Local and tests use Cloudflare's test keys; `TURNSTILE_VERIFY_URL` points siteverify at a fake and refuses to boot in production.
-- Telegram alerts: `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` (page chat, rings), optional `TELEGRAM_ERROR_CHAT_ID` (silent chat; falls back to the page chat) and, used by the ingestion digest every 30 minutes (RFC-001 CW-08, decision D-40; `./app alerts:test --digest` sends one now), `TELEGRAM_OPS_CHAT_ID` (silent; falls back to the error chat) turn on `app/alerts.Notifier`: page-severity `alert=` codes and `LevelFatal` ring, other alert lines and errors go silently, 30 min dedup per fingerprint, the 08:00 America/Sao_Paulo digest of `error_digest_daily` (SDD 12 §7.2, §7.5). vukem's own Telegram log forwarding is switched off in `bootstrap/app.go`. `./app alerts:test [message]` sends one message to the page chat.
-
-## Agents
-
-- Roles `orchestrator`, `senior` and `estagiario` (intern) are defined in `PROMPT-WORKERS.md` and `.orchestration/briefs/`; the former `especialista` (specialist) review role is folded into the orchestrator (audit 2026-11-02). The names are not tied to a vendor; the model per role is a recommendation from the owner (Opus for orchestrator and specialist, Sonnet for seniors, Haiku for the intern).
-- Roadmap lines that say Opus or Sonnet are effort hints, not a required runtime.
-- Local QA: `E2E_IMAGE_TAG=<tag> docker compose --profile app build app-init && docker compose --profile app up -d --wait` builds the current tree and serves it on `127.0.0.1:3000` with the DemoCatalog seed (`admin@example.test` / `Demo-password-1`); test in a browser before marking UI work done. Parallel stacks (one per worker): own project, host port and database, never `down` on project `hexascore`: `docker exec hexascore-postgres-1 createdb -U hexascore hexascore_qa_<tag>`, export `E2E_IMAGE_TAG=<tag> QA_PORT=<3100+> QA_DATABASE_URL=postgres://hexascore:hexascore@host.docker.internal:5433/hexascore_qa_<tag>?sslmode=disable`, then `docker compose --env-file <main checkout>/.env -p hexascore-qa-<tag> --profile app` with `build app-init`, `run --rm --no-deps app-init`, `up -d --wait --no-deps --no-build app`; run e2e and Lighthouse with `E2E_BASE_URL=http://localhost:<port> E2E_APP_CONTAINER=hexascore-qa-<tag>-app-1 E2E_DB_NAME=hexascore_qa_<tag>`; stop with `stop app` and `dropdb`. The image runs with `APP_ENV=production`, so CanonicalHost answers 301 to the compose `APP_URL` (`http://localhost:<port>`) for any other Host: use `localhost`, not `127.0.0.1`, as the base URL.
+- [docs/sdd/](docs/sdd/): product and domain specifications; [docs/sdd/open-issues.md](docs/sdd/open-issues.md): unresolved design points.
+- [docs/rfcs/](docs/rfcs/): catalogue worker, trending and offers proposals; [docs/data/SOURCES.md](docs/data/SOURCES.md): source access, terms and decisions.
+- [docs/runbooks/](docs/runbooks/): operations, releases, incidents and recovery; [docs/setups/](docs/setups/): local and self-hosted setup.
+- [docs/audit/](docs/audit/): project map, reviews and cleanup ledger; [docs/review/](docs/review/): dated state snapshots.
+- `.agents/rules/`: path-scoped coding rules; `.agents/skills/`: project skills. `CLAUDE.md` points here.

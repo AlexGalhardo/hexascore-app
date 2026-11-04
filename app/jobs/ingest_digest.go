@@ -9,7 +9,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 )
 
-// IngestDigest is the scheduled task `ingest:digest` (every 30 minutes, RFC-001 section 8). It does nothing while the
+// IngestDigest is the scheduled task `ingest:digest` (every 5 minutes while the catalogue is filled, RFC-001 section 8). It does nothing while the
 // ingestion master switch is off, so it ships dark; notifier is read at run time because the Notifier is built when
 // the routes are, after the schedule is declared.
 func IngestDigest(app *vukem.App, notifier func() *alerts.Notifier) func(ctx context.Context) error {

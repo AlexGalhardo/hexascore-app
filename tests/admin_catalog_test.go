@@ -4,8 +4,6 @@ package tests
 
 import (
 	"net/url"
-	"regexp"
-	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -50,7 +48,7 @@ func TestSecurity_A01_AdminPagesNotFoundForMembers(t *testing.T) {
 	plain := browserFor(t, app, makeUser(t, app, "plain@example.com", "user", true))
 	admin := browserFor(t, app, makeUser(t, app, adminEmail, "admin", true))
 
-	for _, p := range []string{"/admin/items", "/admin/items/" + itemA, "/admin/items/" + itemA + "/manage", "/admin/ingestion"} {
+	for _, p := range []string{"/admin/r/items", "/admin/r/items/" + itemA, "/admin/items/" + itemA + "/manage", "/admin/ingestion"} {
 		plain.Get(p).AssertNotFound()
 		app.Client(t).Get(p).AssertStatus(302)
 		admin.Get(p).AssertOK()
@@ -75,7 +73,17 @@ func TestAffiliateLinks(t *testing.T) {
 		AssertStatus(303)
 	admin.PostForm(base+"/affiliate-links", url.Values{"store": {"gog"}, "url": {"https://gog.example/a"}, "active": {"true"}}).
 		AssertRedirect(base + "/manage")
-	admin.Get(base + "/manage").AssertOK().AssertSee("https://gog.example/a")
+	if got := inertiaProp(
+		t,
+		admin.Get(base+"/manage").AssertOK().Body(),
+		"Admin/ItemManage",
+		"affiliates",
+	); !strings.Contains(
+		got,
+		"https://gog.example/a",
+	) {
+		t.Fatalf("affiliate link missing from the manage page: %s", got)
+	}
 	admin.PostForm(base+"/affiliate-links/gog/delete", url.Values{}).AssertRedirect(base + "/manage")
 
 	var n int
@@ -110,45 +118,20 @@ func TestAdminMerge(t *testing.T) {
 	admin.Get("/admin/items/" + itemA + "/manage").AssertNotFound()
 }
 
-var sidebarLink = regexp.MustCompile(`<a [^>]*href="([^"]+)"`)
-
-// sidebarHrefs lists the links of the <nav class="sidebar"> block of an admin page.
-func sidebarHrefs(t *testing.T, body string) []string {
-	t.Helper()
-
-	_, rest, ok := strings.Cut(body, `<nav class="sidebar"`)
-	if !ok {
-		t.Fatal("no sidebar in page")
-	}
-
-	nav, _, _ := strings.Cut(rest, "</nav>")
-
-	var out []string
-	for _, m := range sidebarLink.FindAllStringSubmatch(nav, -1) {
-		out = append(out, m[1])
-	}
-
-	return out
-}
-
-func TestAdminIngestionSharesPanelNavigation(t *testing.T) {
+// ADR 0026: the source records screen is a React page; its data travels as Inertia props.
+func TestAdminIngestionSourcesPage(t *testing.T) {
 	t.Parallel()
 
 	app := catalogAdminApp(t)
 	admin := browserFor(t, app, makeUser(t, app, adminEmail, "admin", true))
 
-	want := sidebarHrefs(t, admin.Get("/admin").AssertOK().Body())
-	got := sidebarHrefs(t, admin.Get("/admin/ingestion").AssertOK().Body())
-
-	slices.Sort(want)
-	slices.Sort(got)
-
-	if !slices.Equal(got, want) {
-		t.Fatalf("ingestion sidebar differs from the panel sidebar:\n got %v\nwant %v", got, want)
+	got, props := inertiaPage(t, admin.Get("/admin/ingestion").AssertOK().Body())
+	if got != "Admin/IngestSources" {
+		t.Fatalf("component = %q, want Admin/IngestSources", got)
 	}
 
-	if !slices.Contains(got, "/admin/score-bursts") {
-		t.Fatalf("sidebar misses /admin/score-bursts: %v", got)
+	if _, ok := props["ready"].(bool); !ok {
+		t.Fatalf("ready prop missing: %v", props["ready"])
 	}
 }
 
@@ -271,7 +254,17 @@ func TestAdminOffers(t *testing.T) {
 		t.Fatalf("offer = %q source = %q, %v", id, source, err)
 	}
 
-	admin.Get(base + "/manage").AssertOK().AssertSee("https://store.steampowered.com/app/1")
+	if got := inertiaProp(
+		t,
+		admin.Get(base+"/manage").AssertOK().Body(),
+		"Admin/ItemManage",
+		"offers",
+	); !strings.Contains(
+		got,
+		"https://store.steampowered.com/app/1",
+	) {
+		t.Fatalf("offers missing from the manage page: %s", got)
+	}
 
 	// the same key again replaces the url and keeps one row
 	good.Set("url", "https://store.steampowered.com/app/2")

@@ -43,7 +43,7 @@ func TestReportsReviewComment(t *testing.T) {
 	adminC.PostForm("/admin/reports/"+reviewReport+"/resolve", url.Values{"outcome": {"list_hidden"}}).
 		AssertUnprocessable()
 	adminC.PostForm("/admin/reports/"+reviewReport+"/resolve", url.Values{"outcome": {"content_hidden"}}).
-		AssertRedirect("/admin/reports/" + reviewReport)
+		AssertRedirect("/admin/r/reports/" + reviewReport)
 
 	if n := r.count(`SELECT count(*) FROM reviews WHERE id = $1 AND hidden`, rv); n != 1 {
 		t.Fatal("review not hidden")
@@ -67,7 +67,7 @@ func TestReportsReviewComment(t *testing.T) {
 	}
 
 	adminC.PostForm("/admin/reports/"+commentReport+"/resolve", url.Values{"outcome": {"content_deleted"}}).
-		AssertRedirect("/admin/reports/" + commentReport)
+		AssertRedirect("/admin/r/reports/" + commentReport)
 	if n := r.count(`SELECT count(*) FROM comments WHERE id = $1`, cid); n != 0 {
 		t.Fatal("comment not deleted")
 	}
@@ -85,7 +85,7 @@ func TestReportsReviewBanAuthor(t *testing.T) {
 	id := r.str(`SELECT id::text FROM reports WHERE target_type = 'review'`)
 
 	browserFor(t, r.app, admin).PostForm("/admin/reports/"+id+"/resolve", url.Values{"outcome": {"user_banned"}}).
-		AssertRedirect("/admin/reports/" + id)
+		AssertRedirect("/admin/r/reports/" + id)
 
 	if !reload(t, r.app, a.ID).BannedAt.Valid {
 		t.Fatal("the review's author is not banned")
@@ -132,7 +132,7 @@ func TestReportsUnhide(t *testing.T) {
 	adminC.PostForm("/admin/reports/"+uid+"/resolve", url.Values{"outcome": {"content_unhidden"}}).AssertUnprocessable()
 
 	adminC.PostForm("/admin/reports/"+rid+"/resolve", url.Values{"outcome": {"content_unhidden"}}).
-		AssertRedirect("/admin/reports/" + rid)
+		AssertRedirect("/admin/r/reports/" + rid)
 
 	if n := r.count(`SELECT count(*) FROM reviews WHERE id = $1 AND NOT hidden`, rv); n != 1 {
 		t.Fatal("review still hidden")

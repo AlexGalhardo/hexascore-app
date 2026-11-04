@@ -28,6 +28,10 @@ export const colors = {
 		"star": { oklch: "oklch(0.779 0.16 84.66)", hex: "#e6ad00" },
 		"star-line": { oklch: "oklch(0.528 0.109 82.44)", hex: "#8a6400" },
 		"danger": { oklch: "oklch(0.549 0.19 31.05)", hex: "#c8321e" },
+		"footer-bg": { oklch: "oklch(0.944 0.017 88)", hex: "#f1ece0" },
+		"footer-fg": { oklch: "oklch(0.189 0.009 75.06)", hex: "#16130f" },
+		"footer-muted": { oklch: "oklch(0.453 0.02 79.22)", hex: "#5c554a" },
+		"footer-border": { oklch: "oklch(0.78 0.018 88)", hex: "#bcb7ab" },
 	},
 	dark: {
 		"bg": { oklch: "oklch(0.183 0.007 78.14)", hex: "#14120f" },
@@ -57,10 +61,14 @@ export const colors = {
 		"star": { oklch: "oklch(0.834 0.1584 88.963)", hex: "#f2c230" },
 		"star-line": { oklch: "oklch(0.834 0.1584 88.963)", hex: "#f2c230" },
 		"danger": { oklch: "oklch(0.696 0.16 30.32)", hex: "#f0715e" },
+		"footer-bg": { oklch: "oklch(0.14 0.008 260)", hex: "#07090c" },
+		"footer-fg": { oklch: "oklch(0.96 0.008 260)", hex: "#eff2f7" },
+		"footer-muted": { oklch: "oklch(0.74 0.012 260)", hex: "#a6abb3" },
+		"footer-border": { oklch: "oklch(0.36 0.012 260)", hex: "#393d44" },
 	},
 } as const;
 
 export const spacing = [0,1,2,3,4,6,8,12,16] as const;
 export const fontSize = [12,14,16,18,20,24,30,36] as const;
-export const radius = {"sm":4,"md":8,"lg":12,"full":9999} as const;
+export const radius = {"sm":3,"md":5,"lg":7,"full":9999} as const;
 export const touchTarget = 44;

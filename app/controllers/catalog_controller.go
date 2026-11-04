@@ -115,6 +115,12 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 			return err
 		}
 		facets := map[string]any{"genres": genres, "platforms": platforms}
+		if typ == "movie" || typ == "series" {
+			facets["watch"], err = catalog.WatchFacets(c.Context(), db, typ)
+			if err != nil {
+				return err
+			}
+		}
 		if typ == "game" {
 			if facets["modes"], err = catalog.FacetsOf(
 				c.Context(),
@@ -139,6 +145,7 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 			"filters": map[string]any{
 				"genre":    params.Genre,
 				"platform": params.Platform,
+				"watch":    params.Watch,
 				"year":     params.Year,
 				"minScore": params.MinScore,
 				"sort":     params.Sort,
