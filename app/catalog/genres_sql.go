@@ -53,22 +53,47 @@ func values(rows [][]any, casts ...string) (string, []any) {
 	return "VALUES " + b.String(), args
 }
 
+// ruleGroup is the rules of one group of items, as the SQL repair keys them.
+type ruleGroup struct {
+	Name  string
+	Rules []genreRule
+}
+
 // GenreRepairStatements is genres:canonicalize as plain PostgreSQL, so a migration can apply it without Go code that
 // reads rows: the canonical genres and their names, then every source genre link of every item moved to its
 // canonical genre (or hidden when no rule maps it), exactly as CanonicalizeGenres does. The rules are the Go ones,
 // matched with the same regular expressions (RE2 and PostgreSQL agree on this subset). Only the canonical genres some
 // item needs are created, the rest are created by the normaliser when an item needs them. Idempotent.
 func GenreRepairStatements() []GenreStatement {
+	groups := make([]ruleGroup, 0, 3)
+	for _, g := range genreGroups() {
+		groups = append(groups, ruleGroup{g.Name, g.Rules})
+	}
+
+	return repairStatements(
+		genreTaxonomy, groups,
+		`CASE WHEN i.type IN ('movie', 'series') THEN 'screen' ELSE i.type::text END`,
+	)
+}
+
+// GameModeRepairStatements is the same repair for the game modes (owner 2026-11-04): the Wikidata labels of P404 are
+// replaced by the canonical modes, named with a capital first letter in three locales.
+func GameModeRepairStatements() []GenreStatement {
+	return repairStatements(modeTaxonomy, []ruleGroup{{"game", gameModeRules}}, `i.type::text`)
+}
+
+// repairStatements builds the statements for one taxonomy: groupExpr gives the rule group of item i.
+func repairStatements(tax taxonomy, groups []ruleGroup, groupExpr string) []GenreStatement {
 	var names [][]any
 
-	for _, code := range slices.Sorted(maps.Keys(Genres)) {
-		n := Genres[code]
+	for _, code := range slices.Sorted(maps.Keys(tax.names)) {
+		n := tax.names[code]
 		names = append(names, []any{code, n.En, n.PtBR, n.Es})
 	}
 
 	var rules [][]any
 
-	for _, g := range genreGroups() {
+	for _, g := range groups {
 		for i, r := range g.Rules {
 			rules = append(rules, []any{g.Name, i, r.re.String(), r.code})
 		}
@@ -77,7 +102,7 @@ func GenreRepairStatements() []GenreStatement {
 	namesSQL, namesArgs := values(names, "text", "text", "text", "text")
 	rulesSQL, rulesArgs := values(rules, "text", "int", "text", "text")
 
-	return []GenreStatement{
+	stmts := []GenreStatement{
 		{SQL: `CREATE TEMP TABLE genre_names (code text PRIMARY KEY, en text, pt text, es text)`},
 		{SQL: `INSERT INTO genre_names (code, en, pt, es) ` + namesSQL, Args: namesArgs},
 		{SQL: `CREATE TEMP TABLE genre_rules (grp text, ord int, pattern text, code text)`},
@@ -87,7 +112,7 @@ func GenreRepairStatements() []GenreStatement {
 SELECT DISTINCT ON (s.item_id, s.entity_id) s.item_id, s.entity_id, s.source, s.position, r.code
 FROM (
   SELECT ie.item_id, ie.entity_id, ie.source, ie.position, e.default_name AS label,
-    CASE WHEN i.type IN ('movie', 'series') THEN 'screen' ELSE i.type::text END AS grp
+    GROUP_EXPR AS grp
   FROM item_entities ie
   JOIN entities e ON e.id = ie.entity_id
   JOIN items i ON i.id = ie.item_id
@@ -135,4 +160,14 @@ WHERE ie.item_id = x.item_id AND ie.entity_id = x.entity_id AND ie.role = 'genre
 		{SQL: `DROP TABLE genre_rules`},
 		{SQL: `DROP TABLE genre_names`},
 	}
+
+	// The statements are written for genres; a taxonomy of another kind swaps its name in.
+	for i := range stmts {
+		q := strings.ReplaceAll(stmts[i].SQL, "GROUP_EXPR", groupExpr)
+		q = strings.ReplaceAll(q, "'genre'", "'"+tax.kind+"'")
+		q = strings.ReplaceAll(q, `"canonical":"genre"`, `"canonical":"`+tax.kind+`"`)
+		stmts[i].SQL = q
+	}
+
+	return stmts
 }

@@ -146,7 +146,7 @@ VALUES ($1, $2, 'genre', 0, 'wikidata')`, item, ent); err != nil {
 		t.Fatal(err)
 	}
 
-	if err := catalog.CanonicalizeItemGenres(ctx, db, item); err != nil {
+	if err := catalog.CanonicalizeItem(ctx, db, item); err != nil {
 		t.Fatal(err)
 	}
 

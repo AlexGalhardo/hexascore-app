@@ -255,8 +255,8 @@ VALUES ($1, $2, NULLIF($3, ''), $4, $5) ON CONFLICT DO NOTHING`,
 		}
 	}
 
-	// The genres Wikidata names become the canonical ones now, so a new ingest never shows a source label.
-	if err := catalog.CanonicalizeItemGenres(ctx, ex, id); err != nil {
+	// The genres and game modes Wikidata names become the canonical ones now, so a new ingest never shows a source label.
+	if err := catalog.CanonicalizeItem(ctx, ex, id); err != nil {
 		return err
 	}
 

@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **catalog:** The game mode filter of /games shows a few canonical modes named with a capital first letter in en, pt-BR and es (Single player, Multiplayer, Co-op, PvP, Online multiplayer, Split screen, MMO) instead of the Wikidata labels ("single-player video game", "multiplayer online game"): migration `20261104100000_canonicalize_game_modes` folds the existing links, and the normaliser does the same for every new item
 - **item:** Where to watch shows plain text links instead of boxes, and each streaming service links to its own site (Netflix, Prime Video, Apple TV, Google Play, YouTube and the other known services) instead of TMDB's page about the title; a service with no known site is left out of the page and of the redirect
 - **ingest:** The 30-minute "fill" schedules of the Wikidata, Open Library and TMDB full chains are removed: they re-read the same top 100,000 records and held the ingest slots; the weekly runs and the `wikidata-discover` chain remain
 - **catalog:** The landing page and the four category pages hide items without a cover (`FLAG_HIDE_UNCOVERED`, on by default); an item without a score is still listed, and its score badge appears once it has one. The item page, search and the public API are unchanged
