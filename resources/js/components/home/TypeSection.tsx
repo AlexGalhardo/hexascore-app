@@ -91,7 +91,7 @@ export default function TypeSection({
 												href={`${base}/${item.slug}`}
 												coverSize="compact"
 												badge={
-													<span className="rounded-sm bg-[#ff7a1a] px-2.5 py-1.5 text-sm font-bold text-black">
+													<span className="rounded-sm bg-[#ff7a1a] px-1.5 py-0.5 text-[11px] leading-tight font-bold text-black md:px-2.5 md:py-1.5 md:text-sm">
 														{formatUpcomingRelease(item, locale)}
 													</span>
 												}

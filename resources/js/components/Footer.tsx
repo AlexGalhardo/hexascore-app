@@ -7,7 +7,7 @@ import { APP_ICON, BRAND } from "./Nav";
 
 const SOURCE_URL = "https://github.com/AlexGalhardo/hexascore-app";
 const linkClass =
-	"inline-flex min-h-9 items-center text-sm text-footer-fg hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-footer-fg";
+	"inline-flex min-h-9 items-center justify-center text-sm lg:justify-start text-footer-fg hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-footer-fg";
 const headingClass = "mb-4 text-xs font-bold tracking-[0.08em] text-footer-muted uppercase";
 
 export default function Footer() {
@@ -32,7 +32,7 @@ export default function Footer() {
 	] as const;
 
 	return (
-		<footer className="mt-16 bg-footer-bg text-footer-fg">
+		<footer className="mt-16 bg-footer-bg text-center text-footer-fg lg:text-left">
 			<div className="shell py-12 md:py-16">
 				<div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 					<div>
@@ -41,7 +41,7 @@ export default function Footer() {
 							{t("footer.newsletterSoon")}
 						</p>
 					</div>
-					<div className="flex w-full gap-2 lg:max-w-xl">
+					<div className="mx-auto flex w-full gap-2 lg:mx-0 lg:max-w-xl">
 						<input
 							type="email"
 							disabled
@@ -64,12 +64,12 @@ export default function Footer() {
 					<div className="sm:col-span-2 lg:col-span-1">
 						<Link
 							href={l("/")}
-							className="inline-flex items-center gap-3 text-2xl font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-footer-fg"
+							className="inline-flex items-center justify-center gap-3 text-2xl font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-footer-fg"
 						>
 							<img src={APP_ICON} alt="" width={36} height={36} className="size-9" />
 							{BRAND}
 						</Link>
-						<p className="mt-5 max-w-md text-sm leading-7 text-footer-muted">
+						<p className="mx-auto mt-5 max-w-md text-sm leading-7 text-footer-muted lg:mx-0">
 							{t("footer.description")}
 							<span className="block mt-2">{t("footer.affiliateDisclosure")}</span>
 						</p>
