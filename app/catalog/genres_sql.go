@@ -78,8 +78,6 @@ func GenreRepairStatements() []GenreStatement {
 	rulesSQL, rulesArgs := values(rules, "text", "int", "text", "text")
 
 	return []GenreStatement{
-		{SQL: `INSERT INTO data_sources (code, name, licence, url)
-VALUES ('hexascore', 'HexaScore', 'proprietary', 'https://hexascore.app') ON CONFLICT (code) DO NOTHING`},
 		{SQL: `CREATE TEMP TABLE genre_names (code text PRIMARY KEY, en text, pt text, es text)`},
 		{SQL: `INSERT INTO genre_names (code, en, pt, es) ` + namesSQL, Args: namesArgs},
 		{SQL: `CREATE TEMP TABLE genre_rules (grp text, ord int, pattern text, code text)`},
@@ -97,6 +95,10 @@ FROM (
 ) s
 LEFT JOIN genre_rules r ON r.grp = s.grp AND lower(btrim(s.label)) ~ r.pattern
 ORDER BY s.item_id, s.entity_id, r.ord`},
+		// Only when some item needs a canonical genre: the names point at this data source.
+		{SQL: `INSERT INTO data_sources (code, name, licence, url)
+SELECT 'hexascore', 'HexaScore', 'proprietary', 'https://hexascore.app'
+WHERE EXISTS (SELECT 1 FROM genre_relink WHERE code IS NOT NULL) ON CONFLICT (code) DO NOTHING`},
 		// Take over the genre entity whose code or slug is the canonical code, the one with the code first.
 		{SQL: `UPDATE entities e SET code = m.code, default_name = m.en,
   provenance = e.provenance || '{"canonical":"genre"}', updated_at = now()
