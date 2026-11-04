@@ -188,7 +188,15 @@ VALUES ('`+id+`','merge','item','00000000-0000-0000-0000-0000000000aa','movie','
 
 	admin := browserFor(t, app, makeUser(t, app, "d6-admin@example.com", models.RoleAdmin, true))
 	// The typed-title field is drawn for a merge suggestion; the page needs to say it is one.
-	if got := inertiaProp(t, admin.Get("/admin/moderation/"+id).AssertOK().Body(), "Admin/ModerationDetail", "detail"); !strings.Contains(got, `"kind":"merge"`) {
+	if got := inertiaProp(
+		t,
+		admin.Get("/admin/moderation/"+id).AssertOK().Body(),
+		"Admin/ModerationDetail",
+		"detail",
+	); !strings.Contains(
+		got,
+		`"kind":"merge"`,
+	) {
 		t.Fatalf("detail is not a merge suggestion: %s", got)
 	}
 	admin.WithHeader("Accept", "application/json").

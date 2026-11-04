@@ -67,7 +67,7 @@ function RunsTable({ runs, locale }: { runs: OverviewData["runs"]; locale: strin
 			<CardHeader className="flex flex-row items-center justify-between">
 				<CardTitle>{t("admin.dashboard.runs.title")}</CardTitle>
 				<a
-					href="/admin/job-runs"
+					href="/admin/r/job-runs"
 					className="text-sm text-primary underline-offset-4 hover:underline"
 				>
 					{t("admin.dashboard.runs.viewAll")}
@@ -195,20 +195,20 @@ function Dashboard({ overview }: { overview: OverviewData }): ReactElement {
 					value={num.format(c.items)}
 					icon={Package}
 					hint={t("admin.dashboard.stats.approx")}
-					href="/admin/items"
+					href="/admin/r/items"
 				/>
 				<StatCard
 					label={t("admin.dashboard.stats.users")}
 					value={num.format(c.users)}
 					icon={Users}
 					hint={t("admin.dashboard.stats.approx")}
-					href="/admin/users"
+					href="/admin/r/users"
 				/>
 				<StatCard
 					label={t("admin.dashboard.stats.openReports")}
 					value={num.format(c.openReports)}
 					icon={Flag}
-					href="/admin/reports"
+					href="/admin/r/reports"
 				/>
 				<StatCard
 					label={t("admin.dashboard.stats.runningRuns")}
@@ -221,14 +221,14 @@ function Dashboard({ overview }: { overview: OverviewData }): ReactElement {
 					value={num.format(c.failedRuns24h)}
 					icon={OctagonAlert}
 					tone={c.failedRuns24h > 0 ? "danger" : "default"}
-					href="/admin/job-runs"
+					href="/admin/r/job-runs"
 				/>
 				<StatCard
 					label={t("admin.dashboard.stats.parkedFailures")}
 					value={num.format(c.parkedFailures)}
 					icon={OctagonAlert}
 					tone={c.parkedFailures > 0 ? "danger" : "default"}
-					href="/admin/ingest-failures"
+					href="/admin/r/ingest-failures"
 				/>
 			</div>
 

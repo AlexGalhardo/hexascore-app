@@ -49,7 +49,7 @@ export const NAV: NavGroup[] = [
 	{
 		key: "catalogue",
 		items: [
-			{ key: "items", href: "/admin/items", icon: Package },
+			{ key: "items", href: "/admin/r/items", icon: Package, inertia: true },
 			{ key: "ingestion", href: "/admin/ingest", icon: Workflow, inertia: true },
 			{ key: "sources", href: "/admin/ingestion", icon: Database, inertia: true },
 			{ key: "matchReviews", href: "/admin/ingest/reviews", icon: Layers, inertia: true },
@@ -79,32 +79,47 @@ export const NAV: NavGroup[] = [
 				icon: BarChart3,
 				inertia: true,
 			},
-			{ key: "reports", href: "/admin/reports", icon: Flag },
-			{ key: "ratingFlags", href: "/admin/rating-flags", icon: Star },
-			{ key: "scoreActions", href: "/admin/score-actions", icon: Gauge },
-			{ key: "scoreBursts", href: "/admin/score-bursts", icon: Zap },
-			{ key: "formulaVersions", href: "/admin/score-formula-versions", icon: Gauge },
+			{ key: "reports", href: "/admin/r/reports", icon: Flag, inertia: true },
+			{ key: "ratingFlags", href: "/admin/r/rating-flags", icon: Star, inertia: true },
+			{ key: "scoreActions", href: "/admin/r/score-actions", icon: Gauge, inertia: true },
+			{ key: "scoreBursts", href: "/admin/r/score-bursts", icon: Zap, inertia: true },
+			{
+				key: "formulaVersions",
+				href: "/admin/r/score-formula-versions",
+				icon: Gauge,
+				inertia: true,
+			},
 		],
 	},
 	{
 		key: "operations",
 		items: [
-			{ key: "jobRuns", href: "/admin/job-runs", icon: Activity },
-			{ key: "ingestFailures", href: "/admin/ingest-failures", icon: TriangleAlert },
-			{ key: "dqResults", href: "/admin/dq-results", icon: CheckCircle2 },
-			{ key: "featureFlags", href: "/admin/_flags", icon: ToggleRight },
+			{ key: "jobRuns", href: "/admin/r/job-runs", icon: Activity, inertia: true },
+			{
+				key: "ingestFailures",
+				href: "/admin/r/ingest-failures",
+				icon: TriangleAlert,
+				inertia: true,
+			},
+			{ key: "dqResults", href: "/admin/r/dq-results", icon: CheckCircle2, inertia: true },
+			{ key: "featureFlags", href: "/admin/r/flags", icon: ToggleRight, inertia: true },
 		],
 	},
 	{
 		key: "people",
 		items: [
-			{ key: "users", href: "/admin/users", icon: Users },
-			{ key: "contactMessages", href: "/admin/contact-messages", icon: Mail },
+			{ key: "users", href: "/admin/r/users", icon: Users, inertia: true },
+			{
+				key: "contactMessages",
+				href: "/admin/r/contact-messages",
+				icon: Mail,
+				inertia: true,
+			},
 		],
 	},
 	{
 		key: "system",
-		items: [{ key: "auditLog", href: "/admin/_audit", icon: ScrollText }],
+		items: [{ key: "auditLog", href: "/admin/r/audit-logs", icon: ScrollText, inertia: true }],
 	},
 ];
 

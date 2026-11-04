@@ -124,7 +124,10 @@ FROM suggestion_reviews WHERE suggestion_id = $1 AND reviewer_id = $2`, id, modU
 			t.Fatalf("detail missing %q: %s", want, detail)
 		}
 	}
-	if !strings.Contains(inertiaProp(t, admin.Get("/admin/moderation").AssertOK().Body(), "Admin/Moderation", "queue"), `"recReject":1`) {
+	if !strings.Contains(
+		inertiaProp(t, admin.Get("/admin/moderation").AssertOK().Body(), "Admin/Moderation", "queue"),
+		`"recReject":1`,
+	) {
 		t.Fatal("queue does not show the recommendation")
 	}
 

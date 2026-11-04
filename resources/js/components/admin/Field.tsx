@@ -14,7 +14,11 @@ export function Field({
 }): ReactElement {
 	const id = useId();
 	return (
-		<div className={className ? `grid gap-1.5 ${className}` : "grid gap-1.5"}>
+		<div
+			className={
+				className ? `grid content-start gap-1.5 ${className}` : "grid content-start gap-1.5"
+			}
+		>
 			<label htmlFor={id} className="text-sm font-medium">
 				{label}
 			</label>

@@ -32,8 +32,11 @@ func TestAdminOverview(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if _, err := db.ExecContext(t.Context(), `INSERT INTO job_runs (job, mode, status, triggered_by, started_at, finished_at)
-VALUES ('fetch.wikidata', 'bootstrap', 'failed', 'test', now() - interval '90 seconds', now() - interval '30 seconds')`); err != nil {
+	if _, err := db.ExecContext(
+		t.Context(),
+		`INSERT INTO job_runs (job, mode, status, triggered_by, started_at, finished_at)
+VALUES ('fetch.wikidata', 'bootstrap', 'failed', 'test', now() - interval '90 seconds', now() - interval '30 seconds')`,
+	); err != nil {
 		t.Fatal(err)
 	}
 
@@ -49,7 +52,8 @@ VALUES ('fetch.wikidata', 'bootstrap', 'failed', 'test', now() - interval '90 se
 		t.Fatalf("failed runs in 24h = %d, want 1", data.Counts.FailedRuns24h)
 	}
 
-	if len(data.Runs) != 1 || data.Runs[0].Job != "fetch.wikidata" || data.Runs[0].DurationSec == nil || *data.Runs[0].DurationSec != 60 {
+	if len(data.Runs) != 1 || data.Runs[0].Job != "fetch.wikidata" || data.Runs[0].DurationSec == nil ||
+		*data.Runs[0].DurationSec != 60 {
 		t.Fatalf("runs = %+v, want one fetch.wikidata run of 60 s", data.Runs)
 	}
 

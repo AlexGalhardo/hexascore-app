@@ -32,7 +32,8 @@ func TestLocks(t *testing.T) {
 	admin.PostForm("/admin/locks", url.Values{"target": {"item"}, "target_id": {lockItem}}).AssertStatus(303)
 
 	body := admin.Get("/admin/locks").AssertOK().Body()
-	if !strings.Contains(inertiaProp(t, body, "Admin/Locks", "locks"), "edit war <b>") || strings.Contains(body, "edit war <b>") {
+	if !strings.Contains(inertiaProp(t, body, "Admin/Locks", "locks"), "edit war <b>") ||
+		strings.Contains(body, "edit war <b>") {
 		t.Fatalf("lock reason missing from the data or not escaped in the page: %s", body)
 	}
 

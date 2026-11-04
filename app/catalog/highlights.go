@@ -102,7 +102,19 @@ func scanHighlights(rows *sql.Rows) ([]Highlight, error) {
 	for rows.Next() {
 		var h Highlight
 		var full, thumb, releaseDate sql.NullString
-		err := rows.Scan(&h.ID, &h.Type, &h.Slug, &h.Title, &h.Year, &releaseDate, &h.ReleasePrecision, &h.Score, &h.RatingCount, &full, &thumb)
+		err := rows.Scan(
+			&h.ID,
+			&h.Type,
+			&h.Slug,
+			&h.Title,
+			&h.Year,
+			&releaseDate,
+			&h.ReleasePrecision,
+			&h.Score,
+			&h.RatingCount,
+			&full,
+			&thumb,
+		)
 		if err != nil {
 			return nil, fmt.Errorf("scan highlight: %w", err)
 		}

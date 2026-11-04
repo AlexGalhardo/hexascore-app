@@ -120,9 +120,11 @@ func (h OverviewHandlers) snapshot(ctx context.Context) (OverviewData, error) {
 	}{
 		{&out.Counts.OpenReports, `SELECT count(*) FROM reports WHERE status = 'open'`, nil},
 		{&out.Counts.RunningRuns, `SELECT count(*) FROM job_runs WHERE status = $1`, []any{run.StatusRunning}},
-		{&out.Counts.FailedRuns24h,
+		{
+			&out.Counts.FailedRuns24h,
 			`SELECT count(*) FROM job_runs WHERE status = $1 AND created_at > $2`,
-			[]any{run.StatusFailed, now.Add(-24 * time.Hour)}},
+			[]any{run.StatusFailed, now.Add(-24 * time.Hour)},
+		},
 		{&out.Counts.ParkedFailures, `SELECT count(*) FROM ingest_failures WHERE parked`, nil},
 	}
 	for _, q := range queries {
@@ -202,7 +204,8 @@ func (h OverviewHandlers) runs(ctx context.Context) ([]OverviewRun, error) {
 func approxCount(ctx context.Context, db *database.DB, table string) (int64, error) {
 	var n int64
 
-	err := db.QueryRowContext(ctx, `SELECT greatest(reltuples, 0)::bigint FROM pg_class WHERE oid = $1::regclass`, table).Scan(&n)
+	err := db.QueryRowContext(ctx, `SELECT greatest(reltuples, 0)::bigint FROM pg_class WHERE oid = $1::regclass`, table).
+		Scan(&n)
 	if err != nil {
 		return 0, fmt.Errorf("admin overview estimate %s: %w", table, err)
 	}

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **admin:** Every admin screen is now a React page in the new shell: ingestion and its runs, source records, the match, field and conflict review queues, the catalogue audit with revert, locks, item management (fields, affiliate links, offers, trending, merge), the moderation queue, detail, metrics and bulk result, and read-only list and detail screens for users, score bursts, rating flags, score actions, formula versions, reports, contact messages, items, job runs, ingest failures, data quality results, the audit log and the feature flags (`/admin/r/<slug>`, an allow-list of columns). Actions post to the same endpoints and show the server's message inline. Editing users and contact messages, deleting records and changing flags stay on the framework pages.
+
 - **admin:** A new React admin dashboard at `/admin/overview` (Inertia, TanStack Query, shadcn-style components over Base UI) with a sidebar, light and dark themes, headline counts, worker heartbeat and recent ingestion runs. It sits behind the panel guard (2FA, CSRF, ability) and refreshes every 30 seconds. The other admin screens still use the framework templates until `vadmin` exposes JSON (ADR 0026, VF-083).
 
 - **catalog:** Upcoming releases within 90 days on the landing, 30-day activity ranking for released items, and a where-to-watch provider filter for movie and series listings

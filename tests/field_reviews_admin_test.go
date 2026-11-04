@@ -39,7 +39,12 @@ func TestFieldReviews_AdminResolvesAndItemUpdates(t *testing.T) {
 	seedFieldReview(t, app)
 	admin := browserFor(t, app, makeUser(t, app, "field-reviews-admin@example.com", models.RoleAdmin, true))
 
-	queue := inertiaProp(t, admin.Get("/admin/ingest/field-reviews").AssertOK().Body(), "Admin/IngestFieldReviews", "reviews")
+	queue := inertiaProp(
+		t,
+		admin.Get("/admin/ingest/field-reviews").AssertOK().Body(),
+		"Admin/IngestFieldReviews",
+		"reviews",
+	)
 	if !strings.Contains(queue, "runtime_minutes") || !strings.Contains(queue, "<b>llm</b>") {
 		t.Fatalf("queue page: %s", queue)
 	}

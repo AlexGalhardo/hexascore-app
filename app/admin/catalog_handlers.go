@@ -1,7 +1,6 @@
 package admin
 
 import (
-	"bytes"
 	"context"
 	"database/sql"
 	"embed"
@@ -19,7 +18,6 @@ import (
 	"github.com/AlexGalhardo/vukem/orm"
 	"github.com/AlexGalhardo/vukem/queue"
 	"github.com/AlexGalhardo/vukem/uuid"
-	"github.com/AlexGalhardo/vukem/view"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
@@ -36,22 +34,17 @@ import (
 //go:embed views
 var viewsRoot embed.FS
 
-// ViewsFS holds the template overrides of the panel (layout, show page) and the pages of CatalogHandlers.
+// ViewsFS holds the template overrides of the framework panel (layout and show page); the other screens are React.
 func ViewsFS() (fs.FS, error) { return fs.Sub(viewsRoot, "views") }
 
 var affiliateStores = map[string]bool{"amazon": true, "mercadolivre": true, "steam": true, "gog": true}
 
-const (
-	maxAffiliateURL = 2048
-	panelCSP        = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; " +
-		"form-action 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'"
-)
+const maxAffiliateURL = 2048
 
 // CatalogHandlers serve the item management pages and the ingestion status page behind the panel gate and CSRF.
 type CatalogHandlers struct {
 	Accounts *accounts.Accounts
 	Queue    *queue.Queue
-	Views    *view.Engine
 	// Authorize is the panel gate check (404 for non-admins).
 	Authorize func(c *web.Ctx) error
 	// FlagsURL is the vukem feature-flags page; empty when no flag is registered.
@@ -144,19 +137,6 @@ func (h CatalogHandlers) newPage(title string) pageData {
 		Title: "HexaScore admin", Home: "/admin", CSS: "/admin/_assets/admin.css", AuditURL: "/admin/_audit",
 		FlagsURL: h.FlagsURL, Nav: panelNav,
 	}}
-}
-
-func (h CatalogHandlers) render(c *web.Ctx, name string, d pageData) error {
-	var buf bytes.Buffer
-	if err := h.Views.Render(c.Context(), &buf, name, d); err != nil {
-		return errs.Wrap(http.StatusInternalServerError, err)
-	}
-
-	c.SetHeader("Cache-Control", "no-store")
-	c.SetHeader("X-Frame-Options", "DENY")
-	c.SetHeader("Content-Security-Policy", panelCSP)
-
-	return c.Blob(http.StatusOK, "text/html; charset=utf-8", buf.Bytes())
 }
 
 func (h CatalogHandlers) actor(c *web.Ctx) (models.User, error) {

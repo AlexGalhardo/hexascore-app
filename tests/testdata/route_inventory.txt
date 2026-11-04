@@ -227,6 +227,9 @@ admin GET    /admin/ingest/conflicts
 admin POST   /admin/ingest/conflicts/{id}
 admin GET    /admin/overview
 admin GET    /admin/overview/data
+admin GET    /admin/r/flags
+admin GET    /admin/r/{slug}
+admin GET    /admin/r/{slug}/{id}
 admin GET    /admin/dq-results
 admin GET    /admin/dq-results/create
 admin POST   /admin/dq-results

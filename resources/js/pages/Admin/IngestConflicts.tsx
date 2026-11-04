@@ -29,7 +29,7 @@ function ConflictCard({ conflict }: { conflict: Conflict }): ReactElement {
 		void action.run(`/admin/ingest/conflicts/${conflict.id}`, { action: verb });
 	const other = (
 		<a
-			href={`/admin/items/${conflict.otherID}`}
+			href={`/admin/r/items/${conflict.otherID}`}
 			className="font-medium text-primary underline-offset-4 hover:underline"
 		>
 			{conflict.otherTitle}

@@ -14,12 +14,15 @@ export function ActionForm({
 	submit,
 	variant = "default",
 	className,
+	transform,
 	children,
 }: {
 	action: string;
 	submit: ReactNode;
 	variant?: ButtonProps["variant"];
 	className?: string;
+	/** Reshapes the collected fields before they are posted (a date input becoming the time the handler reads). */
+	transform?: (data: Record<string, string>) => Record<string, string>;
 	children: ReactNode;
 }): ReactElement {
 	const act = useAction();
@@ -34,7 +37,7 @@ export function ActionForm({
 					string,
 					string
 				>;
-				if (await act.run(action, data)) setKey((k) => k + 1);
+				if (await act.run(action, transform ? transform(data) : data)) setKey((k) => k + 1);
 			}}
 		>
 			{children}

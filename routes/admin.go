@@ -10,7 +10,6 @@ import (
 	"github.com/AlexGalhardo/vukem/authz"
 	"github.com/AlexGalhardo/vukem/csrf"
 	"github.com/AlexGalhardo/vukem/router"
-	"github.com/AlexGalhardo/vukem/view"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
@@ -144,12 +143,7 @@ func Admin(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	engine, err := view.New(view.Config{FS: views, DefaultLayout: "admin"})
-	if err != nil {
-		return err
-	}
-
-	catalogH := admin.CatalogHandlers{Accounts: acc, Queue: q, Views: engine, Authorize: bans.Authorize}
+	catalogH := admin.CatalogHandlers{Accounts: acc, Queue: q, Authorize: bans.Authorize}
 	if len(ff.All()) > 0 {
 		catalogH.FlagsURL = "/admin/_flags"
 	}
@@ -243,6 +237,13 @@ func Admin(r *router.Router, app *vukem.App) error {
 	overviewH := admin.OverviewHandlers{DB: acc.DB, Now: app.Now, Authorize: bans.Authorize}
 	r.Get("/admin/overview", overviewH.Index).Name("admin.overview").Use(panel.Guard())
 	r.Get("/admin/overview/data", overviewH.Data).Name("admin.overview.data").Use(panel.Guard())
+
+	// The React list and detail screens of the framework resources and the flags (ADR 0026); the framework pages
+	// stay at /admin/<slug> for editing.
+	resourceH := admin.ResourceHandlers{DB: acc.DB, Flags: ff, Authorize: bans.Authorize}
+	r.Get("/admin/r/flags", resourceH.FlagsPage).Name("admin.r.flags").Use(panel.Guard())
+	r.Get("/admin/r/{slug}", resourceH.List).Name("admin.r.list").Use(panel.Guard())
+	r.Get("/admin/r/{slug}/{id}", resourceH.Show).Name("admin.r.show").Use(panel.Guard())
 	r.Get("/admin/ingest", ingestH.Index).Name("admin.ingest").Use(modMW...)
 	r.Post("/admin/ingest/runs", ingestH.Trigger).Name("admin.ingest.runs").Use(modMW...)
 	r.Post("/admin/ingest/runs/{id}/cancel", ingestH.Cancel).Name("admin.ingest.runs.cancel").Use(modMW...)

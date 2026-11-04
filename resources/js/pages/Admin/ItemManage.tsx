@@ -100,12 +100,12 @@ export default function ItemManage({
 				description={`${item.type} · ${item.slug}`}
 				crumbs={[
 					{ label: t("admin.title"), href: "/admin/overview" },
-					{ label: t("admin.nav.items"), href: "/admin/items" },
+					{ label: t("admin.nav.items"), href: "/admin/r/items" },
 					{ label: t("admin.item.title") },
 				]}
 				actions={
 					<a
-						href={base}
+						href={`/admin/r/items/${item.id}`}
 						className="text-sm text-primary underline-offset-4 hover:underline"
 					>
 						{t("admin.item.backToItem")}

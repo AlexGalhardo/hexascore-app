@@ -73,7 +73,15 @@ func TestAffiliateLinks(t *testing.T) {
 		AssertStatus(303)
 	admin.PostForm(base+"/affiliate-links", url.Values{"store": {"gog"}, "url": {"https://gog.example/a"}, "active": {"true"}}).
 		AssertRedirect(base + "/manage")
-	if got := inertiaProp(t, admin.Get(base+"/manage").AssertOK().Body(), "Admin/ItemManage", "affiliates"); !strings.Contains(got, "https://gog.example/a") {
+	if got := inertiaProp(
+		t,
+		admin.Get(base+"/manage").AssertOK().Body(),
+		"Admin/ItemManage",
+		"affiliates",
+	); !strings.Contains(
+		got,
+		"https://gog.example/a",
+	) {
 		t.Fatalf("affiliate link missing from the manage page: %s", got)
 	}
 	admin.PostForm(base+"/affiliate-links/gog/delete", url.Values{}).AssertRedirect(base + "/manage")
@@ -246,7 +254,15 @@ func TestAdminOffers(t *testing.T) {
 		t.Fatalf("offer = %q source = %q, %v", id, source, err)
 	}
 
-	if got := inertiaProp(t, admin.Get(base+"/manage").AssertOK().Body(), "Admin/ItemManage", "offers"); !strings.Contains(got, "https://store.steampowered.com/app/1") {
+	if got := inertiaProp(
+		t,
+		admin.Get(base+"/manage").AssertOK().Body(),
+		"Admin/ItemManage",
+		"offers",
+	); !strings.Contains(
+		got,
+		"https://store.steampowered.com/app/1",
+	) {
 		t.Fatalf("offers missing from the manage page: %s", got)
 	}
 
