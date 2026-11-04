@@ -14,7 +14,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
 )
 
-// Production 2026-11-04: titles that differ only in case or accents collide on the (item_id, title_norm) index; the
+// Production 2026-11-04: titles that differ only in case or accents collide on the (item_id, normalised title) index; the
 // old insert named (item_id, title) and failed the item's whole relations step with SQLSTATE 23505.
 func TestAltTitlesThatNormaliseAlikeAreStoredOnce(t *testing.T) {
 	ctx := context.Background()

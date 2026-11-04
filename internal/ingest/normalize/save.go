@@ -227,7 +227,7 @@ ON CONFLICT (item_id, locale) DO UPDATE SET
 }
 
 func saveRelations(ctx context.Context, ex database.Executor, id string, rel *Relations, ids map[string]string) error {
-	// No conflict target on purpose: the unique indexes are (item_id, title) and (item_id, title_norm), and two titles
+	// No conflict target on purpose: the unique indexes are (item_id, title) and (item_id, normalised title), and two titles
 	// that differ only in case, accents or punctuation collide on the second one (production, 2026-11-04).
 	for _, a := range rel.AltTitles {
 		if _, err := ex.ExecContext(ctx, `INSERT INTO item_alt_titles (item_id, title, lang, kind, source)
