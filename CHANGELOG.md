@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **ingest:** A book edition whose source gives an implausible publication year (0 or 9999) no longer fails the item's editions step: years outside 1400 to 2100 are stored as unknown
 - **item:** An item whose trailers came from Wikidata (stored as a list of YouTube ids) no longer answers 500: the item page reads both that list and the older objects. Grand Theft Auto VI was the first to fail
 - **catalog:** The canonical genres are permanent: migration `20261104000000_canonicalize_genres` repairs every item whose genres still show Wikidata labels or lost their canonical link (the same repair as `genres:canonicalize`, as SQL), and the normaliser now canonicalises each item it saves, so a new ingest no longer brings the source labels back and the command no longer needs to be run by hand
 - **ingest:** An item whose alternative titles differ only in case or accents no longer fails its whole relations step (the insert now ignores any unique conflict, not only the exact title)

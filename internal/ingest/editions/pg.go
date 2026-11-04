@@ -18,6 +18,16 @@ type PG struct {
 }
 
 // WorkOfISBN finds the work that holds isbn13.
+// plausibleYear is the publication year the editions CHECK accepts (1400 to 2100), or 0 (stored as NULL): a source
+// that says year 0 or 9999 must not fail the whole item (production, 2026-11-04: Q11088862).
+func plausibleYear(y int) int {
+	if y < 1400 || y > 2100 {
+		return 0
+	}
+
+	return y
+}
+
 func (p PG) WorkOfISBN(ctx context.Context, isbn13 string) (string, bool, error) {
 	var work string
 
@@ -61,7 +71,7 @@ func (p PG) Upsert(ctx context.Context, work string, c Candidate) error {
 publication_year = NULLIF($8, 0), publisher_id = coalesce(NULLIF($9, '')::uuid, publisher_id),
 openlibrary_id = coalesce(openlibrary_id, `+freeOLID+`), updated_at = now()
 WHERE work_id = $1 AND (isbn13 = NULLIF($2, '') OR wikidata_qid = NULLIF($3, '') OR openlibrary_id = NULLIF($4, ''))`,
-		work, c.ISBN, c.QID, c.OpenLibraryID, title, lang, c.MarketCountry, c.Year, c.PublisherID)
+		work, c.ISBN, c.QID, c.OpenLibraryID, title, lang, c.MarketCountry, plausibleYear(c.Year), c.PublisherID)
 	if err != nil {
 		return fmt.Errorf("editions: update: %w", err)
 	}
@@ -98,7 +108,7 @@ NULLIF($11, '')::uuid)`,
 		title,
 		lang,
 		c.MarketCountry,
-		c.Year,
+		plausibleYear(c.Year),
 		c.Source,
 		c.PublisherID,
 	)
