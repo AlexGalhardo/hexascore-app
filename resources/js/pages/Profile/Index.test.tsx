@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, test, vi } from "vitest";
 
 import Profile from "./Index";
@@ -35,12 +35,36 @@ const baseProps = {
 	notifications: { communityMailOptOut: false },
 };
 
-test("the profile sections sit in three equal columns from lg up", () => {
+test("a section menu lists every section and each link points at its section", () => {
 	render(<Profile {...baseProps} />);
 
-	const grid = document.getElementById("details")?.parentElement as HTMLElement;
-	expect(grid.className).toContain("lg:grid-cols-3");
-	expect(grid.contains(document.getElementById("delete"))).toBe(true);
+	const nav = screen.getByRole("navigation", { name: "account.nav" });
+	const ids = [
+		"details",
+		"password",
+		"two-factor",
+		"passkeys",
+		"sessions",
+		"privacy",
+		"notifications",
+		"export",
+		"delete",
+	];
+	for (const id of ids) {
+		const link = nav.querySelector(`a[href="#${id}"]`);
+		expect(link, id).not.toBeNull();
+		expect(document.getElementById(id), id).not.toBeNull();
+	}
+	expect(nav.querySelectorAll("a")).toHaveLength(ids.length);
+	expect(nav.querySelector('a[aria-current="true"]')?.getAttribute("href")).toBe("#details");
+});
+
+test("clicking a menu link marks that section as current", () => {
+	render(<Profile {...baseProps} />);
+
+	const nav = screen.getByRole("navigation", { name: "account.nav" });
+	fireEvent.click(nav.querySelector('a[href="#privacy"]') as HTMLElement);
+	expect(nav.querySelector('a[aria-current="true"]')?.getAttribute("href")).toBe("#privacy");
 });
 
 const section = (): HTMLElement => document.getElementById("two-factor") as HTMLElement;

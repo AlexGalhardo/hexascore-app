@@ -555,6 +555,7 @@
   "account": {
     "metaTitle": "Perfil",
     "title": "Tu perfil",
+    "nav": "Secciones del perfil",
     "saved": "Guardado.",
     "details": {
       "title": "Datos de la cuenta",
