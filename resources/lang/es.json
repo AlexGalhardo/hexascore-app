@@ -90,7 +90,8 @@
       "navLabel": "Navegación del admin",
       "skip": "Saltar al contenido",
       "account": "Cuenta",
-      "signedInAs": "Sesión iniciada como {name}"
+      "signedInAs": "Sesión iniciada como {name}",
+      "loading": "Cargando página"
     },
     "common": {
       "actions": "Acciones",

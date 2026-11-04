@@ -1,9 +1,20 @@
+import { act } from "@testing-library/react";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 
 import { cleanup, fireEvent, render, screen, within } from "../lib/testing";
 import AdminLayout from "./AdminLayout";
 
+const handlers: Record<string, (event?: unknown) => void> = {};
+
 vi.mock("@inertiajs/react", () => ({
+	router: {
+		on: (name: string, cb: (event?: unknown) => void) => {
+			handlers[name] = cb;
+			return () => {
+				delete handlers[name];
+			};
+		},
+	},
 	usePage: () => ({
 		url: "/admin/ingest/reviews?x=1",
 		props: { appName: "HexaScore", auth: { user: { name: "Ada Lovelace" } } },
@@ -60,4 +71,48 @@ test("the skip link points at the main region", () => {
 		"#admin-main",
 	);
 	expect(document.getElementById("admin-main")).not.toBeNull();
+});
+
+const visit = (preserveState: boolean) => ({ detail: { visit: { preserveState } } });
+
+test("a page visit shows the progress bar after a short delay and finish hides it", () => {
+	vi.useFakeTimers();
+	try {
+		render(
+			<AdminLayout>
+				<p>content</p>
+			</AdminLayout>,
+		);
+		act(() => handlers.start(visit(false)));
+		expect(screen.queryByRole("progressbar")).toBeNull();
+		act(() => vi.advanceTimersByTime(130));
+		expect(screen.getByRole("progressbar", { name: "admin.topbar.loading" })).toBeTruthy();
+		expect(document.getElementById("admin-main")?.getAttribute("aria-busy")).toBe("true");
+		act(() => handlers.finish());
+		expect(screen.queryByRole("progressbar")).toBeNull();
+		expect(document.getElementById("admin-main")?.getAttribute("aria-busy")).toBe("false");
+	} finally {
+		vi.useRealTimers();
+	}
+});
+
+test("a quick visit never shows the bar, and a reload that keeps the page is ignored", () => {
+	vi.useFakeTimers();
+	try {
+		render(
+			<AdminLayout>
+				<p>content</p>
+			</AdminLayout>,
+		);
+		act(() => handlers.start(visit(false)));
+		act(() => vi.advanceTimersByTime(50));
+		act(() => handlers.finish());
+		act(() => vi.advanceTimersByTime(300));
+		expect(screen.queryByRole("progressbar")).toBeNull();
+		act(() => handlers.start(visit(true)));
+		act(() => vi.advanceTimersByTime(300));
+		expect(screen.queryByRole("progressbar")).toBeNull();
+	} finally {
+		vi.useRealTimers();
+	}
 });

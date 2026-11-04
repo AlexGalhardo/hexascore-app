@@ -19,6 +19,7 @@ import { Sheet } from "../components/admin/ui/sheet";
 import { BRAND } from "../lib/brand";
 import { cn } from "../lib/cn";
 import { toggleTheme } from "../lib/theme";
+import { useNavigating } from "../lib/useNavigating";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
 
@@ -134,6 +135,7 @@ export default function AdminLayout({ children }: { children: ReactNode }): Reac
 	const t = useT();
 	const [open, setOpen] = useState(false);
 	const flash = (usePage().props as { flash?: Flash }).flash;
+	const navigating = useNavigating();
 	return (
 		<div className="min-h-screen bg-bg text-fg">
 			<a
@@ -142,6 +144,15 @@ export default function AdminLayout({ children }: { children: ReactNode }): Reac
 			>
 				{t("admin.topbar.skip")}
 			</a>
+			{navigating && (
+				<div
+					role="progressbar"
+					aria-label={t("admin.topbar.loading")}
+					className="fixed inset-x-0 top-0 z-[80] h-0.5 overflow-hidden bg-surface"
+				>
+					<div className="admin-bar h-full w-1/3 bg-primary" />
+				</div>
+			)}
 			<aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-border bg-bg lg:flex">
 				<SidebarNav />
 			</aside>
@@ -163,7 +174,14 @@ export default function AdminLayout({ children }: { children: ReactNode }): Reac
 					<ThemeToggle />
 					<UserMenu />
 				</header>
-				<main id="admin-main" className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 lg:px-8">
+				<main
+					id="admin-main"
+					aria-busy={navigating}
+					className={cn(
+						"mx-auto w-full max-w-7xl flex-1 px-4 py-6 transition-opacity duration-150 motion-reduce:transition-none lg:px-8",
+						navigating && "pointer-events-none opacity-50",
+					)}
+				>
 					{flash?.success && (
 						<Alert variant="success" className="mb-4">
 							{flash.success}

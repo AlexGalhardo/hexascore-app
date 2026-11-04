@@ -90,7 +90,8 @@
       "navLabel": "Admin navigation",
       "skip": "Skip to content",
       "account": "Account",
-      "signedInAs": "Signed in as {name}"
+      "signedInAs": "Signed in as {name}",
+      "loading": "Loading page"
     },
     "common": {
       "actions": "Actions",
