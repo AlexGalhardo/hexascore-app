@@ -84,16 +84,9 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 		WeeklyOn(time.Sunday, "04:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:tmdb-expire", startChain(app, ingest.TMDBExpire)).
 		DailyAt("03:00").In(saoPaulo).WithoutOverlapping()
-	// Filling the catalogue towards 1,000,000 books, movies and series: the three full chains are tried every 30
-	// minutes and start the moment the previous run of the same chain ends (an active run is not an error, see
-	// startChain). The weekly entries above still run; the active-run guard keeps them from overlapping these.
-	// shortcut: no end condition, remove these when the catalogue reaches its target (digest shows the total).
-	s.Func("ingest:fill-wikidata", startChain(app, ingest.WikidataWeekly)).
-		Cron("*/30 * * * *").WithoutOverlapping()
-	s.Func("ingest:fill-openlibrary", startChain(app, ingest.OpenLibraryWeekly)).
-		Cron("*/30 * * * *").WithoutOverlapping()
-	s.Func("ingest:fill-tmdb", startChain(app, ingest.TMDBWeekly)).
-		Cron("*/30 * * * *").WithoutOverlapping()
+	// The three "fill" entries that re-ran the full Wikidata, Open Library and TMDB chains every 30 minutes are gone
+	// (2026-11-04): each pass re-read the same top-N records (the digest showed 500 k records seen for 100 k stored)
+	// and held the two ingest slots that the discovery below needs. The weekly entries above still refresh them.
 	// Beyond the top-N: walk Wikidata downwards by popularity (internal/ingest/discover). The position persists, so
 	// each run continues where the last stopped, and the active-run guard keeps runs from overlapping.
 	s.Func("ingest:discover-wikidata", startChain(app, ingest.WikidataDiscover)).
