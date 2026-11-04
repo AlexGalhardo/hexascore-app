@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// The summary counts only the window, lists the top errors, and a quiet window sends nothing (except at 08:00).
+// The summary counts only the window, lists the top errors, and a quiet window is still sent.
 func TestIngestDigestFromTables(t *testing.T) {
 	db := openDigestDB(t)
 	ctx := t.Context()
@@ -15,21 +15,21 @@ func TestIngestDigestFromTables(t *testing.T) {
 	f := newFakeTelegram(t)
 	n := newNotifier(t, f, errorChat, nil, at)
 
-	if sent, err := SendIngestDigest(ctx, db, n, at, false); err != nil || sent {
-		t.Fatalf("quiet window: sent %v, err %v", sent, err)
+	if sent, err := SendIngestDigest(ctx, db, n, at, false); err != nil || !sent {
+		t.Fatalf("quiet window: sent %v, err %v (the digest goes out every run)", sent, err)
 	}
 
 	for _, q := range []string{
 		`INSERT INTO data_sources (code, name, licence, url) VALUES ('wikidata','Wikidata','CC0-1.0','https://x')`,
-		`INSERT INTO items (id, type, slug, wikidata_qid, created_at) VALUES (gen_random_uuid(), 'game','new-in-window','Q1', '2026-11-02T17:10:00Z'),
+		`INSERT INTO items (id, type, slug, wikidata_qid, created_at) VALUES (gen_random_uuid(), 'game','new-in-window','Q1', '2026-11-02T17:27:00Z'),
   (gen_random_uuid(), 'game','old','Q2','2026-11-02T10:00:00Z')`,
 		`INSERT INTO job_runs (job, source, mode, status, finished_at, changed, failed, rate_limited, triggered_by)
-VALUES ('fetch', 'wikidata', 'incremental', 'succeeded', '2026-11-02T17:20:00Z', 40, 2, 1, 't'),
-  ('covers', NULL, 'incremental', 'succeeded', '2026-11-02T17:25:00Z', 7, 0, 0, 't'),
+VALUES ('fetch', 'wikidata', 'incremental', 'succeeded', '2026-11-02T17:27:00Z', 40, 2, 1, 't'),
+  ('covers', NULL, 'incremental', 'succeeded', '2026-11-02T17:28:00Z', 7, 0, 0, 't'),
   ('fetch', 'wikidata', 'full', 'succeeded', '2026-11-02T09:00:00Z', 500, 9, 9, 't')`,
 		`INSERT INTO ingest_failures (source, external_id, last_run_id, error_class, error, last_seen) VALUES
-  ('wikidata','Q1',1,'http_5xx','x','2026-11-02T17:15:00Z'), ('wikidata','Q2',1,'http_5xx','x','2026-11-02T17:16:00Z'),
-  ('tmdb','9',1,'timeout','x','2026-11-02T17:17:00Z'), ('tmdb','8',1,'timeout','x','2026-11-02T01:00:00Z')`,
+  ('wikidata','Q1',1,'http_5xx','x','2026-11-02T17:26:00Z'), ('wikidata','Q2',1,'http_5xx','x','2026-11-02T17:27:00Z'),
+  ('tmdb','9',1,'timeout','x','2026-11-02T17:28:00Z'), ('tmdb','8',1,'timeout','x','2026-11-02T01:00:00Z')`,
 		`INSERT INTO ingest_cost_daily (day, llm_usd) VALUES ('2026-11-01', 1.0), ('2026-11-02', 1.0), ('2026-10-31', 50)`,
 	} {
 		if _, err := db.ExecContext(ctx, q); err != nil {
@@ -60,7 +60,7 @@ VALUES ('fetch', 'wikidata', 'incremental', 'succeeded', '2026-11-02T17:20:00Z',
 
 	drain(t, n)
 
-	if got := f.messages(); len(got) != 1 || !got[0].Silent {
+	if got := f.messages(); len(got) != 2 || !got[1].Silent {
 		t.Fatalf("messages = %+v", got)
 	}
 }

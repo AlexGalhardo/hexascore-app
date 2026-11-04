@@ -194,7 +194,7 @@ test("the flags screen lists values and marks locked and overridden flags", () =
 	);
 	expect(screen.getByText("admin.flags.overridden")).toBeTruthy();
 	expect(screen.getByText("admin.flags.locked")).toBeTruthy();
-	expect(screen.getByRole("link", { name: "admin.flags.change" }).getAttribute("href")).toBe(
-		"/admin/_flags",
-	);
+	expect(screen.getByRole("button", { name: "admin.flags.turnOff" })).toBeTruthy();
+	expect(screen.getByRole("button", { name: "admin.flags.reset" })).toBeTruthy();
+	expect(screen.queryByRole("button", { name: "admin.flags.turnOn" })).toBeNull();
 });

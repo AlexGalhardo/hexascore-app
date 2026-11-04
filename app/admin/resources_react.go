@@ -289,6 +289,20 @@ var resSpecs = []resSpec{
 	},
 }
 
+// ResourceSlugs are the resources the framework panel used to serve at /admin/<slug>; the React screens live at
+// /admin/r/<slug> and the old URLs redirect there. The audit log has no old URL of its own.
+func ResourceSlugs() []string {
+	out := make([]string, 0, len(resSpecs))
+
+	for _, s := range resSpecs {
+		if s.Slug != "audit-logs" {
+			out = append(out, s.Slug)
+		}
+	}
+
+	return out
+}
+
 func specBySlug(slug string) (resSpec, bool) {
 	i := slices.IndexFunc(resSpecs, func(s resSpec) bool { return s.Slug == slug })
 	if i < 0 {

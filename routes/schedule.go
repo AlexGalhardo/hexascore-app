@@ -84,6 +84,16 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 		WeeklyOn(time.Sunday, "04:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:tmdb-expire", startChain(app, ingest.TMDBExpire)).
 		DailyAt("03:00").In(saoPaulo).WithoutOverlapping()
+	// Filling the catalogue towards 1,000,000 books, movies and series: the three full chains are tried every 30
+	// minutes and start the moment the previous run of the same chain ends (an active run is not an error, see
+	// startChain). The weekly entries above still run; the active-run guard keeps them from overlapping these.
+	// shortcut: no end condition, remove these when the catalogue reaches its target (digest shows the total).
+	s.Func("ingest:fill-wikidata", startChain(app, ingest.WikidataWeekly)).
+		Cron("*/30 * * * *").WithoutOverlapping()
+	s.Func("ingest:fill-openlibrary", startChain(app, ingest.OpenLibraryWeekly)).
+		Cron("*/30 * * * *").WithoutOverlapping()
+	s.Func("ingest:fill-tmdb", startChain(app, ingest.TMDBWeekly)).
+		Cron("*/30 * * * *").WithoutOverlapping()
 	s.Func("ingest:igdb-weekly", startChain(app, ingest.IGDBWeekly)).
 		WeeklyOn(time.Saturday, "01:00").In(saoPaulo).WithoutOverlapping()
 	// D-36: every 6 h, at :15 so it never starts in the same minute as the 00:30/01:00 runs.

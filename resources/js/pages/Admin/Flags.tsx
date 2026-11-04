@@ -1,10 +1,11 @@
 import { Head } from "@inertiajs/react";
 import type { ReactElement } from "react";
 
+import { ActionButton, ActionForm } from "../../components/admin/ActionForm";
 import { PageHeader } from "../../components/admin/PageHeader";
 import { Badge } from "../../components/admin/ui/badge";
-import { buttonVariants } from "../../components/admin/ui/button";
 import { Card, CardContent } from "../../components/admin/ui/card";
+import { Input } from "../../components/admin/ui/input";
 import {
 	Table,
 	TableBody,
@@ -25,6 +26,42 @@ interface FlagRow {
 	stored: boolean;
 }
 
+function FlagControls({ flag }: { flag: FlagRow }): ReactElement {
+	const t = useT();
+	if (flag.locked) return <span className="text-muted">–</span>;
+	const action = `/admin/r/flags/${encodeURIComponent(flag.name)}`;
+	return (
+		<div className="flex flex-wrap items-center justify-end gap-2">
+			{flag.kind === "bool" ? (
+				<ActionButton
+					action={action}
+					fields={{ value: flag.value === "true" ? "false" : "true" }}
+				>
+					{flag.value === "true" ? t("admin.flags.turnOff") : t("admin.flags.turnOn")}
+				</ActionButton>
+			) : (
+				<ActionForm
+					action={action}
+					submit={t("admin.common.save")}
+					className="grid-cols-[minmax(8rem,1fr)_auto] items-end"
+				>
+					<Input
+						name="value"
+						defaultValue={flag.value}
+						aria-label={flag.name}
+						type={flag.kind === "int" ? "number" : "text"}
+					/>
+				</ActionForm>
+			)}
+			{flag.stored && (
+				<ActionButton action={action} fields={{ reset: "1" }}>
+					{t("admin.flags.reset")}
+				</ActionButton>
+			)}
+		</div>
+	);
+}
+
 export default function Flags({ flags }: { flags: FlagRow[] | null }): ReactElement {
 	const t = useT();
 	const list = flags ?? [];
@@ -38,14 +75,6 @@ export default function Flags({ flags }: { flags: FlagRow[] | null }): ReactElem
 					{ label: t("admin.title"), href: "/admin/overview" },
 					{ label: t("admin.flags.title") },
 				]}
-				actions={
-					<a
-						href="/admin/_flags"
-						className={buttonVariants({ variant: "outline", size: "sm" })}
-					>
-						{t("admin.flags.change")}
-					</a>
-				}
 			/>
 			<Card>
 				<CardContent>
@@ -56,6 +85,9 @@ export default function Flags({ flags }: { flags: FlagRow[] | null }): ReactElem
 								<TableHead>{t("admin.flags.value")}</TableHead>
 								<TableHead>{t("admin.flags.default")}</TableHead>
 								<TableHead>{t("admin.res.col.status")}</TableHead>
+								<TableHead className="text-right">
+									{t("admin.common.actions")}
+								</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -88,6 +120,9 @@ export default function Flags({ flags }: { flags: FlagRow[] | null }): ReactElem
 												</Badge>
 											)}
 										</span>
+									</TableCell>
+									<TableCell className="text-right">
+										<FlagControls flag={f} />
 									</TableCell>
 								</TableRow>
 							))}

@@ -3,6 +3,7 @@ package routes
 import (
 	"context"
 	"net/http"
+	"strconv"
 
 	"github.com/AlexGalhardo/vukem"
 	vadmin "github.com/AlexGalhardo/vukem/admin"
@@ -69,10 +70,6 @@ func Admin(r *router.Router, app *vukem.App) error {
 		return err == nil && ff.Enabled(ctx, community.TrustedModeratorsFlag)
 	})
 
-	if err := gate.Register(admin.Policies(app.Now)...); err != nil {
-		return err
-	}
-
 	// The flags registered with vukem.WithFlags (vukem install:flags) are
 	// toggled at /admin/_flags.
 	ff, err := app.Flags()
@@ -80,28 +77,16 @@ func Admin(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	views, err := admin.ViewsFS()
-	if err != nil {
-		return err
-	}
-
+	// The framework panel is not mounted: every screen is a React page (ADR 0026). Only its guard is used, so the
+	// IP allow-list, session limits, 2FA, CSRF and the admin ability apply to the React routes as they did before.
 	panel, err := vadmin.New(vadmin.Config{
 		DB:         acc.DB,
 		Guard:      acc.Web,
 		Authorizer: gate,
 		Title:      app.Config.Name + " admin",
 		Flags:      ff,
-		Views:      views,
 	})
 	if err != nil {
-		return err
-	}
-
-	if err := panel.Register(admin.Resources(acc, acc.DB.Dialect().Name() == "postgres")...); err != nil {
-		return err
-	}
-
-	if err := panel.Mount(r); err != nil {
 		return err
 	}
 
@@ -241,7 +226,34 @@ func Admin(r *router.Router, app *vukem.App) error {
 	// The React list and detail screens of the framework resources and the flags (ADR 0026); the framework pages
 	// stay at /admin/<slug> for editing.
 	resourceH := admin.ResourceHandlers{DB: acc.DB, Flags: ff, Authorize: bans.Authorize}
+	writeH := admin.WriteHandlers{
+		DB: acc.DB, Flags: ff, Authorize: bans.Authorize,
+		Actor: func(ctx context.Context) string {
+			u, err := auth.UserFrom[models.User](ctx, acc.Web.Name())
+			if err != nil {
+				return ""
+			}
+
+			return strconv.FormatInt(u.ID, 10)
+		},
+	}
 	r.Get("/admin/r/flags", resourceH.FlagsPage).Name("admin.r.flags").Use(panel.Guard())
+	r.Post("/admin/r/flags/{name}", writeH.UpdateFlag).Name("admin.r.flags.update").Use(panel.Guard())
+	r.Post("/admin/r/contact-messages/{id}/handled", writeH.SetContactHandled).
+		Name("admin.r.contact.handled").Use(panel.Guard())
+
+	// The URLs of the removed framework panel still work: they land on the React screen that replaced them.
+	to := func(target string) func(*web.Ctx) error { return func(c *web.Ctx) error { return c.Redirect(target) } }
+	r.Get("/admin", to("/admin/overview")).Name("admin.home").Use(panel.Guard())
+	r.Get("/admin/_flags", to("/admin/r/flags")).Name("admin.legacy.flags").Use(panel.Guard())
+	r.Get("/admin/_audit", to("/admin/r/audit-logs")).Name("admin.legacy.audit").Use(panel.Guard())
+
+	for _, slug := range admin.ResourceSlugs() {
+		r.Get("/admin/"+slug, to("/admin/r/"+slug)).Name("admin.legacy." + slug).Use(panel.Guard())
+		r.Get("/admin/"+slug+"/{id}", func(c *web.Ctx) error {
+			return c.Redirect("/admin/r/" + slug + "/" + c.Param("id"))
+		}).Name("admin.legacy." + slug + ".show").Use(panel.Guard())
+	}
 	r.Get("/admin/r/{slug}", resourceH.List).Name("admin.r.list").Use(panel.Guard())
 	r.Get("/admin/r/{slug}/{id}", resourceH.Show).Name("admin.r.show").Use(panel.Guard())
 	r.Get("/admin/ingest", ingestH.Index).Name("admin.ingest").Use(modMW...)

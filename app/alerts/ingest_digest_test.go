@@ -14,6 +14,7 @@ func TestFormatIngestGolden(t *testing.T) {
 	s := IngestSummary{
 		At: digestAt, Since: digestAt.Add(-IngestWindow),
 		Created: 12, Updated: 340, Failed: 3, Covers: 25, RateLimited: 2, Queued: 4, Running: 1,
+		Books: 100, Movies: 200, Series: 50, HeartbeatOK: true, HeartbeatAge: 42 * time.Second,
 		Errors:      []IngestError{{"wikidata", "http_5xx", 3}, {"tmdb", "timeout", 1}, {"a<b", "x&y", 1}},
 		LLMMonthUSD: 1.23, LLMProjectedUSD: 9.8,
 	}
@@ -30,31 +31,6 @@ func TestFormatIngestGolden(t *testing.T) {
 	s.LLMProjectedUSD = 18
 	if got := FormatIngest(s); !strings.Contains(got, "<b>over the alert</b>") {
 		t.Errorf("projected spend at the alert is not flagged: %s", got)
-	}
-}
-
-func TestIngestSummaryQuietAndSchedule(t *testing.T) {
-	if !(IngestSummary{}).Quiet() {
-		t.Error("an empty window is quiet")
-	}
-
-	for _, s := range []IngestSummary{{Created: 1}, {Failed: 1}, {Queued: 1}, {Running: 1}, {Errors: []IngestError{{}}}} {
-		if s.Quiet() {
-			t.Errorf("%+v is not quiet", s)
-		}
-	}
-
-	sp := Location()
-	for at, want := range map[time.Time]bool{
-		time.Date(2026, 11, 2, 8, 0, 0, 0, sp):   true,
-		time.Date(2026, 11, 2, 8, 30, 0, 0, sp):  false,
-		time.Date(2026, 11, 2, 20, 0, 0, 0, sp):  true,
-		time.Date(2026, 11, 2, 14, 0, 0, 0, sp):  false,
-		time.Date(2026, 11, 2, 20, 29, 0, 0, sp): true,
-	} {
-		if scheduledSend(at) != want {
-			t.Errorf("scheduledSend(%v) = %v, want %v", at, !want, want)
-		}
 	}
 }
 

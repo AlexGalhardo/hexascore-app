@@ -3,9 +3,7 @@ package admin
 import (
 	"context"
 	"database/sql"
-	"embed"
 	"errors"
-	"io/fs"
 	"net/http"
 	"net/url"
 	"strings"
@@ -30,12 +28,6 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/resolve"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
 )
-
-//go:embed views
-var viewsRoot embed.FS
-
-// ViewsFS holds the template overrides of the framework panel (layout and show page); the other screens are React.
-func ViewsFS() (fs.FS, error) { return fs.Sub(viewsRoot, "views") }
 
 var affiliateStores = map[string]bool{"amazon": true, "mercadolivre": true, "steam": true, "gog": true}
 

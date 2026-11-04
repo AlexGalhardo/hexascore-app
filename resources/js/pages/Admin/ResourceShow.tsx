@@ -63,11 +63,6 @@ function Actions({
 						<CardTitle>{t("admin.res.actions.banTitle")}</CardTitle>
 					</CardHeader>
 					<CardContent className="grid gap-4">
-						<div>
-							<a href={`/admin/users/${id}/edit`} className={link}>
-								{t("admin.res.editClassic")}
-							</a>
-						</div>
 						{banned ? (
 							<div>
 								<ActionButton
@@ -169,14 +164,23 @@ function Actions({
 				</div>
 			);
 		}
-		case "contact-messages":
+		case "contact-messages": {
+			const handled = Boolean(values.handled);
 			return (
 				<div>
-					<a href={`/admin/contact-messages/${id}/edit`} className={link}>
-						{t("admin.res.editClassic")}
-					</a>
+					<ActionButton
+						action={`/admin/r/contact-messages/${id}/handled`}
+						fields={{ handled: handled ? "false" : "true" }}
+						variant={handled ? "outline" : "default"}
+						size="default"
+					>
+						{handled
+							? t("admin.res.actions.markUnhandled")
+							: t("admin.res.actions.markHandled")}
+					</ActionButton>
 				</div>
 			);
+		}
 		default:
 			return null;
 	}
