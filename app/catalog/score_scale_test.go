@@ -35,7 +35,7 @@ VALUES ($1,'game','scaled','Q1',1,10,87,'public')`, id); err != nil {
 		t.Fatal(err)
 	}
 
-	hl, err := catalog.Highlights(ctx, db, "game", "en")
+	hl, err := catalog.Highlights(ctx, db, "game", "en", catalog.Showcase{})
 	if err != nil || len(hl.Pool) != 1 || hl.Pool[0].Score == nil {
 		t.Fatalf("highlights: %v %+v", err, hl)
 	}

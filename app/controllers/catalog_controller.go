@@ -94,6 +94,9 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 		if params.Entities, err = entityFilters(c.Query); err != nil {
 			return badListing(err)
 		}
+		if ff, ferr := h.app.Flags(); ferr == nil {
+			params.Showcase = catalog.ShowcaseFrom(c.Context(), ff)
+		}
 		page, err := catalog.List(c.Context(), db, h.codec, params)
 		if err != nil {
 			return badListing(err)

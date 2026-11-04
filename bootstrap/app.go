@@ -24,6 +24,7 @@ import (
 	"github.com/AlexGalhardo/vukem/storage"
 
 	"github.com/AlexGalhardo/hexascore-app/app/alerts"
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
@@ -145,6 +146,8 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 					social.Flag,
 					trending.V2Flag,
 					offers.VerifyFlag,
+					catalog.HideUncoveredFlag,
+					catalog.HideUnscoredFlag,
 				},
 				run.All()...)...),
 		vukem.WithViews(resources.Views()),

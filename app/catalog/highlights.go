@@ -35,11 +35,11 @@ type SectionHighlights struct {
 
 // Highlights loads the public item count and the most active released items over 30 days.
 // popularity_prior carries external source popularity when on-site activity is sparse.
-func Highlights(ctx context.Context, db Querier, typ, locale string) (SectionHighlights, error) {
+func Highlights(ctx context.Context, db Querier, typ, locale string, sc Showcase) (SectionHighlights, error) {
 	out := SectionHighlights{Type: typ, Pool: []Highlight{}}
 
 	err := db.QueryRowContext(ctx,
-		`SELECT count(*) FROM items WHERE type = $1 AND visibility = 'public'`, typ).Scan(&out.Count)
+		`SELECT count(*) FROM items i WHERE i.type = $1 AND i.visibility = 'public'`+sc.where(), typ).Scan(&out.Count)
 	if err != nil {
 		return out, fmt.Errorf("count highlights: %w", err)
 	}
@@ -58,7 +58,7 @@ LEFT JOIN activity a ON a.item_id = i.id
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
 LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
 WHERE i.type = $1 AND i.visibility = 'public' AND i.release_status = 'released'
-  AND (i.release_date IS NULL OR i.release_date <= CURRENT_DATE)
+  AND (i.release_date IS NULL OR i.release_date <= CURRENT_DATE)` + sc.where() + `
 ORDER BY coalesce(a.hype, 0) DESC,
   i.popularity_prior DESC, i.rating_count DESC, i.id
 LIMIT ` + strconv.Itoa(PoolSize)
@@ -75,7 +75,7 @@ LIMIT ` + strconv.Itoa(PoolSize)
 }
 
 // Upcoming ranks public announcements in the next three calendar months by external popularity and on-site intent.
-func Upcoming(ctx context.Context, db Querier, typ, locale string) ([]Highlight, error) {
+func Upcoming(ctx context.Context, db Querier, typ, locale string, sc Showcase) ([]Highlight, error) {
 	rows, err := db.QueryContext(ctx, `SELECT i.id, i.type, i.slug,
   coalesce(t.title, te.title, i.original_title, i.slug),
   extract(year FROM i.release_date)::int, to_char(i.release_date, 'YYYY-MM-DD'), i.release_precision, `+starsScore+`,
@@ -84,7 +84,9 @@ FROM items i
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
 LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
 WHERE i.type = $1 AND i.visibility = 'public' AND i.release_status = 'announced'
-  AND i.release_date > CURRENT_DATE AND i.release_date <= (CURRENT_DATE + INTERVAL '3 months')::date
+  AND i.release_date > CURRENT_DATE AND i.release_date <= (CURRENT_DATE + INTERVAL '3 months')::date`+
+		// An announcement has no score yet: only the cover rule applies to it.
+		Showcase{Cover: sc.Cover}.where()+`
 ORDER BY (0.7 * i.popularity_prior + 10 * ln(1 +
   (SELECT count(*) FROM item_status s WHERE s.item_id = i.id AND s.status = 'want'))) DESC,
   i.release_date, i.id

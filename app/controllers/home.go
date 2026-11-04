@@ -52,14 +52,19 @@ func Home(app *vukem.App) web.HandlerFunc {
 			return err
 		}
 
+		var showcase catalog.Showcase
+		if ff, ferr := app.Flags(); ferr == nil {
+			showcase = catalog.ShowcaseFrom(c.Context(), ff)
+		}
+
 		for _, typ := range homeTypes {
 			s := catalog.SectionHighlights{Type: typ, Pool: []catalog.Highlight{}}
 			// catalog tables exist only on Postgres (VF-033).
 			if db.Dialect().Name() == "postgres" {
-				if s, err = catalog.Highlights(c.Context(), db, typ, i18n.Locale(c.Context())); err != nil {
+				if s, err = catalog.Highlights(c.Context(), db, typ, i18n.Locale(c.Context()), showcase); err != nil {
 					return err
 				}
-				upcoming[typ], err = catalog.Upcoming(c.Context(), db, typ, i18n.Locale(c.Context()))
+				upcoming[typ], err = catalog.Upcoming(c.Context(), db, typ, i18n.Locale(c.Context()), showcase)
 				if err != nil {
 					return err
 				}
@@ -82,13 +87,20 @@ func Home(app *vukem.App) web.HandlerFunc {
 			}
 
 			key := trending.HomeCacheKey(locale)
+			if showcase.Cover || showcase.Score {
+				key += fmt.Sprintf(
+					":s%t%t",
+					showcase.Cover,
+					showcase.Score,
+				) // the flags change the list: keep the entries apart
+			}
 			if !v2 {
 				key += ":v1" // the rollback list must not serve, or be served by, the snapshot cache entry
 			}
 
 			trend, err = cache.Remember(c.Context(), store, key, trendingTTL,
 				func(ctx context.Context) (map[string]trendingSection, error) {
-					return homeTrending(ctx, db.SQL(), app.Now(), locale, v2)
+					return homeTrending(ctx, db.SQL(), app.Now(), locale, v2, showcase)
 				})
 			if err != nil {
 				return err
@@ -166,6 +178,7 @@ func homeTrending(
 	now time.Time,
 	locale string,
 	v2 bool,
+	showcase catalog.Showcase,
 ) (map[string]trendingSection, error) {
 	out := make(map[string]trendingSection, len(homeTypes))
 
@@ -188,7 +201,7 @@ func homeTrending(
 		}
 
 		byID := make(map[string]catalog.Highlight, len(cards))
-		for _, h := range cards {
+		for _, h := range showcase.Filter(cards) {
 			byID[h.ID] = h
 		}
 
