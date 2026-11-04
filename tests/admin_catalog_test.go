@@ -48,7 +48,7 @@ func TestSecurity_A01_AdminPagesNotFoundForMembers(t *testing.T) {
 	plain := browserFor(t, app, makeUser(t, app, "plain@example.com", "user", true))
 	admin := browserFor(t, app, makeUser(t, app, adminEmail, "admin", true))
 
-	for _, p := range []string{"/admin/items", "/admin/items/" + itemA, "/admin/items/" + itemA + "/manage", "/admin/ingestion"} {
+	for _, p := range []string{"/admin/r/items", "/admin/r/items/" + itemA, "/admin/items/" + itemA + "/manage", "/admin/ingestion"} {
 		plain.Get(p).AssertNotFound()
 		app.Client(t).Get(p).AssertStatus(302)
 		admin.Get(p).AssertOK()
