@@ -19,6 +19,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/backfill"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/covers"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/discover"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/dq"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/fetch"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/gog"
@@ -220,6 +221,7 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		backfill.EditionsJob: backfill.Editions{}.Step,
 		offers.DeriveJob:     offers.Derive{}.Step,
 		tmdb.ProvidersJob:    tmdb.ProvidersStep(tc, client, app.Now),
+		discover.Job:         (&discover.Config{Client: client, Fetcher: wd, Now: app.Now}).Step,
 		refresh.Job:          refresh.Step(refresh.Config{Stat: refreshStat(stat), Now: app.Now}),
 		llm.Job:              llm.NormaliseStep(llmClient, llm.Ceiling(app.Source.Get), app.Now),
 		// workaround: Serialise (DQ-I-12) stays nil until the API probe exists; Stat is nil without a bucket.

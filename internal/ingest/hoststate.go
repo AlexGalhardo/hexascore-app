@@ -223,3 +223,29 @@ func (s HostStore) Load(ctx context.Context) (map[string]httpx.HostState, error)
 func (s HostStore) Save(ctx context.Context, host string, st httpx.HostState) error {
 	return putState(ctx, s.DB, hostPrefix+host, st)
 }
+
+// SaveState stores v under key in ingest_host_state; discovery jobs keep their position there so a new run resumes
+// where the last one stopped.
+func SaveState(ctx context.Context, ex database.Executor, key string, v any) error {
+	return putState(ctx, ex, key, v)
+}
+
+// LoadState reads key into v; ok is false when the row does not exist.
+func LoadState(ctx context.Context, ex database.Executor, key string, v any) (ok bool, err error) {
+	var b []byte
+
+	err = ex.QueryRowContext(ctx, `SELECT data FROM ingest_host_state WHERE key = $1`, key).Scan(&b)
+	if errors.Is(err, sql.ErrNoRows) {
+		return false, nil
+	}
+
+	if err != nil {
+		return false, fmt.Errorf("ingest host state %s: %w", key, err)
+	}
+
+	if err := json.Unmarshal(b, v); err != nil {
+		return false, fmt.Errorf("ingest host state %s: %w", key, err)
+	}
+
+	return true, nil
+}

@@ -94,6 +94,10 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 		Cron("*/30 * * * *").WithoutOverlapping()
 	s.Func("ingest:fill-tmdb", startChain(app, ingest.TMDBWeekly)).
 		Cron("*/30 * * * *").WithoutOverlapping()
+	// Beyond the top-N: walk the TMDB id exports in order (internal/ingest/discover). The position persists, so each
+	// run continues where the last stopped, and the active-run guard keeps runs from overlapping.
+	s.Func("ingest:discover-tmdb", startChain(app, ingest.TMDBDiscover)).
+		Cron("*/30 * * * *").WithoutOverlapping()
 	s.Func("ingest:igdb-weekly", startChain(app, ingest.IGDBWeekly)).
 		WeeklyOn(time.Saturday, "01:00").In(saoPaulo).WithoutOverlapping()
 	// D-36: every 6 h, at :15 so it never starts in the same minute as the 00:30/01:00 runs.

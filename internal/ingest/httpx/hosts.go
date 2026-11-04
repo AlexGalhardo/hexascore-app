@@ -14,6 +14,8 @@ func DefaultHosts() map[string]HostLimit {
 		"openlibrary.org":        {PerSecond: 2.5, InFlight: 2},
 		"covers.openlibrary.org": {PerSecond: 10, InFlight: 4},
 		"api.themoviedb.org":     {PerSecond: 20, InFlight: 8},
+		// TMDB daily id exports (discover.tmdb): one download per run.
+		"files.tmdb.org":         {PerSecond: 1, InFlight: 1},
 		"www.youtube.com":        {PerSecond: 10, InFlight: 4},
 		"id.twitch.tv":           {PerSecond: 1, InFlight: 1},
 		"api.igdb.com":           {PerSecond: 3.3, InFlight: 4},
