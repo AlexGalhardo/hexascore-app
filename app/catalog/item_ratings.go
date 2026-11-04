@@ -123,19 +123,34 @@ func validYoutubeID(id string) bool {
 	return true
 }
 
+// assignTrailers reads items.trailers. The normaliser stores the YouTube ids it found as a list of strings
+// (["dQw4w9WgXcQ"]), the older shape and the demo seed store objects ({"youtubeId", "title"}); both are read, so an
+// item whose trailers came from Wikidata no longer fails its page (production, 2026-11-04: Grand Theft Auto VI).
 func assignTrailers(raw []byte) ([]models.Trailer, error) {
 	out := []models.Trailer{}
 	if len(raw) == 0 || string(raw) == "null" {
 		return out, nil
 	}
-	var all []models.Trailer
+
+	var all []json.RawMessage
 	if err := json.Unmarshal(raw, &all); err != nil {
 		return nil, fmt.Errorf("trailers: %w", err)
 	}
-	for _, tr := range all {
+
+	for _, entry := range all {
+		var tr models.Trailer
+
+		var id string
+		if json.Unmarshal(entry, &id) == nil {
+			tr.YoutubeID = id
+		} else if err := json.Unmarshal(entry, &tr); err != nil {
+			continue // an entry of neither shape is skipped, it must not take the page down
+		}
+
 		if validYoutubeID(tr.YoutubeID) {
 			out = append(out, tr)
 		}
 	}
+
 	return out, nil
 }
