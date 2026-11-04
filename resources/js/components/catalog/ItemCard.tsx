@@ -22,7 +22,7 @@ export default function ItemCard({ item, href }: { item: Highlight; href: string
 				</Link>
 				<p className="text-[13px] text-muted tabular-nums">{meta}</p>
 			</div>
-			<ScoreBadge score={item.score} />
+			{item.score !== null && <ScoreBadge score={item.score} />}
 		</li>
 	);
 }

@@ -87,12 +87,8 @@ func Home(app *vukem.App) web.HandlerFunc {
 			}
 
 			key := trending.HomeCacheKey(locale)
-			if showcase.Cover || showcase.Score {
-				key += fmt.Sprintf(
-					":s%t%t",
-					showcase.Cover,
-					showcase.Score,
-				) // the flags change the list: keep the entries apart
+			if showcase.Cover {
+				key += ":cover" // the flag changes the list: keep the entries apart
 			}
 			if !v2 {
 				key += ":v1" // the rollback list must not serve, or be served by, the snapshot cache entry

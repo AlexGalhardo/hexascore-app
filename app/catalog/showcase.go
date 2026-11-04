@@ -11,31 +11,27 @@ import (
 var HideUncoveredFlag = flags.Bool("hide_uncovered", true).
 	Describe("Hide items without a cover from the landing page and the category listings")
 
-// HideUnscoredFlag keeps items without a visible score (fewer than 5 ratings) off the landing page and the four
-// category pages; they come back as soon as they have one (owner 2026-11-04). Env FLAG_HIDE_UNSCORED.
-var HideUnscoredFlag = flags.Bool("hide_unscored", true).
-	Describe("Hide items without a visible score from the landing page and the category listings")
+// Showcase says which items the public shop windows (landing, category pages) may show. An item without a score is
+// still shown (owner 2026-11-04): only its score badge is left out, by the page.
+type Showcase struct{ Cover bool }
 
-// Showcase says which items the public shop windows (landing, category pages) may show.
-type Showcase struct{ Cover, Score bool }
-
-// ShowcaseFrom reads the two flags. Unreadable flags fall back to showing everything.
+// ShowcaseFrom reads the flag. Unreadable flags fall back to showing everything.
 func ShowcaseFrom(ctx context.Context, ff *flags.Flags) Showcase {
 	if ff == nil {
 		return Showcase{}
 	}
 
-	return Showcase{Cover: ff.Enabled(ctx, HideUncoveredFlag), Score: ff.Enabled(ctx, HideUnscoredFlag)}
+	return Showcase{Cover: ff.Enabled(ctx, HideUncoveredFlag)}
 }
 
 // Keep reports whether a loaded card passes the showcase.
 func (s Showcase) Keep(h Highlight) bool {
-	return (!s.Cover || h.Cover != nil) && (!s.Score || h.Score != nil)
+	return !s.Cover || h.Cover != nil
 }
 
 // Filter drops the cards that fail the showcase, keeping the order.
 func (s Showcase) Filter(in []Highlight) []Highlight {
-	if !s.Cover && !s.Score {
+	if !s.Cover {
 		return in
 	}
 
@@ -52,15 +48,9 @@ func (s Showcase) Filter(in []Highlight) []Highlight {
 
 // where is the SQL condition for items aliased i; empty when nothing is hidden.
 func (s Showcase) where() string {
-	cond := ""
-
 	if s.Cover {
-		cond += " AND coalesce(i.cover_key, '') <> ''"
+		return " AND coalesce(i.cover_key, '') <> ''"
 	}
 
-	if s.Score {
-		cond += " AND " + visibleScore
-	}
-
-	return cond
+	return ""
 }

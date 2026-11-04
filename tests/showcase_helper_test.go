@@ -8,6 +8,5 @@ func showEverythingEnv(databaseURL string) map[string]string {
 	return map[string]string{
 		"DATABASE_URL":        databaseURL,
 		"FLAG_HIDE_UNCOVERED": "false",
-		"FLAG_HIDE_UNSCORED":  "false",
 	}
 }

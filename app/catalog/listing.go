@@ -97,7 +97,7 @@ type ListParams struct {
 	// Page > 0 switches to numbered pages (?page=N on the web listings, owner 2026-11-02): OFFSET paging with
 	// the total on every page and no cursors. The API keeps the keyset cursors.
 	Page int
-	// Showcase hides items without a cover or without a visible score: the web listings set it, the API does not.
+	// Showcase hides items without a cover: the web listings set it, the API does not.
 	Showcase Showcase
 }
 
@@ -163,9 +163,6 @@ func (p ListParams) filters() (*queryBuilder, error) {
 	b.add("i.visibility = 'public'") // FR-01-14
 	if p.Showcase.Cover {
 		b.add("coalesce(i.cover_key, '') <> ''")
-	}
-	if p.Showcase.Score {
-		b.add(visibleScore)
 	}
 	entity := func(kind, slug string) {
 		b.add(`EXISTS (SELECT 1 FROM item_entities ie JOIN entities e ON e.id = ie.entity_id

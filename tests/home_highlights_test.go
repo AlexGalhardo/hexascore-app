@@ -141,7 +141,7 @@ func homeSnapshotApp(t *testing.T, env map[string]string) *vukemtest.App {
 	t.Helper()
 
 	env["DATABASE_URL"] = pgtest.Database(t, "")
-	env["FLAG_HIDE_UNCOVERED"], env["FLAG_HIDE_UNSCORED"] = "false", "false"
+	env["FLAG_HIDE_UNCOVERED"] = "false"
 	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env})
 
 	db, err := app.DB()

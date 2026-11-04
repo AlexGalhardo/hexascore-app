@@ -147,7 +147,6 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 					trending.V2Flag,
 					offers.VerifyFlag,
 					catalog.HideUncoveredFlag,
-					catalog.HideUnscoredFlag,
 				},
 				run.All()...)...),
 		vukem.WithViews(resources.Views()),

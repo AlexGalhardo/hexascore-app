@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **catalog:** The landing page and the four category pages hide items without a cover (`FLAG_HIDE_UNCOVERED`) or without a visible score (`FLAG_HIDE_UNSCORED`, fewer than 5 ratings), both on by default; an item shows again as soon as it has one. The item page, search and the public API are unchanged
+- **catalog:** The landing page and the four category pages hide items without a cover (`FLAG_HIDE_UNCOVERED`, on by default); an item without a score is still listed, and its score badge appears once it has one. The item page, search and the public API are unchanged
 - **ingest:** The Telegram ingestion digest goes out every 15 minutes and shows new items by type with the pace and ETA to 1,000,000, the running runs with age, counts and a warning for a stalled one, records fetched per source, an example error, and a warning when no item was created in 45 minutes
 - **home:** Release date badges on the landing carousel are larger, with bigger text, for easier reading.
 

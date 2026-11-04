@@ -20,7 +20,7 @@ export default function ItemTile({
 }: {
 	item: Highlight;
 	href: string;
-	/** null hides the badge; undefined shows the score. */
+	/** null hides the badge; undefined shows the score, and hides it for an item that has none yet. */
 	badge?: ReactNode | null;
 	/** Replaces the item title in the bottom strip. */
 	footer?: ReactNode;
@@ -33,7 +33,7 @@ export default function ItemTile({
 				className="group relative block overflow-hidden rounded-sm border border-border bg-surface hover:border-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
 			>
 				<CoverThumb cover={item.cover} alt="" size={coverSize} />
-				{badge !== null && (
+				{badge !== null && (badge !== undefined || item.score !== null) && (
 					<span className="absolute top-2 right-2">
 						{badge ?? <ScoreBadge score={item.score} size="sm" />}
 					</span>

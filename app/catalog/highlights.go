@@ -85,8 +85,7 @@ LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
 LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
 WHERE i.type = $1 AND i.visibility = 'public' AND i.release_status = 'announced'
   AND i.release_date > CURRENT_DATE AND i.release_date <= (CURRENT_DATE + INTERVAL '3 months')::date`+
-		// An announcement has no score yet: only the cover rule applies to it.
-		Showcase{Cover: sc.Cover}.where()+`
+		sc.where()+`
 ORDER BY (0.7 * i.popularity_prior + 10 * ln(1 +
   (SELECT count(*) FROM item_status s WHERE s.item_id = i.id AND s.status = 'want'))) DESC,
   i.release_date, i.id

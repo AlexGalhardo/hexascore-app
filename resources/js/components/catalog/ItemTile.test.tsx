@@ -59,12 +59,14 @@ test("the cover fills a flat card, the score sits in the corner and the title is
 	).toContain("top-2");
 });
 
-test("an item without a score keeps the accessible no-score label", () => {
+// Owner 2026-11-04: an item without a score is still listed; only its score badge is left out until it has one.
+test("an item without a score is listed without a score badge", () => {
 	render(
 		<ul>
 			<ItemTile item={{ ...item, score: null, type: "book" }} href="/books/bigbug" />
 		</ul>,
 	);
-	expect(screen.getByRole("img", { name: "score.none" }).textContent).toBe("–");
+	expect(screen.queryByRole("img")).toBeNull();
+	expect(screen.getByRole("link").getAttribute("href")).toBe("/books/bigbug");
 	expect(screen.getByRole("link").className).toContain("border-border");
 });
