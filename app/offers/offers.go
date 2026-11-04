@@ -120,7 +120,7 @@ func WithTag(rawURL, param, tag string) string {
 
 const loadSQL = `SELECT DISTINCT ON (o.country, o.store, o.kind)
   o.id::text, o.country::text, o.store, s.name, s.kind, coalesce(s.affiliate_program, ''), coalesce(s.attribution, ''),
-  o.kind, o.last_verified_at
+  o.kind, o.last_verified_at, o.source
 FROM offers o
 JOIN stores s ON s.code = o.store AND s.active
 JOIN items i ON i.id = o.item_id AND i.visibility = 'public'
@@ -149,7 +149,7 @@ func Load(ctx context.Context, q Querier, itemID string, now time.Time, tag Tagg
 		var (
 			v                                                 View
 			country, store, storeKind, programme, attribution string
-			offerKind                                         string
+			offerKind, source                                 string
 			verified                                          sql.NullTime
 		)
 
@@ -163,8 +163,16 @@ func Load(ctx context.Context, q Querier, itemID string, now time.Time, tag Tagg
 			&attribution,
 			&offerKind,
 			&verified,
+			&source,
 		); err != nil {
 			return Section{}, err
+		}
+
+		// A watch provider with no known site of its own has nothing to link to: it is left out of the page.
+		if source == streamingSource {
+			if _, ok := PlatformURL(v.Name); !ok {
+				continue
+			}
 		}
 
 		v.Kind = offerKind
@@ -215,6 +223,9 @@ func Load(ctx context.Context, q Querier, itemID string, now time.Time, tag Tagg
 	return sec, nil
 }
 
+// streamingSource is the offers.source of TMDB watch providers, whose stored link is TMDB's own watch page.
+const streamingSource = "tmdb_providers"
+
 // Link is the target behind an offer id.
 type Link struct {
 	URL     string
@@ -234,10 +245,15 @@ func Resolve(ctx context.Context, q Querier, id string, now time.Time) (Link, er
 		return Link{}, ErrNotFound
 	}
 
-	rows, err := q.QueryContext(ctx, `SELECT o.url, o.store, o.country::text, coalesce(s.affiliate_param, '')
+	rows, err := q.QueryContext(
+		ctx,
+		`SELECT o.url, o.store, o.country::text, coalesce(s.affiliate_param, ''), o.source, s.name
 FROM offers o JOIN stores s ON s.code = o.store AND s.active
 JOIN items i ON i.id = o.item_id AND i.visibility = 'public'
-WHERE o.id = $1 AND o.active AND (o.expires_at IS NULL OR o.expires_at > $2) AND o.verify_status <> 'gone'`, id, now)
+WHERE o.id = $1 AND o.active AND (o.expires_at IS NULL OR o.expires_at > $2) AND o.verify_status <> 'gone'`,
+		id,
+		now,
+	)
 	if err != nil {
 		return Link{}, fmt.Errorf("offers resolve: %w", err)
 	}
@@ -248,9 +264,22 @@ WHERE o.id = $1 AND o.active AND (o.expires_at IS NULL OR o.expires_at > $2) AND
 		return Link{}, errors.Join(ErrNotFound, rows.Err())
 	}
 
-	var l Link
-	if err := rows.Scan(&l.URL, &l.Store, &l.Country, &l.Param); err != nil {
+	var (
+		l            Link
+		source, name string
+	)
+	if err := rows.Scan(&l.URL, &l.Store, &l.Country, &l.Param, &source, &name); err != nil {
 		return Link{}, err
+	}
+
+	// A watch provider links to the service itself, never to TMDB's page about the title.
+	if source == streamingSource {
+		site, ok := PlatformURL(name)
+		if !ok {
+			return Link{}, ErrNotFound
+		}
+
+		l.URL = site
 	}
 
 	return l, nil

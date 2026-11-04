@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **item:** Where to watch shows plain text links instead of boxes, and each streaming service links to its own site (Netflix, Prime Video, Apple TV, Google Play, YouTube and the other known services) instead of TMDB's page about the title; a service with no known site is left out of the page and of the redirect
 - **ingest:** The 30-minute "fill" schedules of the Wikidata, Open Library and TMDB full chains are removed: they re-read the same top 100,000 records and held the ingest slots; the weekly runs and the `wikidata-discover` chain remain
 - **catalog:** The landing page and the four category pages hide items without a cover (`FLAG_HIDE_UNCOVERED`, on by default); an item without a score is still listed, and its score badge appears once it has one. The item page, search and the public API are unchanged
 - **ingest:** The Telegram ingestion digest goes out every 15 minutes and shows new items by type with the pace and ETA to 1,000,000, the running runs with age, counts and a warning for a stalled one, records fetched per source, an example error, and a warning when no item was created in 45 minutes

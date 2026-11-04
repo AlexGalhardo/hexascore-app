@@ -23,8 +23,9 @@ export interface OffersData {
 	attribution: string[];
 }
 
+// Plain text links (owner 2026-11-04): no boxes around the services.
 const LINK =
-	"inline-flex min-h-11 items-center rounded-md border border-border bg-surface px-3 text-[15px] font-semibold hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
+	"inline-flex min-h-8 items-center text-[15px] text-primary underline underline-offset-4 hover:no-underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
 
 // Same order as the server (app/offers kindOrder): subscriptions and free first, physical last.
 const KIND_ORDER = ["stream", "free", "rent", "buy", "buy_digital", "mobile", "physical", "read"];
@@ -74,7 +75,7 @@ export default function Offers({
 					<legend className="mb-2 p-0 text-base font-bold">
 						{t(`offers.kinds.${kind}`)}
 					</legend>
-					<ul className="flex flex-wrap gap-2">
+					<ul className="flex flex-wrap gap-x-5 gap-y-1">
 						{list
 							.filter((o) => o.kind === kind)
 							.map((o) => (
