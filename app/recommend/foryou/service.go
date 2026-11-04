@@ -502,7 +502,8 @@ WHERE ie.role = $2 AND ie.entity_id = $3::uuid ORDER BY i.popularity_prior DESC,
   i.release_status = 'released' AND (i.release_date IS NULL OR i.release_date <= $2::date),
   CASE WHEN i.rating_count >= 5 THEN i.score::float8 END
 FROM items i LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
-WHERE i.id = ANY($1::uuid[]) AND i.type = $3 AND i.visibility = 'public'`, pgArray(ids), now, typ)
+WHERE i.id = ANY($1::uuid[]) AND i.type = $3 AND i.visibility = 'public'
+  AND coalesce(i.cover_key, '') <> ''`, pgArray(ids), now, typ) // no item without a cover is recommended
 	if err != nil {
 		return nil, err
 	}

@@ -66,6 +66,9 @@ func Load(ctx context.Context, db *database.DB, itemID, typ, locale string) (Rel
 			return out, err
 		}
 
+		// No item without a cover is shown (owner 2026-11-04): filtered before the cut, so the list stays full.
+		cards = catalog.Showcase{Cover: true}.Filter(cards)
+
 		if len(cards) > SimilarShown {
 			cards = cards[:SimilarShown]
 		}
@@ -124,6 +127,8 @@ ORDER BY i.rating_count DESC, i.id LIMIT $2`, itemID, CrossMediaShown)
 	if err != nil {
 		return nil, err
 	}
+
+	cards = catalog.Showcase{Cover: true}.Filter(cards)
 
 	out := make([]CrossItem, 0, len(cards))
 	for _, c := range cards {

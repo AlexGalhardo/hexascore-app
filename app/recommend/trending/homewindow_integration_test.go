@@ -105,6 +105,16 @@ func TestHomeListQualityFloor(t *testing.T) {
 	r.exec(`UPDATE items SET cover_key = NULL WHERE id = $1`, noCover) // 50: below the floor
 	r.hot(noCover, 20)
 
+	// a synopsis, both translated titles and a date reach 75 without a cover: the cover is still required
+	richNoCover := r.rich()
+	r.exec(`UPDATE items SET cover_key = NULL WHERE id = $1`, richNoCover)
+	r.exec(
+		`INSERT INTO item_translations (item_id, locale, title, title_source) VALUES ($1, 'pt-BR', 'Título', 'wikidata'),
+($1, 'es', 'Título', 'wikidata')`,
+		richNoCover,
+	)
+	r.hot(richNoCover, 30)
+
 	r.snap(now)
 
 	list := r.home("game", now)
@@ -112,7 +122,7 @@ func TestHomeListQualityFloor(t *testing.T) {
 		t.Fatalf("item over the floor is missing: %v", list)
 	}
 
-	for _, id := range []string{bare, noCover} {
+	for _, id := range []string{bare, noCover, richNoCover} {
 		if has(list, id) {
 			t.Fatalf("item under the quality floor is on the home list: %v", list)
 		}
@@ -123,8 +133,14 @@ func TestHomePinsAndBans(t *testing.T) {
 	r := newRig(t)
 	crowd := r.crowd(6)
 
-	pinned := r.item() // no activity and no cover: a pin skips the floor and the entry rule
+	// no activity and no synopsis: a pin skips the quality floor and the entry rule, but not the cover (the landing
+	// never shows an item without one)
+	pinned := r.item()
+	r.exec(`UPDATE items SET cover_key = 'covers/pin.webp' WHERE id = $1`, pinned)
 	r.exec(`INSERT INTO trending_overrides (item_id, kind, reason) VALUES ($1, 'pinned', 'editor pick')`, pinned)
+
+	coverless := r.item()
+	r.exec(`INSERT INTO trending_overrides (item_id, kind, reason) VALUES ($1, 'pinned', 'no cover')`, coverless)
 
 	banned := r.rich()
 	r.hot(banned, 30) // the strongest item of the type
@@ -141,6 +157,9 @@ func TestHomePinsAndBans(t *testing.T) {
 	r.snap(now)
 
 	list := r.home("game", now)
+	if has(list, coverless) {
+		t.Fatalf("a pinned item without a cover must stay off the list: %v", list)
+	}
 	if len(list) == 0 || list[0] != fmt.Sprintf("1:%s:pinned", pinned) {
 		t.Fatalf("pin must take rank 1: %v", list)
 	}

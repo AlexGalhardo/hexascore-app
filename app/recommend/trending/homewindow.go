@@ -16,8 +16,9 @@ const (
 )
 
 // minQuality is the provisional quality floor of RFC-002 section 4 until RFC-001 stores a quality_score: cover 25, an
-// English synopsis 25, a pt-BR title 15, an es title 15 and a release date 20 must reach 60. An item without a cover
-// or without a synopsis therefore never reaches the carousel, but missing translations alone do not block it.
+// English synopsis 25, a pt-BR title 15, an es title 15 and a release date 20 must reach 60. A cover is required on
+// top of the score (owner 2026-11-04: no item without a cover is shown): without the check, an item with a synopsis,
+// both titles and a date reached 75 with no cover, took a carousel slot and the landing then hid it, leaving a gap.
 //
 // The 60 in homeCandidatesSQL is that floor.
 const (
@@ -32,7 +33,7 @@ const (
 // homeCandidatesSQL lists the public, released (or soon announced) items of a type that clear the quality floor and are
 // not banned, with the activity of the last 7 days. $1 type, $2 UTC day, $3 the run's hour, $4 how many of the most
 // popular items to keep as prior fill. The pool is every item with activity, every release within 180 days, the most
-// popular ones and the pinned ones (a pin skips the quality floor, not visibility or a ban).
+// popular ones and the pinned ones (a pin skips the quality floor, not visibility, a ban or the cover).
 const homeCandidatesSQL = `
 WITH base AS (
   SELECT i.id, i.popularity_prior, i.release_date
@@ -41,6 +42,7 @@ WITH base AS (
     AND ((i.release_status = 'released' AND (i.release_date IS NULL OR i.release_date <= $2::date))
       OR (i.release_status = 'announced' AND i.release_date IS NOT NULL AND i.release_date <= $2::date + 90))
     AND NOT EXISTS (SELECT 1 FROM trending_overrides o WHERE o.item_id = i.id AND o.kind = 'banned' AND ` + activeOverrideSQL + `)
+    AND coalesce(i.cover_key, '') <> ''
     AND (` + qualitySQL + ` >= 60
       OR EXISTS (SELECT 1 FROM trending_overrides o WHERE o.item_id = i.id AND o.kind = 'pinned' AND ` + activeOverrideSQL + `))
 ), pop AS (

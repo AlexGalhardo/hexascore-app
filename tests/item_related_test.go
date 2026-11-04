@@ -104,8 +104,14 @@ func (r *relatedRig) exec(q string, args ...any) {
 func (r *relatedRig) item(typ, visibility string) string {
 	r.n++
 	id := uuid.NewV7().String()
-	r.exec(`INSERT INTO items (id, type, slug, wikidata_qid, visibility) VALUES ($1, $2, $3, $4, $5)`,
-		id, typ, fmt.Sprintf("rel-%d", r.n), fmt.Sprintf("Q%d", 7000+r.n), visibility)
+	r.exec(
+		`INSERT INTO items (id, type, slug, wikidata_qid, visibility, cover_key) VALUES ($1, $2, $3, $4, $5, 'covers/' || $3 || '.webp')`,
+		id,
+		typ,
+		fmt.Sprintf("rel-%d", r.n),
+		fmt.Sprintf("Q%d", 7000+r.n),
+		visibility,
+	)
 	r.exec(`INSERT INTO item_translations (item_id, locale, title, title_source) VALUES ($1, 'en', $2, 'hexascore')`,
 		id, fmt.Sprintf("Title %d", r.n))
 

@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **trending:** The landing carousel requires a cover: an item with a synopsis, both translated titles and a date reached the quality floor without one, took a slot and was then hidden, leaving a gap; pins need a cover too. "For you", similar items and cross-media links leave items without a cover out as well
 - **ingest:** The Telegram digest counts right: `offers.tmdb` counts the items that got offers instead of every offer (it showed 447 thousand changed for 36 thousand seen), `refresh.existing` counts the items whose quality score moved instead of every checked item, and the pace and ETA use the last hour instead of a 15-minute window
 - **ingest:** A book edition whose source gives an implausible publication year (0 or 9999) no longer fails the item's editions step: years outside 1400 to 2100 are stored as unknown
 - **item:** An item whose trailers came from Wikidata (stored as a list of YouTube ids) no longer answers 500: the item page reads both that list and the older objects. Grand Theft Auto VI was the first to fail
