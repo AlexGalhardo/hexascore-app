@@ -227,6 +227,9 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		discover.Job:         (&discover.Config{Client: client, Fetcher: wd}).Step,
 		refresh.Job:          refresh.Step(refresh.Config{Stat: refreshStat(stat), Now: app.Now}),
 		llm.Job:              llm.NormaliseStep(llmClient, llm.Ceiling(app.Source.Get), app.Now),
+		llm.TranslateJob:     llm.TranslateStep(llmClient, llm.Ceiling(app.Source.Get), app.Now),
+		llm.WebJob: llm.WebStep(llmClient, llm.Ceiling(app.Source.Get), app.Source.Get("LLM_WEB_SEARCH") == "true",
+			app.Now),
 		// workaround: Serialise (DQ-I-12) stays nil until the API probe exists; Stat is nil without a bucket.
 		dq.Job:       dq.Asserts{Stat: stat}.Step,
 		rollback.Job: rollback.Step,

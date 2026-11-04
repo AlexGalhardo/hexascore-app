@@ -232,9 +232,10 @@ func TestNormaliseRefusesTheCallAtTheCeiling(t *testing.T) {
 	r.item("book", longText)
 	r.item("book", longText)
 
-	// one call costs US$0.000105: with US$2.9999 spent, the first call fits under US$3 and the second does not
+	// one call costs US$0.000105: with US$2.9999 spent, the first call fits under US$3 and the second does not. The
+	// spend is on an earlier day of the month, so the daily share (US$0.10) does not stop the run first.
 	r.exec(`INSERT INTO llm_usage (ts, job, model, tokens_in, tokens_out, cost_usd, outcome)
-VALUES ($1, 'llm.normalise', 'claude-haiku-5-5', 0, 0, 2.9999, 'queued')`, runAt.Add(-time.Hour))
+VALUES ($1, 'llm.normalise', 'claude-haiku-5-5', 0, 0, 2.9999, 'queued')`, runAt.AddDate(0, 0, -1))
 
 	queued, failed, err := r.runStep(runAt, 3)
 	if err != nil || failed != 0 || queued != 1 {

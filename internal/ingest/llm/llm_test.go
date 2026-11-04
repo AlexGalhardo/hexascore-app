@@ -43,7 +43,7 @@ func TestCeiling(t *testing.T) {
 		}
 	}
 
-	for in, want := range map[string]float64{"": 3, "5": 5, "0.5": 0.5, "0": 0, "abc": 3, "-2": 3, "NaN": 3} {
+	for in, want := range map[string]float64{"": 10, "5": 5, "0.5": 0.5, "0": 0, "abc": 10, "-2": 10, "NaN": 10} {
 		if got := llm.Ceiling(env(in)); got != want {
 			t.Errorf("Ceiling(%q) = %v, want %v", in, got, want)
 		}
@@ -142,7 +142,7 @@ func TestClientCompletes(t *testing.T) {
 	}
 
 	line := (*seen)[0]
-	for _, want := range []string{"sk-test|2023-06-01|/v1/messages|", `"model":"claude-haiku-5-5"`, `"system":"system text"`, `"max_tokens"`} {
+	for _, want := range []string{"sk-test|2023-06-01|/v1/messages|", `"model":"claude-haiku-5-5"`, `"system":"system text"`, `"max_tokens"`, `"thinking":{"type":"disabled"}`, `"effort":"low"`} {
 		if !strings.Contains(line, want) {
 			t.Errorf("request lacks %q: %s", want, line)
 		}
@@ -170,5 +170,49 @@ func TestClientErrors(t *testing.T) {
 	empty := &llm.Client{}
 	if _, err := empty.Complete(context.Background(), "s", "u"); err == nil || !llm.IsPermanent(err) {
 		t.Fatalf("no key set is permanent and makes no request: %v", err)
+	}
+}
+
+// With web search the reply is the last text block; earlier blocks narrate the search, the cited URLs are kept and
+// every search is counted for the budget.
+func TestCompletionWithWebSearch(t *testing.T) {
+	t.Parallel()
+
+	c, seen := fakeAnthropic(t, http.StatusOK, `{"stop_reason":"end_turn","content":[
+{"type":"text","text":"Searching."},
+{"type":"server_tool_use","id":"s1","name":"web_search","input":{"query":"x"}},
+{"type":"web_search_tool_result","tool_use_id":"s1","content":[]},
+{"type":"text","text":"{\"page_count\":412}","citations":[{"type":"web_search_result_location","url":"https://example.org/book"}]}],
+"usage":{"input_tokens":3000,"output_tokens":20,"server_tool_use":{"web_search_requests":2}}}`)
+
+	got, err := c.Do(context.Background(), llm.Request{System: "s", User: "u", WebSearches: 2})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if got.Text != `{"page_count":412}` || got.Searches != 2 || len(got.Sources) != 1 ||
+		got.Sources[0] != "https://example.org/book" {
+		t.Fatalf("completion = %+v", got)
+	}
+
+	if !strings.Contains((*seen)[0], `"type":"web_search_20250305"`) || !strings.Contains((*seen)[0], `"max_uses":2`) {
+		t.Errorf("request lacks the web search tool: %s", (*seen)[0])
+	}
+
+	if cost := llm.CostWithSearches(3000, 20, 2); cost < 0.02 || cost > 0.021 {
+		t.Errorf("cost with two searches = %v", cost)
+	}
+}
+
+func TestRefusalIsAnError(t *testing.T) {
+	t.Parallel()
+
+	c, _ := fakeAnthropic(
+		t,
+		http.StatusOK,
+		`{"stop_reason":"refusal","content":[{"type":"text","text":"no"}],"usage":{"input_tokens":5,"output_tokens":1}}`,
+	)
+	if got, err := c.Complete(context.Background(), "s", "u"); err == nil || got.TokensIn != 5 {
+		t.Fatalf("a refusal is an error that still reports its tokens: %+v %v", got, err)
 	}
 }

@@ -63,8 +63,9 @@ type due struct {
 	needDate, needRuntime, needPages bool
 }
 
-// NormaliseStep asks the model, one item at a time, for the facts its Wikipedia introduction states and queues every
-// value in field_reviews at confidence 50: nothing it says reaches items without a person (RFC-001 section 5 F). Before
+// NormaliseStep asks the model, one item at a time, for the facts its Wikipedia introduction states. A value written in
+// the introduction itself (the number, or the day, month and year of a date) is applied to the item at once; any other
+// value waits in field_reviews at confidence 50 (RFC-001 section 5 F, revised 2026-11-04). Before
 // each call it adds up the month's spend; once the ceiling is reached it stops without error, records one refused
 // row (the marker of the once-a-month alert A18) and leaves the rest for next month. An answer that fails the schema
 // costs its tokens, is recorded as invalid and the item is not asked about again for 180 days. A rejected key stops the run.
@@ -75,6 +76,10 @@ func NormaliseStep(c *Client, ceilingUSD float64, now func() time.Time) run.Step
 			if err := json.Unmarshal(r.Cursor, &cur); err != nil {
 				return run.Result{}, fmt.Errorf("llm normalise: cursor: %w: %w", err, queue.ErrPermanent)
 			}
+		}
+
+		if err := ensureSource(ctx, tx); err != nil {
+			return run.Result{}, err
 		}
 
 		t := now().UTC()
@@ -98,6 +103,12 @@ func NormaliseStep(c *Client, ceilingUSD float64, now func() time.Time) run.Step
 
 			if spent >= ceilingUSD {
 				return budgetReached(ctx, tx, t, spent, ceilingUSD, res, len(items))
+			}
+
+			if done, err := dayDone(ctx, tx, t, ceilingUSD); err != nil || done {
+				res.Done, res.Skipped = true, res.Skipped+len(items)
+
+				return res, err
 			}
 
 			cur.After = it.id
@@ -214,6 +225,20 @@ func queueReviews(ctx context.Context, tx *database.Tx, it due, ex Extraction) (
 	var queued int
 
 	add := func(field string, value any) error {
+		// A value written in the introduction itself is applied at once; anything else waits for a person.
+		if Grounded(it.extract, field, value) {
+			ok, err := applyDirect(ctx, tx, it.id, field, value)
+			if err != nil {
+				return err
+			}
+
+			if ok {
+				queued++
+			}
+
+			return nil
+		}
+
 		if err := store.QueueReview(ctx, tx, store.Review{
 			ItemID: it.id, Field: field, Value: jsonValue(value), Source: Source, Confidence: conf,
 			Reason: "extracted by the model from the English Wikipedia introduction",

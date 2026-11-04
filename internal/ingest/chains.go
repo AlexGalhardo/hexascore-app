@@ -147,8 +147,12 @@ var (
 	// LLMNormalise asks the model for the few facts the Wikipedia introductions state and Wikidata lacks (RFC-001
 	// section 5 F). Source llm: FLAG_INGEST_LLM (default off) and the master switch gate it, the monthly budget bounds it,
 	// and every value waits in field_reviews. Its own chain so a skipped stage never stops another.
+	// Revised 2026-11-04: then the synopses missing in pt-BR and es are translated from the English one, and (only with
+	// LLM_WEB_SEARCH on) the popular items with no stored text are looked up on the web.
 	LLMNormalise = Chain{Name: "llm-normalise", Stages: []Stage{
 		{Job: "llm.normalise", Source: "llm", Mode: run.ModeFull},
+		{Job: "llm.translate", Source: "llm", Mode: run.ModeFull},
+		{Job: "llm.websearch", Source: "llm", Mode: run.ModeFull},
 	}}
 	// RefreshExisting verifies the items the least recently verified first: the cover is still in the bucket, the quality
 	// score is current (RFC-001 section 5 A). It touches no outside host, so only the master switch gates it.

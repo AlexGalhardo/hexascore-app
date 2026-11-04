@@ -1,7 +1,11 @@
-// Package llm is the last-resort text normaliser of the catalogue worker (RFC-001 section 5 F). It reads text the
-// worker already fetched legally, asks Claude Haiku for a few facts, validates the answer against a strict schema and
-// queues every value for a person to review: a model never writes to items. The whole path is off until FLAG_INGEST_LLM
-// is on and stops for the month once LLM_MONTHLY_BUDGET_USD is spent.
+// Package llm is the last-resort gap filler of the catalogue worker (RFC-001 section 5 F, revised 2026-11-04). It is
+// called only for items that still lack a field after every other source: it reads text the worker already fetched
+// (the Wikipedia introduction, the English synopsis), asks Claude Haiku for the missing facts or translations,
+// validates the answer against a strict schema and writes a value directly only when it is grounded (the number is in
+// the source text, or the text is a translation of our own synopsis); everything else goes to the review queue.
+// With LLM_WEB_SEARCH on, an item with no stored text may be looked up with the API's web search, and those answers
+// always go to review. The whole path is off until FLAG_INGEST_LLM is on and stops for the month once
+// LLM_MONTHLY_BUDGET_USD is spent.
 package llm
 
 import (
@@ -12,6 +16,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"slices"
 
 	"github.com/AlexGalhardo/vukem/queue"
 
@@ -25,7 +30,10 @@ const (
 	Model  = "claude-haiku-5-5"
 
 	apiVersion      = "2023-06-01"
-	maxOutputTokens = 300
+	maxOutputTokens = 1024
+	// WebSearchTool is the server tool version Claude Haiku 5.5 takes (the dynamic-filtering 20260209 version is for
+	// the Opus and Sonnet lines).
+	WebSearchTool = "web_search_20250305"
 	// maxResponse caps what is read back: the answer is a few dozen tokens.
 	maxResponse = 1 << 20
 )
@@ -44,25 +52,55 @@ type Client struct {
 	HTTP   *http.Client
 }
 
-// Completion is one answer with the tokens it used.
+// Completion is one answer with what it used.
 type Completion struct {
 	Text                string
 	TokensIn, TokensOut int
+	// Searches is how many web searches the API ran (billed per search).
+	Searches int
+	// Sources are the URLs the answer cited, from web search results.
+	Sources []string
+}
+
+// Request is one call. MaxTokens 0 takes the default; WebSearches > 0 lets the model search the web that many times.
+type Request struct {
+	System, User string
+	MaxTokens    int
+	WebSearches  int
 }
 
 // IsPermanent reports whether retrying cannot help (no key, a rejected key, a malformed request).
 func IsPermanent(err error) bool { return errors.Is(err, queue.ErrPermanent) }
 
-// Complete sends one user message with a system prompt and returns the first text block.
+// Complete sends one user message with a system prompt and returns the answer.
 func (c *Client) Complete(ctx context.Context, system, user string) (Completion, error) {
+	return c.Do(ctx, Request{System: system, User: user})
+}
+
+// Do sends one request. The model runs with thinking off and low effort: the tasks are short extractions and
+// translations, and Claude Haiku 5.5 rejects sampling parameters such as temperature (a 400 on every call before).
+func (c *Client) Do(ctx context.Context, r Request) (Completion, error) {
 	if c.APIKey == "" {
 		return Completion{}, fmt.Errorf("llm: ANTHROPIC_API_KEY is not set: %w", queue.ErrPermanent)
 	}
 
-	body, err := json.Marshal(map[string]any{
-		"model": Model, "max_tokens": maxOutputTokens, "temperature": 0, "system": system,
-		"messages": []map[string]string{{"role": "user", "content": user}},
-	})
+	maxTokens := r.MaxTokens
+	if maxTokens <= 0 {
+		maxTokens = maxOutputTokens
+	}
+
+	payload := map[string]any{
+		"model": Model, "max_tokens": maxTokens, "system": r.System,
+		"thinking":      map[string]string{"type": "disabled"},
+		"output_config": map[string]string{"effort": "low"},
+		"messages":      []map[string]string{{"role": "user", "content": r.User}},
+	}
+
+	if r.WebSearches > 0 {
+		payload["tools"] = []map[string]any{{"type": WebSearchTool, "name": "web_search", "max_uses": r.WebSearches}}
+	}
+
+	body, err := json.Marshal(payload)
 	if err != nil {
 		return Completion{}, err
 	}
@@ -111,14 +149,27 @@ func (c *Client) Complete(ctx context.Context, system, user string) (Completion,
 		return Completion{}, fmt.Errorf("llm: status %d", resp.StatusCode)
 	}
 
+	return parseResponse(raw)
+}
+
+// parseResponse reads an answer: the last text block is the reply (with web search, earlier text blocks narrate the
+// searches), the cited URLs are kept, and the usage counts tokens and searches.
+func parseResponse(raw []byte) (Completion, error) {
 	var doc struct {
-		Content []struct {
-			Type string `json:"type"`
-			Text string `json:"text"`
+		StopReason string `json:"stop_reason"`
+		Content    []struct {
+			Type      string `json:"type"`
+			Text      string `json:"text"`
+			Citations []struct {
+				URL string `json:"url"`
+			} `json:"citations"`
 		} `json:"content"`
 		Usage struct {
-			In  int `json:"input_tokens"`
-			Out int `json:"output_tokens"`
+			In            int `json:"input_tokens"`
+			Out           int `json:"output_tokens"`
+			ServerToolUse struct {
+				WebSearch int `json:"web_search_requests"`
+			} `json:"server_tool_use"`
 		} `json:"usage"`
 	}
 
@@ -126,12 +177,31 @@ func (c *Client) Complete(ctx context.Context, system, user string) (Completion,
 		return Completion{}, fmt.Errorf("llm: decode response: %w", err)
 	}
 
+	out := Completion{TokensIn: doc.Usage.In, TokensOut: doc.Usage.Out, Searches: doc.Usage.ServerToolUse.WebSearch}
+
 	for _, block := range doc.Content {
-		if block.Type == "text" && block.Text != "" {
-			return Completion{Text: block.Text, TokensIn: doc.Usage.In, TokensOut: doc.Usage.Out}, nil
+		if block.Type != "text" {
+			continue
+		}
+
+		if block.Text != "" {
+			out.Text = block.Text
+		}
+
+		for _, c := range block.Citations {
+			if c.URL != "" && !slices.Contains(out.Sources, c.URL) {
+				out.Sources = append(out.Sources, c.URL)
+			}
 		}
 	}
 
-	// the tokens were spent even though nothing usable came back; the caller still records them
-	return Completion{TokensIn: doc.Usage.In, TokensOut: doc.Usage.Out}, errors.New("llm: the answer has no text")
+	switch {
+	case doc.StopReason == "refusal":
+		return out, errors.New("llm: the model declined the request")
+	case out.Text == "":
+		// the tokens were spent even though nothing usable came back; the caller still records them
+		return out, errors.New("llm: the answer has no text")
+	}
+
+	return out, nil
 }
