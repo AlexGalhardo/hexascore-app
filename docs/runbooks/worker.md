@@ -86,3 +86,29 @@ Plan B (RFC-001 section 3), if the owner keeps one service: `QUEUE_LIMITS=ingest
 ## Cost
 
 About US$2.5 a month at 0.1 vCPU average and 0.25 GB (RFC-001 section 6). The `projected-spend.yml` alert at US$18 and the US$20 hard limit (D-27) stay the guard. Raising the cap is decision OQ-03.
+
+## Per-category lanes (owner 2026-11-04)
+
+The discovery chains run one lane per category (`wikidata-discover-movie`, `-series`, `-game`, `-book`): each lane walks
+and normalises only its item type, so the four run side by side. With lanes on, a run of one category is dispatched
+to its own queue (`ingest-movie`, `ingest-series`, `ingest-game`, `ingest-book`) and a long run of one category no
+longer holds the slots of the others. Every other run stays on `ingest`.
+
+Switch them on in this order, so no job lands on a queue nobody consumes:
+
+1. Service `worker`, Settings, Deploy: start command
+   `/app/app queue:work -queue ingest,ingest-movie,ingest-series,ingest-game,ingest-book`.
+2. Service `worker` variables:
+
+   | Variable | Value | Why |
+   | --- | --- | --- |
+   | `QUEUE_CONCURRENCY` | `6` | one job per lane plus two on `ingest` |
+   | `QUEUE_LIMITS` | `ingest=2,ingest-movie=1,ingest-series=1,ingest-game=1,ingest-book=1` | each lane runs one job at a time |
+   | `DB_MAX_OPEN` | `8` | one connection per running job plus the heartbeat |
+   | `INGEST_LANES` | `true` | continuations go to the lane queues |
+
+3. Service `app`: `INGEST_LANES=true` (the scheduler creates the first run of each chain). Redeploy both.
+4. Check: the digest lists the four `discover.wikidata/wikidata:<type>` runs at the same time.
+
+Rollback: `INGEST_LANES` unset on both services. Jobs already on a lane queue finish there while the worker still
+consumes it; keep the start command until the lane queues are empty.

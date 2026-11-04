@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **ingest:** Discovery runs as four lanes, one per category (films, series, games, books): each lane walks and normalises only its type, so they run side by side, and with `INGEST_LANES=true` each goes to its own queue (`ingest-movie`, `ingest-series`, `ingest-game`, `ingest-book`); see the worker runbook for the order to switch them on
 - **catalog:** The game mode filter of /games shows a few canonical modes named with a capital first letter in en, pt-BR and es (Single player, Multiplayer, Co-op, PvP, Online multiplayer, Split screen, MMO) instead of the Wikidata labels ("single-player video game", "multiplayer online game"): migration `20261104100000_canonicalize_game_modes` folds the existing links, and the normaliser does the same for every new item
 - **item:** Where to watch shows plain text links instead of boxes, and each streaming service links to its own site (Netflix, Prime Video, Apple TV, Google Play, YouTube and the other known services) instead of TMDB's page about the title; a service with no known site is left out of the page and of the redirect
 - **ingest:** The 30-minute "fill" schedules of the Wikidata, Open Library and TMDB full chains are removed: they re-read the same top 100,000 records and held the ingest slots; the weekly runs and the `wikidata-discover` chain remain

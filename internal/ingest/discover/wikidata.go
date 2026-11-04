@@ -170,8 +170,14 @@ WHERE source = 'wikidata' AND payload->>'type' = $1`, itemType).Scan(&links)
 // Step handles one chunk: the next BatchSize items of the next type still being walked, minus the ones already
 // fetched. The position is saved in the same transaction, so an interrupted run replays at most one chunk.
 func (c *Config) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.Result, error) {
+	// A lane walks one category and keeps its own position row, so the four lanes never write the same row.
+	key, types := StateKey, wikidata.Types
+	if t := run.Types(r.Params); len(t) == 1 {
+		key, types = StateKey+":"+t[0], t
+	}
+
 	st := state{Types: map[string]position{}}
-	if _, err := ingest.LoadState(ctx, tx, StateKey, &st); err != nil {
+	if _, err := ingest.LoadState(ctx, tx, key, &st); err != nil {
 		return run.Result{}, err
 	}
 
@@ -179,12 +185,26 @@ func (c *Config) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.Resu
 		st.Types = map[string]position{}
 	}
 
+	// A lane starts where the shared walk of the earlier single chain stopped for its category.
+	if key != StateKey {
+		if _, ok := st.Types[types[0]]; !ok {
+			var shared state
+			if _, err := ingest.LoadState(ctx, tx, StateKey, &shared); err != nil {
+				return run.Result{}, err
+			}
+
+			if p, ok := shared.Types[types[0]]; ok {
+				st.Types[types[0]] = p
+			}
+		}
+	}
+
 	itemType := ""
 
-	for i := range wikidata.Types {
-		t := wikidata.Types[(st.Turn+i)%len(wikidata.Types)]
+	for i := range types {
+		t := types[(st.Turn+i)%len(types)]
 		if !st.Types[t].Done {
-			itemType, st.Turn = t, (st.Turn+i+1)%len(wikidata.Types)
+			itemType, st.Turn = t, (st.Turn+i+1)%len(types)
 
 			break
 		}
@@ -268,7 +288,7 @@ func (c *Config) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.Resu
 		}
 	}
 
-	return res, ingest.SaveState(ctx, tx, StateKey, st)
+	return res, ingest.SaveState(ctx, tx, key, st)
 }
 
 // notFetched keeps the QIDs that have no Wikidata record yet.

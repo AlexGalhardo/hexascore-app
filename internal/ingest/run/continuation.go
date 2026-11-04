@@ -211,7 +211,7 @@ WHERE id = $1`, id, cursorArg(res.Cursor), res.Seen, res.Changed, res.Failed, re
 			case processed >= lim.Targets || !r.Now().Before(deadline):
 				out = Continued
 
-				return r.Queue.DispatchTx(ctx, tx, Job{RunID: id})
+				return r.Queue.DispatchTx(ctx, tx, Job{RunID: id}, onQueue(run.Params))
 			}
 
 			return nil

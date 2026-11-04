@@ -118,6 +118,9 @@ func checkPool(maxOpen string) error {
 }
 
 func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
+	// Per-category queues (docs/runbooks/worker.md): the worker must consume them before this is switched on.
+	run.SetLanes(app.Source.Get("INGEST_LANES") == "true")
+
 	if err := checkPool(app.Source.Get("DB_MAX_OPEN")); err != nil {
 		return nil, err
 	}

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -50,7 +51,7 @@ func (n Normalizer) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.R
 		batch = BatchSize
 	}
 
-	qids, err := pending(ctx, tx, batch)
+	qids, err := pending(ctx, tx, batch, run.Types(r.Params))
 	if err != nil {
 		return run.Result{}, err
 	}
@@ -371,11 +372,16 @@ func (n Normalizer) saveRelations(
 	return nil
 }
 
-func pending(ctx context.Context, tx *database.Tx, limit int) ([]string, error) {
-	rows, err := tx.QueryContext(ctx, `SELECT DISTINCT external_id FROM source_records
-WHERE source IN (SELECT jsonb_array_elements_text($1::jsonb))
-  AND (normalized_at IS NULL OR normalized_at < fetched_at)
-ORDER BY external_id LIMIT $2`, jsonList(Sources), limit)
+// pending reads the next QIDs with a record newer than its normalisation. With types (a per-category lane), only the
+// QIDs whose Wikidata record is of those types: the four lanes then never take the same item.
+func pending(ctx context.Context, tx *database.Tx, limit int, types []string) ([]string, error) {
+	rows, err := tx.QueryContext(ctx, `SELECT DISTINCT s.external_id FROM source_records s
+WHERE s.source IN (SELECT jsonb_array_elements_text($1::jsonb))
+  AND (s.normalized_at IS NULL OR s.normalized_at < s.fetched_at)
+  AND (cardinality($3::text[]) = 0 OR EXISTS (
+    SELECT 1 FROM source_records w
+    WHERE w.source = 'wikidata' AND w.external_id = s.external_id AND w.payload->>'type' = ANY($3::text[])))
+ORDER BY s.external_id LIMIT $2`, jsonList(Sources), limit, "{"+strings.Join(types, ",")+"}")
 	if err != nil {
 		return nil, fmt.Errorf("read pending qids: %w", err)
 	}

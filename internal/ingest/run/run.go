@@ -139,7 +139,7 @@ VALUES ($1, NULLIF($2, ''), $3, 'queued', $4::jsonb, $5::jsonb, $6) ON CONFLICT 
 			}
 		}
 
-		return d.DispatchTx(ctx, tx, Job{RunID: id})
+		return d.DispatchTx(ctx, tx, Job{RunID: id}, onQueue(s.Params))
 	})
 	if err != nil {
 		return Run{}, err

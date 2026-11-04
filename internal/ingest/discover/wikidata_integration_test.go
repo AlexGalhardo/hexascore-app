@@ -147,3 +147,90 @@ VALUES (1, 'discover.wikidata', 'wikidata', 'full', 'running', 't')`,
 		t.Errorf("the walk must start at the least popular stored movie (12 sitelinks):\n%s", queries[0])
 	}
 }
+
+// A lane walks only its category and keeps its own position row.
+func TestDiscoverLaneWalksOneCategory(t *testing.T) {
+	ctx := context.Background()
+
+	var queries []string
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		queries = append(queries, r.URL.Query().Get("query"))
+		_, _ = w.Write(
+			[]byte(
+				`{"results":{"bindings":[{"item":{"value":"http://www.wikidata.org/entity/Q7"},"links":{"value":"9"}}]}}`,
+			),
+		)
+	}))
+	t.Cleanup(srv.Close)
+
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{
+		Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")},
+	})
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, q := range []string{
+		`INSERT INTO data_sources (code, name, licence, url) VALUES ('wikidata','Wikidata','CC0-1.0','https://www.wikidata.org')`,
+		`INSERT INTO job_runs (id, job, source, mode, status, triggered_by) OVERRIDING SYSTEM VALUE
+VALUES (1, 'discover.wikidata', 'wikidata:book', 'full', 'running', 't')`,
+	} {
+		if _, err := db.ExecContext(ctx, q); err != nil {
+			t.Fatalf("%v\n%s", err, q)
+		}
+	}
+
+	host := strings.TrimPrefix(srv.URL, "http://")
+	client := httpx.New(httpx.Config{
+		ContactURL: "https://hexascore.app/bot",
+		Hosts:      map[string]httpx.HostLimit{host: {PerSecond: 1000, InFlight: 4}},
+		Allow:      []netip.Prefix{netip.MustParsePrefix("127.0.0.0/8")},
+	})
+
+	types := map[string]string{}
+	cfg := &discover.Config{
+		Client:    client,
+		Fetcher:   &fakeFetcher{types: types},
+		Batch:     2,
+		SparqlURL: srv.URL + "/sparql",
+	}
+
+	for range 5 {
+		var res run.Result
+
+		if err := db.Tx(ctx, func(tx *database.Tx) (err error) {
+			res, err = cfg.Step(
+				ctx,
+				tx,
+				run.Run{ID: 1, Job: discover.Job, Params: json.RawMessage(`{"types":["book"]}`)},
+			)
+
+			return err
+		}); err != nil {
+			t.Fatal(err)
+		}
+
+		if res.Done {
+			break
+		}
+	}
+
+	if types["Q7"] != "book" {
+		t.Errorf("fetched = %v, want Q7 as a book", types)
+	}
+
+	for _, q := range queries {
+		if !strings.Contains(q, "wd:Q7725634") || strings.Contains(q, "wd:Q11424") {
+			t.Errorf("a book lane queried another category:\n%s", q)
+		}
+	}
+
+	var n int
+	if err := db.QueryRowContext(ctx, `SELECT count(*) FROM ingest_host_state WHERE key = 'discover:wikidata:book'`).
+		Scan(&n); err != nil || n != 1 {
+		t.Errorf("lane state rows = %d (%v), want 1", n, err)
+	}
+}

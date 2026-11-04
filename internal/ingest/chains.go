@@ -32,6 +32,9 @@ type Stage struct {
 type Chain struct {
 	Name   string
 	Stages []Stage
+	// Types, when set, is copied to every stage's params ("types"): the run works on those item types only, and
+	// with lanes on (run.SetLanes) a single type sends it to that category's queue.
+	Types []string
 }
 
 func fetch(source, mode string) Stage {
@@ -41,79 +44,79 @@ func fetch(source, mode string) Stage {
 // The chains of the open sources; the asserts stage is last.
 var (
 	// Bootstrap is run by hand: Wikidata top-N, referenced entities, then the normaliser.
-	Bootstrap = Chain{"bootstrap", []Stage{
+	Bootstrap = Chain{Name: "bootstrap", Stages: []Stage{
 		fetch("wikidata", run.ModeBootstrap),
 		{Job: "fetch.entities", Source: "wikidata:entity", Mode: run.ModeBootstrap},
 		{Job: "normalize", Mode: run.ModeBootstrap},
 		{Job: dq.Job, Mode: run.ModeBootstrap},
 	}}
-	WikidataIncremental = Chain{"wikidata-incremental", []Stage{
+	WikidataIncremental = Chain{Name: "wikidata-incremental", Stages: []Stage{
 		fetch("wikidata", run.ModeIncremental),
 		{Job: "fetch.entities", Source: "wikidata:entity", Mode: run.ModeIncremental},
 		{Job: "normalize", Mode: run.ModeIncremental},
 		{Job: dq.Job, Mode: run.ModeIncremental},
 	}}
-	WikidataWeekly = Chain{"wikidata-weekly", []Stage{
+	WikidataWeekly = Chain{Name: "wikidata-weekly", Stages: []Stage{
 		fetch("wikidata", run.ModeFull),
 		{Job: "fetch.entities", Source: "wikidata:entity", Mode: run.ModeFull},
 		{Job: "normalize", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
-	WikipediaWeekly = Chain{"wikipedia-weekly", []Stage{
+	WikipediaWeekly = Chain{Name: "wikipedia-weekly", Stages: []Stage{
 		fetch("wikipedia:en", run.ModeFull),
 		fetch("wikipedia:pt", run.ModeFull),
 		fetch("wikipedia:es", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
-	OpenLibraryWeekly = Chain{"openlibrary-weekly", []Stage{
+	OpenLibraryWeekly = Chain{Name: "openlibrary-weekly", Stages: []Stage{
 		fetch("openlibrary", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 
-	TMDBWeekly = Chain{"tmdb-weekly", []Stage{
+	TMDBWeekly = Chain{Name: "tmdb-weekly", Stages: []Stage{
 		fetch("tmdb", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 	// TMDBExpire refreshes records past 150 days and deletes the ones past 180, then re-normalises their items.
-	TMDBExpire = Chain{"tmdb-expire", []Stage{
+	TMDBExpire = Chain{Name: "tmdb-expire", Stages: []Stage{
 		{Job: "tmdb.expire", Source: "tmdb", Mode: run.ModeFull},
 		{Job: "normalize", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 
-	SteamWeekly = Chain{"steam-weekly", []Stage{
+	SteamWeekly = Chain{Name: "steam-weekly", Stages: []Stage{
 		fetch("steam", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
-	GOGWeekly = Chain{"gog-weekly", []Stage{
+	GOGWeekly = Chain{Name: "gog-weekly", Stages: []Stage{
 		fetch("gog", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
-	IGDBWeekly = Chain{"igdb-weekly", []Stage{
+	IGDBWeekly = Chain{Name: "igdb-weekly", Stages: []Stage{
 		fetch("igdb", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 	// IGDBRefresh applies the D-36 interim rule: refresh records past 24 h, delete the ones past 7 days.
-	IGDBRefresh = Chain{"igdb-refresh", []Stage{
+	IGDBRefresh = Chain{Name: "igdb-refresh", Stages: []Stage{
 		{Job: "igdb.refresh", Source: "igdb", Mode: run.ModeFull},
 		{Job: "normalize", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 
 	// EditionsBackfill walks the books once and saves the editions their stored Wikidata records list (SDD 06 §7.8).
-	EditionsBackfill = Chain{"editions-backfill", []Stage{
+	EditionsBackfill = Chain{Name: "editions-backfill", Stages: []Stage{
 		{Job: "backfill.editions", Mode: run.ModeBackfill},
 	}}
 
 	// TrailersWeekly re-checks every trailer candidate, then re-normalises so the verdicts reach the items. It is its
 	// own chain because a stage skipped by its kill switch (ingest_youtube) stops a chain and must not stop the others.
-	TrailersWeekly = Chain{"trailers-weekly", []Stage{
+	TrailersWeekly = Chain{Name: "trailers-weekly", Stages: []Stage{
 		fetch("youtube", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
@@ -121,56 +124,64 @@ var (
 
 	// CoversDaily covers the items normalised inside the incremental window, then re-checks the catalogue. Covers
 	// have their own chains because a stage skipped by its kill switch (ingest_covers) stops a chain.
-	CoversDaily = Chain{"covers-daily", []Stage{
+	CoversDaily = Chain{Name: "covers-daily", Stages: []Stage{
 		{Job: "covers", Source: "covers", Mode: run.ModeIncremental},
 		{Job: dq.Job, Mode: run.ModeIncremental},
 	}}
 	// CoversWeekly looks at every item (a better source replaces a lesser one) and drops loose Commons covers.
-	CoversWeekly = Chain{"covers-weekly", []Stage{
+	CoversWeekly = Chain{Name: "covers-weekly", Stages: []Stage{
 		{Job: "covers", Source: "covers", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 	// OffersDaily derives the store and Amazon offers from the catalogue ids (RFC-003); it touches no network, so it
 	// needs only the master switch, and it is its own chain so the other chains never wait for it.
-	OffersDaily = Chain{"offers-daily", []Stage{
+	OffersDaily = Chain{Name: "offers-daily", Stages: []Stage{
 		{Job: offers.DeriveJob, Mode: run.ModeFull},
 	}}
 	// OffersTMDB asks TMDB where each film and series can be watched (RFC-003). Its source is tmdb, so the
 	// ingest_tmdb kill switch gates it; only items not asked about in the last 30 days are due, so a daily run is
 	// cheap after the first. Its own chain: a skipped stage stops a chain and must not stop another.
-	OffersTMDB = Chain{"offers-tmdb", []Stage{
+	OffersTMDB = Chain{Name: "offers-tmdb", Stages: []Stage{
 		{Job: "offers.tmdb", Source: "tmdb", Mode: run.ModeFull},
 	}}
 	// LLMNormalise asks the model for the few facts the Wikipedia introductions state and Wikidata lacks (RFC-001
 	// section 5 F). Source llm: FLAG_INGEST_LLM (default off) and the master switch gate it, the monthly budget bounds it,
 	// and every value waits in field_reviews. Its own chain so a skipped stage never stops another.
-	LLMNormalise = Chain{"llm-normalise", []Stage{
+	LLMNormalise = Chain{Name: "llm-normalise", Stages: []Stage{
 		{Job: "llm.normalise", Source: "llm", Mode: run.ModeFull},
 	}}
 	// RefreshExisting verifies the items the least recently verified first: the cover is still in the bucket, the quality
 	// score is current (RFC-001 section 5 A). It touches no outside host, so only the master switch gates it.
-	RefreshExisting = Chain{"refresh-existing", []Stage{
+	RefreshExisting = Chain{Name: "refresh-existing", Stages: []Stage{
 		{Job: "refresh.existing", Mode: run.ModeFull},
 	}}
 	// DQDaily runs the data-quality asserts on their own (SDD 06 §7.7); every chain above ends with the same stage.
-	DQDaily = Chain{"dq-daily", []Stage{{Job: dq.Job, Mode: run.ModeIncremental}}}
+	DQDaily = Chain{Name: "dq-daily", Stages: []Stage{{Job: dq.Job, Mode: run.ModeIncremental}}}
 	// FrontendFields renders a sample of item pages and reports the missing required fields (SDD 06 §7.7).
-	FrontendFields = Chain{"frontend-fields", []Stage{{Job: dq.FrontendJob, Mode: run.ModeIncremental}}}
+	FrontendFields = Chain{Name: "frontend-fields", Stages: []Stage{{Job: dq.FrontendJob, Mode: run.ModeIncremental}}}
 
 	// WikidataDiscover walks Wikidata below the top-N selection, most popular first and one type at a time, and stores
 	// the records of the items not fetched yet; the entities and the normaliser then treat them like any other item.
 	// Its source is wikidata, so the ingest_wikidata kill switch gates it. The position persists across runs
 	// (internal/ingest/discover).
-	WikidataDiscover = Chain{"wikidata-discover", []Stage{
+	WikidataDiscover = Chain{Name: "wikidata-discover", Stages: []Stage{
 		{Job: "discover.wikidata", Source: "wikidata", Mode: run.ModeFull},
 		{Job: "fetch.entities", Source: "wikidata:entity", Mode: run.ModeBootstrap},
 		{Job: "normalize", Mode: run.ModeBootstrap},
 		{Job: dq.Job, Mode: run.ModeBootstrap},
 	}}
 
+	// DiscoverLanes are WikidataDiscover split by category (owner 2026-11-04): each lane walks one item type and
+	// normalises only that type, so the four run side by side (on their own queues when lanes are on) instead of one
+	// long run holding the worker. The discover step stores the referenced entities with the items, so no entities
+	// stage is needed; the data-quality asserts run in dq-daily.
+	DiscoverLanes = []Chain{
+		discoverLane("movie"), discoverLane("series"), discoverLane("game"), discoverLane("book"),
+	}
+
 	// Rollback undoes a bad run, then re-normalises what it restored and re-checks the catalogue (SDD 06 §7.8).
 	// It starts only through StartRollback, which checks the target and records who asked and why.
-	Rollback = Chain{"rollback", []Stage{
+	Rollback = Chain{Name: "rollback", Stages: []Stage{
 		{Job: rollback.Job, Mode: run.ModeRollback},
 		{Job: "normalize", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
@@ -198,11 +209,26 @@ var (
 		LLMNormalise,
 		RefreshExisting,
 		WikidataDiscover,
+		DiscoverLanes[0],
+		DiscoverLanes[1],
+		DiscoverLanes[2],
+		DiscoverLanes[3],
 		DQDaily,
 		FrontendFields,
 		Rollback,
 	}
 )
+
+func discoverLane(itemType string) Chain {
+	return Chain{
+		Name:  "wikidata-discover-" + itemType,
+		Types: []string{itemType},
+		Stages: []Stage{
+			{Job: "discover.wikidata", Source: "wikidata:" + itemType, Mode: run.ModeFull},
+			{Job: "normalize", Source: "wikidata:" + itemType, Mode: run.ModeBootstrap},
+		},
+	}
+}
 
 // chainParams is the "chain" key of job_runs.params.
 type chainParams struct {
@@ -220,6 +246,15 @@ func (c Chain) spec(stage int, params map[string]json.RawMessage, by string) (ru
 	}
 
 	p["chain"] = marker
+
+	if _, ok := p["types"]; !ok && len(c.Types) > 0 {
+		types, err := json.Marshal(c.Types)
+		if err != nil {
+			return run.Spec{}, err
+		}
+
+		p["types"] = types
+	}
 
 	// Fixed when the chain starts and copied to every stage, so a worker restart or a resume never moves the cursor.
 	if _, ok := p["since"]; !ok && c.Stages[stage].Mode == run.ModeIncremental {

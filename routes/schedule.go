@@ -25,6 +25,9 @@ import (
 //	s.Command("reports:send").DailyAt("08:00").WithoutOverlapping()
 //	s.Job(jobs.PruneSessions{}).Hourly()
 func Schedule(s *schedule.Schedule, app *vukem.App) {
+	// The scheduler creates the first run of each chain, so it routes it to its category queue the same way.
+	run.SetLanes(app.Source.Get("INGEST_LANES") == "true")
+
 	s.Command("search:purge").DailyAt("03:30").WithoutOverlapping()
 	// A crash loses at most this minute of views and clicks (SDD 08 NFR-08-4); app shutdown flushes too.
 	// workaround(vukem): VF-064, cache.Buffer has no key cap (SDD 08 section 8).
@@ -87,10 +90,12 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	// The three "fill" entries that re-ran the full Wikidata, Open Library and TMDB chains every 30 minutes are gone
 	// (2026-11-04): each pass re-read the same top-N records (the digest showed 500 k records seen for 100 k stored)
 	// and held the two ingest slots that the discovery below needs. The weekly entries above still refresh them.
-	// Beyond the top-N: walk Wikidata downwards by popularity (internal/ingest/discover). The position persists, so
-	// each run continues where the last stopped, and the active-run guard keeps runs from overlapping.
-	s.Func("ingest:discover-wikidata", startChain(app, ingest.WikidataDiscover)).
-		Cron("*/30 * * * *").WithoutOverlapping()
+	// Beyond the top-N: walk Wikidata downwards by popularity, one lane per category (internal/ingest/discover). Each
+	// lane's position persists, so a run continues where the last stopped, and the active-run guard keeps a lane
+	// from overlapping itself; the four lanes run side by side.
+	for _, lane := range ingest.DiscoverLanes {
+		s.Func("ingest:"+lane.Name, startChain(app, lane)).Cron("*/30 * * * *").WithoutOverlapping()
+	}
 	s.Func("ingest:igdb-weekly", startChain(app, ingest.IGDBWeekly)).
 		WeeklyOn(time.Saturday, "01:00").In(saoPaulo).WithoutOverlapping()
 	// D-36: every 6 h, at :15 so it never starts in the same minute as the 00:30/01:00 runs.
