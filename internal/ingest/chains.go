@@ -157,11 +157,12 @@ var (
 	// FrontendFields renders a sample of item pages and reports the missing required fields (SDD 06 §7.7).
 	FrontendFields = Chain{"frontend-fields", []Stage{{Job: dq.FrontendJob, Mode: run.ModeIncremental}}}
 
-	// TMDBDiscover walks the TMDB daily id exports in order, maps each id to its Wikidata item and stores the records the
-	// top-N selection never reached; the entities and the normaliser then treat them like any other item. Its source is
-	// tmdb, so the ingest_tmdb kill switch gates it. The position persists across runs (internal/ingest/discover).
-	TMDBDiscover = Chain{"tmdb-discover", []Stage{
-		{Job: "discover.tmdb", Source: "tmdb", Mode: run.ModeFull},
+	// WikidataDiscover walks Wikidata below the top-N selection, most popular first and one type at a time, and stores
+	// the records of the items not fetched yet; the entities and the normaliser then treat them like any other item.
+	// Its source is wikidata, so the ingest_wikidata kill switch gates it. The position persists across runs
+	// (internal/ingest/discover).
+	WikidataDiscover = Chain{"wikidata-discover", []Stage{
+		{Job: "discover.wikidata", Source: "wikidata", Mode: run.ModeFull},
 		{Job: "fetch.entities", Source: "wikidata:entity", Mode: run.ModeBootstrap},
 		{Job: "normalize", Mode: run.ModeBootstrap},
 		{Job: dq.Job, Mode: run.ModeBootstrap},
@@ -196,7 +197,7 @@ var (
 		OffersTMDB,
 		LLMNormalise,
 		RefreshExisting,
-		TMDBDiscover,
+		WikidataDiscover,
 		DQDaily,
 		FrontendFields,
 		Rollback,

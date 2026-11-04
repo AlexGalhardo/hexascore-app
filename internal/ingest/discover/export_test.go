@@ -1,4 +1,4 @@
 package discover
 
-// ExportURL exposes exportURL to the external tests.
-var ExportURL = exportURL
+// ParseRows exposes parseRows to the external tests.
+var ParseRows = parseRows
