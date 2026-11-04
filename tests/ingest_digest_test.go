@@ -56,7 +56,7 @@ func TestIngestDigest_AlertsTestCommandSendsOne(t *testing.T) {
 	}
 
 	if sent[0]["chat_id"] != "ops-chat" || sent[0]["disable_notification"] != true ||
-		!strings.Contains(sent[0]["text"].(string), "Ingest digest") {
+		!strings.Contains(sent[0]["text"].(string), "<b>Ingest</b>") {
 		t.Errorf("message = %v", sent[0])
 	}
 }

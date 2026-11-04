@@ -13,9 +13,24 @@ var digestAt = time.Date(2026, 11, 2, 17, 30, 0, 0, time.UTC) // 14:30 America/S
 func TestFormatIngestGolden(t *testing.T) {
 	s := IngestSummary{
 		At: digestAt, Since: digestAt.Add(-IngestWindow),
-		Created: 12, Updated: 340, Failed: 3, Covers: 25, RateLimited: 2, Queued: 4, Running: 1,
-		Books: 100, Movies: 200, Series: 50, HeartbeatOK: true, HeartbeatAge: 42 * time.Second,
+		Created: 12, Updated: 340, Failed: 3, Covers: 25, RateLimited: 2, Queued: 4, Running: 2,
+		Books: 100, Movies: 200, Series: 50, Games: 30, HeartbeatOK: true, HeartbeatAge: 42 * time.Second,
+		NewByType: map[string]int{"movie": 9, "series": 3}, CreatedQuiet: 12,
+		Active: []ActiveRun{
+			{
+				Job:     "fetch",
+				Source:  "wikidata",
+				Age:     12 * time.Minute,
+				BeatAge: time.Minute,
+				Seen:    4210,
+				Changed: 180,
+				Failed:  2,
+			},
+			{Job: "normalize", Age: 40 * time.Minute, BeatAge: 9 * time.Minute, Seen: 1020, Changed: 64},
+		},
+		Fetched:     []SourceCount{{"wikidata", 4200}, {"tmdb", 1020}},
 		Errors:      []IngestError{{"wikidata", "http_5xx", 3}, {"tmdb", "timeout", 1}, {"a<b", "x&y", 1}},
+		ErrorSample: "wikidata Q4521: save alt title: duplicate key <x>",
 		LLMMonthUSD: 1.23, LLMProjectedUSD: 9.8,
 	}
 
@@ -26,6 +41,11 @@ func TestFormatIngestGolden(t *testing.T) {
 
 	if got := FormatIngest(s); got != string(want) {
 		t.Errorf("digest differs from the golden fixture:\n%s\nwant:\n%s", got, want)
+	}
+
+	quiet := IngestSummary{At: digestAt, Active: s.Active}
+	if got := FormatIngest(quiet); !strings.Contains(got, "⚠️ <b>0 new items in 45 min</b> (2 runs active)") {
+		t.Errorf("a quiet catalogue is not flagged: %s", got)
 	}
 
 	s.LLMProjectedUSD = 18

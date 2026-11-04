@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **ingest:** An item whose alternative titles differ only in case or accents no longer fails its whole relations step (the insert now ignores any unique conflict, not only the exact title)
+- **ingest:** The worker heartbeat counts as stale after 8 minutes instead of 3: it queues behind two running ingest chunks of up to 5 minutes, so a busy worker was reported stale
 - **ratings:** Unreleased item pages explain when ratings open and disable guest and member rating controls; the existing server gate remains authoritative
 - **ui:** The navbar bottom border uses the same light border token as the catalogue cards
 - **ingest:** A cancelled refresh stops before opening a batch and between cover checks
@@ -36,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **ingest:** The Telegram ingestion digest goes out every 15 minutes and shows new items by type with the pace and ETA to 1,000,000, the running runs with age, counts and a warning for a stalled one, records fetched per source, an example error, and a warning when no item was created in 45 minutes
 - **home:** Release date badges on the landing carousel are larger, with bigger text, for easier reading.
 
 - **catalog:** Grid and category cover images fill their card, and the score badge is slightly larger.

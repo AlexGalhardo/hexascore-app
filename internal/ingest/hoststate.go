@@ -84,9 +84,10 @@ func ReadSignal(ctx context.Context, ex database.Executor) (s Signal, ok bool, e
 	return s, true, nil
 }
 
-// WorkerStaleAfter is the age at which the worker heartbeat counts as missing: the worker beats once a minute, so three
-// minutes tolerate one missed tick.
-const WorkerStaleAfter = 3 * time.Minute
+// WorkerStaleAfter is the age at which the worker heartbeat counts as missing. The heartbeat is a job on the ingest
+// queue, which is capped at two jobs, and an ingest chunk runs up to five minutes (run.Limits), so a busy worker can
+// leave it waiting that long. Eight minutes keep a working worker from reading as stale (production, 2026-11-04).
+const WorkerStaleAfter = 8 * time.Minute
 
 // ErrWorkerStale is returned by CheckWorker when no worker beat recently.
 var ErrWorkerStale = errors.New("ingest: no recent worker heartbeat")

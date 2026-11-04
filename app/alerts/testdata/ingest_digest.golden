@@ -1,7 +1,15 @@
-<b>Ingest digest</b> 02/11 14:30 (last 5 min)
-Created 12 · updated 340 · failed 3 · covers 25 · rate limited 2
-Backlog: 4 queued, 1 running
-Catalogue: 100 books · 200 movies · 50 series (350 of 1,000,000)
-Worker: beat 42s ago
+<b>Ingest</b> 02/11 14:30 (last 15 min)
+✅ +12 items · movies +9 · series +3 · books +0 · games +0
+Catalogue: 380 of 1,000,000 (0.0%) · 100 books · 200 movies · 50 series · 30 games
+Pace: ≈48 items/h · ETA ≈ 868 days
+
+Runs: 2 running, 4 queued
+• fetch/wikidata · 12m · seen 4.2k · changed 180 · failed 2
+⚠️ normalize · 40m · seen 1.0k · changed 64 · failed 0
+Fetched: wikidata 4.2k · tmdb 1.0k · rate limited 2 · covers 25
+
 Errors: wikidata/http_5xx ×3, tmdb/timeout ×1, a&lt;b/x&amp;y ×1
+  e.g. wikidata Q4521: save alt title: duplicate key &lt;x&gt;
+
+Worker: beat 42s ago
 LLM: $1.23 this month, projected $9.80 (alert at $18.00)

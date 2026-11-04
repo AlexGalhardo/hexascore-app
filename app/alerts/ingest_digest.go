@@ -2,8 +2,11 @@ package alerts
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 	"html"
+	"strconv"
 	"strings"
 	"time"
 
@@ -13,7 +16,10 @@ import (
 )
 
 // IngestWindow is how often the ingestion digest runs and how far back it looks (RFC-001 section 8).
-const IngestWindow = 5 * time.Minute
+const IngestWindow = 15 * time.Minute
+
+// QuietAfter is how long without a new item turns the digest's first line into a warning.
+const QuietAfter = 3 * IngestWindow
 
 // LLMAlertUSD is the projected monthly LLM spend that gets flagged in the digest (RFC-001: US$18 of the US$20 ceiling).
 const LLMAlertUSD = 18.0
@@ -22,6 +28,19 @@ const LLMAlertUSD = 18.0
 type IngestError struct {
 	Source, Class string
 	Count         int
+}
+
+// ActiveRun is one running job_runs row, for the "runs" lines.
+type ActiveRun struct {
+	Job, Source           string
+	Age, BeatAge          time.Duration
+	Seen, Changed, Failed int
+}
+
+// SourceCount is how many source records a source fetched in the window.
+type SourceCount struct {
+	Source string
+	N      int
 }
 
 // IngestSummary is what the ingestion digest reports for [Since, At).
@@ -36,6 +55,14 @@ type IngestSummary struct {
 	HeartbeatAge time.Duration
 	HeartbeatOK  bool
 	Errors       []IngestError
+	// ErrorSample is the newest failure message in the window and its source and target; empty without failures.
+	ErrorSample string
+	// NewByType counts items created in the window; CreatedQuiet counts the last QuietAfter.
+	NewByType    map[string]int
+	CreatedQuiet int
+	Active       []ActiveRun
+	Fetched      []SourceCount
+	Games        int
 	// LLMMonthUSD is the month-to-date spend from ingest_cost_daily; LLMProjectedUSD extrapolates it to the month.
 	LLMMonthUSD, LLMProjectedUSD float64
 }
@@ -63,38 +90,29 @@ FROM job_runs WHERE finished_at >= $1 AND finished_at < $2`, s.Since, at).
 		return s, fmt.Errorf("ingest digest: backlog: %w", err)
 	}
 
-	rows, err := db.QueryContext(ctx, `SELECT source, error_class, count(*) FROM ingest_failures
+	if err := each(ctx, db, `SELECT source, error_class, count(*) FROM ingest_failures
 WHERE last_seen >= $1 AND last_seen < $2 GROUP BY source, error_class ORDER BY count(*) DESC, source, error_class
-LIMIT 5`, s.Since, at)
-	if err != nil {
-		return s, fmt.Errorf("ingest digest: errors: %w", err)
-	}
-
-	for rows.Next() {
+LIMIT 5`, []any{s.Since, at}, func(rows *sql.Rows) error {
 		var e IngestError
 		if err := rows.Scan(&e.Source, &e.Class, &e.Count); err != nil {
-			_ = rows.Close()
-
-			return s, err
+			return err
 		}
 
 		s.Errors = append(s.Errors, e)
-	}
 
-	if err := rows.Err(); err != nil {
-		_ = rows.Close()
-
-		return s, err
-	}
-
-	if err := rows.Close(); err != nil {
-		return s, err
+		return nil
+	}); err != nil {
+		return s, fmt.Errorf("ingest digest: errors: %w", err)
 	}
 
 	if err := db.QueryRowContext(ctx, `SELECT count(*) FILTER (WHERE type = 'book'), count(*) FILTER (WHERE type = 'movie'),
-  count(*) FILTER (WHERE type = 'series') FROM items`).
-		Scan(&s.Books, &s.Movies, &s.Series); err != nil {
+  count(*) FILTER (WHERE type = 'series'), count(*) FILTER (WHERE type = 'game') FROM items`).
+		Scan(&s.Books, &s.Movies, &s.Series, &s.Games); err != nil {
 		return s, fmt.Errorf("ingest digest: totals: %w", err)
+	}
+
+	if err := s.readProgress(ctx, db); err != nil {
+		return s, err
 	}
 
 	if beat, ok, err := ingest.ReadWorkerHeartbeat(ctx, db); err != nil {
@@ -121,28 +139,68 @@ WHERE day >= date_trunc('month', $1::date) AND day <= $1::date`, day.Format(time
 func FormatIngest(s IngestSummary) string {
 	var b strings.Builder
 
+	created := 0
+	for _, n := range s.NewByType {
+		created += n
+	}
+
 	fmt.Fprintf(
 		&b,
-		"<b>Ingest digest</b> %s (last %d min)\n",
+		"<b>Ingest</b> %s (last %d min)\n",
 		s.At.In(saoPaulo).Format("02/01 15:04"),
 		int(IngestWindow.Minutes()),
 	)
-	fmt.Fprintf(&b, "Created %d · updated %d · failed %d · covers %d · rate limited %d\n",
-		s.Created, s.Updated, s.Failed, s.Covers, s.RateLimited)
-	fmt.Fprintf(&b, "Backlog: %d queued, %d running\n", s.Queued, s.Running)
-	fmt.Fprintf(&b, "Catalogue: %d books · %d movies · %d series (%d of 1,000,000)\n",
-		s.Books, s.Movies, s.Series, s.Books+s.Movies+s.Series)
 
-	if s.HeartbeatOK {
-		fmt.Fprintf(&b, "Worker: beat %s ago", s.HeartbeatAge.Round(time.Second))
+	total := s.Books + s.Movies + s.Series + s.Games
 
-		if s.HeartbeatAge > ingest.WorkerStaleAfter {
-			b.WriteString(" <b>STALE</b>")
+	switch {
+	case created > 0:
+		fmt.Fprintf(&b, "✅ +%d items · movies +%d · series +%d · books +%d · games +%d\n",
+			created, s.NewByType["movie"], s.NewByType["series"], s.NewByType["book"], s.NewByType["game"])
+	case s.CreatedQuiet == 0:
+		fmt.Fprintf(&b, "⚠️ <b>0 new items in %d min</b> (%d runs active)\n", int(QuietAfter.Minutes()), len(s.Active))
+	default:
+		b.WriteString("⏸ 0 new items in this window\n")
+	}
+
+	fmt.Fprintf(&b, "Catalogue: %d of 1,000,000 (%.1f%%) · %d books · %d movies · %d series · %d games\n",
+		total, float64(total)/10000, s.Books, s.Movies, s.Series, s.Games)
+
+	if created > 0 {
+		perHour := float64(created) * 60 / IngestWindow.Minutes()
+		fmt.Fprintf(&b, "Pace: ≈%.0f items/h · ETA ≈ %.0f days\n", perHour, float64(1_000_000-total)/perHour/24)
+	}
+
+	fmt.Fprintf(&b, "\nRuns: %d running, %d queued\n", s.Running, s.Queued)
+
+	for _, r := range s.Active {
+		name := r.Job
+		if r.Source != "" {
+			name += "/" + r.Source
 		}
 
-		b.WriteString("\n")
-	} else {
-		b.WriteString("Worker: <b>no heartbeat</b>\n")
+		mark := "•"
+		if r.BeatAge > 5*time.Minute {
+			mark = "⚠️"
+		}
+
+		fmt.Fprintf(&b, "%s %s · %s · seen %s · changed %s · failed %d\n", mark, html.EscapeString(name),
+			fmt.Sprintf("%dm", int(r.Age.Minutes())), compact(r.Seen), compact(r.Changed), r.Failed)
+	}
+
+	if len(s.Fetched) > 0 {
+		parts := make([]string, len(s.Fetched))
+		for i, c := range s.Fetched {
+			parts[i] = fmt.Sprintf("%s %s", html.EscapeString(c.Source), compact(c.N))
+		}
+
+		fmt.Fprintf(
+			&b,
+			"Fetched: %s · rate limited %d · covers %d\n",
+			strings.Join(parts, " · "),
+			s.RateLimited,
+			s.Covers,
+		)
 	}
 
 	if len(s.Errors) > 0 {
@@ -151,7 +209,23 @@ func FormatIngest(s IngestSummary) string {
 			parts[i] = fmt.Sprintf("%s/%s ×%d", html.EscapeString(e.Source), html.EscapeString(e.Class), e.Count)
 		}
 
-		fmt.Fprintf(&b, "Errors: %s\n", strings.Join(parts, ", "))
+		fmt.Fprintf(&b, "\nErrors: %s\n", strings.Join(parts, ", "))
+
+		if s.ErrorSample != "" {
+			fmt.Fprintf(&b, "  e.g. %s\n", html.EscapeString(s.ErrorSample))
+		}
+	}
+
+	if s.HeartbeatOK {
+		fmt.Fprintf(&b, "\nWorker: beat %s ago", s.HeartbeatAge.Round(time.Second))
+
+		if s.HeartbeatAge > ingest.WorkerStaleAfter {
+			b.WriteString(" <b>STALE</b>")
+		}
+
+		b.WriteString("\n")
+	} else {
+		b.WriteString("\nWorker: <b>no heartbeat</b>\n")
 	}
 
 	fmt.Fprintf(
@@ -187,4 +261,105 @@ func SendIngestDigest(ctx context.Context, db database.Executor, n *Notifier, at
 	}
 
 	return true, nil
+}
+
+// each runs a query and hands every row to scan; the rows are closed and checked here, once.
+func each(ctx context.Context, db database.Executor, query string, args []any, scan func(*sql.Rows) error) error {
+	rows, err := db.QueryContext(ctx, query, args...)
+	if err != nil {
+		return err
+	}
+
+	defer func() { _ = rows.Close() }()
+
+	for rows.Next() {
+		if err := scan(rows); err != nil {
+			return err
+		}
+	}
+
+	return rows.Err()
+}
+
+// readProgress fills the fields that tell whether the catalogue is really growing.
+func (s *IngestSummary) readProgress(ctx context.Context, db database.Executor) error {
+	s.NewByType = map[string]int{}
+
+	if err := each(ctx, db, `SELECT type, count(*) FROM items WHERE created_at >= $1 AND created_at < $2 GROUP BY type`,
+		[]any{s.Since, s.At}, func(r *sql.Rows) error {
+			var (
+				t string
+				n int
+			)
+
+			if err := r.Scan(&t, &n); err != nil {
+				return err
+			}
+
+			s.NewByType[t] = n
+
+			return nil
+		}); err != nil {
+		return fmt.Errorf("ingest digest: new by type: %w", err)
+	}
+
+	if err := db.QueryRowContext(ctx, `SELECT count(*) FROM items WHERE created_at >= $1 AND created_at < $2`,
+		s.At.Add(-QuietAfter), s.At).Scan(&s.CreatedQuiet); err != nil {
+		return fmt.Errorf("ingest digest: quiet: %w", err)
+	}
+
+	if err := each(ctx, db, `SELECT job, coalesce(source, ''), seen, changed, failed,
+  extract(epoch FROM $1::timestamptz - coalesce(started_at, created_at))::bigint,
+  extract(epoch FROM $1::timestamptz - coalesce(heartbeat_at, started_at, created_at))::bigint
+FROM job_runs WHERE status = 'running' ORDER BY started_at LIMIT 8`, []any{s.At}, func(r *sql.Rows) error {
+		var (
+			a         ActiveRun
+			age, beat int64
+		)
+
+		if err := r.Scan(&a.Job, &a.Source, &a.Seen, &a.Changed, &a.Failed, &age, &beat); err != nil {
+			return err
+		}
+
+		a.Age, a.BeatAge = time.Duration(age)*time.Second, time.Duration(beat)*time.Second
+		s.Active = append(s.Active, a)
+
+		return nil
+	}); err != nil {
+		return fmt.Errorf("ingest digest: active runs: %w", err)
+	}
+
+	if err := each(ctx, db, `SELECT source, count(*) FROM source_records WHERE fetched_at >= $1 AND fetched_at < $2
+GROUP BY source ORDER BY count(*) DESC, source LIMIT 5`, []any{s.Since, s.At}, func(r *sql.Rows) error {
+		var c SourceCount
+		if err := r.Scan(&c.Source, &c.N); err != nil {
+			return err
+		}
+
+		s.Fetched = append(s.Fetched, c)
+
+		return nil
+	}); err != nil {
+		return fmt.Errorf("ingest digest: fetched: %w", err)
+	}
+
+	var source, target, msg string
+
+	err := db.QueryRowContext(ctx, `SELECT source, external_id, left(error, 140) FROM ingest_failures
+WHERE last_seen >= $1 AND last_seen < $2 ORDER BY last_seen DESC LIMIT 1`, s.Since, s.At).Scan(&source, &target, &msg)
+	if err == nil {
+		s.ErrorSample = fmt.Sprintf("%s %s: %s", source, target, msg)
+	} else if !errors.Is(err, sql.ErrNoRows) {
+		return fmt.Errorf("ingest digest: error sample: %w", err)
+	}
+
+	return nil
+}
+
+func compact(n int) string {
+	if n >= 1000 {
+		return fmt.Sprintf("%.1fk", float64(n)/1000)
+	}
+
+	return strconv.Itoa(n)
 }
