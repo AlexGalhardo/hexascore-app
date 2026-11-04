@@ -184,8 +184,9 @@ func TestProvidersStepFetchesParsesAndRemembers(t *testing.T) {
 	r.item("movie", "public", "6x3") // not a TMDB id
 
 	failed, changed := r.runToEnd()
-	if failed != 1 || changed != 7 {
-		t.Fatalf("failed=%d changed=%d, want 1 failure (the 400) and 7 offers", failed, changed)
+	// changed counts the items that got offers (the film), not the offers: the digest compares it with seen.
+	if failed != 1 || changed != 1 {
+		t.Fatalf("failed=%d changed=%d, want 1 failure (the 400) and 1 item with offers", failed, changed)
 	}
 
 	if n := r.count(

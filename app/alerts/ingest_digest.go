@@ -60,6 +60,9 @@ type IngestSummary struct {
 	// NewByType counts items created in the window; CreatedQuiet counts the last QuietAfter.
 	NewByType    map[string]int
 	CreatedQuiet int
+	// CreatedHour counts the items created in the last hour: the pace and the ETA use it, a 15-minute window swung
+	// from 900 to 2,800 items an hour between two digests.
+	CreatedHour int
 	Active       []ActiveRun
 	Fetched      []SourceCount
 	Games        int
@@ -166,9 +169,9 @@ func FormatIngest(s IngestSummary) string {
 	fmt.Fprintf(&b, "Catalogue: %d of 1,000,000 (%.1f%%) · %d books · %d movies · %d series · %d games\n",
 		total, float64(total)/10000, s.Books, s.Movies, s.Series, s.Games)
 
-	if created > 0 {
-		perHour := float64(created) * 60 / IngestWindow.Minutes()
-		fmt.Fprintf(&b, "Pace: ≈%.0f items/h · ETA ≈ %.0f days\n", perHour, float64(1_000_000-total)/perHour/24)
+	if s.CreatedHour > 0 {
+		perHour := float64(s.CreatedHour)
+		fmt.Fprintf(&b, "Pace (last hour): %d items · ETA ≈ %.0f days\n", s.CreatedHour, float64(1_000_000-total)/perHour/24)
 	}
 
 	fmt.Fprintf(&b, "\nRuns: %d running, %d queued\n", s.Running, s.Queued)
@@ -303,8 +306,9 @@ func (s *IngestSummary) readProgress(ctx context.Context, db database.Executor) 
 		return fmt.Errorf("ingest digest: new by type: %w", err)
 	}
 
-	if err := db.QueryRowContext(ctx, `SELECT count(*) FROM items WHERE created_at >= $1 AND created_at < $2`,
-		s.At.Add(-QuietAfter), s.At).Scan(&s.CreatedQuiet); err != nil {
+	if err := db.QueryRowContext(ctx, `SELECT count(*) FILTER (WHERE created_at >= $1), count(*) FROM items
+WHERE created_at >= $2 AND created_at < $3`,
+		s.At.Add(-QuietAfter), s.At.Add(-time.Hour), s.At).Scan(&s.CreatedQuiet, &s.CreatedHour); err != nil {
 		return fmt.Errorf("ingest digest: quiet: %w", err)
 	}
 

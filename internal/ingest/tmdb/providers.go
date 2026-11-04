@@ -189,7 +189,10 @@ func ProvidersStep(c *Connector, client *ingest.Client, now func() time.Time) ru
 				return run.Result{}, err
 			}
 
-			res.Changed += len(ps)
+			// Changed counts items, like Seen: the digest compares the two (it used to add every provider offer).
+			if len(ps) > 0 {
+				res.Changed++
+			}
 		}
 
 		res.Cursor, err = json.Marshal(cur)

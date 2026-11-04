@@ -15,7 +15,7 @@ func TestFormatIngestGolden(t *testing.T) {
 		At: digestAt, Since: digestAt.Add(-IngestWindow),
 		Created: 12, Updated: 340, Failed: 3, Covers: 25, RateLimited: 2, Queued: 4, Running: 2,
 		Books: 100, Movies: 200, Series: 50, Games: 30, HeartbeatOK: true, HeartbeatAge: 42 * time.Second,
-		NewByType: map[string]int{"movie": 9, "series": 3}, CreatedQuiet: 12,
+		NewByType: map[string]int{"movie": 9, "series": 3}, CreatedQuiet: 12, CreatedHour: 48,
 		Active: []ActiveRun{
 			{
 				Job:     "fetch",

@@ -121,14 +121,58 @@ func Step(c Config) run.Step {
 			}
 		}
 
+		before, err := scores(ctx, tx, ids)
+		if err != nil {
+			return run.Result{}, err
+		}
+
 		if _, err := tx.ExecContext(ctx, scoreSQL, array(ids), now, array(missing)); err != nil {
 			return run.Result{}, fmt.Errorf("refresh: store scores: %w", err)
 		}
 
-		res.Changed = len(items)
+		after, err := scores(ctx, tx, ids)
+		if err != nil {
+			return run.Result{}, err
+		}
+
+		// Changed counts the items whose quality score moved: every checked item is Seen, and the digest used to show
+		// them all as changed.
+		for id, s := range after {
+			if b, ok := before[id]; !ok || b != s {
+				res.Changed++
+			}
+		}
 
 		return res, nil
 	}
+}
+
+// scores reads the quality score of ids; an item without one is absent.
+func scores(ctx context.Context, tx *database.Tx, ids []string) (map[string]int, error) {
+	rows, err := tx.QueryContext(ctx, `SELECT id::text, quality_score FROM items
+WHERE id = ANY($1::uuid[]) AND quality_score IS NOT NULL`, array(ids))
+	if err != nil {
+		return nil, fmt.Errorf("refresh: read scores: %w", err)
+	}
+
+	defer func() { _ = rows.Close() }()
+
+	out := map[string]int{}
+
+	for rows.Next() {
+		var (
+			id string
+			s  int
+		)
+
+		if err := rows.Scan(&id, &s); err != nil {
+			return nil, err
+		}
+
+		out[id] = s
+	}
+
+	return out, rows.Err()
 }
 
 func due(ctx context.Context, tx *database.Tx, before time.Time, limit int) ([]item, error) {
