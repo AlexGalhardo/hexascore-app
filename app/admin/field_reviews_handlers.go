@@ -34,10 +34,7 @@ func (h FieldReviewHandlers) List(c *web.Ctx) error {
 		return err
 	}
 
-	d := h.Pages.newPage("Field reviews")
-	d.FieldReviews = rows
-
-	return h.Pages.render(c, "ingest_field_reviews", d)
+	return h.Pages.react(c, "Admin/IngestFieldReviews", map[string]any{"reviews": rows})
 }
 
 // Resolve handles POST /admin/ingest/field-reviews/{id}: accept or reject.

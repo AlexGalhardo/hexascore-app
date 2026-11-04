@@ -77,14 +77,17 @@ func TestAdminIngestReviews(t *testing.T) {
 	admin := browserFor(t, app, makeUser(t, app, "reviews-admin@example.com", models.RoleAdmin, true))
 
 	body := admin.Get("/admin/ingest/reviews").AssertOK().Body()
-	for _, want := range []string{"Jane Doe", "John Smith", "Q777", "Jane &lt;b&gt;Doe&lt;/b&gt;"} {
-		if !strings.Contains(body, want) {
-			t.Fatalf("queue misses %q: %s", want, body)
+
+	queue := inertiaProp(t, body, "Admin/IngestReviews", "reviews")
+	for _, want := range []string{"Jane Doe", "John Smith", "Q777", "Jane <b>Doe</b>"} {
+		if !strings.Contains(queue, want) {
+			t.Fatalf("queue misses %q: %s", want, queue)
 		}
 	}
 
+	// The data travels as JSON in the page script, where "<" is encoded, so a name cannot open a tag there.
 	if strings.Contains(body, "<b>Doe</b>") {
-		t.Fatalf("candidate name not escaped: %s", body)
+		t.Fatalf("candidate name not escaped in the page: %s", body)
 	}
 
 	admin.PostForm(reviewPath(1), url.Values{"action": {"link"}, "entity_id": {reviewEntity}}).

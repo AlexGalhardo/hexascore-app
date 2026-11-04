@@ -34,10 +34,7 @@ func (h IngestReviewHandlers) List(c *web.Ctx) error {
 		return err
 	}
 
-	d := h.Pages.newPage("Match reviews")
-	d.Reviews = rows
-
-	return h.Pages.render(c, "ingest_reviews", d)
+	return h.Pages.react(c, "Admin/IngestReviews", map[string]any{"reviews": rows})
 }
 
 // Resolve handles POST /admin/ingest/reviews/{id}: action link (with entity_id), create or dismiss.

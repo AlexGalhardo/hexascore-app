@@ -51,10 +51,10 @@ func TestItemConflicts_AdminListsAndAllows(t *testing.T) {
 	plain.Get("/admin/ingest/conflicts").AssertStatus(403) // like the other ingest queues (runIngestion)
 	plain.PostForm("/admin/ingest/conflicts/1", url.Values{"action": {"allow"}}).AssertStatus(403)
 
-	body := admin.Get("/admin/ingest/conflicts").AssertOK().Body()
-	if !strings.Contains(body, conflictQID) || !strings.Contains(body, "tt1") ||
-		!strings.Contains(body, "Owner &lt;Film&gt;") {
-		t.Fatalf("queue page: %s", body)
+	queue := inertiaProp(t, admin.Get("/admin/ingest/conflicts").AssertOK().Body(), "Admin/IngestConflicts", "conflicts")
+	if !strings.Contains(queue, conflictQID) || !strings.Contains(queue, "tt1") ||
+		!strings.Contains(queue, "Owner <Film>") {
+		t.Fatalf("queue page: %s", queue)
 	}
 
 	admin.PostForm("/admin/ingest/conflicts/1", url.Values{"action": {"explode"}}).AssertStatus(422)

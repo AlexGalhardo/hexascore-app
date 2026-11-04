@@ -4,10 +4,7 @@ package tests
 
 import (
 	"net/url"
-	"regexp"
-	"slices"
 	"strconv"
-	"strings"
 	"testing"
 
 	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
@@ -110,45 +107,20 @@ func TestAdminMerge(t *testing.T) {
 	admin.Get("/admin/items/" + itemA + "/manage").AssertNotFound()
 }
 
-var sidebarLink = regexp.MustCompile(`<a [^>]*href="([^"]+)"`)
-
-// sidebarHrefs lists the links of the <nav class="sidebar"> block of an admin page.
-func sidebarHrefs(t *testing.T, body string) []string {
-	t.Helper()
-
-	_, rest, ok := strings.Cut(body, `<nav class="sidebar"`)
-	if !ok {
-		t.Fatal("no sidebar in page")
-	}
-
-	nav, _, _ := strings.Cut(rest, "</nav>")
-
-	var out []string
-	for _, m := range sidebarLink.FindAllStringSubmatch(nav, -1) {
-		out = append(out, m[1])
-	}
-
-	return out
-}
-
-func TestAdminIngestionSharesPanelNavigation(t *testing.T) {
+// ADR 0026: the source records screen is a React page; its data travels as Inertia props.
+func TestAdminIngestionSourcesPage(t *testing.T) {
 	t.Parallel()
 
 	app := catalogAdminApp(t)
 	admin := browserFor(t, app, makeUser(t, app, adminEmail, "admin", true))
 
-	want := sidebarHrefs(t, admin.Get("/admin").AssertOK().Body())
-	got := sidebarHrefs(t, admin.Get("/admin/ingestion").AssertOK().Body())
-
-	slices.Sort(want)
-	slices.Sort(got)
-
-	if !slices.Equal(got, want) {
-		t.Fatalf("ingestion sidebar differs from the panel sidebar:\n got %v\nwant %v", got, want)
+	got, props := inertiaPage(t, admin.Get("/admin/ingestion").AssertOK().Body())
+	if got != "Admin/IngestSources" {
+		t.Fatalf("component = %q, want Admin/IngestSources", got)
 	}
 
-	if !slices.Contains(got, "/admin/score-bursts") {
-		t.Fatalf("sidebar misses /admin/score-bursts: %v", got)
+	if _, ok := props["ready"].(bool); !ok {
+		t.Fatalf("ready prop missing: %v", props["ready"])
 	}
 }
 

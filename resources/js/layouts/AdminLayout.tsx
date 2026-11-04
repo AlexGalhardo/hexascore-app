@@ -3,6 +3,8 @@ import { ArrowLeft, Menu, Moon, Sun } from "lucide-react";
 import { type ReactElement, type ReactNode, useState } from "react";
 
 import { activeHref, NAV, type NavItem } from "../components/admin/nav";
+import type { Flash } from "../components/admin/types";
+import { Alert } from "../components/admin/ui/alert";
 import { Avatar } from "../components/admin/ui/avatar";
 import { Button } from "../components/admin/ui/button";
 import {
@@ -131,6 +133,7 @@ function UserMenu(): ReactElement | null {
 export default function AdminLayout({ children }: { children: ReactNode }): ReactElement {
 	const t = useT();
 	const [open, setOpen] = useState(false);
+	const flash = (usePage().props as { flash?: Flash }).flash;
 	return (
 		<div className="min-h-screen bg-bg text-fg">
 			<a
@@ -161,6 +164,16 @@ export default function AdminLayout({ children }: { children: ReactNode }): Reac
 					<UserMenu />
 				</header>
 				<main id="admin-main" className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 lg:px-8">
+					{flash?.success && (
+						<Alert variant="success" className="mb-4">
+							{flash.success}
+						</Alert>
+					)}
+					{flash?.warning && (
+						<Alert variant="destructive" className="mb-4">
+							{flash.warning}
+						</Alert>
+					)}
 					{children}
 				</main>
 			</div>

@@ -105,7 +105,7 @@ func (h IngestHandlers) Index(c *web.Ctx) error {
 			strings.HasPrefix(r.Job, "fetch.")
 	}
 
-	return h.Pages.render(c, "ingest", d)
+	return h.Pages.react(c, "Admin/Ingest", map[string]any{"runs": d.Runs, "ingest": d.Ingest})
 }
 
 func (h IngestHandlers) status(ctx context.Context, db *sql.DB) (IngestStatus, error) {

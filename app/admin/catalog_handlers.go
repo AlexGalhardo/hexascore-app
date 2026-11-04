@@ -438,7 +438,7 @@ func (h CatalogHandlers) Ingestion(c *web.Ctx) error {
 
 	d.Ready = recs.Valid && runs.Valid
 	if !d.Ready {
-		return h.render(c, "ingestion", d)
+		return h.react(c, "Admin/IngestSources", map[string]any{"ready": false})
 	}
 
 	var err error
@@ -450,7 +450,7 @@ func (h CatalogHandlers) Ingestion(c *web.Ctx) error {
 		return err
 	}
 
-	return h.render(c, "ingestion", d)
+	return h.react(c, "Admin/IngestSources", map[string]any{"ready": true, "sources": d.Sources, "runs": d.Runs})
 }
 
 func loadSources(ctx context.Context, db *sql.DB) ([]sourceRow, error) {
