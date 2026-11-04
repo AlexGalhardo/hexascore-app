@@ -9,17 +9,20 @@ func TestCamelKey(t *testing.T) {
 	t.Parallel()
 
 	for in, want := range map[string]string{
-		"ID":         "id",
-		"URL":        "url",
-		"Job":        "job",
-		"TargetID":   "targetID",
-		"OtherID":    "otherID",
-		"HTMLText":   "htmlText",
-		"canRun":     "canRun",
-		"QID":        "qid",
-		"RawName":    "rawName",
-		"OldestTMDB": "oldestTMDB",
-		"":           "",
+		"ID":               "id",
+		"URL":              "url",
+		"Job":              "job",
+		"TargetID":         "targetID",
+		"OtherID":          "otherID",
+		"HTMLText":         "htmlText",
+		"canRun":           "canRun",
+		"QID":              "qid",
+		"RawName":          "rawName",
+		"OldestTMDB":       "oldestTMDB",
+		"":                 "",
+		"occurred_at":      "occurredAt",
+		"reverts_audit_id": "revertsAuditId",
+		"target_id":        "targetId",
 	} {
 		if got := camelKey(in); got != want {
 			t.Errorf("camelKey(%q) = %q, want %q", in, got, want)

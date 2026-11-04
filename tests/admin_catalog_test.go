@@ -5,6 +5,7 @@ package tests
 import (
 	"net/url"
 	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
@@ -72,7 +73,9 @@ func TestAffiliateLinks(t *testing.T) {
 		AssertStatus(303)
 	admin.PostForm(base+"/affiliate-links", url.Values{"store": {"gog"}, "url": {"https://gog.example/a"}, "active": {"true"}}).
 		AssertRedirect(base + "/manage")
-	admin.Get(base + "/manage").AssertOK().AssertSee("https://gog.example/a")
+	if got := inertiaProp(t, admin.Get(base+"/manage").AssertOK().Body(), "Admin/ItemManage", "affiliates"); !strings.Contains(got, "https://gog.example/a") {
+		t.Fatalf("affiliate link missing from the manage page: %s", got)
+	}
 	admin.PostForm(base+"/affiliate-links/gog/delete", url.Values{}).AssertRedirect(base + "/manage")
 
 	var n int
@@ -243,7 +246,9 @@ func TestAdminOffers(t *testing.T) {
 		t.Fatalf("offer = %q source = %q, %v", id, source, err)
 	}
 
-	admin.Get(base + "/manage").AssertOK().AssertSee("https://store.steampowered.com/app/1")
+	if got := inertiaProp(t, admin.Get(base+"/manage").AssertOK().Body(), "Admin/ItemManage", "offers"); !strings.Contains(got, "https://store.steampowered.com/app/1") {
+		t.Fatalf("offers missing from the manage page: %s", got)
+	}
 
 	// the same key again replaces the url and keeps one row
 	good.Set("url", "https://store.steampowered.com/app/2")

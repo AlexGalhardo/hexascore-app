@@ -5,11 +5,26 @@ export type ActionResult = { ok: true } | { ok: false; message: string };
 
 type Fields = Record<string, string | boolean | number | undefined>;
 
+/** Field errors of a validation problem ({ field: ["message"] }) as one sentence, or null when there are none. */
+function validationMessages(errors: unknown): string | null {
+	if (!errors || typeof errors !== "object") return null;
+	const messages = Object.values(errors as Record<string, unknown>).flatMap((v) =>
+		Array.isArray(v)
+			? v.filter((m): m is string => typeof m === "string")
+			: typeof v === "string"
+				? [v]
+				: [],
+	);
+	return messages.length > 0 ? messages.join(" ") : null;
+}
+
 async function errorMessage(res: Response): Promise<string> {
 	try {
 		const data: unknown = await res.json();
 		if (data && typeof data === "object") {
 			const o = data as Record<string, unknown>;
+			const fields = validationMessages(o.errors);
+			if (fields) return fields;
 			for (const key of ["detail", "message", "title", "error"]) {
 				if (typeof o[key] === "string" && o[key]) return o[key] as string;
 			}

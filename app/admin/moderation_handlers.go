@@ -128,12 +128,9 @@ func (h ModerationHandlers) Index(c *web.Ctx) error {
 		q.NextURL = "/admin/moderation?" + v.Encode()
 	}
 
-	d := h.Pages.newPage("Moderation")
-	d.Queue = q
-	d.CanApply = h.canApply(c)
-	d.RejectReasons = moderation.RejectReasons
-
-	return h.Pages.render(c, "moderation", d)
+	return h.Pages.react(c, "Admin/Moderation", map[string]any{
+		"queue": q, "canApply": h.canApply(c), "rejectReasons": moderation.RejectReasons,
+	})
 }
 
 // Metrics renders GET /admin/moderation/metrics (moderate ability, FR-04-16; runbook R5 starts here).
@@ -147,10 +144,16 @@ func (h ModerationHandlers) Metrics(c *web.Ctx) error {
 		return err
 	}
 
-	d := h.Pages.newPage("Moderation metrics")
-	d.Metrics = m
+	window := func(w moderation.Window) map[string]any {
+		return map[string]any{
+			"days": w.Days, "decided": w.Decided, "approved": w.Approved, "approvalRate": w.ApprovalRate(),
+			"p50Seconds": seconds(w.P50), "p95Seconds": seconds(w.P95),
+		}
+	}
 
-	return h.Pages.render(c, "moderation_metrics", d)
+	return h.Pages.react(c, "Admin/ModerationMetrics", map[string]any{
+		"open": m.Open, "oldestOpenSeconds": seconds(m.OldestOpen), "week": window(m.Week), "month": window(m.Month),
+	})
 }
 
 func (h ModerationHandlers) actor(c *web.Ctx) (models.User, error) {
@@ -308,12 +311,9 @@ func (h ModerationHandlers) Detail(c *web.Ctx) error {
 		return err
 	}
 
-	p := h.Pages.newPage("Suggestion")
-	p.Detail = d
-	p.CanApply = h.canApply(c)
-	p.RejectReasons = moderation.RejectReasons
-
-	return h.Pages.render(c, "moderation_detail", p)
+	return h.Pages.react(c, "Admin/ModerationDetail", map[string]any{
+		"detail": d, "canApply": h.canApply(c), "rejectReasons": moderation.RejectReasons,
+	})
 }
 
 // Clone handles POST /admin/moderation/{id}/clone: admins only.
@@ -358,10 +358,7 @@ func (h ModerationHandlers) Bulk(c *web.Ctx) error {
 		return err
 	}
 
-	p := h.Pages.newPage("Bulk result")
-	p.BulkResults = res
-
-	return h.Pages.render(c, "moderation_bulk", p)
+	return h.Pages.react(c, "Admin/ModerationBulk", map[string]any{"results": res})
 }
 
 // backTo returns the queue URL the form came from (a same-site path only), else the bare queue.

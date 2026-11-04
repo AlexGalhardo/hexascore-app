@@ -118,13 +118,13 @@ FROM suggestion_reviews WHERE suggestion_id = $1 AND reviewer_id = $2`, id, modU
 	}
 
 	admin := browserFor(t, app, makeUser(t, app, "r2-admin@example.com", models.RoleAdmin, true))
-	detail := admin.Get("/admin/moderation/" + id).AssertOK().Body()
-	for _, want := range []string{"Recommendations", "reject", "&lt;b&gt;Wrong year&lt;/b&gt;", "#" + itoa(modUser.ID)} {
+	detail := inertiaProp(t, admin.Get("/admin/moderation/"+id).AssertOK().Body(), "Admin/ModerationDetail", "detail")
+	for _, want := range []string{"reject", "<b>Wrong year</b>", `"reviewerId":` + itoa(modUser.ID)} {
 		if !strings.Contains(detail, want) {
 			t.Fatalf("detail missing %q: %s", want, detail)
 		}
 	}
-	if !strings.Contains(admin.Get("/admin/moderation").AssertOK().Body(), "reject 1") {
+	if !strings.Contains(inertiaProp(t, admin.Get("/admin/moderation").AssertOK().Body(), "Admin/Moderation", "queue"), `"recReject":1`) {
 		t.Fatal("queue does not show the recommendation")
 	}
 

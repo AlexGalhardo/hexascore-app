@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 	"unicode"
 
 	"github.com/AlexGalhardo/vukem/inertia"
@@ -17,6 +18,9 @@ import (
 func (h CatalogHandlers) react(c *web.Ctx, component string, props map[string]any) error {
 	return renderReact(c, component, props)
 }
+
+// seconds is a duration as whole seconds, the unit the React screens format.
+func seconds(d time.Duration) int64 { return int64(d.Seconds()) }
 
 func renderReact(c *web.Ctx, component string, props map[string]any) error {
 	data, err := camelProps(props)
@@ -89,8 +93,20 @@ func camelKeys(v any) any {
 }
 
 // camelKey lowers the leading capitals of a Go field name: ID is id, URL is url, TargetID is targetID and HTMLText is
-// htmlText. Keys that already start in lower case stay as they are.
+// htmlText. A snake_case json tag becomes camelCase (occurred_at is occurredAt). Other keys that already start in
+// lower case stay as they are.
 func camelKey(k string) string {
+	if strings.Contains(k, "_") {
+		parts := strings.Split(k, "_")
+		for i := 1; i < len(parts); i++ {
+			if parts[i] != "" {
+				parts[i] = strings.ToUpper(parts[i][:1]) + parts[i][1:]
+			}
+		}
+
+		return strings.Join(parts, "")
+	}
+
 	runes := []rune(k)
 
 	n := 0

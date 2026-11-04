@@ -67,8 +67,16 @@ func TestCatalogAuditRevert(t *testing.T) {
 	body := admin.Get("/admin/catalog-audit?source=community").AssertOK().Body()
 	auditID := firstAuditID(t, app)
 	revert := "/admin/catalog-audit/" + auditID + "/revert"
-	if !strings.Contains(body, `action="`+revert+`"`) || strings.Contains(body, "<i>b</i>") {
-		t.Fatalf("audit list lacks the revert form or renders values as markup: %s", body)
+	_, props := inertiaPage(t, body)
+
+	rows, _ := props["rows"].([]any)
+	if len(rows) == 0 {
+		t.Fatalf("audit list is empty: %s", body)
+	}
+
+	first, _ := rows[0].(map[string]any)
+	if props["canRevert"] != true || first["revertible"] != true || strings.Contains(body, "<i>b</i>") {
+		t.Fatalf("audit list is not revertible or renders values as markup: %s", body)
 	}
 
 	admin.WithHeader("Accept", "application/json").

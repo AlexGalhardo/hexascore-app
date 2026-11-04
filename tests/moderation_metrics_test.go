@@ -13,8 +13,10 @@ func TestModerationMetricsPage(t *testing.T) {
 
 	app := moderationApp(t, true)
 	mod := browserFor(t, app, makeUser(t, app, "m-mod@example.com", models.RoleModerator, true))
-	mod.Get("/admin/moderation/metrics").AssertOK().
-		AssertSee("Queue size").AssertSee("p95 time to decision").AssertSee(`href="/admin/moderation"`)
+	got, props := inertiaPage(t, mod.Get("/admin/moderation/metrics").AssertOK().Body())
+	if got != "Admin/ModerationMetrics" || props["week"] == nil || props["month"] == nil {
+		t.Fatalf("metrics page = %q, props %v", got, props)
+	}
 }
 
 // The metrics page reads the moderation queue, so it needs the moderate ability like the queue itself.

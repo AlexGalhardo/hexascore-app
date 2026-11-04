@@ -237,7 +237,11 @@ func (h CatalogHandlers) Manage(c *web.Ctx) error {
 
 	d.OfferKinds, d.OfferCountries = offerKinds, append([]string{offers.Everywhere}, offers.Countries...)
 
-	return h.render(c, "items_manage", d)
+	return h.react(c, "Admin/ItemManage", map[string]any{
+		"item":       map[string]any{"id": d.Item.ID, "type": d.Item.Type, "slug": d.Item.Slug},
+		"affiliates": d.Affiliates, "trending": d.Trending, "offers": d.Offers, "stores": d.Stores,
+		"offerKinds": d.OfferKinds, "offerCountries": d.OfferCountries,
+	})
 }
 
 func audit(ctx context.Context, ex database.Executor, actor models.User, record, action string,

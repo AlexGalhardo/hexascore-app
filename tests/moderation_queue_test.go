@@ -28,9 +28,11 @@ VALUES ($1,'edit','item','00000000-0000-0000-0000-0000000000aa','movie','en','{"
 
 	admin := browserFor(t, app, makeUser(t, app, "q-admin@example.com", models.RoleAdmin, true))
 	body := admin.Get("/admin/moderation").AssertOK().Body()
-	for _, want := range []string{"badge-amber", "title", "/admin/moderation/" + id + "/claim", `name="version" value="1"`} {
-		if !strings.Contains(body, want) {
-			t.Fatalf("queue page lacks %q: %s", want, body)
+
+	queue := inertiaProp(t, body, "Admin/Moderation", "queue")
+	for _, want := range []string{`"age":"amber"`, "title", id, `"version":1`} {
+		if !strings.Contains(queue, want) {
+			t.Fatalf("queue page lacks %q: %s", want, queue)
 		}
 	}
 
