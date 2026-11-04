@@ -17,7 +17,7 @@ func TestInertiaPages_Catalog_Index(t *testing.T) {
 	app := vukemtest.New(
 		t,
 		bootstrap.New,
-		vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}},
+		vukemtest.Options{Env: showEverythingEnv(pgtest.Database(t, ""))},
 	)
 
 	db, err := app.DB()
@@ -114,7 +114,7 @@ func TestServerError_PageLinksHome(t *testing.T) {
 	app := vukemtest.New(
 		t,
 		bootstrap.New,
-		vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}},
+		vukemtest.Options{Env: showEverythingEnv(pgtest.Database(t, ""))},
 	)
 
 	db, err := app.DB()

@@ -17,7 +17,7 @@ func TestHome_Highlights(t *testing.T) {
 	app := vukemtest.New(
 		t,
 		bootstrap.New,
-		vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}},
+		vukemtest.Options{Env: showEverythingEnv(pgtest.Database(t, ""))},
 	)
 
 	db, err := app.DB()
@@ -69,7 +69,7 @@ func TestHome_Trending30d(t *testing.T) {
 	app := vukemtest.New(
 		t,
 		bootstrap.New,
-		vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}},
+		vukemtest.Options{Env: showEverythingEnv(pgtest.Database(t, ""))},
 	)
 
 	db, err := app.DB()
@@ -141,6 +141,7 @@ func homeSnapshotApp(t *testing.T, env map[string]string) *vukemtest.App {
 	t.Helper()
 
 	env["DATABASE_URL"] = pgtest.Database(t, "")
+	env["FLAG_HIDE_UNCOVERED"], env["FLAG_HIDE_UNSCORED"] = "false", "false"
 	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env})
 
 	db, err := app.DB()
