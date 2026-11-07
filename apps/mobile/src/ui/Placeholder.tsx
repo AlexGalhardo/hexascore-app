@@ -1,12 +1,11 @@
 import type { ReactElement } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import { EmptyState } from "./EmptyState";
 
 export function Placeholder({ title }: { title: string }): ReactElement {
 	return (
-		<View className="flex-1 items-center justify-center bg-bg px-4 dark:bg-bg-dark">
-			<Text className="font-display text-20 font-semibold tracking-tight text-fg dark:text-fg-dark">
-				{title}
-			</Text>
+		<View className="flex-1 justify-center bg-bg px-4 dark:bg-bg-dark">
+			<EmptyState title={title} />
 		</View>
 	);
 }

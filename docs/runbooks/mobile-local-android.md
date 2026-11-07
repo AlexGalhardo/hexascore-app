@@ -57,6 +57,10 @@ adb exec-out screencap -p > screen.png
 adb logcat -s ReactNativeJS:V
 ```
 
+## Screenshots of every screen
+
+Start Metro with `EXPO_PUBLIC_CAPTURE=1` (hides LogBox) and open screens with deep links instead of tapping: `adb shell am start -W -a android.intent.action.VIEW -d "hexascore://games/<slug>" app.hexascore`. Deep links reach item (`/{type}/{slug}`), `entities/{id}` and `lists/{id}` pages; the tabs, settings and notifications are reached by tapping (tab bar labels at y 2318 on a 1080x2400 emulator). Switch themes with `adb shell cmd uimode night yes|no` once Settings > Appearance is on System, and capture with `adb exec-out screencap -p > shot.png`. Restart Metro after adding files: its watcher can miss new files and then report `Unable to resolve module`.
+
 ## Troubleshooting
 
 - **`Device emulator-5554 is in state offline`**: the emulator is still booting. Wait for `adb shell getprop sys.boot_completed` to print `1`.

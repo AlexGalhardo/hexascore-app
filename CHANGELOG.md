@@ -54,6 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **mobile:** The sign-in screen is rebuilt on the new kit (wordmark, labelled fields with Show/Hide, a separate two-factor page), screens use Card, ListItem, EmptyState, Skeleton and Avatar, toasts are in-app (`ToastHost`, announced to screen readers) instead of `ToastAndroid`, and detail screens keep clear of the status bar. Category accents stay as a 2 px rule on trending cards and the heading squares.
+
 - **mobile:** The Android app wears the neutral zinc skin of the new web UI: grey palette in light and dark, 4/8/12 px radii, hairline borders instead of ledges, Inter as the only family (Playfair Display is no longer embedded). New shadcn-style kit in `apps/mobile/src/ui` (Button with default/secondary/outline/ghost/destructive and three sizes, Input, Label, TextField, Card, Badge, Separator, Skeleton, Avatar, SegmentedControl, Sheet, Toast, ListItem, EmptyState); `Btn` is replaced by `Button` and the language and theme pickers are segmented controls.
 
 - **ingest:** The language-model gap filler (only for items still missing data after every source, budget US$10 a month spread at most 1/30 a day): a value written in the stored Wikipedia introduction is applied to the item at once, anything else goes to review; a new stage translates the English synopsis into pt-BR and es when they are missing (the most popular items first, never replacing a synopsis); and with `LLM_WEB_SEARCH=true` the most popular items with no stored text are looked up with web search, always into review. The client no longer sends `temperature`, which Claude Haiku 5.5 rejects, so no call could succeed before

@@ -6,6 +6,7 @@ import { firstParam, isCatalogType } from "../../src/navigation/catalog";
 import { useLocale } from "../../src/providers/root";
 import { ItemView } from "../../src/screens/item/Item";
 import { Placeholder } from "../../src/ui/Placeholder";
+import { Screen } from "../../src/ui/Screen";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -50,10 +51,12 @@ export default function ItemScreen(): ReactElement {
 		id?: string | string[];
 	}>();
 	return (
-		<ItemBody
-			type={firstParam(params.type)}
-			slug={firstParam(params.slug)}
-			id={firstParam(params.id)}
-		/>
+		<Screen>
+			<ItemBody
+				type={firstParam(params.type)}
+				slug={firstParam(params.slug)}
+				id={firstParam(params.id)}
+			/>
+		</Screen>
 	);
 }
