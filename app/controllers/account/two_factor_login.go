@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/AlexGalhardo/vukem/auth"
-	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/web"
 
@@ -50,18 +49,11 @@ func (h *Handlers) startTwoFactor(c *web.Ctx, u models.User, remember bool) (boo
 		return false, err
 	}
 
-	return true, c.Redirect(TwoFactorStep(c.Request()))
+	return true, c.Redirect(ChallengePath)
 }
 
-// TwoFactorStep is where a pending two-factor login goes next: back to the login page, which opens the code dialog
-// (owner 2026-11-02), for Inertia visits; the /two-factor-challenge page for forms posted without JavaScript.
-func TwoFactorStep(r *http.Request) string {
-	if inertia.IsInertia(r) {
-		return "/login"
-	}
-
-	return "/two-factor-challenge"
-}
+// ChallengePath is the page of the second login step (owner 2026-11-07); it replaced the code dialog on /login.
+const ChallengePath = "/2fa"
 
 // flashedCodes returns the recovery codes flashed by Confirm or
 // RegenerateRecoveryCodes (shown once).

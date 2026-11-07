@@ -89,16 +89,18 @@ test.describe("auth", () => {
 			).toBeVisible();
 
 			await signOut(page);
-			// The code is asked in a dialog on the login page; the first box takes the whole code and submits it.
+			// The code is asked on its own /2fa page; the first box takes the whole code and submits it.
 			await logIn(page, prefix, t, account.email, account.password, { expectFailure: true });
-			const dialog = page.getByRole("dialog", { name: t("auth.login.twoFactorTitle") });
-			await expect(dialog).toBeVisible({ timeout: POW_TIMEOUT });
+			await page.waitForURL(/\/2fa$/, { timeout: POW_TIMEOUT });
+			await expect(
+				page.getByRole("heading", { name: t("auth.login.twoFactorTitle") }),
+			).toBeVisible();
 			await expectNoSeriousA11yViolations(page);
-			const firstBox = dialog.getByLabel(`${t("auth.login.code")} 1`);
+			const firstBox = page.getByLabel(`${t("auth.login.code")} 1`);
 			await firstBox.fill("000000");
-			await expect(dialog.getByRole("alert")).toBeVisible({ timeout: POW_TIMEOUT });
+			await expect(page.getByRole("alert")).toBeVisible({ timeout: POW_TIMEOUT });
 			await firstBox.fill(await codeAfter(secret, step));
-			await page.waitForURL((url) => !/\/login$/.test(url.pathname), {
+			await page.waitForURL((url) => !/\/(login|2fa)$/.test(url.pathname), {
 				timeout: POW_TIMEOUT,
 			});
 			await expectSignedIn(page, prefix);

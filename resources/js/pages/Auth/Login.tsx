@@ -6,7 +6,6 @@ import AuthFrame, {
 	GoogleButton,
 	OrRule,
 } from "../../components/auth/AuthFrame";
-import TwoFactorDialog from "../../components/auth/TwoFactorDialog";
 import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
@@ -77,7 +76,7 @@ export function PasskeySignIn(): React.ReactElement {
 	);
 }
 
-export default function Login({ twoFactor = false }: { twoFactor?: boolean }) {
+export default function Login() {
 	const t = useT();
 	const l = useLocalized();
 	const form = useForm({ identifier: "", password: "", remember: false });
@@ -155,7 +154,6 @@ export default function Login({ twoFactor = false }: { twoFactor?: boolean }) {
 					{t("auth.login.createAccount")}
 				</Link>
 			</AuthFooter>
-			<TwoFactorDialog open={twoFactor} />
 		</AuthFrame>
 	);
 }
