@@ -1,6 +1,6 @@
 // k6: moderation queue and suggestion submit with 10,000 open suggestions (ROADMAP P4.B.5.1, SDD 04 NFR-04-1).
 // Targets: queue p(95) < 500 ms, submit p(95) < 300 ms.
-// LOCAL or staging only. Seed the queue first (the seeder refuses production):
+// LOCAL only. Seed the queue first (the seeder refuses production):
 //   ./app db:seed DemoCatalog && ./app db:seed CommunityLoad --count 10000
 // Env: BASE_URL (http://localhost:3000), ADMIN_EMAIL (admin@example.test), MEMBERS (comma-separated emails of
 // DemoCatalog users, one per submit VU; psql -At -c "select string_agg(email, ',') from (select email from users

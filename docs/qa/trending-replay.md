@@ -1,11 +1,11 @@
 # Trending historical replay (TR-05)
 
-Procedure for the historical replay of RFC-002 §6 ("Historical"), and the report it produces. Source: `docs/rfcs/RFC-002-trending.md`. The first run waits for TR-02 (`Snapshot` with the `7d` window and `basis`) to be merged and deployed to staging. Until then every number below is **pending staging**.
+Procedure for the historical replay of RFC-002 §6 ("Historical"), and the report it produces. Source: `docs/rfcs/RFC-002-trending.md`. The first run waits for TR-02 (`Snapshot` with the `7d` window and `basis`) to be merged and built locally. Until then every number below is **pending a run**.
 
 ## Scope and limits
 
 - The replay compares the 12 items per day that v1 (most-rated) shows with what v2 would show, using the last 30 days of activity.
-- It runs on the staging database only. Production is not read by this procedure. Exporting production data needs the owner's yes and is not part of this document.
+- It runs on a local scratch database only. Production is not read by this procedure. Exporting production data needs the owner's yes and is not part of this document.
 - Seed users (`users.is_seed`) are excluded from every signal (OQ-07). The replay reports the seed share of the signal to confirm it is 0.
 - No external API is called (TMDB, IGDB and the others are not used by the replay).
 - Behaviour behind `FLAG_TRENDING_V2` (default off). The replay itself changes no production data.
@@ -21,7 +21,7 @@ Procedure for the historical replay of RFC-002 §6 ("Historical"), and the repor
 
 ## Procedure
 
-1. **Restore the window.** On the staging database, load the last 30 days of `item_activity_daily` from the export. Confirm `day` covers 30 consecutive dates and that no `item_id` is missing from `items`.
+1. **Restore the window.** On a local scratch database, load the last 30 days of `item_activity_daily` from the export. Confirm `day` covers 30 consecutive dates and that no `item_id` is missing from `items`.
 2. **Run v1 per day.** For each `day` in the window, record the v1 top 12 per `item_type`: item ids and rank.
 3. **Run v2 per day.** Call the v2 snapshot job (TR-02) with the replay clock set to each day in turn, so that each day's `computed_at` matches that day. Record the 10 ranked items per type (`trending_snapshots`, `basis` column).
 4. **Compare.** For each day and type, compute:
@@ -33,13 +33,13 @@ Procedure for the historical replay of RFC-002 §6 ("Historical"), and the repor
 
 ## Report template
 
-| Metric | Target | Result (staging) |
+| Metric | Target | Result (local) |
 | --- | --- | --- |
-| Turnover per type per day | 1 to 3 new items | pending staging |
-| Seed share of the signal | 0 | pending staging |
-| Fallback slots per day | recorded | pending staging |
-| Overlap with v1 (per day, mean) | recorded | pending staging |
-| Days with fewer than 10 v2 items | 0 | pending staging |
+| Turnover per type per day | 1 to 3 new items | pending a run |
+| Seed share of the signal | 0 | pending a run |
+| Fallback slots per day | recorded | pending a run |
+| Overlap with v1 (per day, mean) | recorded | pending a run |
+| Days with fewer than 10 v2 items | 0 | pending a run |
 
 ## Weekly metrics
 
@@ -48,4 +48,4 @@ Weekly metrics (RFC-002 §7: CTR per slot, conversion within 24 h, median days a
 ## Open points
 
 - The v1 query is not copied here on purpose: it lives in `app/controllers/home.go` and the replay must read it at run time.
-- The export method for staging (a dump of the last 30 days) needs the owner's approval for any production read; until then the first run uses staging data only.
+- The export method for the local scratch database (a dump of the last 30 days) needs the owner's approval for any production read; until then the first run uses local data only.

@@ -16,14 +16,14 @@ In: topology, image, env/secrets, migrations, backups, cutover, CI/CD, local dev
 
 Each is verified by the matching §9 item.
 
-- FR-11-1 One project, environments `production` and `staging`, services `app` and `postgres`, one bucket per environment.
+- FR-11-1 One project, environment `production`, services `app` and `postgres` (the `staging` environment was removed on 2026-11-07, ADR 0028; wherever this SDD says staging, read the local QA stack or a scratch database).
 - FR-11-2 Image from pinned bases (tag + digest), non-root, assets embedded.
 - FR-11-3 Traffic switches only after `/up?checks=1` is 200 (db, ssr, storage).
 - FR-11-4 Migrations run once per deploy, before traffic, under an advisory lock; failure aborts the deploy.
 - FR-11-5 Daily encrypted, verified `pg_dump`; retention 30 daily + 12 monthly.
-- FR-11-6 Monthly restore drill on staging ≤ 60 min, asserts green.
+- FR-11-6 Monthly restore drill ≤ 60 min, asserts green (run by hand into a scratch database; no host is scheduled since staging was removed, ADR 0028).
 - FR-11-7 Cutover imports legacy data; every verification query passes.
-- FR-11-8 Branch model (amended 2026-10-28 for the orchestration prompt): `dev` is the integration branch and deploys staging on every merge; `main` receives `dev` by PR when a task group closes and a tag `vX.Y.Z` on `main` deploys production; responses carry the version.
+- FR-11-8 Branch model (amended 2026-10-28 for the orchestration prompt): `dev` is the integration branch (it deployed staging until 2026-11-07, ADR 0028); `main` receives `dev` by PR when a task group closes and a tag `vX.Y.Z` on `main` deploys production; responses carry the version.
 - FR-11-9 `docker compose up` + `vukem serve` work with a deterministic seed on Windows 11 and Linux (CI on `windows-2025`, `ubuntu-24.04`).
 
 ## 4. Non-functional requirements
@@ -89,7 +89,7 @@ Retention of the operational tables without a prune of their own (audit T-17): j
 
 Bucket prefixes: `covers/{section}/{slug}[-t].webp` for items, `covers/<id>-<hash16>.webp` for editions and not yet rekeyed items (SDD 06 §7.5), `exports/` (SDD 05), `backups/postgres/{daily,monthly}/`, `backups/legacy/`.
 
-Not backed up: Railway logs (SDD 12), staging data (re-copied), covers (re-derivable by ingestion, issue 1), Railway variables (owner keeps an encrypted export). Sessions and cache are dumped but worthless after a restore.
+Not backed up: Railway logs (SDD 12), covers (re-derivable by ingestion, issue 1), Railway variables (owner keeps an encrypted export). Sessions and cache are dumped but worthless after a restore.
 
 ## 6. Contracts
 
@@ -141,7 +141,7 @@ Railway service variables per environment; `.env` locally; `.env.example` lists 
 
 | Name | Value / example | Notes |
 | --- | --- | --- |
-| `APP_NAME`, `APP_ENV`, `APP_URL` | `HexaScore`, `production`, `https://hexascore.app` | staging: `APP_ENV=production`, own URL |
+| `APP_NAME`, `APP_ENV`, `APP_URL` | `HexaScore`, `production`, `https://hexascore.app` | a preview or local production build: `APP_ENV=production`, own URL |
 | `APP_KEY`, `APP_PREVIOUS_KEYS` | `base64:` ≥ 32 bytes | secret; `docker run --rm hx key:generate`; per environment; HKDF sub-keys, rotation [vk-crypt], [vk-config] |
 | `PORT`, `HOST` | injected, `0.0.0.0` | [vk-deploy] |
 | `DATABASE_URL`, `DB_MAX_OPEN`, `DB_MAX_IDLE` | reference, `20`, `10` | §5 |
@@ -152,20 +152,18 @@ Railway service variables per environment; `.env` locally; `.env.example` lists 
 | `SHUTDOWN_TIMEOUT`, `LOG_FORMAT` | `30s`, `json` | |
 | `S3_BUCKET`, `S3_REGION`, `S3_ENDPOINT`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_USE_PATH_STYLE` | bucket Credentials tab [buckets] | secret; `drivers/s3` [vk-storage] |
 | `BACKUP_KEY` | 32 bytes base64 | secret, separate from `APP_KEY`, offline copy with the owner |
-| `BACKUP_SOURCE_S3_*` | production bucket credentials | staging only, drill |
+| `BACKUP_SOURCE_S3_*` | production bucket credentials | only where the drill runs (unset today, ADR 0028) |
 | `API_HOST`, `ADMIN_EMAILS` | `api.hexascore.app`, owner | |
 | `MAIL_MAILER` + provider key | `resend` | must be set in production [vk-deploy] |
 | `GOOGLE_*`, session timeouts | per SDD 03 | names [NOT VERIFIED] (SDD 03 issue 7) |
-| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET_<MODE>` | live / test on staging | SDD 05 |
+| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET_<MODE>` | live / test keys | SDD 05 |
 | `TMDB_READ_ACCESS_TOKEN`, `IGDB_TWITCH_CLIENT_ID`, `IGDB_TWITCH_CLIENT_SECRET` | | secret (legacy names shortened) |
 | `OTEL_*` | injected by Railway tracing; `OTEL_METRICS_EXPORTER=none` | Railway receiver is trace-only [vk-deploy], [vk-otel] |
 | `FLAG_PIX_CHECKOUT`, `FLAG_PUBLIC_API_SIGNUP`, `FLAG_SEED_DATA` | `false`, `true`, `false` | names must be lowercase + `_` [vk-flags], so `pix-checkout` → `pix_checkout` |
-| `SEO_NOINDEX` | unset; `true` on staging | disallow-all `robots.txt` and `X-Robots-Tag: noindex, nofollow` |
+| `SEO_NOINDEX` | unset; `true` on a preview or local production build | disallow-all `robots.txt` and `X-Robots-Tag: noindex, nofollow` |
 | `GOMEMLIMIT`, `NODE_OPTIONS` | `900MiB`, `--max-old-space-size=384` | |
 
-Dropped (`legacy/apps/web/lib/env.ts`): `BETTER_AUTH_*`, `UPSTASH_*`, `KV_*`, `BLOB_READ_WRITE_TOKEN`, `CRON_SECRET`, `VERCEL_ENV`, `NEXT_PUBLIC_*`. Legacy crons (`legacy/apps/web/vercel.json`: 00:15, 12:00, 03:00) become scheduler tasks of SDDs 05 and 03. Staging: Stripe test keys, `noindex`, mail allowlist, ingestion on demand.
-
-Staging as built (2026-11-01, owner request; runbook [staging](../runbooks/staging.md)): empty environment `staging` (not a duplicate of production), services `app` (GitHub `main`) and `Postgres-cOb3` (no TCP proxy), bucket `hexascore-staging` (`iad`), URL <https://app-staging-9215.up.railway.app>. `APP_ENV=production` because vukem serves Vite dev assets in any other environment, so `SEO_NOINDEX=true` keeps it out of search engines (`robots.txt` disallow-all and `X-Robots-Tag: noindex, nofollow` on every response; `config.Indexable`). Mail is `MAIL_MAILER=log` instead of an allowlist; billing boots with a placeholder `rk_test_` key and no Stripe account until real test keys exist; Turnstile uses Cloudflare's test keys; no analytics, verification, IndexNow or Bing variables. Data: DemoCatalog seed only.
+Dropped (`legacy/apps/web/lib/env.ts`): `BETTER_AUTH_*`, `UPSTASH_*`, `KV_*`, `BLOB_READ_WRITE_TOKEN`, `CRON_SECRET`, `VERCEL_ENV`, `NEXT_PUBLIC_*`. Legacy crons (`legacy/apps/web/vercel.json`: 00:15, 12:00, 03:00) become scheduler tasks of SDDs 05 and 03. Non-production builds: Stripe test keys, `noindex`, mail allowlist, ingestion on demand.
 
 ### 6.5 Cost sheet
 
@@ -175,13 +173,11 @@ Prices [pricing], [buckets]: RAM US$10/GB-month, CPU US$20/vCPU-month, egress US
 | --- | --- | --- |
 | prod `app` | 0.25 vCPU, 0.45 GB | 9.50 |
 | prod `postgres` | 0.10 vCPU, 0.45 GB, 6 GB volume | 7.40 |
-| staging `app` | 0.03 vCPU, 0.30 GB | 3.60 |
-| staging `postgres` | 0.02 vCPU, 0.25 GB, 6 GB volume | 3.80 |
 | buckets | covers 3 GB × 2 + backups 13 GB | 0.29 |
 | egress | 60 GB (pages + proxied covers) | 3.00 |
-| **Bill (Pro)** | max(20, usage) | **≈ 27.6** |
+| **Bill (Pro)** | max(20, usage) | **≈ 20.2** (≈ 27.6 before the staging rows were removed, ADR 0028) |
 
-Alerts and limit (D-27, amended 2026-11-01): Railway "Custom email alert" at US$15 and hard limit US$20 [pricing], Telegram at US$5, 10, 15 and 20 (SDD 12 A17); the day-20 projected-spend alert is owned by SDD 12 §7.9. Covers are served by the app with `Cache-Control: public, max-age=31536000, immutable` (buckets are private [buckets]); when cover egress exceeds US$5/month (SDD 12 cost review) the CDN decision is triggered (Cloudflare proxy on the cover host, D-28). Above US$15: stop staging `app` between releases (−3.6). Growth (5× traffic, 300k items): app 20 + Postgres 15.8 + egress 300 GB 15 + staging 7.4 ≈ US$58. First purchases: (1) `worker` service (`queue:work`, `schedule:work`; `QUEUE_IN_SERVE=false`, `SCHEDULE_IN_SERVE=false` [vk-sched], ADR 0007); (2) Redis before a second replica (ADR 0003); (3) WAL archiving, RPO ≤ 1 h (ADR 0014).
+Alerts and limit (D-27, amended 2026-11-01): Railway "Custom email alert" at US$15 and hard limit US$20 [pricing], Telegram at US$5, 10, 15 and 20 (SDD 12 A17); the day-20 projected-spend alert is owned by SDD 12 §7.9. Covers are served by the app with `Cache-Control: public, max-age=31536000, immutable` (buckets are private [buckets]); when cover egress exceeds US$5/month (SDD 12 cost review) the CDN decision is triggered (Cloudflare proxy on the cover host, D-28). Growth (5× traffic, 300k items): app 20 + Postgres 15.8 + egress 300 GB 15 + staging 7.4 ≈ US$58. First purchases: (1) `worker` service (`queue:work`, `schedule:work`; `QUEUE_IN_SERVE=false`, `SCHEDULE_IN_SERVE=false` [vk-sched], ADR 0007); (2) Redis before a second replica (ADR 0003); (3) WAL archiving, RPO ≤ 1 h (ADR 0014).
 
 ### 6.6 CI/CD (GitHub Actions on `AlexGalhardo/hexascore-app`)
 
@@ -196,19 +192,19 @@ GitHub Actions is available for `hexascore-app` (D-26; legacy had disabled them 
 | `build` | PR | image build, ≤ 400 MB, no unpinned `FROM` | yes |
 | `e2e` | PR | Playwright + axe vs built container | yes |
 | `lighthouse` | PR | ADR 0004 budgets | yes |
-| `smoke` | staging deploy | k6 smoke `p(95)<500`, 0 errors | gates release |
-| `zap` | weekly | ZAP baseline vs staging | issue on failure |
+| `smoke` | local QA stack | k6 smoke `p(95)<500`, 0 errors | gates release |
+| `zap` | weekly | ZAP baseline vs the local QA stack | issue on failure |
 | `release` | tag `v*`, `workflow_dispatch(version)` | notes from `CHANGELOG.md`, production deploy | — |
 
 `openapi`, `e2e` and `lighthouse` download `image.tar` from `build` and do not run `docker build`. `openapi` exports from that image (`scripts/openapi-check.sh --image`) and fuzzes it (`qa/schemathesis/ci.sh`). `e2e` and `lighthouse` start it with `scripts/ci/qa-up.sh`: compose profile `app`, `--no-build`, DemoCatalog seed. Playwright runs `bun run e2e` (3 locales, desktop and mobile, axe in the specs) and uploads traces on failure. Lighthouse runs `bunx --bun @lhci/cli@0.15.1 autorun` against the five URLs in `lighthouserc.cjs`. Neither job calls staging.
 
-Actions pinned by SHA. Staging: Railway GitHub autodeploy of `main` [vk-deploy]. Production: `release.yml` checks out the tag and runs `railway up --detach` [cli] with a project token (flags [NOT VERIFIED]). Version: `VERSION=$GITHUB_REF_NAME` build arg → `X-Hexascore-Version` header and `about` (inside `/up` [NOT IN VUKEM DOCS]).
+Actions pinned by SHA. Production: `release.yml` checks out the tag and runs `railway up --detach` [cli] with a project token (flags [NOT VERIFIED]). Version: `VERSION=$GITHUB_REF_NAME` build arg → `X-Hexascore-Version` header and `about` (inside `/up` [NOT IN VUKEM DOCS]).
 
 ## 7. Behaviour and algorithms
 
 ### 7.1 Release (ADR 0013; `vukem/docs/tooling.md` "Release process", "Tag pushes" [SITE PAGE MISSING])
 
-1. `main` green, staging smoke green, migration rehearsal done (§7.2).
+1. `main` green, smoke green on the local QA stack, migration rehearsal done (§7.2).
 2. `git-cliff --config .config/cliff.toml --unreleased --tag vX.Y.Z` (preview); `scripts/release.sh vX.Y.Z` (POSIX shell, requires git-cliff; no Task) replaces the body of `[Unreleased]` with the generated section, commits `chore(release): vX.Y.Z`, tags. The range starts after the newest first-parent commit whose tree equals the highest tag's tree (squash releases leave tags off `main`); `--since <rev>` overrides it, and the compare links at the bottom are updated ([release-range runbook](../runbooks/release-range.md)).
 3. `git push origin main`; `git push origin vX.Y.Z` (one tag per push); `gh run list --workflow release.yml`.
 4. Release body from the literal `awk` heading match; empty body fails.
@@ -221,7 +217,7 @@ Rollback: `gh workflow run release.yml -f version=vPREV` (schema stays compatibl
 - Forward-only in production (`down` tested, never run there). Expand → migrate (backfill job, SDD 06 §7.8) → contract two releases later. Each migration runs in its own transaction, rolled back on failure on Postgres [vk-db].
 - Runner: Railway pre-deploy command `/app/hexascore hexascore:predeploy` (`app/console/predeploy.go`, P2.E.1.1; vukem's Railway setup uses `/app/app migrate` [vk-deploy]); on failure "the deployment will not proceed" [predeploy], so the old version keeps serving and new code never boots on an unmigrated schema (run-at-boot would migrate while the old container still serves during overlap). It drops `INVALID` index leftovers of a failed concurrent build (current schema, not partitioned parents, none being built per `pg_stat_progress_create_index`), then runs `migrate`. Since vukem v0.33.0 the runner holds its own `pg_advisory_lock` for the whole run (VF-026), so overlapping runs serialise and the second finds nothing pending; `migrate:locked` (P1.A.4.3) is redundant and retired by ADOPT-VF-040. Switching the Railway pre-deploy command is the owner's deploy change (runbook `docs/runbooks/migrations.md`).
 - Concurrent indexes (VF-017, native since vukem v0.33.0): a one-statement migration with `NoTransaction: true` and `CREATE INDEX CONCURRENTLY IF NOT EXISTS` (Down `DROP INDEX CONCURRENTLY IF EXISTS`), recorded by `migrate:status` like any other. A failed build leaves an `INVALID` index that `IF NOT EXISTS` would skip on retry, which is why `hexascore:predeploy` drops leftovers first (VF-054). Big index builds ship alone in their release (pre-deploy timeout, §8). `database/concurrent/` and `scripts/concurrent-index.sh` (P0.F.5.2 workaround) are not used.
-- Rehearsal before every release with a migration: restore the latest production dump into staging, deploy the candidate, record duration and lock waits; > 5 s `ACCESS EXCLUSIVE` blocks the release.
+- Rehearsal before every release with a migration: restore the latest production dump into a scratch database, deploy the candidate, record duration and lock waits; > 5 s `ACCESS EXCLUSIVE` blocks the release.
 
 ### 7.3 Backups
 
@@ -235,9 +231,9 @@ Rollback: `gh workflow run release.yml -f version=vPREV` (schema stays compatibl
 
 Implementation (P2.E.2.2): `backup:run` uploads, then verifies (`app/backup/verify.go`: the median is over `verified` rows of the same kind from the previous 7 days, none means no size check; `pg_restore --list` runs with an empty environment and must list `TABLE public items|users|ratings`), copies the dump on UTC day 1 to `ObjectKey("monthly", ...)` by decrypting and sealing it again for the new key (frames are bound to their object key, so a byte copy would not decrypt), then prunes by count: the newest 30 daily and 12 monthly objects under each prefix stay (`app/backup/prune.go`). The `backup.*` gauges are registered with the other platform metrics (P2.C.2.2) once the OTel meter exists.
 
-### 7.4 Restore drill (staging, first Sunday 07:00)
+### 7.4 Restore drill (manual since 2026-11-07; first Sunday 07:00 when scheduled)
 
-`backup:drill`: latest production daily via `BACKUP_SOURCE_S3_*` (and `BACKUP_SOURCE_BACKUP_KEY`; each falls back to the unprefixed name) → decrypt → `createdb hexascore_drill` → `pg_restore` on stdin (single job: `-j` needs a seekable file and the plaintext never touches disk; amended 2026-10-29, P2.E.3.1) → row counts vs dump manifest → `catalog:check` asserts (SDD 01 §7.6 plus scoring; SDD 06 §7.7 asserts join in P6) → drop → `backup_runs(kind='drill')`. Pass: < 60 min, 0 assert errors, counts equal. The manifest is written by `backup:run`: row counts of every `public` table taken in a `REPEATABLE READ` transaction whose snapshot `pg_dump --snapshot` reuses, sealed with `BACKUP_KEY` at `backups/manifests/postgres/<kind>/.../<dump name>.json`. Scheduled only where `BACKUP_SOURCE_S3_BUCKET` is set (staging also runs `APP_ENV=production`), weekly Sunday 07:00 with `--first-sunday`. Runbook: `docs/runbooks/restore.md`.
+`backup:drill`: latest production daily via `BACKUP_SOURCE_S3_*` (and `BACKUP_SOURCE_BACKUP_KEY`; each falls back to the unprefixed name) → decrypt → `createdb hexascore_drill` → `pg_restore` on stdin (single job: `-j` needs a seekable file and the plaintext never touches disk; amended 2026-10-29, P2.E.3.1) → row counts vs dump manifest → `catalog:check` asserts (SDD 01 §7.6 plus scoring; SDD 06 §7.7 asserts join in P6) → drop → `backup_runs(kind='drill')`. Pass: < 60 min, 0 assert errors, counts equal. The manifest is written by `backup:run`: row counts of every `public` table taken in a `REPEATABLE READ` transaction whose snapshot `pg_dump --snapshot` reuses, sealed with `BACKUP_KEY` at `backups/manifests/postgres/<kind>/.../<dump name>.json`. Scheduled only where `BACKUP_SOURCE_S3_BUCKET` is set (no deployment sets it since 2026-11-07, ADR 0028), weekly Sunday 07:00 with `--first-sunday`. Runbook: `docs/runbooks/restore.md`.
 
 ### 7.5 RTO runbook
 
@@ -254,7 +250,7 @@ Consistency note (SDD 13 open issue 11, 2026-10-28): after a restore, re-apply a
 
 **Seed users (owner decision 2026-11-01).** The 10,000 legacy users (`@example.test` emails, `legacy_id` `seed-user-*`) are fake. They and their ratings, statuses, lists and time to beat stay in production for now, flagged `users.is_seed` (migration `20261101140000`). A seed user can never sign in (password, remember-me, app tokens, Google, passkeys, password reset all fail closed like a wrong password; `TestSecurity_A07_SeedUserCannotSignIn`). `./app seed:mark --email-suffix @example.test --legacy-prefix seed-user- [--dry-run]` sets the flag (a user must match every filter; admins are never marked). `./app seed:purge [--dry-run] [--batch 500] --confirm` later deletes them in batches (one transaction each; the 31 foreign keys to `users.id` cascade or set null, the tables without a FK are deleted explicitly), then queues the score recompute and the search suggest refresh of the affected items and prints counts per table.
 
-- T-14 d: timed staging rehearsal of steps 2–7 on a fresh Neon copy; Google callback added (SDD 03 §7.7).
+- T-14 d: timed rehearsal on a scratch database of steps 2–7 on a fresh Neon copy; Google callback added (SDD 03 §7.7).
 - T-7 d: `scripts/legacy/blob-export.ts` in this repository (Bun; `legacy/` is read-only, runbook `docs/migration/covers.md`) reads cover URLs **referenced by the DB** (orphans are never copied), uploads to the production bucket under SDD 06 keys, writes `manifest.ndjson {legacyUrl,key,sha256}`; ~79k objects (`legacy/docs/backup-local.md`).
 - T-24 h: DNS TTL 60 s; banner on legacy.
 
@@ -294,9 +290,9 @@ JSON logs on stdout, OTel traces (Railway-injected `OTEL_*` [vk-deploy]), Railwa
 
 - [ ] `docker image inspect hx --format '{{.Config.User}}'` → `app`; compressed size ≤ 400 MB.
 - [ ] `grep -nE ':latest|^FROM [^@]+$' Dockerfile` → no output.
-- [ ] `curl -s https://staging.hexascore.app/up?checks=1` → 200, `db`/`ssr`/`storage` `ok`.
-- [ ] k6 20 rps across a staging redeploy → 0 non-2xx.
-- [ ] Failing migration on staging → deployment failed, previous serving, `migrate:status --json` unchanged.
+- [ ] `curl -s http://localhost:3000/up?checks=1` → 200, `db`/`ssr`/`storage` `ok`.
+- [ ] k6 20 rps across a local redeploy → 0 non-2xx.
+- [ ] Failing migration on the local QA stack → deployment failed, previous serving, `migrate:status --json` unchanged.
 - [ ] `backup:run --kind daily` → `status='verified'`; `backup:drill` → exit 0, `duration_s < 3600`.
 - [ ] Cutover rehearsal: `hexascore:cutover-verify` exit 0; window ≤ 60 min.
 - [ ] `curl -sI https://hexascore.app/up | grep -i x-hexascore-version` → last tag.
@@ -316,7 +312,7 @@ Unit: frame encryption, prune selection. Integration (Postgres 18): concurrent `
 5. SSR supervision inside `serve`, version in `/up`, extra ldflags in `vukem build` [NOT IN VUKEM DOCS]. VF-027; `build:ssr` is a permanent pipeline step (§6.3). Owner: vukem.
 6. Railway Postgres major, extensions, `ALTER SYSTEM`, private hostname, Alpine `postgresql18-client` [NOT VERIFIED] (SDD 07 issue 9). Owner: architect; closes at provisioning.
 7. Queue priority order of `QUEUE_NAMES` for the database driver (SDD 06 issue 5; concurrency now documented [vk-queue]). Owner: vukem.
-8. Railway IaC keys for overlap/draining/restart, config-as-code deprecation, `railway up` flags, wait-for-CI [NOT VERIFIED]. Owner: architect; closes on the first staging deploy.
+8. Railway IaC keys for overlap/draining/restart, config-as-code deprecation, `railway up` flags, wait-for-CI [NOT VERIFIED]. Owner: architect; closes on the first production deploy that uses them.
 9. `credit_ledger` balances. Decided (D-23): honoured as extra quota (SDD 05 §7.2); the import stage writes `api_credit_balances`.
 10. Apex domain DNS. Decided (D-28): Cloudflare with CNAME flattening, proxy off at launch (§6.1). Owner task: move or confirm the zone before T-24 h.
 11. Dumps and database on one provider. Decided (D-32): monthly dump downloaded by the owner via signed link (§7.3 step 6); closes at the first budget increase (external bucket).

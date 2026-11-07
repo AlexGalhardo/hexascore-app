@@ -69,7 +69,7 @@ In the repository *Settings → Environments* create `npm`, `jsr` and `pypi`. Ad
    uv run --no-project --isolated --with hexascore==X.Y.Z python -c "import hexascore; print('ok')"
    ```
 
-7. Tag the commit `sdk-vX.Y.Z` and push the tag. Run the staging smoke tests (`qa/sdk-smoke/`, P3.B.2.2) and record the release in `CHANGELOG.md`.
+7. Tag the commit `sdk-vX.Y.Z` and push the tag. Run the SDK smoke tests against the local QA stack (`qa/sdk-smoke/`, P3.B.2.2) and record the release in `CHANGELOG.md`.
 
 ## Local rehearsal (no network, no login)
 

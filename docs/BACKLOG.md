@@ -7,7 +7,7 @@ Priorities: P0 blocks the public 1.0 · P1 serious · P2 medium · P3 debt. Esti
 | ID | Task | Est. | Depends | Owner | Acceptance | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | B-001 | Deploy the render-cache locale fix (commit 695872f5) to production and verify `/pt-br/games/<slug>` answers `lang="pt-BR"` from a cold and a warm cache | 0.5 | release gate | Senior | curl shows `lang="pt-BR"` with `x-render-cache: HIT`; `TestRenderCacheKeysStrippedLocalePrefix` in CI | W-01, T-07 |
-| B-002 | Nightly score recompute: `queue.Timeout(2h)` + `Retries(1)` on `scoring.recompute_scores`, `recommend.compute_similar`, `recommend.eval_monthly`; resumable cursor in `RecomputeAll`; one-off production run after deploy (owner starts it) | 2 | — | Senior | `go test ./app/scoring ./app/jobs`; staging run logs `recompute scores items=<all>`; `queue:failed` empty the next morning | T-08 |
+| B-002 | Nightly score recompute: `queue.Timeout(2h)` + `Retries(1)` on `scoring.recompute_scores`, `recommend.compute_similar`, `recommend.eval_monthly`; resumable cursor in `RecomputeAll`; one-off production run after deploy (owner starts it) | 2 | — | Senior | `go test ./app/scoring ./app/jobs`; a local QA run logs `recompute scores items=<all>`; `queue:failed` empty the next morning | T-08 |
 
 ## P1
 
@@ -34,7 +34,7 @@ Priorities: P0 blocks the public 1.0 · P1 serious · P2 medium · P3 debt. Esti
 | B-028 | Trending v2 (RFC-002 TR-01..TR-04) | 6.5 | D-40 (seeds excluded) | Senior | see RFC-002 | RFC-002 |
 | B-029 | Catalogue worker streams (RFC-001 CW-03..CW-11) | 22 | B-013 | Senior | see RFC-001 | RFC-001 |
 | B-030 | Offers v1 (RFC-003 OF-01..OF-05, OF-07) | 10 | D-40, B-013; affiliate tags after enrolment | Senior | see RFC-003 | RFC-003 |
-| B-031 | ADR 0025 storage measures on `source_records` (lz4, partitions, cold export) | 2 | — | Senior | size drops ≥ 30 % on a staging copy | ADR 0025 |
+| B-031 | ADR 0025 storage measures on `source_records` (lz4, partitions, cold export) | 2 | — | Senior | size drops ≥ 30 % on a local copy | ADR 0025 |
 | B-032 | Multi-replica readiness note: quota meter atomic counter, scheduler `OnOneServer` plan (no code until ADR 0024 trigger) | 0.5 | — | Senior | `docs/runbooks/scaling.md` | T-10, ADR 0024 |
 | B-033 | Cleanup remainder per `docs/audit/CLEANUP.md`: B5/B6 Temp worktrees (owner command), B8 review of the 14 kept branches (cherry-pick `P2.F-data-migration` S3 retry and `manual-access` CI gate if still relevant, delete the rest), D1 Docker prune | 1 | — | Senior | `git worktree list` shows only the main checkout; branches listed in CLEANUP.md E | CLEANUP |
 | B-034 | Task board rewrite (`.orchestration/queue/TASKS.md`) to the new PROMPT-WORKERS protocol; archive merged rows | 0.5 | — | Intern | board has only open rows | T-25 |

@@ -34,7 +34,7 @@ In (v1): shell, SSR, routing/i18n, §6.2 pages, components, tokens, budgets, acc
 | NFR-09-1 | LCP, mobile emulation (Moto G Power, slow 4G) | ≤ 2.5 s (was 2.0 s; raised per Q-A20) | Lighthouse CI, median of 3 runs |
 | NFR-09-2 | INP | ≤ 150 ms field (p75); lab proxy TBT ≤ 200 ms (open issue 09-11) | Lighthouse CI TBT; Playwright Event Timing on star click; field: `web-vitals` beacon (LCP, INP, CLS, TTFB; opt-in, anonymous) to `POST /app/v1/client-metrics` (SDD 05 §6.4, SDD 12) |
 | NFR-09-3 | CLS | ≤ 0.05 | Lighthouse CI |
-| NFR-09-4 | TTFB p75 (SSR, staging) | ≤ 400 ms; ≤ 150 ms on props-cache hit | k6 + SDD 12 histogram |
+| NFR-09-4 | TTFB p75 (SSR, local QA stack) | ≤ 400 ms; ≤ 150 ms on props-cache hit | k6 + SDD 12 histogram |
 | NFR-09-5 | JS on item page | ≤ 170 kB gzip total (was 150 kB; raised per Q-A20), ≤ 90 kB before interaction | Lighthouse `resource-summary` + `bun run size` |
 | NFR-09-6 | CSS | ≤ 30 kB gzip | same |
 | NFR-09-7 | Fonts | ≤ 3 WOFF2 files, ≤ 100 kB total, `font-display: swap`, 1 preload | Lighthouse |

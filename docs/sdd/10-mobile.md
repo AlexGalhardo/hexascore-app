@@ -22,7 +22,7 @@ Out of scope: billing, API keys, admin (D-12); edit suggestions (later, SDD 04 `
 - **FR-10-2:** The token comes from password (+2FA) or a Google ID token and lives only in SecureStore. Verify: Maestro `login.yaml`; Jest test that the token never enters the query cache.
 - **FR-10-3:** The star widget sets 0.5–10.0 in 0.5 steps with one tap and fires a selection haptic. It is `adjustable` for TalkBack (§7.5). Verify: Jest + RNTL; TalkBack checklist.
 - **FR-10-4:** Rating, status and time-to-beat writes are optimistic, queued offline, and the server wins on conflict (§7.3). Verify: Jest; Maestro airplane-mode flow.
-- **FR-10-5:** A blocking update screen appears on a 426 `app-upgrade-required` or when `X-App-Min-Version` exceeds the running version. Logout still works there. Verify: Jest; staging with `APP_MIN_SUPPORTED_VERSION` raised.
+- **FR-10-5:** A blocking update screen appears on a 426 `app-upgrade-required` or when `X-App-Min-Version` exceeds the running version. Logout still works there. Verify: Jest; local QA stack with `APP_MIN_SUPPORTED_VERSION` raised.
 - **FR-10-6:** The locale is the first supported entry of `getLocales()` [E10], matched by language, else `en`. An in-app override is saved via `PATCH /me {locale}`. Verify: Jest key-completeness.
 - **FR-10-7:** Web URLs `/{,pt-br/,es/}{games|movies|series|books}/{slug}` and `/entities/{id}` open in-app via verified App Links. Verify: `adb shell pm get-app-links app.hexascore` → `verified`.
 - **FR-10-8:** Profile → Delete account calls `POST /me/deletion` after a 10 s countdown (FR-03-15). The listing carries a web URL (§7.8). Verify: Maestro.
@@ -204,16 +204,16 @@ The Go app serves `GET /.well-known/assetlinks.json` [E12] via `r.Get` ([V1] "De
 - `bun run --cwd apps/mobile test` → pass, with coverage ≥ 80 % on `src/rating`, `src/queue` and `src/auth`.
 - `vukem openapi:export -prefix /app/v1 | diff - openapi/app-v1.json` → empty ([V2]).
 - `vukem codegen:client -prefix /app/v1 -o packages/app-client/src/api.ts && git diff --exit-code packages/app-client` → no diff, then typecheck green ([V3] "The command": runs in warmup mode, no secrets needed in CI).
-- `maestro test .maestro/smoke/` (staging) → `login`, `rate-item`, `add-to-list`, `offline-rating` and `deep-link` pass.
-- `curl -si https://staging.hexascore.app/.well-known/assetlinks.json` → 200 `application/json`, package `app.hexascore`, both fingerprints.
-- `curl -si -H "X-App-Version: 0.0.1" -H "Authorization: Bearer $T" https://staging.hexascore.app/app/v1/me` → 426 `app-upgrade-required`.
+- `maestro test .maestro/smoke/` (local QA stack) → `login`, `rate-item`, `add-to-list`, `offline-rating` and `deep-link` pass.
+- `curl -si http://localhost:3000/.well-known/assetlinks.json` → 200 `application/json`, package `app.hexascore`, both fingerprints.
+- `curl -si -H "X-App-Version: 0.0.1" -H "Authorization: Bearer $T" http://localhost:3000/app/v1/me` → 426 `app-upgrade-required`.
 - Reference device → TotalTime p90 ≤ 2500 ms (cached), ≤ 5 % janky frames, AAB download ≤ 25 MB.
 - `grep -rE "hx_app_|sk_live|APP_KEY" apps/mobile/dist` → no match.
 
 ## 10. Test strategy
 
 - **Unit:** Jest, `jest-expo` preset (Vitest on RN [NOT VERIFIED]): widget, per-locale formatters, locale matcher, queue (dedupe, backoff, rollback), rotation window, problem-code mapping.
-- **Contract:** CI regenerates the client and typechecks; integration against staging fixtures (SDD 11).
+- **Contract:** CI regenerates the client and typechecks; integration against the local QA stack fixtures (SDD 11).
 - **E2E: Maestro over Detox.** EAS Workflows run Maestro natively [E13]; YAML flows need no native harness (Detox does, and CNG has no `android/`); flows carry over to iOS.
 - **Accessibility:** role/label queries in screen tests; per-release TalkBack + 200 % font check; Accessibility Scanner on 8 screens, 0 findings.
 - **Release checklist:** target API, data safety, assetlinks, deletion URL, min version, OTA rule, staged rollout.

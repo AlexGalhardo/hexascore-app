@@ -1,6 +1,6 @@
 # k6 baseline
 
-Measured 2026-10-30 on a developer laptop (Docker Desktop, Windows 11), app container built from `main` plus P1.I.3.1, compose profile `app` (`COMPOSE_PROJECT_NAME=hx-senior`), demo catalogue (300 items, `DemoCatalog` seeder). k6 `grafana/k6:2.3.0` with `--network host`, 60 s per scenario. **This is not the NFR dataset** (500k items, staging): it proves the scripts and the thresholds' plumbing, and the numbers are a floor, not a capacity statement. Re-run on staging (P2.F) and replace this table.
+Measured 2026-10-30 on a developer laptop (Docker Desktop, Windows 11), app container built from `main` plus P1.I.3.1, compose profile `app` (`COMPOSE_PROJECT_NAME=hx-senior`), demo catalogue (300 items, `DemoCatalog` seeder). k6 `grafana/k6:2.3.0` with `--network host`, 60 s per scenario. **This is not the NFR dataset** (500k items): it proves the scripts and the thresholds' plumbing, and the numbers are a floor, not a capacity statement. Re-run on a large local copy (P2.F) and replace this table.
 
 ## Setup
 
@@ -25,6 +25,6 @@ docker run --rm --network host -e BASE_URL=http://127.0.0.1:3000 -e API_KEYS -e 
 
 ## Not covered here
 
-- `search.js` and `rating-hot-item.js` (existing, unchanged): `rating-hot-item.js` needs 50 `/app/v1` tokens and an item with ~10,000 ratings; `search.js` needs `SEARCH_CACHE=off`. Both belong to the staging run.
+- `search.js` and `rating-hot-item.js` (existing, unchanged): `rating-hot-item.js` needs 50 `/app/v1` tokens and an item with ~10,000 ratings; `search.js` needs `SEARCH_CACHE=off`. Both belong to the large-dataset run.
 - `DURATION=10m` for the full NFR-05-1 run; the 500k-item dataset.
-- Open issue 09-3 (TTFB without an SSR output cache): passes on the demo catalogue, so the VF-025 anonymous HTML cache workaround is not opened as a microtask; confirm on staging data.
+- Open issue 09-3 (TTFB without an SSR output cache): passes on the demo catalogue, so the VF-025 anonymous HTML cache workaround is not opened as a microtask; confirm on production data (read-only, owner approval).
