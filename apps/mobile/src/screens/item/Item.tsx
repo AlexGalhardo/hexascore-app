@@ -15,6 +15,7 @@ import { StatusSheet } from "../../status/StatusSheet";
 import { TimeToBeatSheet } from "../../status/TimeToBeatSheet";
 import { Button } from "../../ui/Button";
 import { formatScore } from "../../ui/format";
+import { Screen } from "../../ui/Screen";
 import { EditionsList } from "../../ui/screens/EditionsList";
 import {
 	ItemDetail,
@@ -231,41 +232,45 @@ export function ItemView({
 				<Attribution item={resolved} locale={locale} />
 			</ItemDetail>
 			<Modal visible={sheet !== null} animationType="slide" onRequestClose={() => setSheet(null)}>
-				{sheet === "status" ? (
-					<StatusSheet
-						itemId={id}
-						type={type}
-						current={statusOf(me.data)}
-						locale={locale}
-						onDone={() => setSheet(null)}
-					/>
-				) : null}
-				{sheet === "list" && lists ? (
-					<AddToListSheet
-						deps={lists}
-						itemId={id}
-						type={SINGULAR[type] as ListType}
-						locale={locale}
-						onDone={() => setSheet(null)}
-					/>
-				) : null}
-				{sheet === "timeToBeat" ? (
-					<TimeToBeatSheet
-						itemId={id}
-						current={timeToBeatOf(me.data)}
-						locale={locale}
-						onDone={() => setSheet(null)}
-					/>
-				) : null}
+				<Screen>
+					{sheet === "status" ? (
+						<StatusSheet
+							itemId={id}
+							type={type}
+							current={statusOf(me.data)}
+							locale={locale}
+							onDone={() => setSheet(null)}
+						/>
+					) : null}
+					{sheet === "list" && lists ? (
+						<AddToListSheet
+							deps={lists}
+							itemId={id}
+							type={SINGULAR[type] as ListType}
+							locale={locale}
+							onDone={() => setSheet(null)}
+						/>
+					) : null}
+					{sheet === "timeToBeat" ? (
+						<TimeToBeatSheet
+							itemId={id}
+							current={timeToBeatOf(me.data)}
+							locale={locale}
+							onDone={() => setSheet(null)}
+						/>
+					) : null}
+				</Screen>
 			</Modal>
 			<Modal visible={rating} animationType="slide" onRequestClose={() => setRating(false)}>
-				<RateSheet
-					itemId={id}
-					type={type}
-					initial={ratingOf(me.data)}
-					locale={locale}
-					onDone={() => setRating(false)}
-				/>
+				<Screen>
+					<RateSheet
+						itemId={id}
+						type={type}
+						initial={ratingOf(me.data)}
+						locale={locale}
+						onDone={() => setRating(false)}
+					/>
+				</Screen>
 			</Modal>
 		</>
 	);
