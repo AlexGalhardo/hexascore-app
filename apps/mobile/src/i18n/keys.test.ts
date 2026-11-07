@@ -39,3 +39,17 @@ test("plural messages format with Intl.PluralRules", () => {
 	expect(one).not.toBe(key);
 	expect(many).not.toBe(one);
 });
+
+test("plural messages still format when the runtime has no Intl.PluralRules (Hermes)", () => {
+	const original = Intl.PluralRules;
+	Object.defineProperty(Intl, "PluralRules", { value: undefined, configurable: true });
+	try {
+		const messages = { items: { one: "{count} item", other: "{count} items" } };
+		expect(translate(messages, "en", "items", { count: 1 })).toBe("1 item");
+		expect(translate(messages, "en", "items", { count: 2 })).toBe("2 items");
+		expect(translate(messages, "pt-BR", "items", { count: 0 })).toBe("0 item");
+		expect(translate(messages, "pt-BR", "items", { count: 2 })).toBe("2 items");
+	} finally {
+		Object.defineProperty(Intl, "PluralRules", { value: original, configurable: true });
+	}
+});
