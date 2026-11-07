@@ -58,6 +58,7 @@ function offline(element: ReactElement): ReactElement {
 
 // Expo Router provides the SafeAreaProvider at runtime; the router is mocked here.
 jest.mock("react-native-safe-area-context", () => ({
+	SafeAreaInsetsContext: require("react").createContext(null),
 	useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
 }));
 
