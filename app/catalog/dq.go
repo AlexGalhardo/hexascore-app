@@ -136,7 +136,7 @@ UNION SELECT id::text FROM editions WHERE language = 'und'`,
 			`SELECT i.id::text FROM items i, jsonb_each_text(i.provenance) p
 WHERE p.value NOT IN (SELECT code FROM data_sources)
 UNION SELECT e.id::text FROM entities e, jsonb_each_text(e.provenance) p
-WHERE p.value NOT IN (SELECT code FROM data_sources)`,
+WHERE p.key <> 'canonical' AND p.value NOT IN (SELECT code FROM data_sources)`,
 		},
 		{
 			"DQ-12", LevelWarn, "entity_stats refreshed more than 2 hours ago",
