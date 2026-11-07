@@ -15,18 +15,17 @@ describe("fonts", () => {
 	) as [string, { android: { fonts: FontObject[] } }] | undefined;
 	const families = plugin?.[1].android.fonts ?? [];
 
-	test("expo-font embeds Inter 400/600/700 and Playfair Display 700 from local OFL files", () => {
+	test("expo-font embeds Inter 400/600/700 (the only family, as on the web) from local OFL files", () => {
 		const weights = Object.fromEntries(
 			families.map((family) => [family.fontFamily, family.fontDefinitions.map((d) => d.weight)]),
 		);
-		expect(weights).toEqual({ Inter: [400, 600, 700], "Playfair Display": [700] });
+		expect(weights).toEqual({ Inter: [400, 600, 700] });
 		for (const family of families) {
 			for (const definition of family.fontDefinitions) {
 				expect(existsSync(join(__dirname, "../..", definition.path))).toBe(true);
 			}
 		}
 		expect(existsSync(join(__dirname, "../../assets/fonts/Inter-OFL.txt"))).toBe(true);
-		expect(existsSync(join(__dirname, "../../assets/fonts/PlayfairDisplay-OFL.txt"))).toBe(true);
 	});
 
 	test("NativeWind font-display and font-text use the embedded families", () => {
@@ -34,7 +33,7 @@ describe("fonts", () => {
 			display: [fontFamily.display],
 			text: [fontFamily.text],
 		});
-		expect(fontFamily).toEqual({ display: "Playfair Display", text: "Inter" });
+		expect(fontFamily).toEqual({ display: "Inter", text: "Inter" });
 	});
 });
 
