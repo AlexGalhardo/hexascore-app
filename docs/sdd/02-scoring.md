@@ -31,9 +31,9 @@ Out of scope: written reviews, critic scores (D-09), feed/follows (D-06), collab
 
 ## 4. Non-functional requirements
 
-- NFR-02-1: Rating write p95 ≤ 60 ms server time on an item with 10,000 ratings. Verified: k6 on staging (`qa/k6/rating-hot-item.js`). Feasibility measured in P1.D.2.2: the recompute statement alone is p95 28.6 ms on 5,000 ratings and 48.4 ms on 10,000 (local Postgres 18.6, `TestRecomputeLatencyHotItem`), so no covering index was added; the end-to-end write figure from staging is still to be recorded.
+- NFR-02-1: Rating write p95 ≤ 60 ms server time on an item with 10,000 ratings. Verified: k6 on the local QA stack (`qa/k6/rating-hot-item.js`). Feasibility measured in P1.D.2.2: the recompute statement alone is p95 28.6 ms on 5,000 ratings and 48.4 ms on 10,000 (local Postgres 18.6, `TestRecomputeLatencyHotItem`), so no covering index was added; the end-to-end write figure from staging is still to be recorded.
 - NFR-02-2: Read path uses denormalised columns only. Verified: query-count test per request.
-- NFR-02-3: Nightly recompute of 100,000 rated items ≤ 20 min, batches of 500 items, 100 ms pause (D-08 single process). Verified: timed staging run.
+- NFR-02-3: Nightly recompute of 100,000 rated items ≤ 20 min, batches of 500 items, 100 ms pause (D-08 single process). Verified: timed run on the local QA stack.
 - NFR-02-4: No lost updates with 50 concurrent writers on one item; no deadlocks across rating, status and nightly paths. Verified: Postgres test, 100 runs.
 - NFR-02-5: Flags, weights and detector data are admin-only; a user's individual ratings are public only via the profile (SDD 03); `rating_events` kept 180 days, pruned daily. Verified: authorisation and prune tests.
 - NFR-02-6: Formula changes ship only as a new `score_formula_versions` row announced on the help page and API changelog (SDD 05) ≥ 14 days before activation. Verified: release checklist.
@@ -221,7 +221,7 @@ Weight factors:
 
 Prior `C_{t,k}`: mean over items of type `t` with `N ≥ 5` of their weighted raw means `S_k / W`, item-level so blockbusters do not dominate; if fewer than 20 such items, `C_{t,k} = 60` (6.0 stars). Rebuilt nightly into `score_priors` before items are recomputed.
 
-Default `m_t` (version 1): game 10, movie 10, series 8, book 8 [NOT VERIFIED against the migrated distribution]; seeded as version 1 by migration `20261029120001_seed_score_formula_v1` (P1.D.1.2). Reminder for P2.F: measure the median N per type on the first staging copy and, if needed, add version 2. Tuning, at most quarterly on production data: `m_t = clamp(median N over items of type t with N ≥ 1, 5, 50)`. Any change to `m_t`, weights, thresholds or the prior rule is a new `score_formula_versions` row (`params` + changelog), activated by migration ≥ 14 days after announcement (NFR-02-6) and followed by a full recompute; API `formulaVersion` is the active version.
+Default `m_t` (version 1): game 10, movie 10, series 8, book 8 [NOT VERIFIED against the migrated distribution]; seeded as version 1 by migration `20261029120001_seed_score_formula_v1` (P1.D.1.2). Reminder for P2.F: measure the median N per type on the first copy of production data and, if needed, add version 2. Tuning, at most quarterly on production data: `m_t = clamp(median N over items of type t with N ≥ 1, 5, 50)`. Any change to `m_t`, weights, thresholds or the prior rule is a new `score_formula_versions` row (`params` + changelog), activated by migration ≥ 14 days after announcement (NFR-02-6) and followed by a full recompute; API `formulaVersion` is the active version.
 
 Confidence (`SE` on the 0–100 scale, weighted standard deviation `σ = sqrt(Σ w_u (overall_u − S/W)² / W)`, `SE = σ / sqrt(W)`):
 
@@ -319,7 +319,7 @@ i18n: labels in `resources/lang/<locale>.json` as `categories.game.gameplay` etc
 ## 11. Open issues
 
 1. Release-date precision and lifecycle field. Decided (02-1): SDD 01 `release_precision` and `release_status`; §7.4 uses them.
-2. Default `m_t` and fallback prior 60 unverified; measure median rating count per type on migrated data (A-04). Owner: architect. Closes after the first staging data copy.
+2. Default `m_t` and fallback prior 60 unverified; measure median rating count per type on migrated data (A-04). Owner: architect. Closes after the first copy of production data.
 3. Recompute latency on 10k-rating items (NFR-02-1) unmeasured; if over budget, add a covering index. Owner: architect. Closes after the k6 run.
 4. Admin custom row actions are [NOT IN VUKEM DOCS]; bursts/flags use custom routes. Owner: vukem. Closes when `vukem-feedback.md` entry is answered.
 5. orm handling of generated columns (`ratings.overall`) on insert/update is [NOT IN VUKEM DOCS] (legacy Drizzle needed raw SQL). Owner: vukem. Closes with a test or doc entry.

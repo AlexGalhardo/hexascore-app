@@ -19,4 +19,4 @@ Why this rule exists: on 2026-11-02 the audit found the nightly score recompute,
 - Scheduled tasks use `WithoutOverlapping()`, name the time zone when the hour matters (`.In(saoPaulo)`), and stay clear of the 04:00-05:30 window reserved for scores, prunes and data-quality asserts unless they belong there (`routes/schedule.go` comments list the slots).
 - A new table written by a job gets a retention window and a prune task in the same change (SDD 11 §5 lists them); user-linked rows also get an erasure entry in the account purge (`app/accounts/deletion.go`).
 - Alerts are log lines `alert=A<n>` with the codes of SDD 12 §6; the Telegram notifier picks them up. New codes go into SDD 12 first.
-- Production is never a test bed: new jobs run on staging with the DemoCatalog seed before the flag is turned on in production.
+- Production is never a test bed: new jobs run on the local QA stack with the DemoCatalog seed before the flag is turned on in production.

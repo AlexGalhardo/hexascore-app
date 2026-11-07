@@ -158,7 +158,7 @@ Business and queue figures (suggestion queue age, ratings per day, active keys, 
   - outbound calls (sources and the SSR POST) through `httpclient.Options.WrapTransport`.
 
   Spans never carry paths or query strings [V-otel "Outbound HTTP calls", "Security"].
-- Sampler: `parentbased_traceidratio`. `OTEL_TRACES_SAMPLER_ARG` is 0.1 in production and 1.0 in staging.
+- Sampler: `parentbased_traceidratio`. `OTEL_TRACES_SAMPLER_ARG` is 0.1 in production and 1.0 in the local QA stack.
 - Destination: Railway's OTLP receiver. It accepts "traces only", keeps them for the log retention period, and has a limit of 1,000 spans per 10 s per replica. It needs `OTEL_METRICS_EXPORTER=none` [R-trace; V-otel].
 - Correlation: responses carry `X-Request-ID` (vukem) and `X-Trace-ID` (app middleware). Making request id equal trace id is [NOT IN VUKEM DOCS] (issue 2).
 
@@ -376,9 +376,9 @@ Budget-increase predictors (the first step is splitting out the worker, D-08):
 ## 9. Acceptance criteria
 
 - `go test ./... -run 'TestLog_|TestReady_|TestSecurity_A09_Hexa'` passes.
-- `curl -s https://staging.hexascore.app/up?checks=1` returns 200 with all four checks `ok`.
+- `curl -s http://localhost:3000/up?checks=1` returns 200 with all four checks `ok`.
 - After `pkill node`, the same call returns 503 with `ssr: fail`, and a Telegram page arrives within 5 min.
-- `curl -sI https://staging.hexascore.app/` shows `X-Request-ID` and `X-Trace-ID`, and the trace id opens in Railway's trace view.
+- `curl -sI http://localhost:3000/` shows `X-Request-ID` and `X-Trace-ID`, and the trace id opens in Railway's trace view.
 - `railway logs` lines parse as JSON with `level`, `request_id` and `route`, and a scripted grep finds no email pattern.
 - Each in-app check writes its `alert=<code>` line on a fixture that breaches it, and nothing when it does not.
 - The Railway usage page shows the US$15 email alert and the US$20 hard limit.
@@ -399,7 +399,7 @@ Budget-increase predictors (the first step is splitting out the worker, D-08):
 4. The Railway plan (Hobby or Pro) sets log retention (7 or 30 days) and whether monitors exist. Owner: architect (SDD 11). Closes when SDD 11 records the plan.
 5. Status page hosting. Decided (12-5): GitHub Pages (§7.7).
 6. SDD 08 metric names. Decided (12-6): §6.2 names are canonical; SDD 08 aligned.
-7. Metric Views to drop high-cardinality attributes are [NOT IN VUKEM DOCS]. Owner: vukem. Trigger: staging series above 6,000.
+7. Metric Views to drop high-cardinality attributes are [NOT IN VUKEM DOCS]. Owner: vukem. Trigger: series above 6,000 in production.
 8. Railway monitor options (metrics offered, webhook delivery, plan) are [NOT VERIFIED] until the Pro plan is on. Owner: architect. Closes in the observability roadmap task.
 9. Railway hard usage limit. Decided (D-27, amended 2026-11-01): US$20, e-mail alert US$15, Telegram thresholds and the day-20 projection alert A17.
 10. Site documentation gaps, all [SITE PAGE MISSING]. Owner: vukem. Closes when a logging/health page is published.

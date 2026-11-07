@@ -1,10 +1,12 @@
 # Postgres cost reduction (owner-run)
 
-**Owner-run.** Nothing here is automated or executed by an agent. Every step touches Railway (production or staging) and needs the owner's explicit go. Decision behind it: [ADR 0027](../adrs/0027-stay-on-postgres.md) (stay on Postgres, SQLite deferred), which follows `sqlite-problems.md` option (c). Savings are the estimates of that document (about US$4 to 6 a month in total), not measurements; re-check the Railway prices before starting. Statements marked [NOT VERIFIED] have not been checked against the Railway docs or a live project.
+**Owner-run.** Nothing here is automated or executed by an agent. Every step touches Railway (production) and needs the owner's explicit go. Decision behind it: [ADR 0027](../adrs/0027-stay-on-postgres.md) (stay on Postgres, SQLite deferred), which follows `sqlite-problems.md` option (c). Savings are the estimates of that document (the staging part of the US$4 to 6 a month in total is already realised by deleting staging), not measurements; re-check the Railway prices before starting. Statements marked [NOT VERIFIED] have not been checked against the Railway docs or a live project.
+
+Staging is gone: the owner deleted the `staging` environment on 2026-11-07 ([ADR 0028](../adrs/0028-staging-removed.md)), which already removed its Postgres and the US$3.80 a month it cost. Folding staging into the production instance is no longer a step. The remaining levers are the pool, `shared_buffers` and the volume.
 
 Rules for the whole runbook:
 
-- Do one section at a time, in this order: measure, pool, staging, volume.
+- Do one section at a time, in this order: measure, pool, volume.
 - Take a fresh dump before any change that touches production data or the volume: `railway run --service app /app/app backup:run --kind daily`, then confirm the object in the bucket (see [restore](restore.md)).
 - Every section ends with a rollback. Keep the previous value of every variable you change in your notes.
 - Never print secrets. Variables are set by name, values are piped or referenced (`${{Postgres.PGPASSWORD}}`).
@@ -49,41 +51,12 @@ The application default comes from vukem (`DB_MAX_OPEN` 10, `DB_MAX_IDLE` 5); pr
 
 1. Do section 0 first. Proceed only if the busiest observed `numbackends` from the app stays below 8.
 2. Set `DB_MAX_OPEN=12` and `DB_MAX_IDLE=6` on `app` in the production environment, redeploy, watch A12 for 24 hours (the alert fires at 80 % of `DB_MAX_OPEN`, so it now fires at about 10 in use).
-3. Fewer idle connections lower Postgres memory a little; it does not change the plan price by itself. The saving comes only if step 4 lowers the memory or CPU you are billed for.
+3. Fewer idle connections lower Postgres memory a little; it does not change the plan price by itself. The saving comes only if the `shared_buffers` change in step 4 lowers the memory or CPU you are billed for.
 4. Optionally lower Postgres `shared_buffers` (SDD 11 §5 sets 256 MB, `max_connections=60`) if memory use stays under half of it: `ALTER SYSTEM SET shared_buffers = '128MB';` needs a restart of the Postgres service [NOT VERIFIED that Railway allows `ALTER SYSTEM`; ADR/SDD 11 §5 notes the same].
 
 Rollback: set `DB_MAX_OPEN=20` and `DB_MAX_IDLE=10`, redeploy; `ALTER SYSTEM RESET shared_buffers;` and restart Postgres.
 
-## 3. Merge staging into the production Postgres instance
-
-Goal: delete the staging Postgres service (about US$3.80 a month) and keep one instance with two databases.
-
-Constraint to check first [NOT VERIFIED]: staging is a separate Railway environment of the project ([staging](staging.md)). Private-network hostnames and `${{Service.VAR}}` references resolve inside one environment, so an app in the `staging` environment cannot reach the production Postgres privately. Using its public TCP proxy would add egress cost and expose the database, so do not do that. Two workable shapes:
-
-**A. Second app service in the production environment (recommended if the saving is wanted).**
-
-1. Dump production as in the rules above, and confirm the dump restores ([restore](restore.md)).
-2. Create the database on the production instance, from `railway connect Postgres`:
-
-```sql
-CREATE DATABASE hexascore_staging OWNER <the role in PGUSER>;
-```
-
-3. In the production environment add a service `app-staging` from the same repository and branch as `app`, with its own domain `staging.hexascore.app`, the staging variables of [staging](staging.md) (billing off, `MAIL_MAILER=log`, `SEO_NOINDEX=true`, Turnstile test keys, `FLAG_INGEST_ENABLED=false`) and:
-
-   `DATABASE_URL` = the production connection string with the path replaced by `/hexascore_staging` (reference the `Postgres` variables, do not paste the password).
-
-   Give it its own bucket `hexascore-staging` and its own `APP_KEY`; never reuse production values. Set `DB_MAX_OPEN=4` so it cannot starve production.
-4. Deploy; the pre-deploy runs `migrate` against `hexascore_staging` only. Confirm with `SELECT current_database();` in a staging session and that production tables are untouched.
-5. After a week of staging working, remove the old `staging` environment (or just its `Postgres-cOb3` service and volume) in Railway.
-
-Rollback: delete `app-staging`, then `DROP DATABASE hexascore_staging;`. If the old staging Postgres was already deleted, recreate staging from the [staging](staging.md) runbook (it is seeded with the fake dataset, nothing in it is irreplaceable).
-
-**B. Ephemeral staging.** Keep the `staging` environment but only start its Postgres (and app) when needed, and delete the volume afterwards; the dataset is fake and reseeded by `vukem db:seed DemoCatalog`. Saves the same money with no cross-environment problem, costs a few minutes per use.
-
-Whatever shape: the production database name stays as is, and no migration may ever be run with a staging `DATABASE_URL` pointed at `hexascore`.
-
-## 4. Volume size
+## 3. Volume size
 
 Production data is about 3.6 GB planned (SDD 11 §5) against a 6 GB volume; ADR 0024 measured 5.55 GB used on a 10 GB disk at an import peak. Do this only after sections 0 and 1 show steady use well below the volume.
 
@@ -97,8 +70,7 @@ Rollback: switch `DATABASE_URL` back to the old service. Writes made after the s
 
 | Step | Estimated saving (US$ per month, from `sqlite-problems.md`) | Effort |
 | --- | --- | --- |
-| 3 merge or ephemeral staging | about 3.80 | 1 day |
-| 4 volume and 1 history export | about 0.40 | 0.5 day |
+| 3 volume and 1 history export | about 0.40 | 0.5 day |
 | 2 pool, `shared_buffers`, CPU | about 1 to 2 | 0.5 day |
 
 Record the real before and after figures of `railway usage` in this file when the owner has run a step.

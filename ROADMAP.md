@@ -2,8 +2,8 @@
 
 ## Production catalogue worker
 
-- [ ] Align the staging web and worker on the same tested revision. Set `QUEUE_CONNECTION=database` on both, enable matching ingestion source flags, and confirm scheduled jobs reach the `ingest` queue.
-- [ ] Complete the M0 staging proof in [the worker runbook](docs/runbooks/worker.md): seven healthy days; at least 1,000 refreshed items; at least 97% accuracy in the sample; healthy heartbeat, failed queue and digest; cover coverage and spend within the RFC-001 limits.
+- [ ] Align the production web and worker on the same tested revision (the staging environment was removed on 2026-11-07, ADR 0028). Set `QUEUE_CONNECTION=database` on both, enable matching ingestion source flags, and confirm scheduled jobs reach the `ingest` queue.
+- [ ] Complete the M0 proof, now run in production behind the ingest flags, in [the worker runbook](docs/runbooks/worker.md): seven healthy days; at least 1,000 refreshed items; at least 97% accuracy in the sample; healthy heartbeat, failed queue and digest; cover coverage and spend within the RFC-001 limits.
 - [ ] After M0, provision and run the production Railway worker continuously, then record 24-hour throughput, freshness, failures, memory and cost. Follow the runbook's rollback steps if the checks fail.
 - [ ] Implement and validate the discovery and per-source stale-record selection needed to move through the 250k, 500k and 1M catalogue gates; include trailer verification v2 and source-terms review before enabling each source in production.
 

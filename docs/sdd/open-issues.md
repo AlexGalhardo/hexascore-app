@@ -13,8 +13,8 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 01 | 7 | Licence of HexaScore's own data | decided | A-07 in brainstorming.md. |
 | 01 | 8 | Sitemap helper missing; thin entity pages | vukem + decided | VF-007 for the helper. Entities enter the sitemap only with ≥ 3 linked items; others are `noindex,follow` until they qualify. |
 | 02 | 1 | Release-date precision and lifecycle field needed for the release gate | decided | SDD 01 gains `release_precision` (`day`, `month`, `year`, `unknown`) and `release_status` (`announced`, `released`, `cancelled`); applied in the review pass. |
-| 02 | 2 | Default `m` per type and prior unverified | roadmap | Measure on the first staging copy; formula v1 constants frozen before cutover. |
-| 02 | 3 | Recompute latency on 10k-rating items unmeasured | decided | P1.D.2.2 measured the recompute statement: p95 28.6 ms at 5,000 and 48.4 ms at 10,000 ratings, under the 60 ms bar, so no covering index. The k6 scenario `qa/k6/rating-hot-item.js` re-checks the end-to-end write on staging. |
+| 02 | 2 | Default `m` per type and prior unverified | roadmap | Measure on the first copy of production data; formula v1 constants frozen before cutover. |
+| 02 | 3 | Recompute latency on 10k-rating items unmeasured | decided | P1.D.2.2 measured the recompute statement: p95 28.6 ms at 5,000 and 48.4 ms at 10,000 ratings, under the 60 ms bar, so no covering index. The k6 scenario `qa/k6/rating-hot-item.js` re-checks the end-to-end write on the local QA stack. |
 | 02 | 4 | Admin custom row actions not in vukem docs | vukem | VF-008. Custom admin routes in the app. |
 | 02 | 5 | ORM handling of generated column `ratings.overall` | vukem | VF-009. Test at implementation; fall back to raw SQL insert. |
 | 02 | 6 | Delivering i18n catalogues to Inertia/React | decided | SDD 09 specifies: catalogues served as a shared Inertia prop per locale (`Once`), same JSON files as mobile (ADR 0009). |
@@ -49,7 +49,7 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 05 | 8 | Keyset cursors on allowlisted sort columns | vukem | VF-005 (same). |
 | 05 | 9 | Problem code casing differs across SDDs | decided | kebab-case convention; SDD 03 updated in the review pass. |
 | 05 | 10 | Legacy prices and limits need owner review | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round. |
-| 05 | 11 | Per-field API coverage unmeasured | roadmap | `qa/sql/api_coverage.sql` runs on the first staging copy; numbers go to the pricing/docs pages. |
+| 05 | 11 | Per-field API coverage unmeasured | roadmap | `qa/sql/api_coverage.sql` runs on the first copy of production data; numbers go to the pricing/docs pages. |
 | 07 | 1 | Generated tsvector with `CASE` over `regconfig` may be non-immutable | decided | Use a trigger-maintained column from the start; no generated column. |
 | 07 | 2 | `unaccent` before `portuguese_stem` may weaken matching | roadmap | Golden query set decides; alternative: index both accented and unaccented forms. |
 | 07 | 3 | Migrations outside a transaction (`CREATE INDEX CONCURRENTLY`) not in vukem docs | vukem | VF-017. Workaround: build indexes before cutover on an empty-ish table; concurrent builds via a one-off script. |
@@ -58,7 +58,7 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 07 | 6 | `item_alt_titles` table missing from SDD 01 | decided | Added to SDD 01 §5 in the review pass; SDD 06 fills it from Wikidata aliases. |
 | 07 | 7 | API search matching on TMDB-sourced synopses | decided | Search for the paid API ranks only on allowlisted-source text (titles, alt titles, Wikipedia synopsis); site search may use all text. Two configurations of the same interface. |
 | 07 | 8 | Suggest p95 at 2-character prefixes unverified | roadmap | k6 decides; fallback 3-character minimum. |
-| 07 | 9 | Railway Postgres version and index sizing unverified | roadmap | SDD 11 records the Postgres version (≥ 16 target) and plan size; measured on the first staging copy. |
+| 07 | 9 | Railway Postgres version and index sizing unverified | roadmap | SDD 11 records the Postgres version (≥ 16 target) and plan size; measured on the first copy of production data. |
 | 06 | 1 | Open Library licence unread (A-05) | decided | Read 2026-11-01 (same as 01-2): ingest and keep `openlibrary` in `CATALOG_API_SOURCES`; covers are not API-eligible; record in `docs/legal/open-library.md`. |
 | 06 | 2 | Twitch Developer Services Agreement unread; IGDB retention unknown | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round (owner reads and records in `docs/legal/igdb.md`); until then IGDB fields refreshed every 24 h and never cached longer than 7 days. |
 | 06 | 3 | `contrib/imaging` lacks WebP encoding | vukem + decided | VF-004; plan: pinned `cwebp` via `contrib/engine`, parity test ±10 % size vs Pillow output. |
@@ -80,7 +80,7 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 08 | 8 | `trending` eager instead of `Defer` because of SSR | decided | Correct reading of D-07: public SEO content is eager; `Defer` only for personalised or below-the-fold non-SEO props. SDD 09 follows this rule. |
 | 08 | 9 | Similar items in `/api/v1` and relation provenance | decided | Similarity computed from allowlisted-source relations only for the API variant; site variant may use all relations (same split as search, 07-7). |
 | 08 | 10 | Buffered counter with per-minute flush and `HourlyAt` not in vukem docs | vukem | VF-021. |
-| 08 | 11 | Nightly similar-items compute at scale unmeasured | roadmap | Measure on staging; incremental by `feature_hash` if > 60 min. |
+| 08 | 11 | Nightly similar-items compute at scale unmeasured | roadmap | Measure on the local QA stack; incremental by `feature_hash` if > 60 min. |
 | 08 | 12 | LGPD legal basis for personalisation | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round; default: legitimate interest for aggregates, consent toggle for personalised recommendations (opt-out exposed). |
 | 08 | 13 | "Hype" list for unreleased items | roadmap | Post-launch. |
 | 10 | 1 | `/app/v1/me/notifications` missing from SDD 05 | decided | Owned by SDD 14 (notifications inbox); SDD 05 §6.4 cross-references it in the review pass. |
@@ -99,7 +99,7 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 12 | 4 | Railway plan decides log retention and monitors | roadmap | SDD 11 records the plan; alerts use app metrics regardless. |
 | 12 | 5 | Where to host the static status page | decided | GitHub Pages on a `status` repo or `status.hexascore.app` served by the same app as a static page; choose GitHub Pages so it survives an outage of the app. |
 | 12 | 6 | Metric name alignment between SDD 08 and SDD 12 | decided | SDD 12 names win; SDD 08 updated in the review pass. |
-| 12 | 7 | Metric views for high-cardinality attributes | vukem | VF-019 (same entry); trigger: > 6,000 series on staging. |
+| 12 | 7 | Metric views for high-cardinality attributes | vukem | VF-019 (same entry); trigger: > 6,000 series on the local QA stack. |
 | 12 | 8 | Railway monitor options and webhook delivery unverified | roadmap | Verified when the Pro plan is on (D-35 amended 2026-10-31: Railway native only). |
 | 12 | 9 | Railway hard usage limit value | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round; architect default: hard limit US$45 (1.5 × ceiling), email alert at US$24. |
 | 12 | 10 | vukem.dev documentation gaps (health-check API, logger options, scheduler metric hook) | vukem | VF-023. |
@@ -122,7 +122,7 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 11 | 5 | SSR supervision in `serve`, version in `/up`, extra ldflags | vukem | VF-027. |
 | 11 | 6 | Railway Postgres version, extensions, private hostname unverified | roadmap | Closes at provisioning (first infra task). |
 | 11 | 7 | `QUEUE_NAMES` priority order with the database driver | vukem | VF-018 (same). |
-| 11 | 8 | Railway IaC keys, config-as-code deprecation, CLI flags unverified | roadmap | Closes on the first staging deploy. |
+| 11 | 8 | Railway IaC keys, config-as-code deprecation, CLI flags unverified | roadmap | Closes on the first production deploy. |
 | 11 | 9 | Legacy `credit_ledger` balances | decided (owner) | D-23. |
 | 11 | 10 | Apex domain needs CNAME flattening/ALIAS at the DNS host | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round (which DNS provider hosts hexascore.app). |
 | 11 | 11 | Dumps and database on one provider | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round; architect default: monthly dump downloaded by the owner until an off-site bucket fits the budget. |

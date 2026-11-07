@@ -1,8 +1,8 @@
 # Ingestion worker (second Railway service)
 
-RFC-001 section 3, task CW-01, owner decision OQ-03 / D-40: the ingest queue runs in its own Railway service built from the same image. **Status checked 2026-11-03 via Railway MCP: staging worker deployed; no worker deployment or configuration in production.** Creating it, setting its variables and turning ingestion on are owner actions (agents cannot write production variables or deploy). Do staging first, then production.
+RFC-001 section 3, task CW-01, owner decision OQ-03 / D-40: the ingest queue runs in its own Railway service built from the same image. **Status checked 2026-11-03 via Railway MCP (before the staging environment was deleted on 2026-11-07, ADR 0028): staging worker deployed; no worker deployment or configuration in production.** Since 2026-11-07 there is no staging: the steps below that say staging are done in production, behind the ingest flags, and the evidence collected on staging is gone. Creating it, setting its variables and turning ingestion on are owner actions (agents cannot write production variables or deploy). Staging no longer exists: run it in production behind the flags.
 
-The staging worker's latest deployment was `ff53eda9-2e88-461f-9914-354a37b5ca0d` (SUCCESS, 14:01 UTC). Its logs show `queue worker started` with queue `ingest`, concurrency 3 and limit 2; they do not establish completed ingestion batches or seven healthy days. The web follows branch `staging`, while the worker follows `main`: align their tested revisions before collecting the M0 evidence. Production worker promotion remains pending that evidence and owner approval.
+The (now deleted) staging worker's latest deployment was `ff53eda9-2e88-461f-9914-354a37b5ca0d` (SUCCESS, 14:01 UTC). Its logs show `queue worker started` with queue `ingest`, concurrency 3 and limit 2; they do not establish completed ingestion batches or seven healthy days. Align the tested revisions of web and worker before collecting the M0 evidence. Production worker promotion remains pending that evidence and owner approval.
 
 ## What changes
 
@@ -16,9 +16,9 @@ The staging worker's latest deployment was `ff53eda9-2e88-461f-9914-354a37b5ca0d
 
 The scheduler stays in the web process: a chain start is already a queue job, so the worker only needs the queue. The worker never serves traffic, so it carries no domain.
 
-## Create the service (staging first)
+## Create the service
 
-In the Railway dashboard, project `hexascore`, environment `staging`:
+In the Railway dashboard, project `hexascore`, environment `production`:
 
 1. New service, from the GitHub repo `AlexGalhardo/hexascore-app`, branch `main`. Name it `worker`.
 2. Settings, Deploy: custom start command `/app/app queue:work -queue ingest`. No healthcheck path, no public domain, no pre-deploy command (the web runs the migrations).
@@ -28,8 +28,8 @@ In the Railway dashboard, project `hexascore`, environment `staging`:
 The CLI sets variables the same way for both environments; a secret goes through stdin, never through chat or the shell history:
 
 ```text
-railway variable set QUEUE_NAMES=ingest --service worker --environment staging
-printf "%s" "$VALUE" | railway variable set THEMOVIEDATABASE_API_READ_ACCESS_TOKEN --stdin --service worker --environment staging
+railway variable set QUEUE_NAMES=ingest --service worker --environment production
+printf "%s" "$VALUE" | railway variable set THEMOVIEDATABASE_API_READ_ACCESS_TOKEN --stdin --service worker --environment production
 ```
 
 ## Variables
@@ -47,7 +47,7 @@ Worker only:
 | `SCHEDULE_IN_SERVE` | `false` | no scheduler here |
 | `GOMEMLIMIT` | `400MiB` | the batch target is under 400 MB |
 | `DB_MAX_OPEN` | `4` | at least 2 are needed (a step transaction plus the cover reservation) |
-| `FLAG_INGEST_ENABLED` | `true` | master switch; stays `false` until the staging run below is green |
+| `FLAG_INGEST_ENABLED` | `true` | master switch; stays `false` until the first production run below is green |
 | `FLAG_INGEST_<SOURCE>` | `true` one by one | `WIKIDATA`, `WIKIPEDIA`, `OPENLIBRARY`, `TMDB`, `IGDB`, `STEAM`, `GOG`, `COVERS`, `YOUTUBE` |
 | `THEMOVIEDATABASE_API_READ_ACCESS_TOKEN` | secret | TMDB (also the watch providers of RFC-003) |
 | `IGDB_TWITCH_CLIENT_ID`, `IGDB_TWITCH_CLIENT_SECRET` | secrets | IGDB |
@@ -66,13 +66,13 @@ On `app` (web):
 | `FLAG_INGEST_<SOURCE>` | same enabled sources as the worker | **required**: `routes/schedule.go` checks each chain's source flag before enqueueing its first stage; flags only on the worker leave scheduled source chains idle. Persisted `/admin/_flags` overrides also apply |
 | `WORKER_HEARTBEAT_CHECK` | `true` | set it only after the worker has beaten once; it adds the `worker` entry to `/up?checks=1` |
 
-Never put a production secret in a variable of the staging environment or the reverse.
+Never put a production secret in a variable of a preview or local environment or the reverse.
 
 ## Check
 
-1. `railway logs --service worker --environment staging` shows jobs being processed (`offers verify`, `ingest.worker_heartbeat`, run logs) a minute after the deploy.
-2. `curl -s "https://staging.hexascore.app/up?checks=1"` lists `worker: ok` once `WORKER_HEARTBEAT_CHECK=true` is set on the web. A worker that stopped consuming the queue shows `worker: fail` within three minutes (the heartbeat is a queued job, so a running process that is stuck is caught too).
-3. Run a small chain by hand from `/admin/ingest` with `limit` 100, watch it finish, then let the schedule take over. Seven green days on staging come before production (P6.A.4.2).
+1. `railway logs --service worker --environment production` shows jobs being processed (`offers verify`, `ingest.worker_heartbeat`, run logs) a minute after the deploy.
+2. `curl -s "https://hexascore.app/up?checks=1"` lists `worker: ok` once `WORKER_HEARTBEAT_CHECK=true` is set on the web. A worker that stopped consuming the queue shows `worker: fail` within three minutes (the heartbeat is a queued job, so a running process that is stuck is caught too).
+3. Run a small chain by hand from `/admin/ingest` with `limit` 100, watch it finish, then let the schedule take over. Seven green days with the flags on come before raising limits (P6.A.4.2, adapted: no staging since 2026-11-07).
 4. The 30-minute Telegram digest (`ingest:digest`, silent ops chat) shows the worker's items, failures and heartbeat age.
 
 Record the seven-day window, failed queue count, refresh run totals (at least 1,000 items), cover coverage over 14 days, accuracy sample (at least 97%) and spend (at most US$12) before M0 promotion (RFC-001 section 10). A successful deployment or a fresh heartbeat alone does not prove source ingestion. New discovery towards 250k, 500k and 1M follows the later milestone gates; M0 is refresh only.

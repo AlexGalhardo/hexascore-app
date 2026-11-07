@@ -34,7 +34,7 @@ Out of scope (v1): trusted moderators (modelled, flag off, D-15); suggestion obj
 
 ## 4. Non-functional requirements
 
-- NFR-04-1: Submit p95 < 300 ms; queue page p95 < 500 ms with 10,000 open suggestions; apply p95 < 200 ms (excluding cover processing); Recent changes p95 < 150 ms server time. Verify: k6 on staging.
+- NFR-04-1: Submit p95 < 300 ms; queue page p95 < 500 ms with 10,000 open suggestions; apply p95 < 200 ms (excluding cover processing); Recent changes p95 < 150 ms server time. Verify: k6 on the local QA stack.
 - NFR-04-2: SLA: 95 % of submissions decided within 24 h; ageing badge green < 12 h, amber 12–24 h, red > 24 h; alert when the oldest open suggestion passes 20 h (SDD 12).
 - NFR-04-3: Audit retained forever, written in the same transaction as the change, covered by daily backups (D-18).
 - NFR-04-4: CSRF on forms, policies fail closed (vukem `https://vukem.dev/docs/security/authorization` "Authorization"), diffs rendered as text, user URLs fetched only via `httpclient.Safe` (vukem `https://vukem.dev/docs/basics/csrf` A01). Verify: `TestSecurity_*` (section 10), ZAP.

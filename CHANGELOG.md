@@ -93,6 +93,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **build:** `.dockerignore` keeps worktrees, tool state, venvs, nested env files and `node_modules` out of the Docker build context; `local.properties` is gitignored
 - **agents:** `PROMPT-WORKERS.md` rewritten: orchestrator reviews and merges, senior and intern in standby, ticket and report formats, autonomy limits
 
+### Removed
+
+- **infra:** The `staging` environment (app, worker, Postgres and bucket; deleted in Railway by the owner on 2026-11-07, ADR 0028) and everything that pointed at it: the staging runbook, the staging-only scheduling of `backup:drill` (the command stays, run by hand), the staging-merge step of `postgres-cost.md`, and the staging cost rows of SDD 11. `SEO_NOINDEX` and the non-production `robots.txt` stay for previews and local production builds.
+
 ## [0.38.0] - 2026-11-02
 
 ### Added

@@ -428,7 +428,7 @@ Each assert is a SQL query returning violating ids; `vukem catalog:check [--json
 - [ ] `go test -tags=integration ./app/catalog/...` with `DATABASE_URL` set → PASS (FR-01-1..13).
 - [ ] With default `CATALOG_API_SOURCES`, `curl -H "Authorization: Bearer $KEY" $API/v1/movies/$ID | jq '..|.source? // empty' | sort -u` → no `tmdb`, no `igdb`.
 - [ ] `curl -sI $WEB/pt-br/games/$OLD_SLUG` → `301`, `Location: /pt-br/games/$NEW_SLUG`.
-- [ ] `vukem catalog:check --json` on the migrated staging copy → `{"errors":0}`; warnings recorded in the cutover checklist.
+- [ ] `vukem catalog:check --json` on the migrated local copy → `{"errors":0}`; warnings recorded in the cutover checklist.
 - [ ] `curl $WEB/sitemap.xml` → index whose child files each hold ≤ 50,000 URLs with `xhtml:link` alternates for `en`, `pt-br`, `es`, `x-default`.
 - [ ] Schemathesis on `listItems`, `getItem`, `getEntity`, `listEntityItems`, `listEditions` → no failures.
 

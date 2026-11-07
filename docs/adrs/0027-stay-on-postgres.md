@@ -18,3 +18,7 @@ The owner asked whether SQLite could be the only main database to save money on 
 - Monthly saving stays modest and unmeasured until the owner runs the runbook.
 - The local development cost of Docker Postgres remains.
 - A later SQLite decision must start a new ADR that supersedes this one together with the ADRs it would replace.
+
+## Amendment (2026-11-07, later the same day)
+
+The owner deleted the `staging` environment ([ADR 0028](0028-staging-removed.md)), which realises the "fold staging into the production instance" saving outright. That step and its second-database procedure are gone from `postgres-cost.md`; "production and staging data" in the Decision above now reads "production data".

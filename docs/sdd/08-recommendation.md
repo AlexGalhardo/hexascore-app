@@ -333,7 +333,7 @@ CF ships only through a new ADR, and only with:
 - [ ] `go test ./app/recommend/... -run 'TestTrendScore|TestFallback|TestSimilarity|TestProfile'` exits 0, with golden values 118.97 and 72.8 (±0.01).
 - [ ] `go test ./app/recommend/... -run TestSnapshotDeterminism -count=3` exits 0.
 - [ ] `go test -tags=integration ./app/recommend/... -run TestBurstDoesNotEnterTop10` exits 0.
-- [ ] Staging: `psql "$DATABASE_URL" -c "select item_type, count(*) from trending_snapshots where computed_at = date_trunc('hour', now()) group by 1"` returns 4 rows of 10.
+- [ ] Local QA stack: `psql "$DATABASE_URL" -c "select item_type, count(*) from trending_snapshots where computed_at = date_trunc('hour', now()) group by 1"` returns 4 rows of 10.
 - [ ] `curl -sI …/api/v1/game/trending -H "Authorization: Bearer $KEY"` returns an `ETag`, and the same request with `If-None-Match` returns 304. `…/activity` with a non-pro key returns 403.
 - [ ] `k6 run tests/k6/home.js`: `p(95) < 200ms` with the cache warm.
 - [ ] Schemathesis passes on `listTrending` and `get<Type>Activity`, and the responses contain no TMDB/IGDB fields.

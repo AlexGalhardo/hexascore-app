@@ -18,7 +18,7 @@ Terminate leftover sessions only after the alter commits. Do not run R3 before t
 
 ## R3 — replay writes made after the cutover
 
-From a checkout of the app, against the local or staging app database (read-only is enough):
+From a checkout of the app, against the local app database (read-only is enough):
 
 ```sh
 /app/app hexascore:export-since 2026-10-30T15:00:00Z \
