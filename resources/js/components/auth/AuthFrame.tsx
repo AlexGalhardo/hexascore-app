@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { BRAND } from "../../lib/brand";
 import { useT } from "../../lib/useT";
 
 interface Props {
@@ -15,8 +16,18 @@ interface Props {
 export default function AuthFrame({ heading, lede, title, children }: Props): React.ReactElement {
 	if (!heading) {
 		return (
-			<section className="mx-auto my-4 w-full max-w-md border-t border-fg pt-4 md:my-12 md:border md:px-8 md:py-9">
-				<h1 className="mb-5 font-display text-[28px] leading-tight font-bold">{title}</h1>
+			<section className="mx-auto w-full max-w-sm py-8 md:py-16">
+				<img
+					src="/icons/app-icon.svg"
+					alt=""
+					width={40}
+					height={40}
+					className="mx-auto mb-6 size-10"
+				/>
+				<p className="sr-only">{BRAND}</p>
+				<h1 className="mb-8 text-center font-display text-[28px] leading-tight font-bold">
+					{title}
+				</h1>
 				{children}
 			</section>
 		);
@@ -41,12 +52,17 @@ export default function AuthFrame({ heading, lede, title, children }: Props): Re
 	);
 }
 
+/** The small line under the form that points to the other page (login and sign-up). */
+export function AuthFooter({ children }: { children: ReactNode }): React.ReactElement {
+	return <p className="mt-8 text-center text-sm text-muted">{children}</p>;
+}
+
 /** The "or" rule between the Google button and the form. */
 export function OrRule(): React.ReactElement {
 	const t = useT();
 
 	return (
-		<p className="my-5 flex items-center gap-4 text-sm text-muted before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
+		<p className="my-6 flex items-center gap-4 text-sm text-muted before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
 			{t("auth.or")}
 		</p>
 	);
