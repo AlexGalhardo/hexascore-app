@@ -1,7 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import type { ThemePreference } from "../../theme";
-import { Btn } from "../Btn";
+import { Button } from "../Button";
 
 export interface SettingsLabels {
 	account: string;
@@ -68,7 +68,7 @@ export function SettingsPage(props: SettingsPageProps): ReactElement {
 			<View className={SECTION}>
 				<Heading>{labels.account}</Heading>
 				{props.account === null ? (
-					<Btn label={labels.signIn} onPress={props.onSignIn} />
+					<Button label={labels.signIn} onPress={props.onSignIn} />
 				) : (
 					<>
 						<View>
@@ -83,7 +83,7 @@ export function SettingsPage(props: SettingsPageProps): ReactElement {
 								</Text>
 							) : null}
 						</View>
-						<Btn variant="secondary" label={labels.signOut} onPress={props.onSignOut} />
+						<Button variant="outline" label={labels.signOut} onPress={props.onSignOut} />
 					</>
 				)}
 			</View>

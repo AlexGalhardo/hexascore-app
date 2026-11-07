@@ -1,5 +1,7 @@
 import { type ReactElement, useState } from "react";
-import { Pressable, Text, TextInput, type TextInputProps, View } from "react-native";
+import { Pressable, Text, type TextInputProps, View } from "react-native";
+import { Input } from "./Input";
+import { Label } from "./Label";
 
 export interface TextFieldProps {
 	label: string;
@@ -12,9 +14,7 @@ export interface TextFieldProps {
 	keyboardType?: TextInputProps["keyboardType"];
 }
 
-const FG = "text-fg dark:text-fg-dark";
-
-// Round 2 login/signup fields: visible label above, 44 px box, Show inside the password box.
+// Label above, Input, optional Show / Hide inside the password box, inline error below.
 export function TextField({
 	label,
 	value,
@@ -27,26 +27,27 @@ export function TextField({
 	const [hidden, setHidden] = useState(true);
 	return (
 		<View className="gap-2">
-			<Text className={`font-text text-14 font-semibold ${FG}`}>{label}</Text>
-			<View className="min-h-11 flex-row items-center rounded-sm border border-field bg-field-bg dark:border-field-dark dark:bg-field-bg-dark">
-				<TextInput
-					accessibilityLabel={label}
+			<Label text={label} />
+			<View className="justify-center">
+				<Input
+					label={label}
 					autoCapitalize="none"
 					autoComplete={autoComplete}
 					keyboardType={keyboardType}
 					secureTextEntry={secure !== undefined && hidden}
 					value={value}
 					onChangeText={onChangeText}
-					className={`min-h-11 flex-1 px-3 font-text text-16 ${FG}`}
+					invalid={error !== undefined}
+					className={secure ? "pr-20" : ""}
 				/>
 				{secure !== undefined && (
 					<Pressable
 						accessibilityRole="button"
 						accessibilityLabel={hidden ? secure.show : secure.hide}
 						onPress={() => setHidden(!hidden)}
-						className="h-11 justify-center px-3"
+						className="absolute right-0 h-11 justify-center px-3"
 					>
-						<Text className="font-text text-14 font-semibold text-primary dark:text-primary-dark">
+						<Text className="font-text text-14 font-semibold text-fg dark:text-fg-dark">
 							{hidden ? secure.show : secure.hide}
 						</Text>
 					</Pressable>

@@ -1,7 +1,7 @@
 import { type ReactElement, useState } from "react";
 import { Alert, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
 import type { ItemRowData } from "../ui/ItemRow";
 import { ListDetailPage } from "../ui/screens/ListDetailPage";
 import { TextField } from "../ui/TextField";
@@ -72,7 +72,7 @@ export function ListDetailScreen({
 			{draft === null ? null : (
 				<View className="gap-2 px-4 pt-4">
 					<TextField label={t(locale, "lists.fieldTitle")} value={draft} onChangeText={setDraft} />
-					<Btn
+					<Button
 						label={t(locale, "lists.save")}
 						onPress={() => void saveTitle()}
 						disabled={!online || draft.trim() === ""}

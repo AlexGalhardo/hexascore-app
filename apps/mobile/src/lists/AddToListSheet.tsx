@@ -1,7 +1,7 @@
 import { type ReactElement, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
 import { Icon } from "../ui/Icon";
 import { TextField } from "../ui/TextField";
 import { type ListsDeps, type ListType, useListActions, useMyLists, useOnline } from "./data";
@@ -70,8 +70,8 @@ export function AddToListSheet({
 				})}
 			</View>
 			<TextField label={t(locale, "lists.fieldTitle")} value={title} onChangeText={setTitle} />
-			<Btn
-				variant="secondary"
+			<Button
+				variant="outline"
 				label={t(locale, "lists.newWithItem")}
 				onPress={() => void createWithItem()}
 				disabled={!online || title.trim() === ""}

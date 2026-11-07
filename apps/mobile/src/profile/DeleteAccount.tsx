@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import type { Client } from "../../../../packages/app-client/src/api";
 import { describeError } from "../api/problems";
 import { type AppLocale, t } from "../i18n";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
 import { SettingsSection } from "../ui/screens/SettingsPage";
 
 export type DeletionWrite = <T>(
@@ -58,7 +58,7 @@ export function DeleteAccount({
 		<SettingsSection title={t(locale, "account.delete.title")}>
 			<Text className={FG}>{t(locale, "account.delete.body")}</Text>
 			{left === null ? (
-				<Btn variant="secondary" label={t(locale, "account.delete.button")} onPress={open} />
+				<Button variant="outline" label={t(locale, "account.delete.button")} onPress={open} />
 			) : (
 				<View
 					testID="delete-dialog"
@@ -72,7 +72,7 @@ export function DeleteAccount({
 						{t(locale, "account.delete.dialogTitle")}
 					</Text>
 					<Text className={FG}>{t(locale, "account.delete.dialogBody")}</Text>
-					<Btn
+					<Button
 						label={
 							left > 0
 								? t(locale, "account.delete.wait", { seconds: left })
@@ -81,7 +81,7 @@ export function DeleteAccount({
 						disabled={left > 0}
 						onPress={() => void confirm()}
 					/>
-					<Btn
+					<Button
 						variant="ghost"
 						label={t(locale, "account.delete.cancel")}
 						onPress={() => setUntil(null)}

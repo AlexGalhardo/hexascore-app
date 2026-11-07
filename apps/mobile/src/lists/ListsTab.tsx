@@ -1,7 +1,7 @@
 import { type ReactElement, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
 import { Icon } from "../ui/Icon";
 import { TextField } from "../ui/TextField";
 import {
@@ -119,7 +119,7 @@ export function ListsTab({
 						/>
 					))}
 				</View>
-				<Btn
+				<Button
 					label={t(locale, "lists.create")}
 					onPress={() => void create()}
 					disabled={!online || title.trim() === ""}

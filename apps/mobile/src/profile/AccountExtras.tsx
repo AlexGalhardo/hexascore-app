@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import { Pressable, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
 import { type NotificationsApi, useUnread } from "../notifications/useUnread";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
 import { DeleteAccount, type DeletionWrite } from "./DeleteAccount";
 import { ExportData, type ExportWrite } from "./Export";
 
@@ -53,7 +53,7 @@ export function AccountExtras({
 					<DeleteAccount locale={locale} write={write} onScheduled={onScheduled} />
 				</>
 			) : null}
-			<Btn
+			<Button
 				variant="ghost"
 				label={t(locale, "account.about.title")}
 				onPress={() => onOpen("/about")}

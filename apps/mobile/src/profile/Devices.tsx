@@ -3,7 +3,7 @@ import { type ReactElement, useState } from "react";
 import { Text, View } from "react-native";
 import { describeError } from "../api/problems";
 import { type AppLocale, t } from "../i18n";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
 import { SettingsSection } from "../ui/screens/SettingsPage";
 import { type Device, devicesKey, type ProfileApi, parseDevices } from "./me";
 
@@ -53,8 +53,8 @@ export function Devices({
 							{`${t(locale, "account.sessions.lastSeen")}: ${new Date(device.lastUsedAt).toLocaleDateString(locale)}`}
 						</Text>
 					) : null}
-					<Btn
-						variant="secondary"
+					<Button
+						variant="outline"
 						label={t(locale, "account.sessions.revoke")}
 						accessibilityHint={device.name}
 						onPress={() => void revoke(device)}

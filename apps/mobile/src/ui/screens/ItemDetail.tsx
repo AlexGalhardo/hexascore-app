@@ -1,7 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { scoreBand } from "../../theme/scoreBand";
-import { Btn } from "../Btn";
+import { Button } from "../Button";
 import { Cover } from "../Cover";
 import { formatScore } from "../format";
 import { Icon } from "../Icon";
@@ -172,11 +172,11 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 			)}
 			<View className="flex-row gap-2">
 				<View className="flex-1">
-					<Btn label={labels.rate} onPress={props.onRate} />
+					<Button label={labels.rate} onPress={props.onRate} />
 				</View>
 				{props.statusLabel !== undefined && props.onStatus && (
 					<View className="flex-1">
-						<Btn variant="secondary" label={props.statusLabel} onPress={props.onStatus} />
+						<Button variant="outline" label={props.statusLabel} onPress={props.onStatus} />
 					</View>
 				)}
 				{props.onAddToList && (
@@ -228,7 +228,7 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 							label={`${labels.overall}, ${labels.score(rating.overall)}`}
 						/>
 					</View>
-					<Btn label={labels.save} disabled={rating.saving} onPress={props.onSave} />
+					<Button label={labels.save} disabled={rating.saving} onPress={props.onSave} />
 				</View>
 			)}
 			{item.categories.length > 0 && (
