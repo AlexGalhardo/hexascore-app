@@ -37,8 +37,6 @@ test.describe("footer newsletter", () => {
 			await page.route(ENDPOINT, (route) => mockSubscribe(route, status, seen));
 
 			await page.goto(`${prefix}/`);
-			// Typing before the page settles loses the value (suspected app bug, see COVERAGE.md "Found bugs"), so wait first.
-			await page.waitForLoadState("networkidle");
 			const form = page.locator("footer form").filter({
 				has: page.locator('input[name="email"]'),
 			});
