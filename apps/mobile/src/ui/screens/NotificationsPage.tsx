@@ -1,6 +1,9 @@
 import type { ReactElement } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
+import { Badge } from "../Badge";
 import { Button } from "../Button";
+import { EmptyState } from "../EmptyState";
+import { ListItem } from "../ListItem";
 
 export interface NotificationRow {
 	id: string;
@@ -39,29 +42,20 @@ function Row({
 	onOpen: (row: NotificationRow) => void;
 }): ReactElement {
 	return (
-		<Pressable
-			accessibilityRole="button"
+		<ListItem
+			title={row.text}
+			subtitle={row.time}
 			accessibilityLabel={[row.unread ? labels.unread : null, row.text, row.time]
 				.filter(Boolean)
 				.join(", ")}
 			onPress={() => onOpen(row)}
-			className="min-h-11 flex-row items-start gap-3 border-b border-border py-3 active:bg-surface dark:border-border-dark dark:active:bg-surface-dark"
-		>
-			<View
-				className={`mt-2 h-2 w-2 rounded-full ${row.unread ? "bg-primary dark:bg-primary-dark" : "bg-transparent"}`}
-			/>
-			<View className="flex-1 gap-1">
-				{row.unread ? (
-					<Text className="font-text text-12 font-bold uppercase tracking-wider text-primary dark:text-primary-dark">
-						{labels.unread}
-					</Text>
-				) : null}
-				<Text className={`font-text text-16 ${row.unread ? "font-semibold" : ""} ${FG}`}>
-					{row.text}
-				</Text>
-				<Text className={MUTED}>{row.time}</Text>
-			</View>
-		</Pressable>
+			leading={
+				<View
+					className={`h-2 w-2 rounded-full ${row.unread ? "bg-primary dark:bg-primary-dark" : "bg-transparent"}`}
+				/>
+			}
+			trailing={row.unread ? <Badge label={labels.unread} /> : undefined}
+		/>
 	);
 }
 
@@ -96,9 +90,7 @@ export function NotificationsPage({
 				/>
 			</View>
 			{rows.length === 0 ? (
-				<Text accessibilityLiveRegion="polite" className={`py-8 font-text text-16 ${FG}`}>
-					{labels.empty}
-				</Text>
+				<EmptyState title={labels.empty} />
 			) : (
 				<View className="border-t border-border dark:border-border-dark">
 					{rows.map((row) => (

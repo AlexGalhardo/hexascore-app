@@ -1,3 +1,6 @@
+import { EmptyState } from "../ui/EmptyState";
+import { ListItem } from "../ui/ListItem";
+import { Card } from "../ui/Card";
 import { type ReactElement, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
@@ -80,7 +83,7 @@ export function ListsTab({
 				{t(locale, "nav.lists")}
 			</Text>
 			{rows.length === 0 && !lists.isPending ? (
-				<Text className={`font-text text-16 ${FG}`}>{t(locale, "lists.noLists")}</Text>
+				<EmptyState title={t(locale, "lists.noLists")} />
 			) : null}
 			<View className="border-t border-border dark:border-border-dark">
 				{rows.map((list) => {
@@ -90,23 +93,20 @@ export function ListsTab({
 						t(locale, list.isPublic ? "lists.public" : "lists.private"),
 					];
 					return (
-						<Pressable
+						<ListItem
 							key={list.id}
-							accessibilityRole="button"
+							title={list.title}
+							subtitle={meta.join(" · ")}
 							accessibilityLabel={[list.title, ...meta].join(", ")}
 							onPress={() => onOpen(list)}
-							className="min-h-11 flex-row items-center gap-4 border-b border-border py-3 active:bg-surface dark:border-border-dark dark:active:bg-surface-dark"
-						>
-							<View className="flex-1 gap-1">
-								<Text className={`font-text text-16 font-bold ${FG}`}>{list.title}</Text>
-								<Text className={`${MUTED} tabular-nums`}>{meta.join(" Â· ")}</Text>
-							</View>
-							<Icon name="chevron-forward" size={20} className="text-muted dark:text-muted-dark" />
-						</Pressable>
+							trailing={
+								<Icon name="chevron-forward" size={20} className="text-muted dark:text-muted-dark" />
+							}
+						/>
 					);
 				})}
 			</View>
-			<View className={PANEL}>
+			<Card>
 				<Text
 					accessibilityRole="header"
 					className={`font-display text-24 font-semibold tracking-tight ${FG}`}
@@ -131,7 +131,7 @@ export function ListsTab({
 					disabled={!online || title.trim() === ""}
 				/>
 				{online ? null : <Text className={MUTED}>{t(locale, "lists.offline")}</Text>}
-			</View>
+			</Card>
 		</ScrollView>
 	);
 }

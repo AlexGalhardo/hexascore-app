@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { Button } from "../Button";
 import { Cover } from "../Cover";
+import { EmptyState } from "../EmptyState";
 import { Icon } from "../Icon";
 import { ScoreBadge } from "../ScoreBadge";
 
@@ -158,9 +159,11 @@ export function LibraryPage(props: LibraryPageProps): ReactElement {
 				<Button variant="outline" label={labels.filters} onPress={props.onFilters} />
 			</View>
 			{props.groups.length === 0 ? (
-				<View accessibilityLiveRegion="polite" className="items-start gap-4 py-8">
-					<Text className={`font-text text-16 ${FG}`}>{labels.empty}</Text>
-					<Button variant="outline" label={labels.browse} onPress={props.onBrowse} />
+				<View className="py-6">
+					<EmptyState
+						title={labels.empty}
+						action={{ label: labels.browse, onPress: props.onBrowse }}
+					/>
 				</View>
 			) : (
 				props.groups.map((group) => <Group key={group.key} group={group} props={props} />)

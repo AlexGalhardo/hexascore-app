@@ -2,6 +2,7 @@ import type { ReactElement, ReactNode } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { scoreBand } from "../../theme/scoreBand";
 import { Button } from "../Button";
+import { Card } from "../Card";
 import { Cover } from "../Cover";
 import { formatScore } from "../format";
 import { Icon } from "../Icon";
@@ -203,7 +204,7 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 				</View>
 			)}
 			{rating !== null && (
-				<View className="gap-4 rounded-lg border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark">
+				<Card>
 					<Text className={H2}>{labels.rateTitle(item.title)}</Text>
 					{item.categories.map((category) => (
 						<View key={category.key} className="gap-1">
@@ -229,7 +230,7 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 						/>
 					</View>
 					<Button label={labels.save} disabled={rating.saving} onPress={props.onSave} />
-				</View>
+				</Card>
 			)}
 			{item.categories.length > 0 && (
 				<View className={RULE}>

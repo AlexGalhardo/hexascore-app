@@ -1,12 +1,13 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { type ReactElement, type ReactNode, useState } from "react";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import type { AppItemJSON } from "../../../../packages/app-client/src/api";
 import type { ReadClient } from "../api/client";
 import { type AppLocale, t } from "../i18n";
 import { type CatalogType, SINGULAR } from "../navigation/catalog";
 import { GENRE_METHOD, queryKeys } from "../query/keys";
 import { formatScore } from "../ui/format";
+import { ListSkeleton } from "../ui/Skeleton";
 import { type CatalogLabels, CatalogPage, type CatalogRow } from "../ui/screens/CatalogPage";
 
 export type ListingReader = Pick<ReadClient, "listItems" | (typeof GENRE_METHOD)[CatalogType]>;
@@ -117,7 +118,7 @@ export function ListingBody({
 				>
 					{title}
 				</Text>
-				<ActivityIndicator accessibilityLabel={t(locale, "item.loading")} />
+				<ListSkeleton label={t(locale, "item.loading")} />
 			</View>
 		);
 	}
