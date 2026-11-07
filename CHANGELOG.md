@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **mobile:** `bun run android:dev` builds and runs the debug app on an Android emulator against a local dev backend (`EXPO_PUBLIC_API_BASE_URL` defaults to `http://10.0.2.2:3000`; debug builds already allow cleartext, release stays https-only). On Windows the native build runs in a short-path hoisted mirror (`C:\h`) because ninja cannot stat the 260+ character paths of bun's isolated `node_modules`. Runbook: `docs/runbooks/mobile-local-android.md`.
+
 - **perf:** Two partial indexes on `items` for the default listing (migrations `20261107000000` and `20261107000100`): page one of a type sorted by score reads the index instead of sorting every item (42.8 ms to 0.12 ms on 22,500 games) and the total count is an index-only scan (39.2 ms to 1.3 ms).
 - **docs:** `docs/runbooks/postgres-cost.md` (owner-run steps to measure, right-size the pool, fold staging into the production instance and size the volume) and ADR 0027 (stay on Postgres, SQLite deferred).
 - **ui:** The footer newsletter form is live: it posts the email (with a honeypot) from the browser to vukem-email's `/subscribe/hexascore` (`NEWSLETTER_API_URL`, default `https://email.hexascore.app` in production and `http://localhost:3100` otherwise; `NEWSLETTER_PROJECT_SLUG`), whose origin joins `connect-src`. States: sending, check your inbox, invalid, rate limited, error.
@@ -33,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **docs:** Architect audit 2026-11-02: project map, web test report, technical review and cleanup ledger in `docs/audit/`; RFC-001 catalogue worker, RFC-002 trending, RFC-003 offers; ADR 0024 (Redis deferred) and ADR 0025 (MongoDB rejected); `docs/data/SOURCES.md`, `docs/ROADMAP-V1.md`, `docs/BACKLOG.md`, `docs/OPEN-QUESTIONS.md`; ROADMAP phase P8
 
 ### Fixed
+
+- **mobile:** Plural messages no longer crash the home screen on Android: Hermes has no `Intl.PluralRules`, so `translate` falls back to the en, es and pt-BR rules.
 
 - **trending:** The landing carousel requires a cover: an item with a synopsis, both translated titles and a date reached the quality floor without one, took a slot and was then hidden, leaving a gap; pins need a cover too. "For you", similar items and cross-media links leave items without a cover out as well
 - **ingest:** The Telegram digest counts right: `offers.tmdb` counts the items that got offers instead of every offer (it showed 447 thousand changed for 36 thousand seen), `refresh.existing` counts the items whose quality score moved instead of every checked item, and the pace and ETA use the last hour instead of a 15-minute window
