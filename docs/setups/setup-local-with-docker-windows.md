@@ -8,7 +8,7 @@ This guide runs HexaScore on Windows 11 with Docker Desktop: Postgres and RustFS
 | --- | --- | --- | --- |
 | Go | 1.27.3 | `go` directive in `go.mod` | <https://go.dev/dl/> |
 | bun | 1.4.3 | `packageManager` in `package.json` | PowerShell: `iex "& {$(irm https://bun.sh/install.ps1)} -Version 1.4.3"` ([bun docs](https://bun.sh/docs/installation)) |
-| vukem CLI | v0.37.0 | `github.com/AlexGalhardo/vukem` in `go.mod` | `go install github.com/AlexGalhardo/vukem/cmd/vukem@v0.37.0` |
+| vukem CLI | v0.39.0 | `github.com/AlexGalhardo/vukem` in `go.mod` | `go install github.com/AlexGalhardo/vukem/cmd/vukem@v0.39.0` |
 | golangci-lint | 2.15.0 | `GOLANGCI_LINT_VERSION` in `.github/workflows/ci.yml` | installed by the setup script |
 | git | not pinned by the repo | | Git for Windows, <https://git-scm.com/download/win> |
 | Docker Desktop | not pinned by the repo (WSL 2 backend) | | <https://docs.docker.com/desktop/setup/install/windows-install/> |
