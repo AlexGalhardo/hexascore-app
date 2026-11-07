@@ -180,6 +180,8 @@ export type Synopsis = {
   text?: string;
 };
 
+export type AuthGoogleNonceBody = unknown;
+
 export type ClientErrorsBody = unknown;
 
 export type ClientMetricsBody = unknown;
@@ -542,6 +544,11 @@ function requester(options: ClientOptions) {
 /** Client has one method per API operation. */
 export interface Client {
   /**
+   * POST /app/v1/auth/google/nonce
+   */
+  authGoogleNonce(args?: { body?: AuthGoogleNonceBody }): Promise<unknown>;
+
+  /**
    * POST /app/v1/client-errors
    */
   clientErrors(args?: { body?: ClientErrorsBody }): Promise<unknown>;
@@ -812,6 +819,7 @@ export function createClient(options: ClientOptions = {}): Client {
   const request = requester(options);
 
   return {
+    authGoogleNonce: (args) => request<unknown>("POST", "/app/v1/auth/google/nonce", args),
     clientErrors: (args) => request<unknown>("POST", "/app/v1/client-errors", args),
     clientMetrics: (args) => request<unknown>("POST", "/app/v1/client-metrics", args),
     editionDelete: (args) => request<unknown>("DELETE", "/app/v1/items/{id}/edition", args),

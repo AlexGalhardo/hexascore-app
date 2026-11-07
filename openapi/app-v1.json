@@ -10,6 +10,33 @@
     }
   ],
   "paths": {
+    "/app/v1/auth/google/nonce": {
+      "post": {
+        "operationId": "auth.google_nonce",
+        "summary": "auth.google_nonce",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {}
+            }
+          }
+        },
+        "responses": {
+          "4XX": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "default": {
+            "description": "Response",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/app/v1/books/genres": {
       "get": {
         "operationId": "listBookGenres",
