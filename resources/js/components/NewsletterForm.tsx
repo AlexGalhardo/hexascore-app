@@ -1,4 +1,4 @@
-import { type FormEvent, useId, useState } from "react";
+import { type FormEvent, useEffect, useId, useState } from "react";
 
 import { useT } from "../lib/useT";
 
@@ -14,6 +14,10 @@ export default function NewsletterForm({ endpoint }: { endpoint: string }) {
 	const t = useT();
 	const id = useId();
 	const [state, setState] = useState<State>("idle");
+	// The form only works with JS (it posts with fetch), and hydration clears a value typed into the server-rendered
+	// input, so it stays disabled until React has hydrated it.
+	const [ready, setReady] = useState(false);
+	useEffect(() => setReady(true), []);
 
 	const submit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -67,6 +71,7 @@ export default function NewsletterForm({ endpoint }: { endpoint: string }) {
 					required
 					maxLength={254}
 					autoComplete="email"
+					disabled={!ready}
 					aria-label={t("footer.newsletterPlaceholder")}
 					aria-describedby={`${id}-status`}
 					aria-invalid={failed ? true : undefined}
@@ -75,7 +80,7 @@ export default function NewsletterForm({ endpoint }: { endpoint: string }) {
 				/>
 				<button
 					type="submit"
-					disabled={state === "loading"}
+					disabled={!ready || state === "loading"}
 					className="min-h-11 shrink-0 rounded-sm bg-footer-fg px-5 text-sm font-bold text-footer-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-footer-fg disabled:cursor-not-allowed disabled:opacity-60"
 				>
 					{t("footer.newsletterSubmit")}
