@@ -1,0 +1,1228 @@
+[
+  {
+    "coverage_id": ".github%2Fworkflows%2F%2A.yml::.github%2Fworkflows%2Fsecurity-audit.yml%23permissions::.github::ATTACK-CLASSES.md%23Cryptography%20and%20secrets",
+    "canonical_refs": {
+      "surface": ".github/workflows/*.yml",
+      "boundary": ".github/workflows/security-audit.yml#permissions",
+      "subsystem": ".github",
+      "attack_class": "ATTACK-CLASSES.md#Cryptography and secrets"
+    },
+    "surface": ".github/workflows/*.yml",
+    "boundary": ".github/workflows/security-audit.yml#permissions",
+    "subsystem": ".github",
+    "attack_class": "Cryptography and secrets",
+    "starting_paths": [
+      ".github/workflows/security-audit.yml",
+      ".github/workflows/ci.yml",
+      ".github/workflows/release.yml",
+      "Dockerfile",
+      ".dockerignore"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Cryptography and secrets",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      ".github/workflows/security-audit.yml",
+      ".github/workflows/ci.yml",
+      ".github/workflows/release.yml",
+      "Dockerfile",
+      ".dockerignore"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          ".github/workflows/security-audit.yml",
+          ".github/workflows/ci.yml",
+          ".github/workflows/release.yml",
+          "Dockerfile",
+          ".dockerignore"
+        ],
+        "invariant": "Actions are pinned, tokens are least privilege and secrets stay off untrusted triggers.",
+        "method": "source",
+        "result": "All actions pinned by SHA, no pull_request_target or untrusted interpolation in run:, digest-pinned non-root Docker image.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "app%2Faccounts%2Fdeletion.go%23Delete::app%2Faccounts%2Fdeletion.go%23anonymize::app%2Faccounts::ATTACK-CLASSES.md%23Feature%20abuse%20and%20data%20leakage",
+    "canonical_refs": {
+      "surface": "app/accounts/deletion.go#Delete",
+      "boundary": "app/accounts/deletion.go#anonymize",
+      "subsystem": "app/accounts",
+      "attack_class": "ATTACK-CLASSES.md#Feature abuse and data leakage"
+    },
+    "surface": "app/accounts/deletion.go#Delete",
+    "boundary": "app/accounts/deletion.go#anonymize",
+    "subsystem": "app/accounts",
+    "attack_class": "Feature abuse and data leakage",
+    "starting_paths": [
+      "app/accounts/deletion.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Feature abuse and data leakage",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "deferred",
+    "agent_id": null,
+    "reviewed_paths": [],
+    "local_checks": [],
+    "result_fingerprints": [],
+    "unresolved": [
+      "Data erasure completeness was not audited."
+    ]
+  },
+  {
+    "coverage_id": "app%2Faccounts%2Fpasskeys.go%23FinishPasskeyLogin::app%2Faccounts%2Fpasskeys.go%23takeLogin::app%2Faccounts::ATTACK-CLASSES.md%23Cryptography%20and%20secrets",
+    "canonical_refs": {
+      "surface": "app/accounts/passkeys.go#FinishPasskeyLogin",
+      "boundary": "app/accounts/passkeys.go#takeLogin",
+      "subsystem": "app/accounts",
+      "attack_class": "ATTACK-CLASSES.md#Cryptography and secrets"
+    },
+    "surface": "app/accounts/passkeys.go#FinishPasskeyLogin",
+    "boundary": "app/accounts/passkeys.go#takeLogin",
+    "subsystem": "app/accounts",
+    "attack_class": "Cryptography and secrets",
+    "starting_paths": [
+      "app/accounts/passkeys.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Cryptography and secrets",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "app/accounts/passkeys.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "app/accounts/passkeys.go"
+        ],
+        "invariant": "Challenges are single use and session bound; RP id and origin come from the configured APP_URL.",
+        "method": "source",
+        "result": "takeLogin and takeRegistration pull the challenge from the session, relying party id and origin derive from config, sign count and ban checks run after the assertion.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "app%2Faccounts%2Fsocial.go%23FindOrCreateFromSocial::app%2Faccounts%2Fsocial.go%23FindOrCreateFromSocial::app%2Faccounts::ATTACK-CLASSES.md%23Access%20control",
+    "canonical_refs": {
+      "surface": "app/accounts/social.go#FindOrCreateFromSocial",
+      "boundary": "app/accounts/social.go#FindOrCreateFromSocial",
+      "subsystem": "app/accounts",
+      "attack_class": "ATTACK-CLASSES.md#Access control"
+    },
+    "surface": "app/accounts/social.go#FindOrCreateFromSocial",
+    "boundary": "app/accounts/social.go#FindOrCreateFromSocial",
+    "subsystem": "app/accounts",
+    "attack_class": "Access control",
+    "starting_paths": [
+      "app/accounts/social.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Access control",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "app/accounts/social.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "app/accounts/social.go"
+        ],
+        "invariant": "A provider email never takes over an account it does not prove.",
+        "method": "source",
+        "result": "Unverified provider email gets 409; an unverified local account is reset and its sessions revoked before linking.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "app%2Faccounts%2Ftwo_factor.go%23VerifyTwoFactor::app%2Faccounts%2Ftwo_factor.go%23lockTwoFactor::app%2Faccounts::ATTACK-CLASSES.md%23Business%20logic",
+    "canonical_refs": {
+      "surface": "app/accounts/two_factor.go#VerifyTwoFactor",
+      "boundary": "app/accounts/two_factor.go#lockTwoFactor",
+      "subsystem": "app/accounts",
+      "attack_class": "ATTACK-CLASSES.md#Business logic"
+    },
+    "surface": "app/accounts/two_factor.go#VerifyTwoFactor",
+    "boundary": "app/accounts/two_factor.go#lockTwoFactor",
+    "subsystem": "app/accounts",
+    "attack_class": "Business logic",
+    "starting_paths": [
+      "app/accounts/two_factor.go",
+      "app/controllers/account/two_factor.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Business logic",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "app/accounts/two_factor.go",
+      "app/controllers/account/two_factor.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "app/accounts/two_factor.go",
+          "app/controllers/account/two_factor.go"
+        ],
+        "invariant": "A TOTP step and a recovery code are single use under a row lock; settings changes need the password.",
+        "method": "source",
+        "result": "last_step and recovery codes are updated in one locked transaction; disable and regenerate require the password and a throttle; the pending challenge is session-bound with a 5 minute TTL.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "app%2Fapi%2Fkeys.go%23Resolve::app%2Fapi%2Fguard.go%23Authenticate::app%2Fapi::ATTACK-CLASSES.md%23Cryptography%20and%20secrets",
+    "canonical_refs": {
+      "surface": "app/api/keys.go#Resolve",
+      "boundary": "app/api/guard.go#Authenticate",
+      "subsystem": "app/api",
+      "attack_class": "ATTACK-CLASSES.md#Cryptography and secrets"
+    },
+    "surface": "app/api/keys.go#Resolve",
+    "boundary": "app/api/guard.go#Authenticate",
+    "subsystem": "app/api",
+    "attack_class": "Cryptography and secrets",
+    "starting_paths": [
+      "app/api/keys.go",
+      "app/api/guard.go",
+      "routes/api_v1.go",
+      "app/accounts/app_tokens.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Cryptography and secrets",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "app/api/keys.go",
+      "app/api/guard.go",
+      "routes/api_v1.go",
+      "app/accounts/app_tokens.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "app/api/keys.go",
+          "app/api/guard.go",
+          "routes/api_v1.go",
+          "app/accounts/app_tokens.go"
+        ],
+        "invariant": "Keys are high-entropy, stored hashed, revocable and owner-scoped.",
+        "method": "source",
+        "result": "crypto/rand base62 keys, SHA-256 at rest, owner-scoped revoke, NotBanned in the guard stack, token cap and rotation conditional on revoke.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "app%2Fbackup%2F%2A::app%2Fbackup%2Frestore.go%23Restore::app%2Fbackup::ATTACK-CLASSES.md%23Resource%20and%20file%20handling",
+    "canonical_refs": {
+      "surface": "app/backup/*",
+      "boundary": "app/backup/restore.go#Restore",
+      "subsystem": "app/backup",
+      "attack_class": "ATTACK-CLASSES.md#Resource and file handling"
+    },
+    "surface": "app/backup/*",
+    "boundary": "app/backup/restore.go#Restore",
+    "subsystem": "app/backup",
+    "attack_class": "Resource and file handling",
+    "starting_paths": [
+      "app/backup/dump.go",
+      "app/backup/restore.go",
+      "app/backup/verify.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Resource and file handling",
+    "selected_companion_blocks": [
+      "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Core discipline",
+      "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Universal moves",
+      "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "deferred",
+    "agent_id": null,
+    "reviewed_paths": [],
+    "local_checks": [],
+    "result_fingerprints": [],
+    "unresolved": [
+      "Backup dump, restore and verify argument handling was skimmed, not traced end to end."
+    ]
+  },
+  {
+    "coverage_id": "app%2Fbilling%2Fbilling.go%23Webhook::app%2Fbilling%2Fbilling.go%23SyncSubscription::app%2Fbilling::ATTACK-CLASSES.md%23Business%20logic",
+    "canonical_refs": {
+      "surface": "app/billing/billing.go#Webhook",
+      "boundary": "app/billing/billing.go#SyncSubscription",
+      "subsystem": "app/billing",
+      "attack_class": "ATTACK-CLASSES.md#Business logic"
+    },
+    "surface": "app/billing/billing.go#Webhook",
+    "boundary": "app/billing/billing.go#SyncSubscription",
+    "subsystem": "app/billing",
+    "attack_class": "Business logic",
+    "starting_paths": [
+      "app/billing/billing.go",
+      "routes/billing.go",
+      "app/billing/plan_state.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Business logic",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "app/billing/billing.go",
+      "routes/billing.go",
+      "app/billing/plan_state.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "app/billing/billing.go",
+          "routes/billing.go",
+          "app/billing/plan_state.go"
+        ],
+        "invariant": "Entitlements derive from the Stripe record, never from a webhook payload or client input.",
+        "method": "source",
+        "result": "Webhook is signature-verified by the framework and fails closed without a secret; sync re-fetches the subscription from Stripe; checkout and portal use the session user's customer.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "app%2Fbilling%2Fstripe_calls.go%23portal%20and%20checkout%20sessions::app%2Fbilling%2Fbilling.go%23Checkout::app%2Fbilling::ATTACK-CLASSES.md%23Business%20logic",
+    "canonical_refs": {
+      "surface": "app/billing/stripe_calls.go#portal and checkout sessions",
+      "boundary": "app/billing/billing.go#Checkout",
+      "subsystem": "app/billing",
+      "attack_class": "ATTACK-CLASSES.md#Business logic"
+    },
+    "surface": "app/billing/stripe_calls.go#portal and checkout sessions",
+    "boundary": "app/billing/billing.go#Checkout",
+    "subsystem": "app/billing",
+    "attack_class": "Business logic",
+    "starting_paths": [
+      "app/billing/stripe_calls.go",
+      "app/billing/canceller.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Business logic",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "deferred",
+    "agent_id": null,
+    "reviewed_paths": [],
+    "local_checks": [],
+    "result_fingerprints": [],
+    "unresolved": [
+      "Cancellation and plan-change races were read, not exercised against Stripe."
+    ]
+  },
+  {
+    "coverage_id": "app%2Fcatalog%2Flisting.go%23List::app%2Fcatalog%2Flisting.go%23sortSpec::app%2Fcatalog::ATTACK-CLASSES.md%23Injection",
+    "canonical_refs": {
+      "surface": "app/catalog/listing.go#List",
+      "boundary": "app/catalog/listing.go#sortSpec",
+      "subsystem": "app/catalog",
+      "attack_class": "ATTACK-CLASSES.md#Injection"
+    },
+    "surface": "app/catalog/listing.go#List",
+    "boundary": "app/catalog/listing.go#sortSpec",
+    "subsystem": "app/catalog",
+    "attack_class": "Injection",
+    "starting_paths": [
+      "app/catalog/listing.go",
+      "app/catalog/redirects.go",
+      "app/jobs/prune_retention.go",
+      "app/admin/resources_react.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "app/catalog/listing.go",
+      "app/catalog/redirects.go",
+      "app/jobs/prune_retention.go",
+      "app/admin/resources_react.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "app/catalog/listing.go",
+          "app/catalog/redirects.go",
+          "app/jobs/prune_retention.go",
+          "app/admin/resources_react.go"
+        ],
+        "invariant": "Request input never reaches SQL text; identifiers come from allow-lists.",
+        "method": "source",
+        "result": "Every fmt.Sprintf query uses constants or spec metadata; sort, filter and search use allow-lists and bound parameters.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "app%2Fcommunity%2Fuploads.go%23FetchCover::app%2Fcommunity%2Fuploads.go%23allowedCover::app%2Fcommunity::ATTACK-CLASSES.md%23Injection",
+    "canonical_refs": {
+      "surface": "app/community/uploads.go#FetchCover",
+      "boundary": "app/community/uploads.go#allowedCover",
+      "subsystem": "app/community",
+      "attack_class": "ATTACK-CLASSES.md#Injection"
+    },
+    "surface": "app/community/uploads.go#FetchCover",
+    "boundary": "app/community/uploads.go#allowedCover",
+    "subsystem": "app/community",
+    "attack_class": "Injection",
+    "starting_paths": [
+      "app/community/uploads.go",
+      "app/webhooks/endpoints.go",
+      "app/webhooks/sender.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "app/community/uploads.go",
+      "app/webhooks/endpoints.go",
+      "app/webhooks/sender.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "app/community/uploads.go",
+          "app/webhooks/endpoints.go",
+          "app/webhooks/sender.go"
+        ],
+        "invariant": "User-supplied URLs are fetched only through httpclient.Safe.",
+        "method": "source",
+        "result": "Webhook endpoints and cover fetch use httpclient.Safe with https-only and public-address checks.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "app%2Fcommunity%2Fuploads.go%23UploadCover::app%2Fcommunity%2Fuploads.go%23measureCover::app%2Fcommunity::ATTACK-CLASSES.md%23Resource%20and%20file%20handling",
+    "canonical_refs": {
+      "surface": "app/community/uploads.go#UploadCover",
+      "boundary": "app/community/uploads.go#measureCover",
+      "subsystem": "app/community",
+      "attack_class": "ATTACK-CLASSES.md#Resource and file handling"
+    },
+    "surface": "app/community/uploads.go#UploadCover",
+    "boundary": "app/community/uploads.go#measureCover",
+    "subsystem": "app/community",
+    "attack_class": "Resource and file handling",
+    "starting_paths": [
+      "app/community/uploads.go",
+      "internal/ingest/covers/dhash.go",
+      "internal/ingest/covers/webp.go",
+      "app/seo/og_image.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Resource and file handling",
+    "selected_companion_blocks": [
+      "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Core discipline",
+      "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Universal moves",
+      "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "candidate",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "app/community/uploads.go",
+      "internal/ingest/covers/dhash.go",
+      "internal/ingest/covers/webp.go",
+      "app/seo/og_image.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "app/community/uploads.go",
+          "internal/ingest/covers/dhash.go",
+          "internal/ingest/covers/webp.go",
+          "app/seo/og_image.go"
+        ],
+        "invariant": "Decoded image size is bounded before a decode allocates it.",
+        "method": "source",
+        "result": "Cover upload and Fingerprint lacked a pixel cap; no user-reachable decode of an oversized image was demonstrated. Hardened in 66386651.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [
+      "hexascore:cover-pixel-cap-missing"
+    ],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "app%2Fcontrollers%2Fpublicapi%2F%2A::routes%2Fapi_v1.go%23stack::app%2Fcontrollers%2Fpublicapi::ATTACK-CLASSES.md%23Access%20control",
+    "canonical_refs": {
+      "surface": "app/controllers/publicapi/*",
+      "boundary": "routes/api_v1.go#stack",
+      "subsystem": "app/controllers/publicapi",
+      "attack_class": "ATTACK-CLASSES.md#Access control"
+    },
+    "surface": "app/controllers/publicapi/*",
+    "boundary": "routes/api_v1.go#stack",
+    "subsystem": "app/controllers/publicapi",
+    "attack_class": "Access control",
+    "starting_paths": [
+      "app/controllers/publicapi",
+      "routes/api_v1.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Access control",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "deferred",
+    "agent_id": null,
+    "reviewed_paths": [],
+    "local_checks": [],
+    "result_fingerprints": [],
+    "unresolved": [
+      "Public API field exposure and quota accounting were sampled only through the guard."
+    ]
+  },
+  {
+    "coverage_id": "app%2Fhttp%2Fmiddleware%2Frender_cache.go%23RenderCache::app%2Fhttp%2Fmiddleware%2Frender_cache.go%23pageKey::app%2Fhttp::ATTACK-CLASSES.md%23Feature%20abuse%20and%20data%20leakage",
+    "canonical_refs": {
+      "surface": "app/http/middleware/render_cache.go#RenderCache",
+      "boundary": "app/http/middleware/render_cache.go#pageKey",
+      "subsystem": "app/http",
+      "attack_class": "ATTACK-CLASSES.md#Feature abuse and data leakage"
+    },
+    "surface": "app/http/middleware/render_cache.go#RenderCache",
+    "boundary": "app/http/middleware/render_cache.go#pageKey",
+    "subsystem": "app/http",
+    "attack_class": "Feature abuse and data leakage",
+    "starting_paths": [
+      "app/http/middleware/render_cache.go",
+      "app/http/middleware/locale_prefix.go",
+      "app/http/middleware/catalog_redirect.go",
+      "app/http/middleware/security_headers.go",
+      "app/http/middleware/canonical_host.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Feature abuse and data leakage",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "app/http/middleware/render_cache.go",
+      "app/http/middleware/locale_prefix.go",
+      "app/http/middleware/catalog_redirect.go",
+      "app/http/middleware/security_headers.go",
+      "app/http/middleware/canonical_host.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "app/http/middleware/render_cache.go",
+          "app/http/middleware/locale_prefix.go",
+          "app/http/middleware/catalog_redirect.go",
+          "app/http/middleware/security_headers.go",
+          "app/http/middleware/canonical_host.go"
+        ],
+        "invariant": "Only anonymous cookie-free 200s are shared; redirects stay same-site; headers are fixed.",
+        "method": "source",
+        "result": "Cache skips any session cookie and Set-Cookie, swaps the CSP nonce on replay, and the canonical host is configured, not read from Host.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "app%2Flibrary%2Flists.go%23Update::app%2Flibrary%2Flist_items.go%23lockList::app%2Flibrary::ATTACK-CLASSES.md%23Access%20control",
+    "canonical_refs": {
+      "surface": "app/library/lists.go#Update",
+      "boundary": "app/library/list_items.go#lockList",
+      "subsystem": "app/library",
+      "attack_class": "ATTACK-CLASSES.md#Access control"
+    },
+    "surface": "app/library/lists.go#Update",
+    "boundary": "app/library/list_items.go#lockList",
+    "subsystem": "app/library",
+    "attack_class": "Access control",
+    "starting_paths": [
+      "app/library/lists.go",
+      "app/library/list_items.go",
+      "app/social/comments.go",
+      "app/social/follows.go",
+      "app/webhooks/endpoints.go",
+      "app/scoring/write.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Access control",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "app/library/lists.go",
+      "app/library/list_items.go",
+      "app/social/comments.go",
+      "app/social/follows.go",
+      "app/webhooks/endpoints.go",
+      "app/scoring/write.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "app/library/lists.go",
+          "app/library/list_items.go",
+          "app/social/comments.go",
+          "app/social/follows.go",
+          "app/webhooks/endpoints.go",
+          "app/scoring/write.go"
+        ],
+        "invariant": "Writes to user-owned rows filter by the session user in SQL.",
+        "method": "source",
+        "result": "Every UPDATE and DELETE on lists, comments, follows, reviews, ratings, passkeys, api_keys and webhook endpoints carries a user_id owner filter.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "app%2Fseo%2Fog_image.go%23dwebp::app%2Fssr%2Fsupervisor.go%23Supervise::app%2Fseo::ATTACK-CLASSES.md%23Injection",
+    "canonical_refs": {
+      "surface": "app/seo/og_image.go#dwebp",
+      "boundary": "app/ssr/supervisor.go#Supervise",
+      "subsystem": "app/seo",
+      "attack_class": "ATTACK-CLASSES.md#Injection"
+    },
+    "surface": "app/seo/og_image.go#dwebp",
+    "boundary": "app/ssr/supervisor.go#Supervise",
+    "subsystem": "app/seo",
+    "attack_class": "Injection",
+    "starting_paths": [
+      "app/seo/og_image.go",
+      "app/ssr/supervisor.go",
+      "cmd/app/main.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "app/seo/og_image.go",
+      "app/ssr/supervisor.go",
+      "cmd/app/main.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "app/seo/og_image.go",
+          "app/ssr/supervisor.go",
+          "cmd/app/main.go"
+        ],
+        "invariant": "Subprocess names and arguments never come from a request.",
+        "method": "source",
+        "result": "dwebp reads a fixed temp-dir path with a 10 s timeout; the SSR supervisor command comes from bootstrap.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "apps%2Fmobile%2Fsrc%2Fauth%2FtokenStore.ts::apps%2Fmobile%2Fsrc%2Fauth%2FsecureVault.ts%23SecureStore::apps%2Fmobile::ATTACK-CLASSES.md%23Cryptography%20and%20secrets",
+    "canonical_refs": {
+      "surface": "apps/mobile/src/auth/tokenStore.ts",
+      "boundary": "apps/mobile/src/auth/secureVault.ts#SecureStore",
+      "subsystem": "apps/mobile",
+      "attack_class": "ATTACK-CLASSES.md#Cryptography and secrets"
+    },
+    "surface": "apps/mobile/src/auth/tokenStore.ts",
+    "boundary": "apps/mobile/src/auth/secureVault.ts#SecureStore",
+    "subsystem": "apps/mobile",
+    "attack_class": "Cryptography and secrets",
+    "starting_paths": [
+      "apps/mobile/src/auth/secureVault.ts",
+      "apps/mobile/src/auth/tokenStore.ts",
+      "apps/mobile/app.config.ts",
+      "apps/mobile/src/linking.ts",
+      "apps/mobile/src/screens/Entity.tsx"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Cryptography and secrets",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "apps/mobile/src/auth/secureVault.ts",
+      "apps/mobile/src/auth/tokenStore.ts",
+      "apps/mobile/app.config.ts",
+      "apps/mobile/src/linking.ts",
+      "apps/mobile/src/screens/Entity.tsx"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "apps/mobile/src/auth/secureVault.ts",
+          "apps/mobile/src/auth/tokenStore.ts",
+          "apps/mobile/app.config.ts",
+          "apps/mobile/src/linking.ts",
+          "apps/mobile/src/screens/Entity.tsx"
+        ],
+        "invariant": "Tokens live only in the OS keystore; deep links open fixed screens only.",
+        "method": "source",
+        "result": "SecureStore with a device-only option, verified https App Links, resolveDeepLink maps to a fixed screen allow-list; sourceUrl opens ingest-written URLs only.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "go.mod%23dependencies::osv-scanner.toml::dependencies::ATTACK-CLASSES.md%23Cryptography%20and%20secrets",
+    "canonical_refs": {
+      "surface": "go.mod#dependencies",
+      "boundary": "osv-scanner.toml",
+      "subsystem": "dependencies",
+      "attack_class": "ATTACK-CLASSES.md#Cryptography and secrets"
+    },
+    "surface": "go.mod#dependencies",
+    "boundary": "osv-scanner.toml",
+    "subsystem": "dependencies",
+    "attack_class": "Cryptography and secrets",
+    "starting_paths": [
+      "go.mod",
+      "osv-scanner.toml",
+      "package.json"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Cryptography and secrets",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "go.mod",
+      "osv-scanner.toml",
+      "package.json"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "go.mod",
+          "osv-scanner.toml",
+          "package.json"
+        ],
+        "invariant": "No known-exploitable dependency is reachable from the server.",
+        "method": "source",
+        "result": "govulncheck reports 0 reachable vulnerabilities; bun audit lists 4 dev-tooling advisories (zod, minimatch, glob, deepmerge) already tracked in osv-scanner.toml.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "internal%2Fingest%2F%2A::internal%2Fingest%23httpclient::internal%2Fingest::ATTACK-CLASSES.md%23Injection",
+    "canonical_refs": {
+      "surface": "internal/ingest/*",
+      "boundary": "internal/ingest#httpclient",
+      "subsystem": "internal/ingest",
+      "attack_class": "ATTACK-CLASSES.md#Injection"
+    },
+    "surface": "internal/ingest/*",
+    "boundary": "internal/ingest#httpclient",
+    "subsystem": "internal/ingest",
+    "attack_class": "Injection",
+    "starting_paths": [
+      "internal/ingest"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "deferred",
+    "agent_id": null,
+    "reviewed_paths": [],
+    "local_checks": [],
+    "result_fingerprints": [],
+    "unresolved": [
+      "Ingest source parsers (IGDB, TMDB, Wikidata) were not hunted."
+    ]
+  },
+  {
+    "coverage_id": "openapi%2F%2A::openapi%23securitySchemes::openapi::ATTACK-CLASSES.md%23Access%20control",
+    "canonical_refs": {
+      "surface": "openapi/*",
+      "boundary": "openapi#securitySchemes",
+      "subsystem": "openapi",
+      "attack_class": "ATTACK-CLASSES.md#Access control"
+    },
+    "surface": "openapi/*",
+    "boundary": "openapi#securitySchemes",
+    "subsystem": "openapi",
+    "attack_class": "Access control",
+    "starting_paths": [
+      "openapi"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Access control",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "deferred",
+    "agent_id": null,
+    "reviewed_paths": [],
+    "local_checks": [],
+    "result_fingerprints": [],
+    "unresolved": [
+      "Per-operation security requirements were not diffed against the handlers."
+    ]
+  },
+  {
+    "coverage_id": "resources%2Fjs::resources%2Fjs%2Fcomponents%23href::resources%2Fjs::ATTACK-CLASSES.md%23Injection",
+    "canonical_refs": {
+      "surface": "resources/js",
+      "boundary": "resources/js/components#href",
+      "subsystem": "resources/js",
+      "attack_class": "ATTACK-CLASSES.md#Injection"
+    },
+    "surface": "resources/js",
+    "boundary": "resources/js/components#href",
+    "subsystem": "resources/js",
+    "attack_class": "Injection",
+    "starting_paths": [
+      "resources/js/app.tsx",
+      "resources/js/components/Footer.tsx",
+      "resources/js/components/item/Offers.tsx",
+      "app/social/markdown.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "resources/js/app.tsx",
+      "resources/js/components/Footer.tsx",
+      "resources/js/components/item/Offers.tsx",
+      "app/social/markdown.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "resources/js/app.tsx",
+          "resources/js/components/Footer.tsx",
+          "resources/js/components/item/Offers.tsx",
+          "app/social/markdown.go"
+        ],
+        "invariant": "User text is never rendered as HTML; user links are absolute http(s).",
+        "method": "source",
+        "result": "No dangerouslySetInnerHTML, innerHTML or eval; markdown links restricted to http(s) and rendered as React nodes.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "routes%2Fadmin.go%23%2Fadmin%2F%2A::app%2Fadmin%2F%2A_handlers.go%23actor::app%2Fadmin::ATTACK-CLASSES.md%23Access%20control",
+    "canonical_refs": {
+      "surface": "routes/admin.go#/admin/*",
+      "boundary": "app/admin/*_handlers.go#actor",
+      "subsystem": "app/admin",
+      "attack_class": "ATTACK-CLASSES.md#Access control"
+    },
+    "surface": "routes/admin.go#/admin/*",
+    "boundary": "app/admin/*_handlers.go#actor",
+    "subsystem": "app/admin",
+    "attack_class": "Access control",
+    "starting_paths": [
+      "routes/admin.go",
+      "app/admin/catalog_handlers.go",
+      "app/admin/moderation_handlers.go",
+      "app/admin/scoring_handlers.go",
+      "app/admin/resources_react.go",
+      "app/admin/resources_write.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Access control",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "routes/admin.go",
+      "app/admin/catalog_handlers.go",
+      "app/admin/moderation_handlers.go",
+      "app/admin/scoring_handlers.go",
+      "app/admin/resources_react.go",
+      "app/admin/resources_write.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "routes/admin.go",
+          "app/admin/catalog_handlers.go",
+          "app/admin/moderation_handlers.go",
+          "app/admin/scoring_handlers.go",
+          "app/admin/resources_react.go",
+          "app/admin/resources_write.go"
+        ],
+        "invariant": "Every admin action authorizes its own ability; list columns and sorts are allow-listed.",
+        "method": "source",
+        "result": "A scan of every (c *web.Ctx) handler in app/admin found an Authorize or actor call in each; the resource specs never select secret columns.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "routes%2Fapp_api.go%23POST%20%2Fapp%2Fv1%2Ftokens%2Fgoogle::app%2Fcontrollers%2Fappapi%2Ftokens_controller.go%23verifyGoogle::app%2Fcontrollers%2Fappapi::ATTACK-CLASSES.md%23Cryptography%20and%20secrets",
+    "canonical_refs": {
+      "surface": "routes/app_api.go#POST /app/v1/tokens/google",
+      "boundary": "app/controllers/appapi/tokens_controller.go#verifyGoogle",
+      "subsystem": "app/controllers/appapi",
+      "attack_class": "ATTACK-CLASSES.md#Cryptography and secrets"
+    },
+    "surface": "routes/app_api.go#POST /app/v1/tokens/google",
+    "boundary": "app/controllers/appapi/tokens_controller.go#verifyGoogle",
+    "subsystem": "app/controllers/appapi",
+    "attack_class": "Cryptography and secrets",
+    "starting_paths": [
+      "routes/app_api.go",
+      "app/controllers/appapi/tokens_controller.go",
+      "apps/mobile/src/auth/googlePrompt.ts"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Cryptography and secrets",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "candidate",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "routes/app_api.go",
+      "app/controllers/appapi/tokens_controller.go",
+      "apps/mobile/src/auth/googlePrompt.ts"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "routes/app_api.go",
+          "app/controllers/appapi/tokens_controller.go",
+          "apps/mobile/src/auth/googlePrompt.ts"
+        ],
+        "invariant": "A Google ID token is bound to the client that requested it.",
+        "method": "source",
+        "result": "jwt.Verifier checks iss, aud, exp and RS256 only; no nonce or replay binding, and the mobile flow is implicit over a custom scheme. Not decidable from source alone.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [
+      "hexascore:google-id-token-not-bound-to-request"
+    ],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "routes%2Fcommunity.go%23%2Fsuggestions%2F%7Bid%7D::app%2Fpolicies%2Fsuggestion.go%23SuggestionPolicy::app%2Fcommunity::ATTACK-CLASSES.md%23Access%20control",
+    "canonical_refs": {
+      "surface": "routes/community.go#/suggestions/{id}",
+      "boundary": "app/policies/suggestion.go#SuggestionPolicy",
+      "subsystem": "app/community",
+      "attack_class": "ATTACK-CLASSES.md#Access control"
+    },
+    "surface": "routes/community.go#/suggestions/{id}",
+    "boundary": "app/policies/suggestion.go#SuggestionPolicy",
+    "subsystem": "app/community",
+    "attack_class": "Access control",
+    "starting_paths": [
+      "routes/community.go",
+      "app/policies/suggestion.go",
+      "app/community/draft.go",
+      "app/controllers/community/status.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Access control",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "routes/community.go",
+      "app/policies/suggestion.go",
+      "app/community/draft.go",
+      "app/controllers/community/status.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "routes/community.go",
+          "app/policies/suggestion.go",
+          "app/community/draft.go",
+          "app/controllers/community/status.go"
+        ],
+        "invariant": "Only the author reads or acts on a suggestion; others get 404.",
+        "method": "source",
+        "result": "Policy is author-only with DenyAsNotFound; SaveDraft locks on author_id.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "routes%2Fexports.go%23%2Fexports%2F::app%2Flibrary%2Fexport.go%23zipCSV::app%2Flibrary::ATTACK-CLASSES.md%23Feature%20abuse%20and%20data%20leakage",
+    "canonical_refs": {
+      "surface": "routes/exports.go#/exports/",
+      "boundary": "app/library/export.go#zipCSV",
+      "subsystem": "app/library",
+      "attack_class": "ATTACK-CLASSES.md#Feature abuse and data leakage"
+    },
+    "surface": "routes/exports.go#/exports/",
+    "boundary": "app/library/export.go#zipCSV",
+    "subsystem": "app/library",
+    "attack_class": "Feature abuse and data leakage",
+    "starting_paths": [
+      "routes/exports.go",
+      "app/library/export.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Feature abuse and data leakage",
+    "selected_companion_blocks": [],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "covered",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "routes/exports.go",
+      "app/library/export.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "routes/exports.go",
+          "app/library/export.go"
+        ],
+        "invariant": "Export links are signed, expiring and prefix scoped; CSV cells cannot carry formulas.",
+        "method": "source",
+        "result": "storage.Handler with a signer and a 24 h TTL; export.EncodeCSV applies SafeCell.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [],
+    "unresolved": []
+  },
+  {
+    "coverage_id": "routes%2Ftwo_factor.go%23POST%20%2F2fa::app%2Fcontrollers%2Faccount%2Ftwo_factor.go%23Challenge::app%2Faccounts::ATTACK-CLASSES.md%23Access%20control",
+    "canonical_refs": {
+      "surface": "routes/two_factor.go#POST /2fa",
+      "boundary": "app/controllers/account/two_factor.go#Challenge",
+      "subsystem": "app/accounts",
+      "attack_class": "ATTACK-CLASSES.md#Access control"
+    },
+    "surface": "routes/two_factor.go#POST /2fa",
+    "boundary": "app/controllers/account/two_factor.go#Challenge",
+    "subsystem": "app/accounts",
+    "attack_class": "Access control",
+    "starting_paths": [
+      "routes/two_factor.go",
+      "app/controllers/account/two_factor.go",
+      "app/controllers/account/two_factor_login.go",
+      "app/accounts/two_factor.go"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Access control",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+      "WEB-PROTOCOL-AND-AUTH.md#Universal moves",
+      "WEB-PROTOCOL-AND-AUTH.md#Validation rules"
+    ],
+    "excluded_blocks": [],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "candidate",
+    "agent_id": "auditor",
+    "reviewed_paths": [
+      "routes/two_factor.go",
+      "app/controllers/account/two_factor.go",
+      "app/controllers/account/two_factor_login.go",
+      "app/accounts/two_factor.go"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "auditor",
+        "reviewed_paths": [
+          "routes/two_factor.go",
+          "app/controllers/account/two_factor.go",
+          "app/controllers/account/two_factor_login.go",
+          "app/accounts/two_factor.go"
+        ],
+        "invariant": "A second-factor guess budget is bounded per account whatever the client address.",
+        "method": "source",
+        "result": "Per-user-and-IP bucket only; a per-account bucket was missing. Fixed in f78b356e with a unit test.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [
+      "hexascore:2fa-challenge-throttle-per-ip-only"
+    ],
+    "unresolved": []
+  }
+]

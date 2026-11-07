@@ -36,6 +36,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **auth:** The web two-factor challenge (`POST /2fa`) now also stops guessing per account, 10 tries per 15 minutes whatever the address, so rotating IPs no longer widens the budget (security audit 2026-11-07).
+- **uploads:** Community cover uploads and the covers fingerprint step refuse images over 25 megapixels before decoding them.
+- **mobile:** The Google sign-in nonce comes from the platform CSPRNG; the sign-in is skipped when none exists instead of falling back to `Math.random`.
 - **mobile:** Plural messages no longer crash the home screen on Android: Hermes has no `Intl.PluralRules`, so `translate` falls back to the en, es and pt-BR rules.
 
 - **trending:** The landing carousel requires a cover: an item with a synopsis, both translated titles and a date reached the quality floor without one, took a slot and was then hidden, leaving a gap; pins need a cover too. "For you", similar items and cross-media links leave items without a cover out as well
