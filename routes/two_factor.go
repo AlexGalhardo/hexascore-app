@@ -43,6 +43,7 @@ func TwoFactor(r *router.Router, app *vukem.App) error {
 	// The password checks of the settings page (disable, new recovery
 	// codes) share the confirm bucket.
 	challenge := ratelimit.Middleware(limits.TwoFactor.From(limiters), account.TwoFactorThrottleKey)
+	account2FA := ratelimit.Middleware(limits.TwoFactorAcc.From(limiters), account.TwoFactorAccountKey)
 	confirm := ratelimit.Middleware(limits.TwoFactorSet.From(limiters), account.TwoFactorThrottleKey)
 
 	// The settings live in the /profile section now; the old page answers 301.
@@ -59,7 +60,7 @@ func TwoFactor(r *router.Router, app *vukem.App) error {
 		Use(required, verified, hasPassword, confirm)
 
 	r.Get("/2fa", h.ShowChallenge).Name("two-factor.login").Use(auth.Guest(acc.Web))
-	r.Post("/2fa", h.Challenge).Use(auth.Guest(acc.Web), challenge)
+	r.Post("/2fa", h.Challenge).Use(auth.Guest(acc.Web), challenge, account2FA)
 	r.Get("/two-factor-challenge", h.LegacyChallenge)
 
 	return nil

@@ -41,6 +41,16 @@ func TwoFactorThrottleKey(r *http.Request) string {
 	return "2fa:" + id + ":" + ratelimit.ByIP(r)
 }
 
+// TwoFactorAccountKey buckets challenge guesses by account only, whatever the IP (A07).
+func TwoFactorAccountKey(r *http.Request) string {
+	id := accounts.PendingTwoFactorID(r)
+	if r.Method != http.MethodPost || id == "" {
+		return ""
+	}
+
+	return "2fa-account:" + id
+}
+
 // startTwoFactor sends users with two-factor authentication to the code
 // step instead of logging them in (called by Login).
 func (h *Handlers) startTwoFactor(c *web.Ctx, u models.User, remember bool) (bool, error) {
