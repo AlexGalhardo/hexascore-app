@@ -5,7 +5,13 @@ const config: ExpoConfig = {
 	name: "HexaScore",
 	slug: "hexascore",
 	owner: "alexgalhardo",
-	scheme: "hexascore",
+	// Google sign-in redirects to the reversed client id (src/auth/googlePrompt.ts); registered only when a client is configured.
+	scheme: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID
+		? [
+				"hexascore",
+				`com.googleusercontent.apps.${process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID.replace(/\.apps\.googleusercontent\.com$/, "")}`,
+			]
+		: "hexascore",
 	version: "1.0.0",
 	orientation: "portrait",
 	userInterfaceStyle: "automatic",
