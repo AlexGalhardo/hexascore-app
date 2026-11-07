@@ -214,7 +214,7 @@ export default function Index({
 			<Head title={t("account.metaTitle")} />
 			<h1 className="mb-6 text-2xl font-semibold">{t("account.title")}</h1>
 			{/* A section menu on the left from lg up (owner 2026-11-03), the sections stacked on the right. */}
-			<div className="grid items-start gap-x-10 gap-y-4 lg:grid-cols-[13rem_minmax(0,1fr)]">
+			<div className="grid grid-cols-[minmax(0,1fr)] items-start gap-x-10 gap-y-4 lg:grid-cols-[13rem_minmax(0,1fr)]">
 				<ProfileNav items={navItems} label={t("account.nav")} />
 				<div className="max-w-2xl" data-testid="profile-sections">
 					<Section id="details" title={t("account.details.title")}>
