@@ -49,4 +49,18 @@ Routes come from `routes/*.go`. Auth pages (`/login`, `/signup`, `/2fa`) are out
 | Crawler: every reachable public page and internal link                              | crawler                                                        | pages behind login are not crawled by design          |
 | Performance budget (TTFB, load)                                                     | perf-budget                                                    | LCP and script size remain Lighthouse-only            |
 
-Status: crawler, api-contract, security-hardening, perf-budget and smoke ran green against the e2e stack (84 passed, 0 failed, 6 projects). No app bugs found in this run.
+Status: round 5 (auth, passkeys, newsletter, 6 projects): 60 passed, 6 failed (all mobile, see Found bugs). Earlier green run: crawler, api-contract, security-hardening, perf-budget and smoke, 84 passed.
+
+## Found bugs
+
+1. Footer newsletter input loses a typed value when filled right after load.
+   - Route: `/` (footer `NewsletterForm`), reproduced on desktop-en.
+   - Expected: the typed address stays in `input[name=email]` and is posted.
+   - Actual: the value is empty immediately after `fill`; the POST body has `"email": ""`. It works after `networkidle`. Suspected hydration re-mount of the form; root cause not confirmed.
+   - Spec: `newsletter.spec.ts` waits for `networkidle` as a workaround and marks it with a comment.
+
+2. Profile security buttons are unclickable on mobile (360 px).
+   - Route: `/profile` (account security section), mobile-en, mobile-pt-BR, mobile-es.
+   - Expected: "Enable 2FA" and the passkey "add" button receive clicks.
+   - Actual: Playwright reports the button intercepted by other sections (profile section nav `<ul>`, password section label, details section `<p>`). Visual confirmation pending.
+   - Spec: `auth.spec.ts` (TOTP) and `passkeys.spec.ts` fail on mobile; tests are not weakened.
