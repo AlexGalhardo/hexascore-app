@@ -65,20 +65,20 @@ func TestTwoFactorUsersPassChallenge(t *testing.T) {
 
 	login := func() *vukemtest.Client {
 		c := app.Client(t).Inertia("").WithHeader("Referer", "/login")
-		// The 2FA dialog opens over /login.
+		// The password step stops at the /2fa page.
 		c.PostJSON("/login", map[string]any{"identifier": "bruno@example.test", "password": "correct horse battery staple"}).
-			AssertRedirect("/login")
+			AssertRedirect("/2fa")
 
 		return c
 	}
 
-	login().PostJSON("/two-factor-challenge", map[string]any{"code": code, "recovery_code": ""}).
+	login().PostJSON("/2fa", map[string]any{"code": code, "recovery_code": ""}).
 		AssertRedirect("/onboarding")
 
 	// An unused Better Auth backup code works once as a recovery code.
-	login().PostJSON("/two-factor-challenge", map[string]any{"code": "", "recovery_code": "aB3dE-fG4hI"}).
+	login().PostJSON("/2fa", map[string]any{"code": "", "recovery_code": "aB3dE-fG4hI"}).
 		AssertRedirect("/onboarding")
-	login().WithHeader("Referer", "/two-factor-challenge").
-		PostJSON("/two-factor-challenge", map[string]any{"code": "", "recovery_code": "aB3dE-fG4hI"}).
-		AssertRedirect("/two-factor-challenge")
+	login().WithHeader("Referer", "/2fa").
+		PostJSON("/2fa", map[string]any{"code": "", "recovery_code": "aB3dE-fG4hI"}).
+		AssertRedirect("/2fa")
 }
