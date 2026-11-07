@@ -2,7 +2,7 @@ import "../global.css";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { type ErrorBoundaryProps, Stack, useSegments } from "expo-router";
 import { type ReactElement, useEffect, useState, useSyncExternalStore } from "react";
-import { Pressable, Text, View } from "react-native";
+import { LogBox, Pressable, Text, View } from "react-native";
 import { appLocale, persistOptions, queryClient, ratingQueue, rootDeps } from "../src/auth/runtime";
 import { t } from "../src/i18n";
 import { OfflineBanner } from "../src/platform/OfflineBanner";
@@ -15,6 +15,10 @@ import {
 	setCrashConsent,
 	setCrashScreen,
 } from "../src/telemetry/runtime";
+import { ToastHost } from "../src/ui/ToastHost";
+
+// Screenshot runs (docs/runbooks/mobile-local-android.md) start Metro with EXPO_PUBLIC_CAPTURE=1.
+if (__DEV__ && process.env.EXPO_PUBLIC_CAPTURE === "1") LogBox.ignoreAllLogs();
 
 // Expo Router renders this when a route throws during render (the error boundary of SDD 10 §7.7).
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps): ReactElement {
@@ -51,6 +55,7 @@ export default function RootLayout(): ReactElement | null {
 			<LocaleProvider locale={locale}>
 				<RatingQueueProvider value={ratingQueue}>
 					<OfflineBanner locale={locale} />
+					<ToastHost />
 					{consent === "unset" ? (
 						<CrashConsentPrompt
 							locale={locale}
