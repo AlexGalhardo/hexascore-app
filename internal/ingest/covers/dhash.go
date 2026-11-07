@@ -65,9 +65,14 @@ func Distance(a, b uint64) int { return bits.OnesCount64(a ^ b) }
 func Fingerprint(src []byte) (hash uint64, w, h int, err error) {
 	var img image.Image
 
-	_, format, err := image.DecodeConfig(bytes.NewReader(src))
+	cfg, format, err := image.DecodeConfig(bytes.NewReader(src))
 	if err != nil {
 		return 0, 0, 0, fmt.Errorf("%w: %w", ErrUnsupported, err)
+	}
+
+	// Decoding allocates width*height*4 bytes: refuse a decompression bomb before it runs, as Encode does.
+	if cfg.Width <= 0 || cfg.Height <= 0 || cfg.Width*cfg.Height > MaxPixels {
+		return 0, 0, 0, fmt.Errorf("%w: %dx%d", ErrTooLarge, cfg.Width, cfg.Height)
 	}
 
 	switch format {
