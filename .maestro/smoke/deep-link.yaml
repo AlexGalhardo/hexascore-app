@@ -1,5 +1,5 @@
-# P5.B.5.1 smoke (preview build with the staging host override, owner-gated).
-# Set SLUG and ENTITY_ID to a DemoCatalog game slug and entity id on staging.
+# P5.B.5.1 smoke (preview build pointed at a local stack, owner-gated).
+# Set SLUG and ENTITY_ID to a DemoCatalog game slug and entity id in the local stack.
 appId: app.hexascore
 ---
 - launchApp

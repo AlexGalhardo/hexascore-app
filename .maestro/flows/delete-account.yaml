@@ -1,4 +1,4 @@
-# P5.B.4.3 (staging, owner-gated): run signed in as a throwaway account only; it schedules that account's deletion.
+# P5.B.4.3 (a local stack seeded with DemoCatalog, owner-gated): run signed in as a throwaway account only; it schedules that account's deletion.
 appId: app.hexascore
 ---
 - launchApp
