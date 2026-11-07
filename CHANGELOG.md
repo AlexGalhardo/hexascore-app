@@ -57,6 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **auth:** Google sign-in in the Android app uses the authorization code flow with PKCE (S256) and `state` instead of the implicit ID-token flow. The app first calls the new `POST /app/v1/auth/google/nonce` (guest, rate limited); the ID token must carry that single-use, 5-minute nonce, which `POST /app/v1/tokens/google` checks after verifying the token and consumes when it mints the app token (migration `google_nonces`, hashed). `expo-crypto` 58.0.7 is a direct dependency of the app.
+
 - **docs:** Agent guidance covers the shared framework feedback file (`HS-` ids), the `RUN_SLOW_CI` gate and `scripts/ci/local.sh`, the removed staging environment, integration and Windows test pitfalls, SSR private prefixes, JS-only forms, and the mobile local-dev notes.
 - **ui:** The public site adopts shadcn/ui components and a neutral zinc theme (ADR 0029, ported from PR #69): flat buttons and inputs, hairline borders, rounded-md 8 px, blurred navbar with a shadow once scrolled, dark mode on the same greys. The palette and radii match the Android kit (`neutral.json`), checked by `packages/tokens/neutral.test.ts`. New dependency: `@radix-ui/react-slot` 1.5.0.
 - **mobile:** The sign-in screen is rebuilt on the new kit (wordmark, labelled fields with Show/Hide, a separate two-factor page), screens use Card, ListItem, EmptyState, Skeleton and Avatar, toasts are in-app (`ToastHost`, announced to screen readers) instead of `ToastAndroid`, and detail screens keep clear of the status bar. Category accents stay as a 2 px rule on trending cards and the heading squares.

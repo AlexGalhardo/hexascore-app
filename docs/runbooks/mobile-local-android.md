@@ -57,6 +57,10 @@ adb exec-out screencap -p > screen.png
 adb logcat -s ReactNativeJS:V
 ```
 
+## Google sign-in (debug APK only)
+
+The button appears only when `EXPO_PUBLIC_GOOGLE_CLIENT_ID` is set at Metro start and at prebuild (it also registers the `com.googleusercontent.apps.<id>` redirect scheme in `app.config.ts`). The client must be a Google OAuth client for an installed app with the custom URI scheme enabled, and its id must be in the server's `GOOGLE_ANDROID_CLIENT_ID` (or `SOCIAL_GOOGLE_CLIENT_ID`). The flow is authorization code with PKCE and a server-issued nonce (`docs/brainstorming.md`, "Owner decisions 2026-11-07 (mobile)"). Unverified against the production client, so it is not part of release builds yet.
+
 ## Screenshots of every screen
 
 Start Metro with `EXPO_PUBLIC_CAPTURE=1` (hides LogBox) and open screens with deep links instead of tapping: `adb shell am start -W -a android.intent.action.VIEW -d "hexascore://games/<slug>" app.hexascore`. Deep links reach item (`/{type}/{slug}`), `entities/{id}` and `lists/{id}` pages; the tabs, settings and notifications are reached by tapping (tab bar labels at y 2318 on a 1080x2400 emulator). Switch themes with `adb shell cmd uimode night yes|no` once Settings > Appearance is on System, and capture with `adb exec-out screencap -p > shot.png`. Restart Metro after adding files: its watcher can miss new files and then report `Unable to resolve module`.
