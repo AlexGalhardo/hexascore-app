@@ -38,7 +38,12 @@ type homeHighlights struct {
 	Upcoming map[string][]catalog.Highlight `json:"upcoming"`
 }
 
-func loadHomeHighlights(ctx context.Context, db catalog.Querier, locale string, sc catalog.Showcase) (homeHighlights, error) {
+func loadHomeHighlights(
+	ctx context.Context,
+	db catalog.Querier,
+	locale string,
+	sc catalog.Showcase,
+) (homeHighlights, error) {
 	out := homeHighlights{Upcoming: map[string][]catalog.Highlight{}}
 
 	for _, typ := range homeTypes {
@@ -95,10 +100,15 @@ func Home(app *vukem.App) web.HandlerFunc {
 
 			// Twelve queries per visit otherwise; the entry ages out after highlightsTTL and is forgotten when
 			// the trending snapshot lands (ComputeTrending), the same moment the carousel changes.
-			hl, err := cache.Remember(c.Context(), store, trending.HighlightsCacheKey(locale, showcase.Cover), highlightsTTL,
+			hl, err := cache.Remember(
+				c.Context(),
+				store,
+				trending.HighlightsCacheKey(locale, showcase.Cover),
+				highlightsTTL,
 				func(ctx context.Context) (homeHighlights, error) {
 					return loadHomeHighlights(ctx, db, locale, showcase)
-				})
+				},
+			)
 			if err != nil {
 				return err
 			}
