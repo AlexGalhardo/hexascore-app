@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen } from "@testing-library/react-native";
+import { fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactElement, ReactNode } from "react";
 import RootLayout from "../app/_layout";
 import Login from "../app/(auth)/login";
@@ -72,7 +72,7 @@ function params(next: Record<string, string>): void {
 const routes: [string, Record<string, string>, () => ReactElement, string | null][] = [
 	["(auth)/login", {}, () => <Login />, null],
 	["(tabs)/index", {}, () => offline(<Home />), "HexaScore"],
-	["(tabs)/[type]", { type: "games" }, () => offline(<SectionScreen />), "Games"],
+	["(tabs)/[type]", { type: "games" }, () => offline(<SectionScreen />), "Movies"],
 	["(tabs)/search", {}, () => offline(<Search />), "All"],
 	["(tabs)/lists", {}, () => offline(<Lists />), "My lists"],
 	["(tabs)/profile", {}, () => offline(<Profile />), "Settings"],
@@ -121,9 +121,14 @@ test("[type] rejects anything outside games|movies|series|books", async () => {
 	expect(screen.getByText("Unknown section")).toBeTruthy();
 	await render(<ItemBody type="billing" slug="nope" />);
 	expect(screen.getByText("Unknown section")).toBeTruthy();
+});
+
+test("the Sections tab falls back to games and switches category from the picker", async () => {
 	params({ type: "admin" });
-	await render(<SectionScreen />);
-	expect(screen.getByText("Unknown section")).toBeTruthy();
+	await render(offline(<SectionScreen />));
+	expect(screen.getByRole("tab", { name: "Games" }).props.accessibilityState.selected).toBe(true);
+	await fireEvent.press(screen.getByRole("tab", { name: "Books" }));
+	expect(screen.getByRole("tab", { name: "Books" }).props.accessibilityState.selected).toBe(true);
 });
 
 test("platform boundary exposes network state and the Play listing", () => {
