@@ -2,6 +2,7 @@
 package appapi
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -114,7 +115,7 @@ func (h *Tokens) Create(c *web.Ctx) error {
 		return err
 	}
 
-	return h.issue(c, u, device, in.Code, in.RecoveryCode)
+	return h.issue(c, u, device, in.Code, in.RecoveryCode, nil)
 }
 
 // Google exchanges a Google ID token for an app token: POST /app/v1/tokens/google.
@@ -148,7 +149,34 @@ func (h *Tokens) Google(c *web.Ctx) error {
 		return err
 	}
 
-	return h.issue(c, u, device, in.Code, in.RecoveryCode)
+	// The nonce Google copied from the authorization request must be one this server issued and not yet used.
+	// It is consumed only when the token is minted, so a sign-in waiting for its second factor can retry.
+	nonce, _ := claims.Extra["nonce"].(string)
+
+	valid, err := h.a.GoogleNonceValid(c.Context(), nonce)
+	if err != nil {
+		return err
+	}
+
+	if !valid {
+		web.SecurityEvent(c.Request(), "auth.id_token_nonce_rejected", "provider", "google")
+
+		return h.problem(c, http.StatusUnauthorized, "invalid-id-token", "Invalid ID token")
+	}
+
+	return h.issue(c, u, device, in.Code, in.RecoveryCode, func(ctx context.Context) (bool, error) {
+		return h.a.ConsumeGoogleNonce(ctx, nonce)
+	})
+}
+
+// GoogleNonce issues the single-use nonce for a Google sign-in: POST /app/v1/auth/google/nonce.
+func (h *Tokens) GoogleNonce(c *web.Ctx) error {
+	nonce, expires, err := h.a.IssueGoogleNonce(c.Context())
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusCreated, map[string]any{"nonce": nonce, "expiresAt": expires})
 }
 
 func truthy(v any) bool {
@@ -176,7 +204,10 @@ func (h *Tokens) verifyGoogle(c *web.Ctx, idToken string) (jwt.Claims, bool) {
 }
 
 // issue applies the checks that follow a proven identity (ban, verified email, second factor) and mints the token.
-func (h *Tokens) issue(c *web.Ctx, u models.User, device, code, recovery string) error {
+// consume, when set, runs right before minting and must report true (Google sign-in: the single-use nonce).
+func (h *Tokens) issue(
+	c *web.Ctx, u models.User, device, code, recovery string, consume func(context.Context) (bool, error),
+) error {
 	if u.IsSeed {
 		return h.problem(c, http.StatusUnprocessableEntity, "invalid-credentials", "Invalid credentials")
 	}
@@ -215,6 +246,17 @@ func (h *Tokens) issue(c *web.Ctx, u models.User, device, code, recovery string)
 
 		if !valid {
 			return h.problem(c, http.StatusUnprocessableEntity, "invalid-credentials", "Invalid credentials")
+		}
+	}
+
+	if consume != nil {
+		ok, err := consume(c.Context())
+		if err != nil {
+			return err
+		}
+
+		if !ok {
+			return h.problem(c, http.StatusUnauthorized, "invalid-id-token", "Invalid ID token")
 		}
 	}
 
