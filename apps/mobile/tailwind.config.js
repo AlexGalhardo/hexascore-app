@@ -19,7 +19,7 @@ module.exports = {
 				Object.entries(tokens.radius).map(([name, value]) => [name, `${value}px`]),
 			),
 			fontFamily: {
-				display: ["Playfair Display"],
+				display: ["Inter"],
 				text: ["Inter"],
 			},
 		},
