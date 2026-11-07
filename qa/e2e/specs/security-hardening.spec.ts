@@ -43,7 +43,12 @@ test.describe("security hardening", () => {
 			await createVerifiedAccount(page, prefix, t);
 
 			const response = await page.request.patch(`${prefix}/profile/privacy`, {
-				headers: { accept: "application/json", "content-type": "application/json" },
+				headers: {
+					accept: "application/json",
+					"content-type": "application/json",
+					"sec-fetch-site": "cross-site",
+					origin: "https://evil.example",
+				},
 				data: {},
 			});
 			expect(response.status()).toBe(403);
