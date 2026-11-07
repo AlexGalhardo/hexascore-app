@@ -7,6 +7,17 @@ const fill = (text: string, params: Record<string, string | number>): string =>
 		name in params ? String(params[name]) : match,
 	);
 
+// Hermes on Android ships no Intl.PluralRules (it is undefined, and `new` on it throws).
+// shortcut: covers en, es and pt-BR only (the app's locales); add a language here before shipping it.
+const fallbackCategory = (locale: string, count: number): string =>
+	locale.toLowerCase().startsWith("pt")
+		? count >= 0 && count < 2
+			? "one"
+			: "other"
+		: count === 1
+			? "one"
+			: "other";
+
 export function translate(
 	messages: Record<string, Message>,
 	locale: string,
@@ -20,6 +31,9 @@ export function translate(
 	const count = params.count;
 	if (typeof count !== "number") return fill(message.other ?? key, params);
 	if (count === 0 && message.zero !== undefined) return fill(message.zero, params);
-	const category = new Intl.PluralRules(locale).select(count);
+	const category =
+		typeof Intl.PluralRules === "function"
+			? new Intl.PluralRules(locale).select(count)
+			: fallbackCategory(locale, count);
 	return fill(message[category] ?? message.other ?? key, params);
 }
