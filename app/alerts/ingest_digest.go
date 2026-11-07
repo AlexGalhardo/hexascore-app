@@ -63,9 +63,9 @@ type IngestSummary struct {
 	// CreatedHour counts the items created in the last hour: the pace and the ETA use it, a 15-minute window swung
 	// from 900 to 2,800 items an hour between two digests.
 	CreatedHour int
-	Active       []ActiveRun
-	Fetched      []SourceCount
-	Games        int
+	Active      []ActiveRun
+	Fetched     []SourceCount
+	Games       int
 	// LLMMonthUSD is the month-to-date spend from ingest_cost_daily; LLMProjectedUSD extrapolates it to the month.
 	LLMMonthUSD, LLMProjectedUSD float64
 }
@@ -171,7 +171,12 @@ func FormatIngest(s IngestSummary) string {
 
 	if s.CreatedHour > 0 {
 		perHour := float64(s.CreatedHour)
-		fmt.Fprintf(&b, "Pace (last hour): %d items · ETA ≈ %.0f days\n", s.CreatedHour, float64(1_000_000-total)/perHour/24)
+		fmt.Fprintf(
+			&b,
+			"Pace (last hour): %d items · ETA ≈ %.0f days\n",
+			s.CreatedHour,
+			float64(1_000_000-total)/perHour/24,
+		)
 	}
 
 	fmt.Fprintf(&b, "\nRuns: %d running, %d queued\n", s.Running, s.Queued)
