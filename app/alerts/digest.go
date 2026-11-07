@@ -202,6 +202,7 @@ WHERE hour >= $1 AND alert <> '' GROUP BY alert ORDER BY alert`, since)
 	if err != nil {
 		return "", fmt.Errorf("digest alerts: %w", err)
 	}
+	defer func() { _ = alerts.Close() }()
 
 	var codes []string
 
@@ -210,7 +211,6 @@ WHERE hour >= $1 AND alert <> '' GROUP BY alert ORDER BY alert`, since)
 
 		var n int64
 		if err := alerts.Scan(&code, &n); err != nil {
-			_ = alerts.Close()
 			return "", err
 		}
 
@@ -231,6 +231,7 @@ GROUP BY fingerprint ORDER BY sum(count) DESC, fingerprint LIMIT $2`, since, dig
 	if err != nil {
 		return "", fmt.Errorf("digest top: %w", err)
 	}
+	defer func() { _ = rows.Close() }()
 
 	b.WriteString("\n")
 
@@ -239,7 +240,6 @@ GROUP BY fingerprint ORDER BY sum(count) DESC, fingerprint LIMIT $2`, since, dig
 
 		var n int64
 		if err := rows.Scan(&msg, &route, &n, &rid); err != nil {
-			_ = rows.Close()
 			return "", err
 		}
 

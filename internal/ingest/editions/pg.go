@@ -28,6 +28,7 @@ func plausibleYear(y int) int {
 	return y
 }
 
+// WorkOfISBN returns the work that already owns an edition with isbn13, and whether one does.
 func (p PG) WorkOfISBN(ctx context.Context, isbn13 string) (string, bool, error) {
 	var work string
 
