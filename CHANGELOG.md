@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **auth:** Login and sign-up share one minimal centered layout (logo, title, Google and passkey buttons, divider, form, link to the other page); the two-factor step is its own `/2fa` page with six code boxes and a backup-code swap, and `/two-factor-challenge` redirects to it.
+- **perf:** The landing page's highlights and upcoming blocks are cached per locale for 5 minutes and forgotten when a trending snapshot lands, so a visit no longer runs 12 catalogue queries.
+
 - **ingest:** `wikidata-discover` chain (every 30 minutes, behind `FLAG_INGEST_WIKIDATA`): walks Wikidata below the top-N selection that capped the catalogue at 100,000 items, most popular first (sitelink count, floor 3) and one type at a time (films, series, games, books), stores the records of items not fetched yet and lets the normaliser create them. The position persists across runs. It needs no TMDB, Open Library or paid access, and Goodreads, Skoob, JustWatch and the IMDb datasets stay unused, as decided in `docs/data/SOURCES.md`
 - **admin:** A progress bar sweeps across the top and the content dims while an admin page loads (after a 120 ms delay, so fast pages do not flash).
 
