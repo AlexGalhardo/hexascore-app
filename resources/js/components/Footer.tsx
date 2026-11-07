@@ -4,6 +4,7 @@ import { localized } from "../lib/route";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
 import { APP_ICON, BRAND } from "./Nav";
+import NewsletterForm from "./NewsletterForm";
 
 const SOURCE_URL = "https://github.com/AlexGalhardo/hexascore-app";
 const linkClass =
@@ -12,7 +13,7 @@ const headingClass = "mb-4 text-xs font-bold tracking-[0.08em] text-footer-muted
 
 export default function Footer() {
 	const t = useT();
-	const { locale } = usePage<SharedProps>().props;
+	const { locale, newsletterUrl } = usePage<SharedProps>().props;
 	const l = (path: string) => localized(path, locale);
 	const categories = [
 		["/games", "nav.games"],
@@ -37,27 +38,9 @@ export default function Footer() {
 				<div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 					<div>
 						<h2 className={headingClass}>{t("footer.newsletterTitle")}</h2>
-						<p id="newsletter-soon" className="text-sm text-footer-muted">
-							{t("footer.newsletterSoon")}
-						</p>
+						<p className="text-sm text-footer-muted">{t("footer.newsletterText")}</p>
 					</div>
-					<div className="mx-auto flex w-full gap-2 lg:mx-0 lg:max-w-xl">
-						<input
-							type="email"
-							disabled
-							aria-label={t("footer.newsletterPlaceholder")}
-							aria-describedby="newsletter-soon"
-							placeholder={t("footer.newsletterPlaceholder")}
-							className="min-h-11 min-w-0 flex-1 rounded-sm border border-footer-border bg-footer-border/30 px-3 text-sm text-footer-fg placeholder:text-footer-muted disabled:cursor-not-allowed"
-						/>
-						<button
-							type="button"
-							disabled
-							className="min-h-11 shrink-0 rounded-sm bg-footer-fg px-5 text-sm font-bold text-footer-bg disabled:cursor-not-allowed disabled:opacity-60"
-						>
-							{t("footer.newsletterSubmit")}
-						</button>
-					</div>
+					{newsletterUrl && <NewsletterForm endpoint={newsletterUrl} />}
 				</div>
 
 				<div className="grid gap-10 pt-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.8fr)_repeat(4,minmax(0,1fr))] lg:gap-8">
