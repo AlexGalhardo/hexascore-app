@@ -57,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Require vukem v0.39.0.
 - **auth:** Google sign-in in the Android app uses the authorization code flow with PKCE (S256) and `state` instead of the implicit ID-token flow. The app first calls the new `POST /app/v1/auth/google/nonce` (guest, rate limited); the ID token must carry that single-use, 5-minute nonce, which `POST /app/v1/tokens/google` checks after verifying the token and consumes when it mints the app token (migration `google_nonces`, hashed). `expo-crypto` 58.0.7 is a direct dependency of the app.
 
 - **docs:** Agent guidance covers the shared framework feedback file (`HS-` ids), the `RUN_SLOW_CI` gate and `scripts/ci/local.sh`, the removed staging environment, integration and Windows test pitfalls, SSR private prefixes, JS-only forms, and the mobile local-dev notes.
