@@ -83,7 +83,7 @@ export default function List({
 			{items.length === 0 ? (
 				<p className="mt-4">{t("userLists.empty")}</p>
 			) : (
-				<ol className="mt-8 grid gap-4 border-t-2 border-fg pt-6 sm:grid-cols-2 lg:grid-cols-3">
+				<ol className="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-2 lg:grid-cols-3">
 					{items.map((e) => (
 						<li key={e.item.id}>
 							<ShelfCard item={e.item}>

@@ -58,7 +58,7 @@ export default function Index({ plans, currency, currencies, coverage }: Props) 
 								<Link
 									href={`${localized("/pricing", locale)}?currency=${c}`}
 									aria-current={c === currency ? "true" : undefined}
-									className="inline-flex min-h-11 min-w-22 items-center justify-center px-4 font-semibold hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg aria-[current=true]:bg-fg aria-[current=true]:text-bg"
+									className="inline-flex min-h-11 min-w-22 items-center justify-center px-4 font-semibold hover:bg-hover outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-[current=true]:bg-fg aria-[current=true]:text-bg"
 								>
 									{c.toUpperCase()}
 								</Link>
@@ -77,7 +77,7 @@ export default function Index({ plans, currency, currencies, coverage }: Props) 
 						<li
 							key={plan.id}
 							aria-labelledby={`plan-${plan.id}`}
-							className={`flex flex-col border-t-2 border-fg p-6 ${featured ? "bg-surface" : ""}`}
+							className={`flex flex-col rounded-xl border p-6 ${featured ? "border-fg bg-surface shadow-sm" : "border-border"}`}
 						>
 							<h2
 								id={`plan-${plan.id}`}
@@ -86,7 +86,7 @@ export default function Index({ plans, currency, currencies, coverage }: Props) 
 								{name}
 								{featured && (
 									<span
-										className={`${eyebrow} bg-fg px-2 py-1 font-sans text-bg`}
+										className={`${eyebrow} rounded-full bg-fg px-2.5 py-1 font-sans text-bg`}
 									>
 										{t("billing.pricing.popular")}
 									</span>

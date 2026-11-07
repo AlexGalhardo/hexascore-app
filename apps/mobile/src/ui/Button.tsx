@@ -36,6 +36,8 @@ export interface ButtonProps {
 	size?: ButtonSize;
 	disabled?: boolean;
 	loading?: boolean;
+	/** `link` for actions that leave the app (web page, store). */
+	role?: "button" | "link";
 	accessibilityHint?: string;
 	className?: string;
 }
@@ -48,13 +50,14 @@ export function Button({
 	size = "default",
 	disabled = false,
 	loading = false,
+	role = "button",
 	accessibilityHint,
 	className = "",
 }: ButtonProps): ReactElement {
 	const inert = disabled || loading;
 	return (
 		<Pressable
-			accessibilityRole="button"
+			accessibilityRole={role}
 			accessibilityLabel={label}
 			accessibilityHint={accessibilityHint}
 			accessibilityState={{ disabled: inert, busy: loading }}

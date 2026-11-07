@@ -22,7 +22,7 @@ const isType = (type: string): type is (typeof TYPES)[number] =>
 	(TYPES as readonly string[]).includes(type);
 
 const textLink =
-	"inline-flex min-h-11 items-center font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
+	"inline-flex min-h-11 items-center font-semibold text-primary hover:underline outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
 
 interface Group {
 	type: string;
@@ -122,7 +122,7 @@ export default function Index({
 									key={type}
 									href={href(type, 1)}
 									aria-current={current ? "page" : undefined}
-									className={`inline-flex min-h-11 items-center border px-4 text-[15px] font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${current ? "border-fg bg-fg text-bg" : "border-border bg-surface hover:bg-hover"}`}
+									className={`inline-flex min-h-11 items-center border px-4 text-[15px] font-semibold outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 ${current ? "border-fg bg-fg text-bg" : "border-border bg-surface hover:bg-hover"}`}
 								>
 									{isType(type) ? (
 										<span className="inline-flex items-center gap-2">
@@ -137,17 +137,17 @@ export default function Index({
 						})}
 					</nav>
 					{notice && (
-						<p className="mt-8 border-t-2 border-fg pt-6 font-display text-2xl md:text-[28px]">
+						<p className="mt-8 border-t border-border pt-6 font-display text-2xl md:text-[28px]">
 							{notice}
 						</p>
 					)}
 					{unavailable && (
-						<p role="status" className="mt-8 border-t-2 border-fg pt-6">
+						<p role="status" className="mt-8 border-t border-border pt-6">
 							{t("search.unavailable")}
 						</p>
 					)}
 					{empty && (
-						<div className="mt-8 border-t-2 border-fg pt-6">
+						<div className="mt-8 border-t border-border pt-6">
 							<h2 className="font-display text-[28px] leading-tight font-bold md:text-[32px]">
 								{t("search.nothingFound", { q: query.q })}
 							</h2>
@@ -187,7 +187,7 @@ export default function Index({
 						</div>
 					)}
 					{groups.map((g) => (
-						<section key={g.type} className="mt-8 border-t-2 border-fg pt-4">
+						<section key={g.type} className="mt-8 border-t border-border pt-4">
 							<h2 className="flex items-baseline gap-3">
 								{isType(g.type) && (
 									<CategoryIcon
@@ -215,7 +215,7 @@ export default function Index({
 						</section>
 					))}
 					{results.length > 0 && (
-						<section className="mt-8 border-t-2 border-fg pt-2">
+						<section className="mt-8 border-t border-border pt-2">
 							<h2 className="sr-only">
 								{t("search.count", { count: total, n: num(total) })}
 							</h2>

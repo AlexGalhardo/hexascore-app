@@ -12,7 +12,7 @@ import type { SharedProps } from "../../types";
 const TYPES: CategoryType[] = ["game", "movie", "series", "book"];
 const SOURCE_URL = "https://github.com/AlexGalhardo/hexascore-app";
 const textLink =
-	"inline-flex min-h-11 items-center font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
+	"inline-flex min-h-11 items-center font-semibold text-primary hover:underline outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
 
 // Copy from README and SDD 09 (owner round 2026-11-01 item 25); same layout as the legal pages.
 export default function Index(): ReactElement {

@@ -1,9 +1,12 @@
+import { useColorScheme } from "nativewind";
 import { type ReactElement, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
 import { Button } from "../ui/Button";
+import { GoogleButton } from "../ui/GoogleButton";
 import { TextField } from "../ui/TextField";
 import { isValidDeviceName } from "./deviceName";
+import type { GoogleSignInInput } from "./google";
 import type { LoginInput, LoginOutcome } from "./login";
 import type { StoredToken } from "./tokenStore";
 
@@ -14,6 +17,11 @@ export type LoginFormProps = {
 	onSignedIn: (token: StoredToken) => Promise<void>;
 	/** Opens the web challenge, signup or recovery page. */
 	openWeb: (path: "/login" | "/signup" | "/forgot-password") => void;
+	/** Google sign-in; omitted when no Google client id is configured, which hides the button. */
+	google?: {
+		prompt: () => Promise<string | null>;
+		submit: (input: GoogleSignInInput) => Promise<LoginOutcome>;
+	};
 };
 
 export function LoginForm(props: LoginFormProps): ReactElement {
@@ -26,11 +34,12 @@ export function LoginForm(props: LoginFormProps): ReactElement {
 	const [code, setCode] = useState("");
 	const [error, setError] = useState<string | null>(null);
 	const [busy, setBusy] = useState(false);
+	const [googleToken, setGoogleToken] = useState<string | null>(null);
+	const scheme = useColorScheme().colorScheme === "dark" ? "dark" : "light";
 
 	const canSubmit =
 		!busy &&
-		identifier.length > 0 &&
-		password.length > 0 &&
+		(googleToken !== null || (identifier.length > 0 && password.length > 0)) &&
 		isValidDeviceName(deviceName) &&
 		(!needsCode || code.trim().length > 0);
 
@@ -42,17 +51,30 @@ export function LoginForm(props: LoginFormProps): ReactElement {
 				? { recoveryCode: code.trim() }
 				: { code: code.trim() }
 			: {};
-		const outcome = await props.submit({
-			identifier,
-			password,
-			deviceName: deviceName.trim(),
-			...second,
-		});
+		const name = deviceName.trim();
+		const outcome =
+			googleToken !== null && props.google
+				? await props.google.submit({ idToken: googleToken, deviceName: name, ...second })
+				: await props.submit({ identifier, password, deviceName: name, ...second });
+		await finish(outcome);
+	};
+
+	const finish = async (outcome: LoginOutcome): Promise<void> => {
 		setBusy(false);
 		if (outcome.kind === "ok") await props.onSignedIn(outcome.token);
 		else if (outcome.kind === "twoFactor") setNeedsCode(true);
 		else if (outcome.kind === "challenge") props.openWeb("/login");
 		else setError(t(locale, outcome.key));
+	};
+
+	const signInWithGoogle = async (): Promise<void> => {
+		if (!props.google || !isValidDeviceName(deviceName)) return;
+		setError(null);
+		const idToken = await props.google.prompt();
+		if (idToken === null) return;
+		setBusy(true);
+		setGoogleToken(idToken);
+		await finish(await props.google.submit({ idToken, deviceName: deviceName.trim() }));
 	};
 
 	const step = needsCode ? "twoFactor" : "credentials";
@@ -87,6 +109,23 @@ export function LoginForm(props: LoginFormProps): ReactElement {
 					)}
 				</Text>
 			</View>
+			{step === "credentials" && props.google ? (
+				<>
+					<GoogleButton
+						label={t(locale, "auth.googleSignIn")}
+						scheme={scheme}
+						onPress={() => void signInWithGoogle()}
+						disabled={busy}
+					/>
+					<View className="flex-row items-center gap-4" accessibilityElementsHidden>
+						<View className="h-px flex-1 bg-border dark:bg-border-dark" />
+						<Text className="font-text text-14 text-muted dark:text-muted-dark">
+							{t(locale, "auth.or")}
+						</Text>
+						<View className="h-px flex-1 bg-border dark:bg-border-dark" />
+					</View>
+				</>
+			) : null}
 			{step === "credentials" ? (
 				<View className="gap-4">
 					<TextField
@@ -149,6 +188,7 @@ export function LoginForm(props: LoginFormProps): ReactElement {
 					<Button
 						variant="ghost"
 						size="sm"
+						role="link"
 						label={t(locale, "auth.login.forgot")}
 						onPress={() => props.openWeb("/forgot-password")}
 					/>
@@ -157,6 +197,7 @@ export function LoginForm(props: LoginFormProps): ReactElement {
 					</Text>
 					<Button
 						variant="outline"
+						role="link"
 						label={t(locale, "auth.login.createAccount")}
 						onPress={() => props.openWeb("/signup")}
 					/>
