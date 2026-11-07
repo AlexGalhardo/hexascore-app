@@ -44,4 +44,3 @@ go run ./cmd/app serve
 ```
 
 Open <http://localhost:3001/>. The preview has public catalogue data and no production accounts. Stop the process with Ctrl+C. Do not put the production `DATABASE_URL` in `.env` or `.env.example`.
-
