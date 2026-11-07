@@ -39,6 +39,18 @@ func Web(r *router.Router, app *vukem.App) error {
 	// Covers come from the bucket origin when COVERS_BASE_URL is set; that origin joins img-src.
 	coversBase := catalog.CoversBase(app.Source.Get("COVERS_BASE_URL"))
 
+	newsletterBase := app.Source.Get("NEWSLETTER_API_URL")
+	if newsletterBase == "" {
+		newsletterBase = appmiddleware.NewsletterDevBase
+		if app.Config.IsProduction() {
+			newsletterBase = appmiddleware.NewsletterProdBase
+		}
+	}
+
+	newsletterURL, newsletterOrigin := appmiddleware.NewsletterEndpoint(
+		newsletterBase, cmp.Or(app.Source.Get("NEWSLETTER_PROJECT_SLUG"), appmiddleware.NewsletterSlug),
+	)
+
 	var imgHosts []string
 	if u, err := url.Parse(coversBase); err == nil && u.Scheme == "https" && u.Host != "" {
 		imgHosts = append(imgHosts, u.Scheme+"://"+u.Host)
@@ -63,6 +75,10 @@ func Web(r *router.Router, app *vukem.App) error {
 		SecureHeaders: func(cfg *middleware.SecureHeadersConfig) {
 			secure(cfg)
 			appmiddleware.AddCSPSources(cfg, ts.CSPSources())
+
+			if newsletterOrigin != "" {
+				appmiddleware.AddCSPSources(cfg, map[string][]string{"connect-src": {newsletterOrigin}})
+			}
 		},
 		// The browser posts violation reports with no session and no CSRF token.
 		// The step-up interstitial is written before the session and CSRF middleware run, so its form carries no
@@ -200,6 +216,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			User:       func(c *web.Ctx) (any, error) { return acc.Web.User(c) },
 			// Empty while Turnstile is off: the widget renders nothing.
 			TurnstileSiteKey: ts.SiteKey,
+			NewsletterURL:    newsletterURL,
 		}),
 		appmiddleware.NotBanned(acc.Web.User, acc.ProblemBase, app.Now),
 	)

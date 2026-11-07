@@ -33,6 +33,8 @@ export interface SharedProps {
 	consent?: "all" | "essential";
 	/** Public Turnstile site key; empty while Turnstile is off. */
 	turnstileSiteKey?: string;
+	/** vukem-email subscribe endpoint of the footer form; empty hides the form. */
+	newsletterUrl?: string;
 	unreadNotifications?: number;
 	/** Allowlisted feature flags (vukem flags.Share); `social` gates Phase 7. */
 	flags?: { social?: boolean };

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **ui:** The footer newsletter form is live: it posts the email (with a honeypot) from the browser to vukem-email's `/subscribe/hexascore` (`NEWSLETTER_API_URL`, default `https://email.hexascore.app` in production and `http://localhost:3100` otherwise; `NEWSLETTER_PROJECT_SLUG`), whose origin joins `connect-src`. States: sending, check your inbox, invalid, rate limited, error.
 - **auth:** Login and sign-up share one minimal centered layout (logo, title, Google and passkey buttons, divider, form, link to the other page); the two-factor step is its own `/2fa` page with six code boxes and a backup-code swap, and `/two-factor-challenge` redirects to it.
 - **perf:** The landing page's highlights and upcoming blocks are cached per locale for 5 minutes and forgotten when a trending snapshot lands, so a visit no longer runs 12 catalogue queries.
 

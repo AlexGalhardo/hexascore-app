@@ -13,6 +13,7 @@ const props = vi.hoisted(() => ({
 	auth: { user: null } as { user: null | Record<string, unknown> },
 	unreadNotifications: 0,
 	flags: {} as { social?: boolean },
+	newsletterUrl: "https://email.test/subscribe/hexascore",
 }));
 
 vi.mock("@inertiajs/react", () => ({
@@ -85,14 +86,8 @@ test("navbar has the search trigger, moon/sun toggle and four sections; footer h
 	expect(source.getAttribute("target")).toBe("_blank");
 	expect(source.getAttribute("rel")).toBe("noopener noreferrer");
 	expect(screen.getByRole("button", { name: "footer.cookieSettings" })).toBeTruthy();
-	expect(
-		(screen.getByRole("textbox", { name: "footer.newsletterPlaceholder" }) as HTMLInputElement)
-			.disabled,
-	).toBe(true);
-	expect(
-		(screen.getByRole("button", { name: "footer.newsletterSubmit" }) as HTMLButtonElement)
-			.disabled,
-	).toBe(true);
+	expect(screen.getByRole("textbox", { name: "footer.newsletterPlaceholder" })).toBeTruthy();
+	expect(screen.getByRole("button", { name: "footer.newsletterSubmit" })).toBeTruthy();
 	expect(footer.querySelector("[hreflang]")).toBeNull();
 });
 
