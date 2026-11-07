@@ -32,3 +32,4 @@ Format: [MADR](https://adr.github.io/madr/) (title, status, context, decision, a
 | [0026](0026-admin-react-shadcn.md) | Admin panel moves to React with shadcn-style components over Base UI | accepted |
 | [0027](0027-stay-on-postgres.md) | Stay on Postgres; the SQLite migration is deferred and cost is cut through the owner-run runbook | accepted |
 | [0028](0028-staging-removed.md) | The staging environment is removed; verification moves to the local QA stack | accepted |
+| [0029](0029-shadcn-ui-neutral-theme.md) | shadcn/ui components and the neutral zinc web theme shared with the Android app | accepted |
