@@ -35,7 +35,7 @@ export default function NavSheet({
 						const hit = (e.target as HTMLElement).closest("a,button");
 						if (hit && !hit.hasAttribute("data-theme-toggle")) onOpenChange(false);
 					}}
-					className="fixed inset-y-0 right-0 z-[60] flex w-80 max-w-[calc(100%-3rem)] flex-col overflow-y-auto border-l border-fg bg-bg text-fg outline-none transition-transform duration-200 data-ending-style:translate-x-full data-starting-style:translate-x-full motion-reduce:transition-none lg:hidden"
+					className="fixed inset-y-0 right-0 z-[60] flex w-80 max-w-[calc(100%-3rem)] flex-col overflow-y-auto border-l border-border bg-bg text-fg outline-none transition-transform duration-200 data-ending-style:translate-x-full data-starting-style:translate-x-full motion-reduce:transition-none lg:hidden"
 				>
 					<div className="flex h-14 shrink-0 items-center justify-between border-b border-border pr-2 pl-4">
 						<BaseDialog.Title className="font-display text-xl font-bold">

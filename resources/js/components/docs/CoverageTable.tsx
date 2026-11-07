@@ -33,14 +33,14 @@ export default function CoverageTable({ coverage }: { coverage: Coverage }) {
 				</caption>
 				<thead>
 					<tr>
-						<th scope="col" className="border-b-2 border-fg py-2 pr-4 text-left">
+						<th scope="col" className="border-b border-border py-2 pr-4 text-left">
 							{t("coverage.field")}
 						</th>
 						{types.map((type) => (
 							<th
 								key={type}
 								scope="col"
-								className="border-b-2 border-fg py-2 pr-4 text-right"
+								className="border-b border-border py-2 pr-4 text-right"
 							>
 								{t(`catalog.title.${type}`)}
 							</th>

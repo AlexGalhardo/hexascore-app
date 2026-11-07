@@ -28,17 +28,16 @@ vi.mock("../lib/useT", () => ({ useT: () => (key: string) => key }));
 
 afterEach(cleanup);
 
-test("btnClass gives every kind a 44 px target, a ledge and a reduced-motion press", () => {
-	for (const kind of ["primary", "secondary"] as const) {
+test("btnClass renders the shadcn button: a 44 px target and a visible focus ring for every kind", () => {
+	for (const kind of ["primary", "secondary", "ghost"] as const) {
 		const cls = btnClass(kind);
-		expect(cls).toContain("min-h-11");
-		expect(cls).toContain(`shadow-ledge-${kind}`);
-		expect(cls).toContain(`active:shadow-ledge-${kind}-pressed`);
-		expect(cls).toContain("active:translate-y-px");
-		expect(cls).toContain("motion-reduce:active:translate-y-0");
-		expect(cls).toContain("focus-visible:outline-2");
+		expect(cls).toContain("h-11");
+		expect(cls).toContain("focus-visible:ring-[3px]");
+		expect(cls).toContain("rounded-md");
 	}
-	expect(btnClass("ghost")).not.toContain("shadow-ledge");
+	expect(btnClass("primary")).toContain("bg-primary");
+	expect(btnClass("secondary")).toContain("border-border");
+	expect(btnClass("ghost", "w-full")).toContain("w-full");
 	render(<Btn kind="secondary">Reset</Btn>);
 	expect(screen.getByRole("button", { name: "Reset" }).getAttribute("type")).toBe("button");
 });

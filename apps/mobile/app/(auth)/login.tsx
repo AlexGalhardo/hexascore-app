@@ -2,6 +2,8 @@ import { router } from "expo-router";
 import type { ReactElement } from "react";
 import { Linking } from "react-native";
 import { defaultDeviceName } from "../../src/auth/deviceName";
+import { signInWithGoogle } from "../../src/auth/google";
+import { googleClientId, promptGoogleIdToken } from "../../src/auth/googlePrompt";
 import { LoginForm } from "../../src/auth/LoginForm";
 import { login } from "../../src/auth/login";
 import { apiBaseUrl, appClient, session } from "../../src/auth/runtime";
@@ -20,6 +22,17 @@ export default function LoginScreen(): ReactElement {
 				await session.signIn(token);
 				router.replace("/");
 			}}
+			google={
+				googleClientId === ""
+					? undefined
+					: {
+							prompt: () => promptGoogleIdToken(googleClientId),
+							submit: (input) =>
+								appClient.write(appClient.newIdempotencyKey(), (client) =>
+									signInWithGoogle(client, input),
+								),
+						}
+			}
 			openWeb={(path) => void Linking.openURL(new URL(path, apiBaseUrl).toString())}
 		/>
 	);

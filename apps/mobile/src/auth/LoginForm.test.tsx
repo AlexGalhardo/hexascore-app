@@ -70,3 +70,75 @@ test("the device name field is labelled through the catalogues", async () => {
 	);
 	expect(screen.getByLabelText("Nome do dispositivo")).toBeTruthy();
 });
+
+describe("Google sign-in and web links", () => {
+	const base = (): LoginFormProps => ({
+		locale: "en",
+		initialDeviceName: "HexaScore · Pixel",
+		submit: jest.fn(),
+		onSignedIn: jest.fn(async () => {}),
+		openWeb: jest.fn(),
+	});
+
+	test("no Google button without a configured Google client", async () => {
+		await render(<LoginForm {...base()} />);
+		expect(screen.queryByText("Sign in with Google")).toBeNull();
+	});
+
+	test("Google signs in with the ID token and the device name", async () => {
+		const props = {
+			...base(),
+			google: {
+				prompt: jest.fn(async () => "idtok"),
+				submit: jest.fn(async () => ({ kind: "ok", token }) as LoginOutcome),
+			},
+		};
+		await render(<LoginForm {...props} />);
+		await fireEvent.press(screen.getByText("Sign in with Google"));
+		await waitFor(() => expect(props.onSignedIn).toHaveBeenCalledWith(token));
+		expect(props.google.submit).toHaveBeenCalledWith({
+			idToken: "idtok",
+			deviceName: "HexaScore · Pixel",
+		});
+	});
+
+	test("a cancelled Google prompt does nothing", async () => {
+		const props = {
+			...base(),
+			google: { prompt: jest.fn(async () => null), submit: jest.fn() },
+		};
+		await render(<LoginForm {...props} />);
+		await fireEvent.press(screen.getByText("Sign in with Google"));
+		await waitFor(() => expect(props.google.prompt).toHaveBeenCalled());
+		expect(props.google.submit).not.toHaveBeenCalled();
+	});
+
+	test("Google two-factor keeps the ID token for the code step", async () => {
+		const submit = jest
+			.fn()
+			.mockResolvedValueOnce({ kind: "twoFactor" })
+			.mockResolvedValueOnce({ kind: "ok", token });
+		const props = { ...base(), google: { prompt: jest.fn(async () => "idtok"), submit } };
+		await render(<LoginForm {...props} />);
+		await fireEvent.press(screen.getByText("Sign in with Google"));
+		await waitFor(() => screen.getByLabelText("Code"));
+		await fireEvent.changeText(screen.getByLabelText("Code"), "123456");
+		await fireEvent.press(screen.getByText("Verify"));
+		await waitFor(() =>
+			expect(submit).toHaveBeenLastCalledWith({
+				idToken: "idtok",
+				deviceName: "HexaScore · Pixel",
+				code: "123456",
+			}),
+		);
+	});
+
+	test("forgot password and create account are links that open the web", async () => {
+		const props = base();
+		await render(<LoginForm {...props} />);
+		await fireEvent.press(screen.getByRole("link", { name: "Forgot your password?" }));
+		await fireEvent.press(screen.getByRole("link", { name: "Create account" }));
+		expect(props.openWeb).toHaveBeenCalledWith("/forgot-password");
+		expect(props.openWeb).toHaveBeenCalledWith("/signup");
+	});
+});

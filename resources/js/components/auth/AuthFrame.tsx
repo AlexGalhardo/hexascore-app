@@ -42,7 +42,7 @@ export default function AuthFrame({ heading, lede, title, children }: Props): Re
 				{lede && <p className="mt-4 max-w-xl text-muted md:mt-6 md:text-lg">{lede}</p>}
 			</div>
 			{/* Mobile drops the card for a top rule; the title stays for screen readers and focus. */}
-			<section className="border-t border-fg pt-4 md:border md:px-8 md:py-9">
+			<section className="border-t border-border pt-4 md:rounded-xl md:border md:bg-surface md:px-8 md:py-9 md:shadow-xs">
 				<h1 className="sr-only font-display text-[28px] leading-tight font-bold md:not-sr-only md:mb-5">
 					{title}
 				</h1>
@@ -71,7 +71,7 @@ export function OrRule(): React.ReactElement {
 // Google sign-in branding colours are fixed by Google, not HexaScore tokens: the one third-party exception
 // documented in docs/openpencil/v1-editorial/README.md (round 2, item 15). Inter instead of Roboto (two-family budget).
 const google =
-	"inline-flex min-h-11 w-full items-center justify-center gap-3 rounded-md border border-[#747775] bg-[#FFFFFF] px-4 text-[15px] font-medium text-[#1F1F1F] shadow-[0_2px_0_#747775] transition-[box-shadow,translate] duration-100 hover:bg-[#F8F8F8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg active:translate-y-px active:shadow-[0_1px_0_#747775] motion-reduce:transition-none motion-reduce:active:translate-y-0 dark:border-[#8E918F] dark:bg-[#131314] dark:text-[#E3E3E3] dark:shadow-[0_2px_0_#8E918F] dark:hover:bg-[#1E1E20] dark:active:shadow-[0_1px_0_#8E918F]";
+	"inline-flex min-h-11 w-full items-center justify-center gap-3 rounded-md border border-[#747775] bg-[#FFFFFF] px-4 text-[15px] font-medium text-[#1F1F1F] shadow-[0_2px_0_#747775] transition-[box-shadow,translate] duration-100 hover:bg-[#F8F8F8] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 active:translate-y-px active:shadow-[0_1px_0_#747775] motion-reduce:transition-none motion-reduce:active:translate-y-0 dark:border-[#8E918F] dark:bg-[#131314] dark:text-[#E3E3E3] dark:shadow-[0_2px_0_#8E918F] dark:hover:bg-[#1E1E20] dark:active:shadow-[0_1px_0_#8E918F]";
 
 /** "Sign in with Google" (login) or "Sign up with Google" (signup); a full navigation to the OAuth redirect. */
 export function GoogleButton({ mode }: { mode: "signIn" | "signUp" }): React.ReactElement {

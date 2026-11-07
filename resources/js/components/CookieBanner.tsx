@@ -57,14 +57,14 @@ export default function CookieBanner() {
 							ref={first}
 							type="button"
 							onClick={() => choose("essential")}
-							className="min-h-11 rounded-md border border-border px-4 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+							className="min-h-11 rounded-md border border-border px-4 text-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 						>
 							{t("cookies.decline")}
 						</button>
 						<button
 							type="button"
 							onClick={() => choose("all")}
-							className="min-h-11 rounded-md bg-fg px-4 text-sm text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+							className="min-h-11 rounded-md bg-fg px-4 text-sm text-bg outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 						>
 							{t("cookies.accept")}
 						</button>

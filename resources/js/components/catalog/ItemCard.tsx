@@ -16,7 +16,7 @@ export default function ItemCard({ item, href }: { item: Highlight; href: string
 			<div className="min-w-0 flex-1">
 				<Link
 					href={href}
-					className="block truncate font-display text-lg leading-snug font-bold hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+					className="block truncate font-display text-lg leading-snug font-bold hover:text-primary outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 				>
 					{item.title}
 				</Link>

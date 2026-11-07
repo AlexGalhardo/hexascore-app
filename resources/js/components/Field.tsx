@@ -1,12 +1,14 @@
 import type { InputHTMLAttributes } from "react";
 
+import { cn } from "../lib/utils";
+import { inputClass } from "./ui/input";
+
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
 	label: string;
 	error?: string;
 }
 
-export const fieldClass =
-	"mt-2 block min-h-12 w-full rounded-md border border-field bg-field-bg px-3.5 text-base text-fg placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-primary aria-invalid:border-danger read-only:bg-surface read-only:text-muted";
+export const fieldClass = cn(inputClass, "mt-2 h-11");
 
 // Field is a labelled input with its validation error.
 export default function Field({ label, error, ...input }: Props) {

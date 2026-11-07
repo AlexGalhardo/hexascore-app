@@ -132,7 +132,7 @@ export default function Index({ counts, groups, filters }: Props) {
 				</button>
 			</form>
 			{groups.data.length === 0 ? (
-				<p className="mt-8 border-t-2 border-fg pt-6 font-display text-2xl">
+				<p className="mt-8 border-t border-border pt-6 font-display text-2xl">
 					{t("library.empty")}
 				</p>
 			) : (
@@ -145,7 +145,7 @@ export default function Index({ counts, groups, filters }: Props) {
 						return (
 							<section
 								key={status}
-								className="mt-8 border-t-2 border-fg pt-4"
+								className="mt-8 border-t border-border pt-4"
 								aria-labelledby={`status-${status}`}
 							>
 								<h2

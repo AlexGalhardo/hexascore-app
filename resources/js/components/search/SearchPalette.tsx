@@ -115,10 +115,10 @@ function SearchPalette({ open, onOpenChange, returnFocus }: Props) {
 				<BaseDialog.Popup
 					initialFocus={input}
 					finalFocus={returnFocus}
-					className="fixed inset-0 z-[60] flex flex-col bg-bg text-fg outline-none sm:inset-x-0 sm:top-[12vh] sm:bottom-auto sm:mx-auto sm:max-h-[76vh] sm:w-[calc(100%-2rem)] sm:max-w-[640px] sm:rounded-md sm:border sm:border-fg sm:shadow-[0_4px_0_var(--color-border)]"
+					className="fixed inset-0 z-[60] flex flex-col bg-bg text-fg outline-none sm:inset-x-0 sm:top-[12vh] sm:bottom-auto sm:mx-auto sm:max-h-[76vh] sm:w-[calc(100%-2rem)] sm:max-w-[640px] sm:rounded-xl sm:border sm:border-border sm:shadow-lg"
 				>
 					<BaseDialog.Title className="sr-only">{t("search.title")}</BaseDialog.Title>
-					<search className="flex items-center gap-2 border-b border-fg px-4">
+					<search className="flex items-center gap-2 border-b border-border px-4">
 						<svg
 							aria-hidden="true"
 							viewBox="0 0 24 24"
@@ -149,7 +149,7 @@ function SearchPalette({ open, onOpenChange, returnFocus }: Props) {
 							onKeyDown={onKeyDown}
 							className="h-14 min-w-0 flex-1 bg-transparent text-[17px] outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
 						/>
-						<BaseDialog.Close className="inline-flex min-h-11 shrink-0 items-center rounded-md px-2 text-sm font-semibold text-primary hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg">
+						<BaseDialog.Close className="inline-flex min-h-11 shrink-0 items-center rounded-md px-2 text-sm font-semibold text-primary hover:bg-hover outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
 							<span className="sm:hidden">{t("search.palette.close")}</span>
 							<kbd className="hidden h-[22px] items-center rounded-sm border border-border bg-surface px-1.5 font-sans text-xs font-semibold text-muted sm:inline-flex">
 								Esc

@@ -86,7 +86,7 @@ export default function Index({
 								<li key={a.param}>
 									<a
 										href={withoutParam(url, a.param)}
-										className="inline-flex min-h-11 items-center gap-2 rounded-md border-2 border-fg bg-surface px-3 text-sm font-semibold shadow-ledge-secondary hover:bg-fg hover:text-bg"
+										className="inline-flex min-h-11 items-center gap-2 rounded-md border-2 border-fg bg-surface px-3 text-sm font-semibold shadow-ledge-secondary hover:bg-hover"
 										aria-label={t("catalog.removeFilter", { name: a.name })}
 									>
 										{a.name} <span aria-hidden="true">×</span>
