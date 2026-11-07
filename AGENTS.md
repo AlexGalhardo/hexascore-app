@@ -7,17 +7,18 @@ HexaScore is a catalogue, rating and recommendation platform for games, films, s
 1. Read [ROADMAP.md](ROADMAP.md), then [docs/ROADMAP-V1.md](docs/ROADMAP-V1.md) and [docs/BACKLOG.md](docs/BACKLOG.md) for milestones and task order.
 2. Check the latest [review snapshot](docs/review/) and relevant [design documents](docs/sdd/), [ADRs](docs/adrs/) and [owner decisions](docs/brainstorming.md) before changing behavior.
 3. Read every matching rule in [.agents/rules/](.agents/rules/) before editing; read the applicable skill in [.agents/skills/](.agents/skills/) when its description fits. Rules are not loaded automatically.
-4. For Railway operations, follow [.agents/skills/use-railway/SKILL.md](.agents/skills/use-railway/SKILL.md) and [the Railway runbooks](docs/runbooks/). Never deploy unless the owner explicitly asks. A push to `main` deploys production.
+4. For Railway operations, follow [.agents/skills/use-railway/SKILL.md](.agents/skills/use-railway/SKILL.md) and [the Railway runbooks](docs/runbooks/). Never deploy unless the owner explicitly asks. A push to `main` deploys production; there is no staging environment (ADR 0028). hexascore.app DNS is on Cloudflare and owner-run.
 
 ## Working rules
 
 - Keep repository code, comments and docs in English; chat with the owner in pt-BR. Put UI text in the `en`, `pt-BR` and `es` catalogues.
 - Treat [brainstorming decisions](docs/brainstorming.md) and [ADRs](docs/adrs/) as final: update the decision, then the SDD, then code when a change is approved.
 - Prefer native vukem features. Do not add Go/npm dependencies without owner approval and an ADR. Pin exact versions; never use `latest` or prereleases.
-- Use official [vukem documentation](https://vukem.dev/docs) for framework facts. Do not invent APIs; record undocumented gaps in the local framework feedback process.
+- Use official [vukem documentation](https://vukem.dev/docs) for framework facts. Do not invent APIs; record undocumented gaps in the shared framework feedback ([rule](.agents/rules/framework-feedback.md)).
 - Make surgical changes. Do not weaken security defaults. Update owning docs and `CHANGELOG.md` when behavior, commands or conventions change.
-- Follow the acceptance commands in [ROADMAP.md](ROADMAP.md). Run focused checks for the task; the full release gate is in [the local CI script](scripts/ci/local.sh).
-- Use Conventional Commits per [.agents/rules/commits.md](.agents/rules/commits.md). Never rewrite history or force-push. Workers do not push; only the orchestrator may push `main`, after the required gate.
+- Follow the acceptance commands in [ROADMAP.md](ROADMAP.md). Run focused checks for the task; the full release gate is in [the local CI script](scripts/ci/local.sh). Remote CI skips the slow jobs unless the repo variable `RUN_SLOW_CI=true`, so run `scripts/ci/local.sh` (lint, test-go, test-go-integration, test-ts, build, openapi) before calling a PR green.
+- Use Conventional Commits per [.agents/rules/commits.md](.agents/rules/commits.md). Never rewrite history or force-push. Workers do not push; only the orchestrator may push `main`, after the required gate. In a shared tree workers commit with explicit paths; the orchestrator reviews and fixes bugs, and a security review finding is fixed together with a test.
+- Apply the vendored `security-audit` skill in guidance mode while developing; see [.agents/rules/secure-coding.md](.agents/rules/secure-coding.md).
 - Never commit `go.work` or a local `replace` directive. Keep `legacy` immutable and never delete it.
 - Before production data changes, get owner approval and follow the relevant [runbook](docs/runbooks/).
 
