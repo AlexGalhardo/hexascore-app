@@ -28,7 +28,7 @@ export function AppHeader({
 		>
 			<Text
 				accessibilityRole="header"
-				className="font-display text-24 font-bold text-fg dark:text-fg-dark"
+				className="font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark"
 			>
 				HexaScore
 			</Text>

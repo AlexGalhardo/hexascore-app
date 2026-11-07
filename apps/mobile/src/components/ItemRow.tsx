@@ -54,7 +54,7 @@ function ItemRowView({ item, locale, basis, coverThumbUrl, onPress }: ItemRowPro
 					accessibilityLabel={t(locale, "item.coverAlt", { title: item.title ?? item.slug })}
 				/>
 			) : (
-				<View className="rounded-sm bg-surface dark:bg-surface-dark" style={COVER} />
+				<View className="rounded-md bg-surface dark:bg-surface-dark" style={COVER} />
 			)}
 			<View className="flex-1 gap-1">
 				<Text className="text-12 text-muted dark:text-muted-dark">

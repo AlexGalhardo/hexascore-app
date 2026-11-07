@@ -54,7 +54,7 @@ function IconBtn({
 			accessibilityState={{ disabled }}
 			disabled={disabled}
 			onPress={onPress}
-			className={`h-11 w-11 items-center justify-center rounded-sm active:bg-surface dark:active:bg-surface-dark ${disabled ? "opacity-50" : ""}`}
+			className={`h-11 w-11 items-center justify-center rounded-md active:bg-surface dark:active:bg-surface-dark ${disabled ? "opacity-50" : ""}`}
 		>
 			<Icon name={name} size={20} className={FG} />
 		</Pressable>
@@ -73,7 +73,10 @@ export function ListDetailPage(props: ListDetailProps): ReactElement {
 				<Text className="font-text text-12 font-bold uppercase tracking-wider text-primary dark:text-primary-dark">
 					{props.kicker}
 				</Text>
-				<Text accessibilityRole="header" className={`font-display text-36 font-bold ${FG}`}>
+				<Text
+					accessibilityRole="header"
+					className={`font-display text-36 font-semibold tracking-tight ${FG}`}
+				>
 					{props.title}
 				</Text>
 				{props.description ? (
@@ -105,7 +108,7 @@ export function ListDetailPage(props: ListDetailProps): ReactElement {
 					{labels.empty}
 				</Text>
 			) : (
-				<View className="border-t-2 border-fg dark:border-fg-dark">
+				<View className="border-t border-border dark:border-border-dark">
 					{rows.map((row, index) => (
 						<ItemRow
 							key={row.id}

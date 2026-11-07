@@ -18,7 +18,7 @@ const FG = "text-fg dark:text-fg-dark";
 const MUTED = "font-text text-14 text-muted dark:text-muted-dark";
 // Same panel as the status and add-to-list sheets.
 const PANEL =
-	"gap-4 border-t-2 border-primary bg-surface p-4 dark:border-primary-dark dark:bg-surface-dark";
+	"gap-4 rounded-lg border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark";
 
 function TypeChip({
 	label,
@@ -34,10 +34,10 @@ function TypeChip({
 			accessibilityRole="button"
 			accessibilityState={{ selected }}
 			onPress={onPress}
-			className={`min-h-11 justify-center rounded-full border px-4 ${selected ? "border-fg bg-fg dark:border-fg-dark dark:bg-fg-dark" : "border-border dark:border-border-dark"}`}
+			className={`min-h-11 justify-center rounded-full border px-4 ${selected ? "border-primary bg-primary dark:border-primary-dark dark:bg-primary-dark" : "border-border dark:border-border-dark"}`}
 		>
 			<Text
-				className={`font-text text-14 ${selected ? "text-bg dark:text-bg-dark" : "text-fg dark:text-fg-dark"}`}
+				className={`font-text text-14 ${selected ? "text-on-primary dark:text-on-primary-dark" : "text-fg dark:text-fg-dark"}`}
 			>
 				{label}
 			</Text>
@@ -73,13 +73,16 @@ export function ListsTab({
 			className="flex-1 bg-bg dark:bg-bg-dark"
 			contentContainerClassName="gap-6 px-4 pb-8 pt-6"
 		>
-			<Text accessibilityRole="header" className={`font-display text-36 font-bold ${FG}`}>
+			<Text
+				accessibilityRole="header"
+				className={`font-display text-36 font-semibold tracking-tight ${FG}`}
+			>
 				{t(locale, "nav.lists")}
 			</Text>
 			{rows.length === 0 && !lists.isPending ? (
 				<Text className={`font-text text-16 ${FG}`}>{t(locale, "lists.noLists")}</Text>
 			) : null}
-			<View className="border-t-2 border-fg dark:border-fg-dark">
+			<View className="border-t border-border dark:border-border-dark">
 				{rows.map((list) => {
 					const meta = [
 						t(locale, `catalog.title.${list.type}`),
@@ -104,7 +107,10 @@ export function ListsTab({
 				})}
 			</View>
 			<View className={PANEL}>
-				<Text accessibilityRole="header" className={`font-display text-24 font-bold ${FG}`}>
+				<Text
+					accessibilityRole="header"
+					className={`font-display text-24 font-semibold tracking-tight ${FG}`}
+				>
 					{t(locale, "lists.new")}
 				</Text>
 				<TextField label={t(locale, "lists.fieldTitle")} value={title} onChangeText={setTitle} />

@@ -32,7 +32,7 @@ export function ItemRow({ row, locale, onOpen, trailing }: ItemRowProps): ReactE
 			>
 				<Cover uri={row.coverUri} title={row.title} className="w-10" />
 				<View className="flex-1">
-					<Text className="font-display text-18 font-bold text-fg dark:text-fg-dark">
+					<Text className="font-display text-18 font-semibold tracking-tight text-fg dark:text-fg-dark">
 						{row.title}
 					</Text>
 					<Text className="font-text text-14 text-muted dark:text-muted-dark">{row.meta}</Text>

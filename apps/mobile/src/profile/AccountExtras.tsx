@@ -33,9 +33,9 @@ export function AccountExtras({
 						accessibilityRole="button"
 						accessibilityLabel={unread > 0 ? `${inbox}, ${count}` : inbox}
 						onPress={() => onOpen("/notifications")}
-						className="min-h-11 flex-row items-center justify-between gap-3 border-t-2 border-fg pt-4 dark:border-fg-dark"
+						className="min-h-11 flex-row items-center justify-between gap-3 border-t border-border pt-4 dark:border-border-dark"
 					>
-						<Text className="font-display text-24 font-bold text-fg dark:text-fg-dark">
+						<Text className="font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark">
 							{inbox}
 						</Text>
 						{unread > 0 ? (

@@ -16,7 +16,7 @@ export function Cover({ uri, title, className = "" }: CoverProps): ReactElement 
 			accessible
 			accessibilityRole="image"
 			accessibilityLabel={title}
-			className={`aspect-[2/3] overflow-hidden rounded-sm bg-surface dark:bg-surface-dark ${className}`}
+			className={`aspect-[2/3] overflow-hidden rounded-md bg-surface dark:bg-surface-dark ${className}`}
 		>
 			{uri !== null && (
 				<Image source={uri} contentFit="cover" transition={0} style={StyleSheet.absoluteFill} />

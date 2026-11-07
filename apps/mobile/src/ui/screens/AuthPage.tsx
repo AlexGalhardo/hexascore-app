@@ -23,13 +23,13 @@ export function AuthPage(props: AuthPageProps): ReactElement {
 			contentContainerClassName="gap-6 px-4 pb-8 pt-6"
 			keyboardShouldPersistTaps="handled"
 		>
-			<View className="gap-3 border-b-2 border-fg pb-6 dark:border-fg-dark">
+			<View className="gap-3 border-b border-border pb-6 dark:border-border-dark">
 				<Text className="font-text text-12 font-bold uppercase tracking-wider text-primary dark:text-primary-dark">
 					{props.kicker}
 				</Text>
 				<Text
 					accessibilityRole="header"
-					className="font-display text-36 font-bold text-fg dark:text-fg-dark"
+					className="font-display text-36 font-semibold tracking-tight text-fg dark:text-fg-dark"
 				>
 					{props.title}
 				</Text>

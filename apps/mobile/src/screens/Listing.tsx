@@ -37,11 +37,11 @@ function Chip({
 		<Pressable
 			accessibilityRole="button"
 			accessibilityState={{ selected }}
-			className={`min-h-11 justify-center rounded-full border px-3 ${selected ? "border-fg bg-fg dark:border-fg-dark dark:bg-fg-dark" : "border-border dark:border-border-dark"}`}
+			className={`min-h-11 justify-center rounded-full border px-3 ${selected ? "border-primary bg-primary dark:border-primary-dark dark:bg-primary-dark" : "border-border dark:border-border-dark"}`}
 			onPress={onPress}
 		>
 			<Text
-				className={`font-text text-14 ${selected ? "text-bg dark:text-bg-dark" : "text-fg dark:text-fg-dark"}`}
+				className={`font-text text-14 ${selected ? "text-on-primary dark:text-on-primary-dark" : "text-fg dark:text-fg-dark"}`}
 			>
 				{label}
 			</Text>
@@ -113,7 +113,7 @@ export function ListingBody({
 			<View testID="listing" className="flex-1 gap-6 bg-bg px-4 pt-6 dark:bg-bg-dark">
 				<Text
 					accessibilityRole="header"
-					className="font-display text-36 font-bold text-fg dark:text-fg-dark"
+					className="font-display text-36 font-semibold tracking-tight text-fg dark:text-fg-dark"
 				>
 					{title}
 				</Text>

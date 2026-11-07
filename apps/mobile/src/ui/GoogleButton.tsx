@@ -1,7 +1,6 @@
 import { Image } from "expo-image";
 import type { ReactElement } from "react";
 import { Pressable, Text } from "react-native";
-import { useReducedMotion } from "./motion";
 
 export interface GoogleButtonProps {
 	/** "Sign in with Google" / "Sign up with Google", translated per Google's wording. */
@@ -25,8 +24,6 @@ export function GoogleButton({
 	onPress,
 	disabled = false,
 }: GoogleButtonProps): ReactElement {
-	const reduced = useReducedMotion();
-	const sink = reduced ? "" : "active:translate-y-px";
 	return (
 		<Pressable
 			accessibilityRole="button"
@@ -34,7 +31,7 @@ export function GoogleButton({
 			accessibilityState={{ disabled }}
 			disabled={disabled}
 			onPress={onPress}
-			className={`min-h-11 flex-row items-center justify-center gap-3 rounded-sm border border-b-2 px-4 active:border-b ${SURFACE[scheme]} ${sink} ${disabled ? "opacity-50" : ""}`}
+			className={`min-h-11 flex-row items-center justify-center gap-3 rounded-md border px-4 ${SURFACE[scheme]} ${disabled ? "opacity-50" : ""}`}
 		>
 			<Image
 				testID="google-mark"

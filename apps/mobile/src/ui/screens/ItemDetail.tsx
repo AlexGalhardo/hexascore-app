@@ -84,9 +84,9 @@ const BAR = {
 	"score-none": "bg-score-none",
 } as const;
 
-const H2 = "font-display text-24 font-bold text-fg dark:text-fg-dark";
+const H2 = "font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark";
 const MUTED = "font-text text-14 text-muted dark:text-muted-dark";
-const RULE = "gap-3 border-t border-fg pt-4 dark:border-fg-dark";
+const RULE = "gap-3 border-t border-border pt-4 dark:border-border-dark";
 
 function CategoryBar({
 	category,
@@ -113,7 +113,7 @@ function CategoryBar({
 					/>
 				)}
 			</View>
-			<Text className="w-10 text-right font-display text-16 font-bold tabular-nums text-fg dark:text-fg-dark">
+			<Text className="w-10 text-right font-display text-16 font-semibold tracking-tight tabular-nums text-fg dark:text-fg-dark">
 				{formatScore(category.score, locale)}
 			</Text>
 		</View>
@@ -137,7 +137,7 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 					</Text>
 					<Text
 						accessibilityRole="header"
-						className="font-display text-30 font-bold text-fg dark:text-fg-dark"
+						className="font-display text-30 font-semibold tracking-tight text-fg dark:text-fg-dark"
 					>
 						{item.title}
 					</Text>
@@ -163,7 +163,7 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 						<View
 							key={genre}
 							testID="genre-chip"
-							className="min-h-11 justify-center rounded-full border border-fg px-4 dark:border-fg-dark"
+							className="min-h-11 justify-center rounded-full border border-border px-4 dark:border-border-dark"
 						>
 							<Text className="font-text text-14 text-fg dark:text-fg-dark">{genre}</Text>
 						</View>
@@ -184,7 +184,7 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 						accessibilityRole="button"
 						accessibilityLabel={labels.addToList}
 						onPress={props.onAddToList}
-						className="h-11 w-11 items-center justify-center rounded-sm border border-b-2 border-fg bg-field-bg active:border-b dark:border-fg-dark dark:bg-field-bg-dark"
+						className="h-11 w-11 items-center justify-center rounded-md border border-border bg-bg active:bg-hover dark:border-border-dark dark:bg-bg-dark dark:active:bg-hover-dark"
 					>
 						<Icon name="add" size={22} className="text-fg dark:text-fg-dark" />
 					</Pressable>
@@ -203,7 +203,7 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 				</View>
 			)}
 			{rating !== null && (
-				<View className="gap-4 border-t-2 border-primary bg-surface p-4 dark:border-primary-dark dark:bg-surface-dark">
+				<View className="gap-4 rounded-lg border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark">
 					<Text className={H2}>{labels.rateTitle(item.title)}</Text>
 					{item.categories.map((category) => (
 						<View key={category.key} className="gap-1">

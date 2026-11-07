@@ -51,7 +51,7 @@ function groupByRole(entities: EntityRef[]): [string, EntityRef[]][] {
 	return [...groups];
 }
 
-const H2 = "font-display text-24 font-bold text-fg dark:text-fg-dark";
+const H2 = "font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark";
 
 function detailOf(item: AppItemJSON, type: CatalogType, locale: AppLocale): ItemDetailView {
 	const year = item.releaseDate?.slice(0, 4);

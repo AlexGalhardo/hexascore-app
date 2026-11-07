@@ -79,7 +79,10 @@ export function NotificationsPage({
 			contentContainerClassName="gap-4 px-4 pb-8 pt-6"
 		>
 			<View className="gap-2">
-				<Text accessibilityRole="header" className={`font-display text-36 font-bold ${FG}`}>
+				<Text
+					accessibilityRole="header"
+					className={`font-display text-36 font-semibold tracking-tight ${FG}`}
+				>
 					{title}
 				</Text>
 				<Text className={`${MUTED} tabular-nums`}>{labels.unreadCount(unread)}</Text>
@@ -97,7 +100,7 @@ export function NotificationsPage({
 					{labels.empty}
 				</Text>
 			) : (
-				<View className="border-t-2 border-fg dark:border-fg-dark">
+				<View className="border-t border-border dark:border-border-dark">
 					{rows.map((row) => (
 						<Row key={row.id} row={row} labels={labels} onOpen={onOpen} />
 					))}

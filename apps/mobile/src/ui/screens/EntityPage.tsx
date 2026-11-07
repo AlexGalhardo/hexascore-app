@@ -62,7 +62,10 @@ export function EntityPage(props: EntityPageProps): ReactElement {
 				<Text className="font-text text-12 font-bold uppercase tracking-wider text-secondary dark:text-secondary-dark">
 					{props.kind}
 				</Text>
-				<Text accessibilityRole="header" className={`font-display text-36 font-bold ${FG}`}>
+				<Text
+					accessibilityRole="header"
+					className={`font-display text-36 font-semibold tracking-tight ${FG}`}
+				>
 					{props.name}
 				</Text>
 				{props.roles.length > 0 ? (
@@ -76,7 +79,7 @@ export function EntityPage(props: EntityPageProps): ReactElement {
 									accessibilityLabel={`${role.label} (${role.count})`}
 									accessibilityState={{ selected }}
 									onPress={() => props.onRole(role.key)}
-									className={`min-h-11 flex-row items-center gap-1.5 rounded-sm border px-3 ${selected ? "border-fg bg-surface dark:border-fg-dark dark:bg-surface-dark" : "border-border dark:border-border-dark"}`}
+									className={`min-h-11 flex-row items-center gap-1.5 rounded-md border px-3 ${selected ? "border-primary bg-surface dark:border-primary-dark dark:bg-surface-dark" : "border-border dark:border-border-dark"}`}
 								>
 									<Text className={`font-text text-14 font-semibold ${FG}`}>{role.label}</Text>
 									<Text className={`${MUTED} tabular-nums`}>({role.count})</Text>
@@ -87,7 +90,7 @@ export function EntityPage(props: EntityPageProps): ReactElement {
 				) : null}
 			</View>
 			{props.facts.length > 0 || props.description ? (
-				<View className="border-t-2 border-fg pt-2 dark:border-fg-dark">
+				<View className="border-t border-border pt-2 dark:border-border-dark">
 					{props.facts.map((fact) => (
 						<View
 							key={fact.label}
@@ -124,7 +127,7 @@ export function EntityPage(props: EntityPageProps): ReactElement {
 			{groups.length === 0 ? (
 				<View
 					accessibilityLiveRegion="polite"
-					className="items-center gap-3 border-t-2 border-fg py-12 dark:border-fg-dark"
+					className="items-center gap-3 border-t border-border py-12 dark:border-border-dark"
 				>
 					<Text className="font-display text-24 italic text-muted dark:text-muted-dark">
 						{props.empty.title}
@@ -135,8 +138,11 @@ export function EntityPage(props: EntityPageProps): ReactElement {
 			) : (
 				groups.map((group) => (
 					<View key={group.key} className="gap-1">
-						<View className="flex-row flex-wrap items-baseline gap-x-3 border-t-2 border-fg pt-4 dark:border-fg-dark">
-							<Text accessibilityRole="header" className={`font-display text-24 font-bold ${FG}`}>
+						<View className="flex-row flex-wrap items-baseline gap-x-3 border-t border-border pt-4 dark:border-border-dark">
+							<Text
+								accessibilityRole="header"
+								className={`font-display text-24 font-semibold tracking-tight ${FG}`}
+							>
 								{group.title}
 							</Text>
 							<Text className={`${MUTED} tabular-nums`}>{group.count}</Text>

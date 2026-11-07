@@ -10,6 +10,8 @@ export interface SegmentedControlProps<T extends string> {
 	value: T;
 	onChange: (value: T) => void;
 	label: string;
+	/** Radio semantics (a setting) instead of tab semantics (a view switch). */
+	radio?: boolean;
 }
 
 // shadcn tabs list: a muted track with the selected segment raised on the page colour.
@@ -18,10 +20,11 @@ export function SegmentedControl<T extends string>({
 	value,
 	onChange,
 	label,
+	radio = false,
 }: SegmentedControlProps<T>): React.ReactElement {
 	return (
 		<View
-			accessibilityRole="tablist"
+			accessibilityRole={radio ? "radiogroup" : "tablist"}
 			accessibilityLabel={label}
 			className="flex-row rounded-lg bg-hover p-1 dark:bg-hover-dark"
 		>
@@ -30,10 +33,10 @@ export function SegmentedControl<T extends string>({
 				return (
 					<Pressable
 						key={option.value}
-						accessibilityRole="tab"
-						accessibilityState={{ selected }}
+						accessibilityRole={radio ? "radio" : "tab"}
+						accessibilityState={radio ? { checked: selected } : { selected }}
 						onPress={() => onChange(option.value)}
-						className={`min-h-9 flex-1 items-center justify-center rounded-md px-3 ${selected ? "bg-bg dark:bg-bg-dark" : ""}`}
+						className={`min-h-11 flex-1 items-center justify-center rounded-md px-3 ${selected ? "bg-bg dark:bg-bg-dark" : ""}`}
 					>
 						<Text
 							className={`font-text text-14 font-semibold ${selected ? "text-fg dark:text-fg-dark" : "text-muted dark:text-muted-dark"}`}
