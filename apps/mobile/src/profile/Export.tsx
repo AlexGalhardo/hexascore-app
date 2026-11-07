@@ -2,7 +2,7 @@ import { type ReactElement, useState } from "react";
 import { Text } from "react-native";
 import { ApiError, type Client } from "../../../../packages/app-client/src/api";
 import { type AppLocale, t } from "../i18n";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
 import { SettingsSection } from "../ui/screens/SettingsPage";
 
 export type ExportWrite = <T>(call: (client: Pick<Client, "meExport">) => Promise<T>) => Promise<T>;
@@ -41,8 +41,8 @@ export function ExportData({
 	return (
 		<SettingsSection title={t(locale, "account.export.title")}>
 			<Text className={FG}>{t(locale, "account.export.body")}</Text>
-			<Btn
-				variant="secondary"
+			<Button
+				variant="outline"
 				label={t(locale, "account.export.button")}
 				onPress={() => void request()}
 				disabled={busy}

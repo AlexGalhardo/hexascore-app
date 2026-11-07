@@ -5,7 +5,7 @@ import { describeError } from "../api/problems";
 import { type AppLocale, t } from "../i18n";
 import { APP_LOCALES } from "../i18n/locale";
 import type { ThemePreference } from "../theme";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
 import { SettingsPage, SettingsSection } from "../ui/screens/SettingsPage";
 import { TextField } from "../ui/TextField";
 import { Devices } from "./Devices";
@@ -125,7 +125,7 @@ function ProfileForm({
 						{`${t(locale, "account.details.nickname")}: ${me.username}`}
 					</Text>
 				)}
-				<Btn
+				<Button
 					label={t(locale, "account.details.save")}
 					onPress={() =>
 						void run({

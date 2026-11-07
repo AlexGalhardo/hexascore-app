@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import { AccessibilityInfo } from "react-native";
-import { Btn } from "./Btn";
+import { Button } from "./Button";
 import { formatScore } from "./format";
 import { RatingInput, valueAt } from "./RatingInput";
 import { ScoreBadge } from "./ScoreBadge";
@@ -28,10 +28,10 @@ describe("ScoreBadge", () => {
 	});
 });
 
-describe("Btn", () => {
+describe("Button", () => {
 	test("is a 44 px button that presses and reports disabled", async () => {
 		const onPress = jest.fn();
-		await render(<Btn label="Save" onPress={onPress} variant="primary" />);
+		await render(<Button label="Save" onPress={onPress} variant="default" />);
 		const button = screen.getByRole("button", { name: "Save" });
 		expect(button.props.className ?? "").toBeDefined();
 		await fireEvent.press(button);
@@ -40,7 +40,7 @@ describe("Btn", () => {
 
 	test("disabled does not press", async () => {
 		const onPress = jest.fn();
-		await render(<Btn label="Save" onPress={onPress} disabled />);
+		await render(<Button label="Save" onPress={onPress} disabled />);
 		await fireEvent.press(screen.getByRole("button", { name: "Save" }));
 		expect(onPress).not.toHaveBeenCalled();
 		expect(screen.getByRole("button", { name: "Save" }).props.accessibilityState).toMatchObject({
@@ -50,7 +50,7 @@ describe("Btn", () => {
 
 	test("reduced motion drops the pressed translate", async () => {
 		jest.spyOn(AccessibilityInfo, "isReduceMotionEnabled").mockResolvedValue(true);
-		await render(<Btn label="Go" onPress={jest.fn()} />);
+		await render(<Button label="Go" onPress={jest.fn()} />);
 		await act(async () => {});
 		expect(screen.getByRole("button", { name: "Go" }).props.className).not.toContain("translate-y");
 	});

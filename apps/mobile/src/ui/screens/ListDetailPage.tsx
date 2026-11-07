@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { Btn } from "../Btn";
+import { Button } from "../Button";
 import { Icon, type IconName } from "../Icon";
 import { ItemRow, type ItemRowData } from "../ItemRow";
 
@@ -84,13 +84,13 @@ export function ListDetailPage(props: ListDetailProps): ReactElement {
 			{editable ? (
 				<View className="gap-2">
 					<View className="flex-row flex-wrap gap-2">
-						<Btn
-							variant="secondary"
+						<Button
+							variant="outline"
 							label={labels.rename}
 							onPress={props.onRename}
 							disabled={!online}
 						/>
-						<Btn
+						<Button
 							variant="ghost"
 							label={labels.remove}
 							onPress={props.onDelete}

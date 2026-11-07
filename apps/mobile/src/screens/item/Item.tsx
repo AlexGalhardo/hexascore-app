@@ -13,7 +13,7 @@ import { RateSheet } from "../../rating/RateSheet";
 import { statusOf, timeToBeatOf } from "../../status/cache";
 import { StatusSheet } from "../../status/StatusSheet";
 import { TimeToBeatSheet } from "../../status/TimeToBeatSheet";
-import { Btn } from "../../ui/Btn";
+import { Button } from "../../ui/Button";
 import { formatScore } from "../../ui/format";
 import { EditionsList } from "../../ui/screens/EditionsList";
 import {
@@ -189,9 +189,9 @@ export function ItemView({
 				onOpenSimilar={noop}
 			>
 				<View className="gap-2">
-					<Btn label={t(locale, "item.status.title")} onPress={() => setSheet("status")} />
+					<Button label={t(locale, "item.status.title")} onPress={() => setSheet("status")} />
 					{type === "games" ? (
-						<Btn
+						<Button
 							label={t(locale, "item.timeToBeat.yours")}
 							onPress={() => setSheet("timeToBeat")}
 						/>

@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { Btn } from "../Btn";
+import { Button } from "../Button";
 import { ItemRow, type ItemRowData } from "../ItemRow";
 
 export interface EntityRole {
@@ -130,7 +130,7 @@ export function EntityPage(props: EntityPageProps): ReactElement {
 						{props.empty.title}
 					</Text>
 					<Text className={`text-center ${MUTED}`}>{props.empty.body}</Text>
-					<Btn variant="secondary" label={props.empty.action} onPress={props.onBrowse} />
+					<Button variant="outline" label={props.empty.action} onPress={props.onBrowse} />
 				</View>
 			) : (
 				groups.map((group) => (
@@ -147,8 +147,8 @@ export function EntityPage(props: EntityPageProps): ReactElement {
 						))}
 						{group.hasMore && props.onMore ? (
 							<View className="items-start pt-2">
-								<Btn
-									variant="secondary"
+								<Button
+									variant="outline"
 									label={props.moreLabel ?? ""}
 									accessibilityHint={group.title}
 									onPress={() => props.onMore?.(group.key)}

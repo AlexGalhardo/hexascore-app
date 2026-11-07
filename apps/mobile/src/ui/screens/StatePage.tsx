@@ -1,11 +1,11 @@
 import type { ReactElement } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { Btn, type BtnVariant } from "../Btn";
+import { Button, type ButtonVariant } from "../Button";
 
 export interface StateAction {
 	label: string;
 	onPress: () => void;
-	variant?: BtnVariant;
+	variant?: ButtonVariant;
 	/** `link` for actions that leave the app (store, web). */
 	role?: "button" | "link";
 }
@@ -22,7 +22,7 @@ const FG = "text-fg dark:text-fg-dark";
 
 function Action({ action }: { action: StateAction }): ReactElement {
 	if (action.role !== "link") {
-		return <Btn label={action.label} onPress={action.onPress} variant={action.variant} />;
+		return <Button label={action.label} onPress={action.onPress} variant={action.variant} />;
 	}
 	return (
 		<Pressable

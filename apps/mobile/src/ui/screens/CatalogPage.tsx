@@ -1,6 +1,6 @@
 import type { ReactElement, ReactNode } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { Btn } from "../Btn";
+import { Button } from "../Button";
 import { Cover } from "../Cover";
 import { Icon } from "../Icon";
 import { ScoreBadge } from "../ScoreBadge";
@@ -63,8 +63,8 @@ function Pager({
 }: Pick<CatalogPageProps, "page" | "pages" | "labels" | "onPage">): ReactElement {
 	return (
 		<View className="flex-row items-center justify-between gap-2 py-3">
-			<Btn
-				variant="secondary"
+			<Button
+				variant="outline"
 				label={labels.previous}
 				disabled={page <= 1}
 				onPress={() => onPage(page - 1)}
@@ -72,8 +72,8 @@ function Pager({
 			<Text className="font-text text-14 font-semibold tabular-nums text-fg dark:text-fg-dark">
 				{labels.page(page, pages)}
 			</Text>
-			<Btn
-				variant="secondary"
+			<Button
+				variant="outline"
 				label={labels.next}
 				disabled={page >= pages}
 				onPress={() => onPage(page + 1)}
@@ -161,17 +161,17 @@ export function CatalogPage(props: CatalogPageProps): ReactElement {
 					{props.filterPanel}
 					<View className="flex-row gap-3">
 						<View className="flex-1">
-							<Btn label={labels.apply} onPress={props.onApply} />
+							<Button label={labels.apply} onPress={props.onApply} />
 						</View>
 						<View className="flex-1">
-							<Btn variant="secondary" label={labels.reset} onPress={props.onReset} />
+							<Button variant="outline" label={labels.reset} onPress={props.onReset} />
 						</View>
 					</View>
 				</View>
 			) : rows.length === 0 ? (
 				<View accessibilityLiveRegion="polite" className="items-start gap-4 py-8">
 					<Text className="font-text text-16 text-fg dark:text-fg-dark">{labels.empty}</Text>
-					<Btn variant="secondary" label={labels.reset} onPress={props.onReset} />
+					<Button variant="outline" label={labels.reset} onPress={props.onReset} />
 				</View>
 			) : (
 				<>

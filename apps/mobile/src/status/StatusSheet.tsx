@@ -5,7 +5,7 @@ import type { AppLocale } from "../i18n/locale";
 import { type CatalogType, SINGULAR } from "../navigation/catalog";
 import type { QueuePayload } from "../queue/store";
 import { useRatingQueue } from "../rating/useRateMutation";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
 import { Icon } from "../ui/Icon";
 import { type ItemStatus, STATUSES } from "./cache";
 
@@ -90,7 +90,7 @@ export function StatusSheet({
 			</View>
 			{failed ? <Text className={`text-16 ${FG}`}>{t(locale, "item.status.notSaved")}</Text> : null}
 			{current !== null ? (
-				<Btn
+				<Button
 					label={t(locale, "item.status.none")}
 					variant="ghost"
 					onPress={() => void write(null, { method: "delete" }).then(finish)}

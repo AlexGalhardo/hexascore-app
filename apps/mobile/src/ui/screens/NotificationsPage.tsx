@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { Btn } from "../Btn";
+import { Button } from "../Button";
 
 export interface NotificationRow {
 	id: string;
@@ -85,8 +85,8 @@ export function NotificationsPage({
 				<Text className={`${MUTED} tabular-nums`}>{labels.unreadCount(unread)}</Text>
 			</View>
 			<View className="self-start">
-				<Btn
-					variant="secondary"
+				<Button
+					variant="outline"
 					label={labels.markAll}
 					onPress={onMarkAll}
 					disabled={unread === 0}
