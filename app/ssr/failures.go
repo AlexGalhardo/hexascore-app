@@ -15,7 +15,7 @@ import (
 
 // PrivatePrefixes are the route prefixes that skip SSR (SDD 09 §6.1); a fallback there is not an SEO loss and
 // never raises A5.
-var PrivatePrefixes = []string{"/admin", "/profile", "/me", "/billing", "/suggest", "/suggestions"}
+var PrivatePrefixes = []string{"/admin", "/profile", "/me", "/billing", "/suggest", "/suggestions", "/library", "/lists"}
 
 // Failures counts renders that fell back to client-side rendering. vukem's
 // default OnFailure only logs (VF-002), so the count is what alerts read.
