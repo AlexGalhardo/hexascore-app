@@ -111,7 +111,7 @@ test.describe("auth", () => {
 			await signOut(page);
 
 			await open(page, `${prefix}/recover-password`);
-			await page.getByLabel(t("auth.fields.email")).fill(account.email);
+			await page.getByLabel(t("auth.fields.email"), { exact: true }).fill(account.email);
 			await page.getByRole("button", { name: t("auth.recover.submit") }).click();
 			await expect(page.getByRole("status").filter({ hasText: /\S/ }).first()).toBeVisible({
 				timeout: POW_TIMEOUT,

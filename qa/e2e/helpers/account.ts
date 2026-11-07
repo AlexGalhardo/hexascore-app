@@ -72,7 +72,7 @@ export async function fillSignup(
 	// Inputs intermittently lose a value filled right after hydration on narrow viewports; retry until each sticks.
 	const fields = [
 		[page.locator("input[name=nickname]"), account.nickname],
-		[page.getByLabel(t("auth.fields.email")), account.email],
+		[page.getByLabel(t("auth.fields.email"), { exact: true }), account.email],
 		[page.locator("input[name=password]"), account.password],
 		[page.locator("input[name=password_confirmation]"), account.password],
 	] as const;
