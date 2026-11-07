@@ -22,9 +22,10 @@
 	--font-display: var(--font-sans);
 }
 
-/* Vercel-like theme over the shared tokens (owner experiment, 2026-11-03; ADR 0026): neutral greys, near-black primary,
-   hairline borders and soft shadows instead of ledges. The overrides live here, not in packages/tokens, so the Android
-   app keeps its palette. Category accents, score bands and star colours are unchanged. */
+/* Vercel-like theme over the shared tokens (owner experiment, 2026-11-03; ADR 0029): neutral greys, near-black primary,
+   hairline borders and soft shadows instead of ledges. The overrides live here, not in packages/tokens; the Android
+   kit mirrors them in apps/mobile/src/theme/neutral.json and packages/tokens/neutral.test.ts fails when the two drift.
+   Category accents, score bands and star colours are unchanged. */
 :root {
 	--hs-bg: oklch(1 0 0);
 	--hs-fg: oklch(0.205 0 0);
@@ -59,7 +60,7 @@
 @theme inline {
 	--color-ring: var(--hs-ring);
 	--radius-sm: 4px;
-	--radius-md: 6px;
+	--radius-md: 8px;
 	--radius-lg: 12px;
 	--radius-xl: 16px;
 	--shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);

@@ -7,7 +7,7 @@ paths:
 # Frontend rules
 
 - React 19 + TypeScript (strict) pages under `resources/js/pages`, rendered by Inertia v3 with SSR (`resources/js/ssr.tsx`). Props shapes live in `resources/js/types.ts` and mirror the Go controllers in `app/controllers`.
-- Components: shadcn/ui files in `resources/js/components/ui/` (ADR 0026, owner 2026-11-03, amends D-22) plus Base UI (`@base-ui/react`, D-22) for the primitives already built on it. Styling is Tailwind v4, tokens in `@theme` in `resources/css/app.css`; use `cn()` from `lib/utils.ts`. No other component kit.
+- Components: shadcn/ui files in `resources/js/components/ui/` (ADR 0029, owner 2026-11-03, amends D-22; the admin shell keeps ADR 0026) plus Base UI (`@base-ui/react`, D-22) for the primitives already built on it. Styling is Tailwind v4, tokens in `@theme` in `resources/css/app.css`; use `cn()` from `lib/utils.ts`. No other component kit.
 - Visual direction follows the HexaScore design notes in `docs/sdd/09-web.md`. No third-party logos, names or copied assets.
 - Every string comes from `resources/lang/<locale>.json` (`en`, `pt-BR`, `es`) through `resources/js/lib/i18n.ts`; the three locales stay in sync (a test checks the key sets). Format money/dates with `Intl.*` and the active locale.
 - Dark/light: `.dark` class on `<html>`, set before paint by the nonce'd inline script in `app.html`; toggle persists in `localStorage` (`theme`).
