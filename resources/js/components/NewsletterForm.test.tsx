@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, expect, test, vi } from "vitest";
 
-import NewsletterForm from "./NewsletterForm";
+import NewsletterForm, { checkEmail } from "./NewsletterForm";
 
 vi.mock("../lib/useT", () => ({ useT: () => (key: string) => key }));
 
@@ -52,4 +52,27 @@ test("a network failure shows the generic error", async () => {
 	await waitFor(() =>
 		expect(screen.getByRole("alert").textContent).toBe("footer.newsletterError"),
 	);
+});
+
+test("checkEmail keeps addresses to 12..48 characters with a real domain", () => {
+	expect(checkEmail("ana@example.com")).toBeNull();
+	expect(checkEmail("a@b.co")).toBe("length"); // 6 characters
+	expect(checkEmail(`${"a".repeat(40)}@example.com`)).toBe("length"); // 52 characters
+	expect(checkEmail("ana.example.com")).toBe("invalid");
+	expect(checkEmail("ana@examplecom")).toBe("invalid");
+	expect(checkEmail("ana @example.com")).toBe("invalid");
+	expect(checkEmail("ana@example.c")).toBe("invalid");
+});
+
+test("does not post an address outside the length rule", async () => {
+	render(<NewsletterForm endpoint="https://email.test/subscribe/hexascore" />);
+	fireEvent.change(screen.getByLabelText("footer.newsletterPlaceholder"), {
+		target: { value: "a@b.co" },
+	});
+	fireEvent.click(screen.getByRole("button", { name: "footer.newsletterSubmit" }));
+
+	await waitFor(() =>
+		expect(screen.getByRole("alert").textContent).toBe("footer.newsletterLength"),
+	);
+	expect(fetchMock).not.toHaveBeenCalled();
 });

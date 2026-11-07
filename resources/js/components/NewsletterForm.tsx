@@ -2,9 +2,20 @@ import { type FormEvent, useEffect, useId, useState } from "react";
 
 import { useT } from "../lib/useT";
 
-type State = "idle" | "loading" | "done" | "invalid" | "limited" | "error";
+type State = "idle" | "loading" | "done" | "invalid" | "length" | "limited" | "error";
 
 const byStatus: Record<number, State> = { 202: "done", 422: "invalid", 429: "limited" };
+
+// Owner rule (2026-11-07): an address has 12 to 48 characters; the server still validates everything it receives.
+export const EMAIL_MIN = 12;
+export const EMAIL_MAX = 48;
+const emailShape = /^[^\s@]+@[^\s@]+\.[^\s@.]{2,}$/;
+
+/** checkEmail returns the form state for a typed address, or null when it can be sent. */
+export function checkEmail(email: string): "invalid" | "length" | null {
+	if (email.length < EMAIL_MIN || email.length > EMAIL_MAX) return "length";
+	return emailShape.test(email) ? null : "invalid";
+}
 
 /**
  * The footer newsletter form. It posts straight to vukem-email's public subscribe endpoint (no cookies, so no
@@ -22,6 +33,12 @@ export default function NewsletterForm({ endpoint }: { endpoint: string }) {
 	const submit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const data = new FormData(e.currentTarget);
+		const email = String(data.get("email") ?? "").trim();
+		const problem = checkEmail(email);
+		if (problem) {
+			setState(problem);
+			return;
+		}
 		setState("loading");
 
 		try {
@@ -44,10 +61,12 @@ export default function NewsletterForm({ endpoint }: { endpoint: string }) {
 		loading: t("footer.newsletterSending"),
 		done: t("footer.newsletterDone"),
 		invalid: t("footer.newsletterInvalid"),
+		length: t("footer.newsletterLength", { min: EMAIL_MIN, max: EMAIL_MAX }),
 		limited: t("footer.newsletterRateLimited"),
 		error: t("footer.newsletterError"),
 	};
-	const failed = state === "invalid" || state === "limited" || state === "error";
+	const failed =
+		state === "invalid" || state === "length" || state === "limited" || state === "error";
 
 	return (
 		<form
@@ -69,7 +88,8 @@ export default function NewsletterForm({ endpoint }: { endpoint: string }) {
 					type="email"
 					name="email"
 					required
-					maxLength={254}
+					minLength={EMAIL_MIN}
+					maxLength={EMAIL_MAX}
 					autoComplete="email"
 					disabled={!ready}
 					aria-label={t("footer.newsletterPlaceholder")}

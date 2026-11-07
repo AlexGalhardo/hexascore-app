@@ -1338,6 +1338,7 @@
     "newsletterSending": "Subscribing…",
     "newsletterDone": "Check your inbox to confirm your subscription. Look in your spam folder too.",
     "newsletterInvalid": "Enter a valid email address.",
+    "newsletterLength": "Use an email with {min} to {max} characters.",
     "newsletterError": "Could not subscribe right now. Try again later.",
     "newsletterRateLimited": "Too many attempts. Wait a minute and try again.",
     "affiliateDisclosure": "We may earn a commission from purchase links, at no extra cost to you.",
