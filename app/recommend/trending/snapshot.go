@@ -340,6 +340,16 @@ func AgeSeconds(ctx context.Context, db *database.DB, now time.Time) (float64, e
 // Locales are the UI locales whose home payload is cached per type.
 var Locales = []string{"en", "pt-BR", "es"}
 
+// HighlightsCacheKey is the cache entry of the landing page's highlights and upcoming blocks for one locale (cover
+// showcase variant apart); forgotten with HomeCacheKey when a snapshot lands.
+func HighlightsCacheKey(locale string, cover bool) string {
+	if cover {
+		return "home:highlights:v1:" + locale + ":cover"
+	}
+
+	return "home:highlights:v1:" + locale
+}
+
 // HomeCacheKey is the cache entry of the landing page's trending payload (all four types) for one locale; the hourly
 // job forgets it when a new snapshot lands, so the home never serves a list older than the last run.
 func HomeCacheKey(locale string) string { return "home:trending:v2:" + locale }
