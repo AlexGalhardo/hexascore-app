@@ -117,5 +117,7 @@ func All() []schema.Migration {
 		m20261103040100AddItemsVerifyIdx(),
 		m20261104000000CanonicalizeGenres(),
 		m20261104100000CanonicalizeGameModes(),
+		m20261107000000AddItemsListScoreIdx(),
+		m20261107000100AddItemsListCoveredIdx(),
 	}
 }

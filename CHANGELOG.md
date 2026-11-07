@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **perf:** Two partial indexes on `items` for the default listing (migrations `20261107000000` and `20261107000100`): page one of a type sorted by score reads the index instead of sorting every item (42.8 ms to 0.12 ms on 22,500 games) and the total count is an index-only scan (39.2 ms to 1.3 ms).
 - **docs:** `docs/runbooks/postgres-cost.md` (owner-run steps to measure, right-size the pool, fold staging into the production instance and size the volume) and ADR 0027 (stay on Postgres, SQLite deferred).
 - **ui:** The footer newsletter form is live: it posts the email (with a honeypot) from the browser to vukem-email's `/subscribe/hexascore` (`NEWSLETTER_API_URL`, default `https://email.hexascore.app` in production and `http://localhost:3100` otherwise; `NEWSLETTER_PROJECT_SLUG`), whose origin joins `connect-src`. States: sending, check your inbox, invalid, rate limited, error.
 - **auth:** Login and sign-up share one minimal centered layout (logo, title, Google and passkey buttons, divider, form, link to the other page); the two-factor step is its own `/2fa` page with six code boxes and a backup-code swap, and `/two-factor-challenge` redirects to it.
