@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { Button } from "../Button";
+import { EmptyState } from "../EmptyState";
 import { ItemRow, type ItemRowData } from "../ItemRow";
 
 export interface EntityRole {
@@ -125,16 +126,11 @@ export function EntityPage(props: EntityPageProps): ReactElement {
 				</View>
 			) : null}
 			{groups.length === 0 ? (
-				<View
-					accessibilityLiveRegion="polite"
-					className="items-center gap-3 border-t border-border py-12 dark:border-border-dark"
-				>
-					<Text className="font-display text-24 italic text-muted dark:text-muted-dark">
-						{props.empty.title}
-					</Text>
-					<Text className={`text-center ${MUTED}`}>{props.empty.body}</Text>
-					<Button variant="outline" label={props.empty.action} onPress={props.onBrowse} />
-				</View>
+				<EmptyState
+					title={props.empty.title}
+					description={props.empty.body || undefined}
+					action={{ label: props.empty.action, onPress: props.onBrowse }}
+				/>
 			) : (
 				groups.map((group) => (
 					<View key={group.key} className="gap-1">

@@ -11,7 +11,7 @@ import { ListItem } from "./ListItem";
 import { SegmentedControl } from "./SegmentedControl";
 import { Separator } from "./Separator";
 import { Sheet } from "./Sheet";
-import { Skeleton } from "./Skeleton";
+import { ListSkeleton, Skeleton } from "./Skeleton";
 import { TextField } from "./TextField";
 import { Toast } from "./Toast";
 
@@ -220,5 +220,13 @@ describe("ListItem and EmptyState", () => {
 		expect(screen.getByRole("header", { name: "Nothing" })).toBeTruthy();
 		await fireEvent.press(screen.getByRole("button", { name: "Browse" }));
 		expect(onPress).toHaveBeenCalled();
+	});
+});
+
+describe("ListSkeleton", () => {
+	test("is one labelled live region of placeholder rows", async () => {
+		await render(<ListSkeleton label="Loading" rows={2} />);
+		expect(screen.getByLabelText("Loading").props.accessibilityLiveRegion).toBe("polite");
+		expect(screen.getAllByTestId("skeleton", { includeHiddenElements: true })).toHaveLength(8);
 	});
 });

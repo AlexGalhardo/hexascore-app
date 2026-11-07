@@ -12,6 +12,7 @@ export function EmptyState({ title, description, action }: EmptyStateProps): Rea
 	return (
 		<View
 			testID="empty-state"
+			accessibilityLiveRegion="polite"
 			className="items-center gap-2 rounded-lg border border-dashed border-border px-4 py-8 dark:border-border-dark"
 		>
 			<Text

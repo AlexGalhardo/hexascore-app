@@ -2,6 +2,7 @@ import { type ReactElement, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
 import { Button } from "../ui/Button";
+import { Card } from "../ui/Card";
 import { Icon } from "../ui/Icon";
 import { TextField } from "../ui/TextField";
 import { type ListsDeps, type ListType, useListActions, useMyLists, useOnline } from "./data";
@@ -37,10 +38,7 @@ export function AddToListSheet({
 	};
 
 	return (
-		<View
-			testID="add-to-list-sheet"
-			className="gap-4 rounded-lg border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark"
-		>
+		<Card testID="add-to-list-sheet">
 			<Text
 				accessibilityRole="header"
 				className={`font-display text-24 font-semibold tracking-tight ${FG}`}
@@ -80,6 +78,6 @@ export function AddToListSheet({
 				disabled={!online || title.trim() === ""}
 			/>
 			{online ? null : <Text className={MUTED}>{t(locale, "lists.offline")}</Text>}
-		</View>
+		</Card>
 	);
 }

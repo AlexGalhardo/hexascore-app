@@ -1,6 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import { ScrollView, Text, View } from "react-native";
 import type { ThemePreference } from "../../theme";
+import { Avatar } from "../Avatar";
 import { Button } from "../Button";
 import { SegmentedControl } from "../SegmentedControl";
 
@@ -78,17 +79,20 @@ export function SettingsPage(props: SettingsPageProps): ReactElement {
 					<Button label={labels.signIn} onPress={props.onSignIn} />
 				) : (
 					<>
-						<View>
-							{props.account.name ? (
-								<Text className={`font-text text-16 font-semibold ${FG}`}>
-									{props.account.name}
-								</Text>
-							) : null}
-							{props.account.email ? (
-								<Text className="font-text text-14 text-muted dark:text-muted-dark">
-									{props.account.email}
-								</Text>
-							) : null}
+						<View className="flex-row items-center gap-3">
+							<Avatar name={props.account.name ?? props.account.email ?? "?"} size="lg" />
+							<View className="flex-1">
+								{props.account.name ? (
+									<Text className={`font-text text-16 font-semibold ${FG}`}>
+										{props.account.name}
+									</Text>
+								) : null}
+								{props.account.email ? (
+									<Text className="font-text text-14 text-muted dark:text-muted-dark">
+										{props.account.email}
+									</Text>
+								) : null}
+							</View>
 						</View>
 						<Button variant="outline" label={labels.signOut} onPress={props.onSignOut} />
 					</>

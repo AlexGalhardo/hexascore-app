@@ -6,13 +6,12 @@ import { type CatalogType, SINGULAR } from "../navigation/catalog";
 import type { QueuePayload } from "../queue/store";
 import { useRatingQueue } from "../rating/useRateMutation";
 import { Button } from "../ui/Button";
+import { Card } from "../ui/Card";
 import { Icon } from "../ui/Icon";
 import { type ItemStatus, STATUSES } from "./cache";
 
 const FG = "text-fg dark:text-fg-dark";
 // v1 look of the rating sheet (no separate frame for status and time to beat).
-export const SHEET =
-	"gap-4 rounded-lg border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark";
 export const SHEET_TITLE =
 	"font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark";
 
@@ -58,7 +57,7 @@ export function StatusSheet({
 	};
 
 	return (
-		<View testID="status-sheet" className={SHEET}>
+		<Card testID="status-sheet">
 			<Text accessibilityRole="header" className={SHEET_TITLE}>
 				{t(locale, "item.status.title")}
 			</Text>
@@ -101,6 +100,6 @@ export function StatusSheet({
 					onPress={() => void write(null, { method: "delete" }).then(finish)}
 				/>
 			) : null}
-		</View>
+		</Card>
 	);
 }

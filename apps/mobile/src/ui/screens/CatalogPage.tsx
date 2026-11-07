@@ -2,6 +2,7 @@ import type { ReactElement, ReactNode } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { Button } from "../Button";
 import { Cover } from "../Cover";
+import { EmptyState } from "../EmptyState";
 import { Icon } from "../Icon";
 import { ScoreBadge } from "../ScoreBadge";
 
@@ -171,9 +172,11 @@ export function CatalogPage(props: CatalogPageProps): ReactElement {
 					</View>
 				</View>
 			) : rows.length === 0 ? (
-				<View accessibilityLiveRegion="polite" className="items-start gap-4 py-8">
-					<Text className="font-text text-16 text-fg dark:text-fg-dark">{labels.empty}</Text>
-					<Button variant="outline" label={labels.reset} onPress={props.onReset} />
+				<View className="py-6">
+					<EmptyState
+						title={labels.empty}
+						action={{ label: labels.reset, onPress: props.onReset }}
+					/>
 				</View>
 			) : (
 				<>

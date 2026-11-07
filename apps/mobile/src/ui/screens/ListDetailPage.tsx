@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { Button } from "../Button";
+import { EmptyState } from "../EmptyState";
 import { Icon, type IconName } from "../Icon";
 import { ItemRow, type ItemRowData } from "../ItemRow";
 
@@ -104,9 +105,7 @@ export function ListDetailPage(props: ListDetailProps): ReactElement {
 				</View>
 			) : null}
 			{rows.length === 0 ? (
-				<Text accessibilityLiveRegion="polite" className={`py-8 font-text text-16 ${FG}`}>
-					{labels.empty}
-				</Text>
+				<EmptyState title={labels.empty} />
 			) : (
 				<View className="border-t border-border dark:border-border-dark">
 					{rows.map((row, index) => (

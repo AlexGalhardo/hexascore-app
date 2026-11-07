@@ -4,13 +4,16 @@ import { Text, View } from "react-native";
 export function Card({
 	children,
 	className = "",
+	testID,
 }: {
 	children: ReactNode;
 	className?: string;
+	testID?: string;
 }): ReactElement {
 	return (
 		<View
-			className={`gap-3 rounded-lg border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark ${className}`}
+			testID={testID}
+			className={`gap-4 rounded-lg border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark ${className}`}
 		>
 			{children}
 		</View>

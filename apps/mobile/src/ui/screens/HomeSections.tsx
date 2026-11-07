@@ -53,6 +53,14 @@ const ACCENT_BG: Record<ItemType, string> = {
 	book: "bg-accent-book dark:bg-accent-book-dark",
 };
 
+// A 2 px category rule on the card edge: the accent stays, the rest of the card is neutral.
+const ACCENT_RULE: Record<ItemType, string> = {
+	game: "border-l-2 border-l-accent-game dark:border-l-accent-game-dark",
+	movie: "border-l-2 border-l-accent-movie dark:border-l-accent-movie-dark",
+	series: "border-l-2 border-l-accent-series dark:border-l-accent-series-dark",
+	book: "border-l-2 border-l-accent-book dark:border-l-accent-book-dark",
+};
+
 const MUTED = "font-text text-14 text-muted dark:text-muted-dark";
 
 interface CardProps {
@@ -80,7 +88,7 @@ function TrendingCard({
 				", ",
 			)}
 			onPress={() => onOpen(item, section.type)}
-			className={`flex-row gap-3 rounded-lg border border-border bg-surface p-3 active:opacity-80 dark:border-border-dark dark:bg-surface-dark`}
+			className={`flex-row gap-3 rounded-lg border border-border bg-surface p-3 active:opacity-80 dark:border-border-dark dark:bg-surface-dark ${ACCENT_RULE[section.type]}`}
 		>
 			<Cover uri={item.coverUri} title={item.title} className="w-16" />
 			<View className="flex-1 gap-1">
