@@ -1,7 +1,12 @@
 import { Head, Link, useForm } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 
-import AuthFrame, { authLink, GoogleButton, OrRule } from "../../components/auth/AuthFrame";
+import AuthFrame, {
+	AuthFooter,
+	authLink,
+	GoogleButton,
+	OrRule,
+} from "../../components/auth/AuthFrame";
 import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
@@ -32,7 +37,7 @@ export function Agreement({
 	const href = { terms: "/terms", privacy: "/privacy" } as const;
 
 	return (
-		<p className="text-sm text-muted">
+		<p className="text-center text-sm text-muted">
 			{text.split(/(<(?:terms|privacy)>.*?<\/(?:terms|privacy)>)/).map((part) => {
 				const m = /^<(terms|privacy)>(.*)<\/\1>$/.exec(part);
 				return m ? (
@@ -157,12 +162,12 @@ export default function Signup({ formToken }: { formToken: string }) {
 				</SubmitButton>
 				<ChallengeStatus checking={checking} />
 			</form>
-			<p className="mt-8 text-muted">
+			<AuthFooter>
 				{t("auth.signup.alreadyMember")}{" "}
 				<Link href={l("/login")} className={authLink}>
 					{t("auth.signup.logIn")}
 				</Link>
-			</p>
+			</AuthFooter>
 		</AuthFrame>
 	);
 }
