@@ -374,8 +374,9 @@ func TestPasskeyLoginSkipsTOTP(t *testing.T) {
 	addPasskey(t, owner, authn, "")
 	owner.PostJSON("/logout", nil).AssertRedirect("/")
 
+	// A password login with TOTP on stops at the code step; the passkey below skips it.
 	owner.PostJSON("/login", map[string]any{"identifier": "totp@example.com", "password": testPassword}).
-		AssertRedirect("/login")
+		AssertRedirect("/2fa")
 
 	fresh := app.Client(t)
 	postAssertion(fresh, passkeyAssertion(t, fresh, authn)).AssertRedirect("/onboarding")
