@@ -453,7 +453,9 @@ func TestSecurity_A07_GoogleIDTokenAudience(t *testing.T) {
 	}
 
 	// A token Google issued to another app is refused even though the signature is valid.
-	if got := codeOf(post(sign("someone-elses-client", claims(googleNonce(t, c)))).AssertUnauthorized()); got != "invalid-id-token" {
+	if got := codeOf(
+		post(sign("someone-elses-client", claims(googleNonce(t, c)))).AssertUnauthorized(),
+	); got != "invalid-id-token" {
 		t.Errorf("foreign audience code = %q", got)
 	}
 
@@ -513,7 +515,10 @@ func TestSecurity_A07_GoogleNonce(t *testing.T) {
 	}
 
 	if _, err := db.ExecContext(
-		t.Context(), "UPDATE google_nonces SET expires_at = "+db.Dialect().Placeholder(1), time.Now().Add(-time.Minute)); err != nil {
+		t.Context(),
+		"UPDATE google_nonces SET expires_at = "+db.Dialect().Placeholder(1),
+		time.Now().Add(-time.Minute),
+	); err != nil {
 		t.Fatal(err)
 	}
 
