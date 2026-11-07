@@ -1,8 +1,9 @@
 import "../global.css";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { type ErrorBoundaryProps, Stack, useSegments } from "expo-router";
+import { useColorScheme } from "nativewind";
 import { type ReactElement, useEffect, useState, useSyncExternalStore } from "react";
-import { LogBox, Pressable, Text, View } from "react-native";
+import { LogBox, Pressable, StatusBar, Text, View } from "react-native";
 import { appLocale, persistOptions, queryClient, ratingQueue, rootDeps } from "../src/auth/runtime";
 import { t } from "../src/i18n";
 import { OfflineBanner } from "../src/platform/OfflineBanner";
@@ -45,6 +46,7 @@ export default function RootLayout(): ReactElement | null {
 	// The typed-routes manifest is not generated in this repo, so the hook is typed `never`.
 	const segments = (useSegments as () => string[])();
 	const locale = useSyncExternalStore(appLocale.subscribe, appLocale.get);
+	const dark = useColorScheme().colorScheme === "dark";
 	const [consent, setConsent] = useState(crashConsent);
 	useEffect(() => setCrashScreen(`/${segments.join("/")}`), [segments]);
 	// Every guard is false until the vault is read; render nothing instead of an unmatched route.
@@ -54,6 +56,7 @@ export default function RootLayout(): ReactElement | null {
 		<PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
 			<LocaleProvider locale={locale}>
 				<RatingQueueProvider value={ratingQueue}>
+					<StatusBar barStyle={dark ? "light-content" : "dark-content"} />
 					<OfflineBanner locale={locale} />
 					<ToastHost />
 					{consent === "unset" ? (

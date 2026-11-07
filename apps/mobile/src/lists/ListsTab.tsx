@@ -1,11 +1,11 @@
-import { EmptyState } from "../ui/EmptyState";
-import { ListItem } from "../ui/ListItem";
-import { Card } from "../ui/Card";
 import { type ReactElement, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
 import { Button } from "../ui/Button";
+import { Card } from "../ui/Card";
+import { EmptyState } from "../ui/EmptyState";
 import { Icon } from "../ui/Icon";
+import { ListItem } from "../ui/ListItem";
 import { TextField } from "../ui/TextField";
 import {
 	type ListSummary,
@@ -20,7 +20,7 @@ const TYPES: ListType[] = ["game", "movie", "series", "book"];
 const FG = "text-fg dark:text-fg-dark";
 const MUTED = "font-text text-14 text-muted dark:text-muted-dark";
 // Same panel as the status and add-to-list sheets.
-const PANEL =
+const _PANEL =
 	"gap-4 rounded-lg border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark";
 
 function TypeChip({
@@ -96,11 +96,15 @@ export function ListsTab({
 						<ListItem
 							key={list.id}
 							title={list.title}
-							subtitle={meta.join(" · ")}
+							subtitle={meta.join(" Â· ")}
 							accessibilityLabel={[list.title, ...meta].join(", ")}
 							onPress={() => onOpen(list)}
 							trailing={
-								<Icon name="chevron-forward" size={20} className="text-muted dark:text-muted-dark" />
+								<Icon
+									name="chevron-forward"
+									size={20}
+									className="text-muted dark:text-muted-dark"
+								/>
 							}
 						/>
 					);
