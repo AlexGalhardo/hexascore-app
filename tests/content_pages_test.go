@@ -142,7 +142,7 @@ func TestRobots_Production(t *testing.T) {
 
 const nl = "\n"
 
-// Staging runs APP_ENV=production (SDD 11 §6.4), so SEO_NOINDEX is what keeps it out of search results.
+// A production build that must stay out of search results (a preview, a local production build) sets SEO_NOINDEX.
 func TestRobots_ProductionNoindex(t *testing.T) {
 	t.Parallel()
 

@@ -20,8 +20,9 @@ import (
 // with the dump manifest, run the data quality asserts, drop it and record
 // backup_runs(kind='drill') (SDD 11 §7.4, FR-11-6). The source bucket and
 // key come from BACKUP_SOURCE_<name> (BACKUP_SOURCE_S3_*, BACKUP_SOURCE_BACKUP_KEY)
-// and fall back to the plain names, so staging drills production's dumps
-// once the owner grants it read access. --first-sunday makes the weekly
+// and fall back to the plain names, so a drill host other than production can
+// read production's dumps once the owner grants it read access (the staging environment, the former
+// host, was removed: ADR 0028). --first-sunday makes the weekly
 // schedule entry a monthly one.
 func BackupDrill() vukem.Command {
 	var firstSunday *bool
