@@ -49,7 +49,7 @@ export function StatePage({ code, title, body, actions }: StatePageProps): React
 				{code ? (
 					// The title says the same thing in words; reading the number too is noise.
 					<View accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-						<Text className="font-display text-36 font-bold text-primary dark:text-primary-dark">
+						<Text className="font-display text-36 font-semibold tracking-tight text-primary dark:text-primary-dark">
 							{code}
 						</Text>
 						<View className="h-0.5 w-32 self-center bg-fg dark:bg-fg-dark" />
@@ -57,7 +57,7 @@ export function StatePage({ code, title, body, actions }: StatePageProps): React
 				) : null}
 				<Text
 					accessibilityRole="header"
-					className={`text-center font-display text-30 font-bold ${FG}`}
+					className={`text-center font-display text-30 font-semibold tracking-tight ${FG}`}
 				>
 					{title}
 				</Text>

@@ -39,9 +39,12 @@ export function AddToListSheet({
 	return (
 		<View
 			testID="add-to-list-sheet"
-			className="gap-4 border-t-2 border-primary bg-surface p-4 dark:border-primary-dark dark:bg-surface-dark"
+			className="gap-4 rounded-lg border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark"
 		>
-			<Text accessibilityRole="header" className={`font-display text-24 font-bold ${FG}`}>
+			<Text
+				accessibilityRole="header"
+				className={`font-display text-24 font-semibold tracking-tight ${FG}`}
+			>
 				{t(locale, "lists.addToList")}
 			</Text>
 			{rows.length === 0 && !lists.isPending ? (
@@ -49,7 +52,7 @@ export function AddToListSheet({
 					{t(locale, `lists.noListsOfType.${type === "book" ? "other" : type}`)}
 				</Text>
 			) : null}
-			<View className="border-t-2 border-fg dark:border-fg-dark">
+			<View className="border-t border-border dark:border-border-dark">
 				{rows.map((list) => {
 					const count = t(locale, "lists.itemCount", { count: list.itemCount });
 					return (

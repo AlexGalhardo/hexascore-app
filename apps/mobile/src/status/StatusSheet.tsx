@@ -12,8 +12,9 @@ import { type ItemStatus, STATUSES } from "./cache";
 const FG = "text-fg dark:text-fg-dark";
 // v1 look of the rating sheet (no separate frame for status and time to beat).
 export const SHEET =
-	"gap-4 border-t-2 border-primary bg-surface p-4 dark:border-primary-dark dark:bg-surface-dark";
-export const SHEET_TITLE = "font-display text-24 font-bold text-fg dark:text-fg-dark";
+	"gap-4 rounded-lg border border-border bg-surface p-4 dark:border-border-dark dark:bg-surface-dark";
+export const SHEET_TITLE =
+	"font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark";
 
 /** Optimistic write on the `status` or `timeToBeat` lane; false when the queue refused it (full or signed out). */
 export function useStatusWrite(
@@ -71,17 +72,21 @@ export function StatusSheet({
 							accessibilityRole="radio"
 							accessibilityLabel={label}
 							accessibilityState={{ checked: on }}
-							className={`min-h-11 flex-row items-center justify-between gap-3 rounded-sm border border-b-2 border-fg px-4 active:border-b dark:border-fg-dark ${on ? "bg-fg dark:bg-fg-dark" : "bg-field-bg dark:bg-field-bg-dark"}`}
+							className={`min-h-11 flex-row items-center justify-between gap-3 rounded-md border border-border px-4 dark:border-border-dark ${on ? "bg-primary dark:bg-primary-dark" : "bg-bg dark:bg-bg-dark"}`}
 							onPress={() => void write(status, { method: "put", body: { status } }).then(finish)}
 						>
 							<Text
-								className={`font-text text-16 font-semibold ${on ? "text-bg dark:text-bg-dark" : FG}`}
+								className={`font-text text-16 font-semibold ${on ? "text-on-primary dark:text-on-primary-dark" : FG}`}
 							>
 								{label}
 							</Text>
 							{on ? (
 								<View testID="status-checked">
-									<Icon name="checkmark" size={20} className="text-bg dark:text-bg-dark" />
+									<Icon
+										name="checkmark"
+										size={20}
+										className="text-on-primary dark:text-on-primary-dark"
+									/>
 								</View>
 							) : null}
 						</Pressable>

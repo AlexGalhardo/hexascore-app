@@ -63,11 +63,11 @@ export function DeleteAccount({
 				<View
 					testID="delete-dialog"
 					accessibilityRole="alert"
-					className="gap-3 border-t-2 border-danger bg-surface p-4 dark:border-danger-dark dark:bg-surface-dark"
+					className="gap-3 rounded-lg border border-danger bg-surface p-4 dark:border-danger-dark dark:bg-surface-dark"
 				>
 					<Text
 						accessibilityRole="header"
-						className="font-display text-20 font-bold text-fg dark:text-fg-dark"
+						className="font-display text-20 font-semibold tracking-tight text-fg dark:text-fg-dark"
 					>
 						{t(locale, "account.delete.dialogTitle")}
 					</Text>
