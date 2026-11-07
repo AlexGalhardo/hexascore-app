@@ -175,6 +175,11 @@ func (h *TwoFactorHandlers) Disable(c *web.Ctx) error {
 	return c.Redirect("/profile")
 }
 
+// LegacyChallenge sends old /two-factor-challenge links to the /2fa page, keeping the locale prefix.
+func (*TwoFactorHandlers) LegacyChallenge(c *web.Ctx) error {
+	return c.RedirectStatus(http.StatusFound, i18n.PathPrefix(c.Context())+ChallengePath)
+}
+
 // ShowChallenge renders the code step of the login.
 func (h *TwoFactorHandlers) ShowChallenge(c *web.Ctx) error {
 	if _, _, err := h.a.PendingTwoFactor(c); err != nil {

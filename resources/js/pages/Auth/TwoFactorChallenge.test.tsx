@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, test, vi } from "vitest";
 
-import TwoFactorDialog from "./TwoFactorDialog";
+import TwoFactorChallenge from "./TwoFactorChallenge";
 
 const post = vi.fn();
 const transform = vi.fn();
@@ -9,6 +9,8 @@ const transform = vi.fn();
 vi.mock("../../lib/useT", () => ({ useT: () => (key: string) => key }));
 vi.mock("../../lib/useLocalized", () => ({ useLocalized: () => (path: string) => path }));
 vi.mock("@inertiajs/react", () => ({
+	Head: () => null,
+	Link: ({ children }: { children: React.ReactNode }) => <a href="/">{children}</a>,
 	useForm: () => ({
 		data: { code: "", recovery_code: "" },
 		errors: {},
@@ -30,7 +32,7 @@ afterEach(() => {
 const boxes = () => screen.getAllByRole("textbox", { name: /auth\.login\.code \d/ });
 
 test("six one-digit boxes submit the code on their own once all six are typed", () => {
-	render(<TwoFactorDialog open />);
+	render(<TwoFactorChallenge />);
 	expect(boxes()).toHaveLength(6);
 
 	"12345".split("").forEach((d, i) => {
@@ -39,12 +41,12 @@ test("six one-digit boxes submit the code on their own once all six are typed", 
 	expect(post).not.toHaveBeenCalled();
 
 	fireEvent.change(boxes()[5], { target: { value: "6" } });
-	expect(post).toHaveBeenCalledWith("/two-factor-challenge", expect.anything());
+	expect(post).toHaveBeenCalledWith("/2fa", expect.anything());
 	expect(transform.mock.calls.at(-1)?.[0]()).toEqual({ code: "123456", recovery_code: "" });
 });
 
 test("a pasted code fills every box and submits", () => {
-	render(<TwoFactorDialog open />);
+	render(<TwoFactorChallenge />);
 	fireEvent.paste(boxes()[0], { clipboardData: { getData: () => " 987 654 " } });
 
 	expect(boxes().map((b) => (b as HTMLInputElement).value)).toEqual([
@@ -59,9 +61,17 @@ test("a pasted code fills every box and submits", () => {
 });
 
 test("letters are ignored and nothing is sent while a box is empty", () => {
-	render(<TwoFactorDialog open />);
+	render(<TwoFactorChallenge />);
 	fireEvent.change(boxes()[0], { target: { value: "a" } });
 
 	expect((boxes()[0] as HTMLInputElement).value).toBe("");
 	expect(post).not.toHaveBeenCalled();
+});
+
+test("the backup code link swaps the boxes for a recovery code input", () => {
+	render(<TwoFactorChallenge />);
+	fireEvent.click(screen.getByRole("button", { name: "auth.login.useBackup" }));
+
+	expect(screen.queryAllByRole("textbox", { name: /auth\.login\.code \d/ })).toHaveLength(0);
+	expect(screen.getByLabelText("auth.login.backupCode")).toBeTruthy();
 });

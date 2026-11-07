@@ -96,8 +96,9 @@ web   POST   /user/two-factor/disable
 web   POST   /user/passkeys/options
 web   POST   /user/passkeys
 web   DELETE /profile/passkeys/{id}
+web   GET    /2fa
+web   POST   /2fa
 web   GET    /two-factor-challenge
-web   POST   /two-factor-challenge
 web   GET    /profile
 web   PATCH  /profile/details
 web   PUT    /profile/password

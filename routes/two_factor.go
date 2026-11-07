@@ -58,8 +58,9 @@ func TwoFactor(r *router.Router, app *vukem.App) error {
 		Name("two-factor.disable").
 		Use(required, verified, hasPassword, confirm)
 
-	r.Get("/two-factor-challenge", h.ShowChallenge).Name("two-factor.login").Use(auth.Guest(acc.Web))
-	r.Post("/two-factor-challenge", h.Challenge).Use(auth.Guest(acc.Web), challenge)
+	r.Get("/2fa", h.ShowChallenge).Name("two-factor.login").Use(auth.Guest(acc.Web))
+	r.Post("/2fa", h.Challenge).Use(auth.Guest(acc.Web), challenge)
+	r.Get("/two-factor-challenge", h.LegacyChallenge)
 
 	return nil
 }

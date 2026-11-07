@@ -132,18 +132,17 @@ func TestTwoFactorLogin(t *testing.T) {
 
 	// The password alone does not log in.
 	c := app.Client(t).Inertia("")
-	// An Inertia login goes back to the login page, which opens the code dialog (owner 2026-11-02).
-	passwordStep(c, "ana2fa@example.com", true).AssertRedirect("/login")
-	c.Get("/login").AssertInertia("Auth/Login").PropEquals("twoFactor", true)
+	// The password step ends on the /2fa page (owner 2026-11-07).
+	passwordStep(c, "ana2fa@example.com", true).AssertRedirect("/2fa")
 	c.Get("/dashboard").AssertRedirect("/login")
-	c.Get("/two-factor-challenge").AssertInertia("Auth/TwoFactorChallenge").PropEquals("auth.user", nil)
+	c.Get("/2fa").AssertInertia("Auth/TwoFactorChallenge").PropEquals("auth.user", nil)
 
-	rejected(t, c, "/two-factor-challenge", "/two-factor-challenge", "Auth/TwoFactorChallenge", "code",
+	rejected(t, c, "/2fa", "/2fa", "Auth/TwoFactorChallenge", "code",
 		map[string]any{"code": wrongCode(t, secret), "recovery_code": ""})
 
 	// The confirmation used the current step: the next one logs in.
 	code := totpCode(t, secret, 1)
-	c.PostJSON("/two-factor-challenge", map[string]any{"code": code, "recovery_code": ""}).AssertRedirect("/onboarding")
+	c.PostJSON("/2fa", map[string]any{"code": code, "recovery_code": ""}).AssertRedirect("/onboarding")
 	c.Get("/dashboard").AssertInertia("Dashboard").PropEquals("auth.user.email", "ana2fa@example.com")
 
 	if c.CookieValue("remember_web") == "" {
@@ -152,8 +151,8 @@ func TestTwoFactorLogin(t *testing.T) {
 
 	// The same code cannot be used twice.
 	replay := app.Client(t).Inertia("")
-	passwordStep(replay, "ana2fa@example.com", false).AssertRedirect("/login")
-	rejected(t, replay, "/two-factor-challenge", "/two-factor-challenge", "Auth/TwoFactorChallenge", "code",
+	passwordStep(replay, "ana2fa@example.com", false).AssertRedirect("/2fa")
+	rejected(t, replay, "/2fa", "/2fa", "Auth/TwoFactorChallenge", "code",
 		map[string]any{"code": code, "recovery_code": ""})
 	replay.Get("/dashboard").AssertRedirect("/login")
 }
@@ -166,16 +165,16 @@ func TestTwoFactorRecoveryCodes(t *testing.T) {
 	_, codes := enableTwoFactor(t, app, owner, "bob2fa@example.com")
 
 	c := app.Client(t).Inertia("")
-	passwordStep(c, "bob2fa@example.com", false).AssertRedirect("/login")
-	c.PostJSON("/two-factor-challenge", map[string]any{"code": "", "recovery_code": codes[0]}).
+	passwordStep(c, "bob2fa@example.com", false).AssertRedirect("/2fa")
+	c.PostJSON("/2fa", map[string]any{"code": "", "recovery_code": codes[0]}).
 		AssertRedirect("/onboarding")
 	c.PostJSON("/logout", nil).AssertRedirect("/")
 
 	// A recovery code works once.
-	passwordStep(c, "bob2fa@example.com", false).AssertRedirect("/login")
-	rejected(t, c, "/two-factor-challenge", "/two-factor-challenge", "Auth/TwoFactorChallenge", "recovery_code",
+	passwordStep(c, "bob2fa@example.com", false).AssertRedirect("/2fa")
+	rejected(t, c, "/2fa", "/2fa", "Auth/TwoFactorChallenge", "recovery_code",
 		map[string]any{"code": "", "recovery_code": codes[0]})
-	c.PostJSON("/two-factor-challenge", map[string]any{"code": "", "recovery_code": codes[1]}).
+	c.PostJSON("/2fa", map[string]any{"code": "", "recovery_code": codes[1]}).
 		AssertRedirect("/onboarding")
 
 	owner.Get("/profile").AssertInertia("Profile/Index").PropEquals("twoFactor.recoveryCodesLeft", 6)
@@ -192,8 +191,8 @@ func TestTwoFactorRecoveryCodes(t *testing.T) {
 	}
 
 	c.PostJSON("/logout", nil).AssertRedirect("/")
-	passwordStep(c, "bob2fa@example.com", false).AssertRedirect("/login")
-	rejected(t, c, "/two-factor-challenge", "/two-factor-challenge", "Auth/TwoFactorChallenge", "recovery_code",
+	passwordStep(c, "bob2fa@example.com", false).AssertRedirect("/2fa")
+	rejected(t, c, "/2fa", "/2fa", "Auth/TwoFactorChallenge", "recovery_code",
 		map[string]any{"code": "", "recovery_code": codes[2]})
 }
 
@@ -204,13 +203,13 @@ func TestSecurity_A07_TwoFactorThrottle(t *testing.T) {
 	secret, _ := enableTwoFactor(t, app, app.Client(t).Inertia(""), "cid2fa@example.com")
 
 	attacker := app.Client(t).Inertia("")
-	passwordStep(attacker, "cid2fa@example.com", false).AssertRedirect("/login")
+	passwordStep(attacker, "cid2fa@example.com", false).AssertRedirect("/2fa")
 
 	for range 5 {
-		attacker.PostJSON("/two-factor-challenge", map[string]any{"code": wrongCode(t, secret)})
+		attacker.PostJSON("/2fa", map[string]any{"code": wrongCode(t, secret)})
 	}
 
-	attacker.PostJSON("/two-factor-challenge", map[string]any{"code": totpCode(t, secret, 1)}).AssertStatus(429)
+	attacker.PostJSON("/2fa", map[string]any{"code": totpCode(t, secret, 1)}).AssertStatus(429)
 
 	// Confirming a new setup is limited too.
 	c := app.Client(t).Inertia("")
@@ -252,8 +251,19 @@ func TestSecurity_A07_TwoFactorChallengeNeedsPasswordStep(t *testing.T) {
 	app := vukemtest.New(t, bootstrap.New)
 	c := app.Client(t).Inertia("")
 
-	c.Get("/two-factor-challenge").AssertRedirect("/login")
-	c.PostJSON("/two-factor-challenge", map[string]any{"code": "123456"}).AssertRedirect("/login")
+	c.Get("/2fa").AssertRedirect("/login")
+	c.PostJSON("/2fa", map[string]any{"code": "123456"}).AssertRedirect("/login")
+}
+
+// Old links and bookmarks keep working: the legacy path redirects to /2fa in every locale.
+func TestTwoFactorLegacyChallengePath(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	c := app.Client(t).Inertia("")
+
+	c.Get("/two-factor-challenge").AssertRedirect("/2fa")
+	c.Get("/es/two-factor-challenge").AssertRedirect("/es/2fa")
 }
 
 // The settings page moved into /profile (owner round 2026-11-01 item 21): the old path answers 301 in every
