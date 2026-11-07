@@ -94,3 +94,21 @@ func TestSecurity_A07_SocialDoesNotTakeOverUnverifiedEmails(t *testing.T) {
 	signIn(t, app.Client(t)).AssertStatus(409)
 	vukemtest.AssertDatabaseCount(t, app, "social_accounts", 0)
 }
+
+// An account with two-factor authentication that signs in with Google goes to the /2fa code step; the old
+// login-page dialog no longer exists, so a redirect to /login dropped the user on the login form.
+func TestSecurity_A07_SocialLoginWithTwoFactorOpensChallenge(t *testing.T) {
+	t.Parallel()
+
+	const email = "lia@example.com"
+
+	user := social.User{ID: "gh-2fa", Email: email, EmailVerified: true, Name: "Lia"}
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: vukemtest.FakeSocial(user)})
+
+	enableTwoFactor(t, app, app.Client(t).Inertia(""), email)
+
+	c := app.Client(t)
+	signIn(t, c).AssertRedirect("/2fa")
+	c.Get("/2fa").AssertOK().AssertInertia("Auth/TwoFactorChallenge")
+	c.Get("/dashboard").AssertRedirect("/login")
+}

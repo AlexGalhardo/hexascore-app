@@ -1,6 +1,7 @@
 package account
 
 import (
+	"github.com/AlexGalhardo/vukem/i18n"
 	"net/http"
 
 	"github.com/AlexGalhardo/vukem/auth"
@@ -59,7 +60,7 @@ func (h *Handlers) startTwoFactor(c *web.Ctx, u models.User, remember bool) (boo
 		return false, err
 	}
 
-	return true, c.Redirect(ChallengePath)
+	return true, c.Redirect(i18n.PathPrefix(c.Context()) + ChallengePath)
 }
 
 // ChallengePath is the page of the second login step (owner 2026-11-07); it replaced the code dialog on /login.

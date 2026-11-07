@@ -3,10 +3,12 @@ package routes
 import (
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
+	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/router"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/controllers/account"
 )
 
 // Social registers "sign in with" routes (vukem install:auth --social).
@@ -68,8 +70,8 @@ func Social(r *router.Router, app *vukem.App) error {
 		}
 
 		if pending {
-			// A full-page return from Google: the login page opens the code dialog (owner 2026-11-02).
-			return c.Redirect("/login")
+			// The code step is its own page since 2026-11-07; /login no longer opens a dialog for it.
+			return c.Redirect(i18n.PathPrefix(c.Context()) + account.ChallengePath)
 		}
 
 		if err := acc.Web.Login(c, u); err != nil {
