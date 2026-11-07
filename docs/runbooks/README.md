@@ -15,7 +15,7 @@ Operator procedures from SDD 12 §7.8 and §7.9. Alerts are `alert=<code>` lines
 | A11 | disk over 80 % | [disk-full](disk-full.md) |
 | A12 | connection pool near its limit | [pg-connections](pg-connections.md) |
 | A13, A14 | score drift, trending stale | job logs; same pattern as [ingestion-stuck](ingestion-stuck.md) |
-| A15, A17 | cost | [cost](cost.md) |
+| A15, A17 | cost | [cost](cost.md), [postgres-cost](postgres-cost.md) |
 | leaked credential | any | [leaked-secret](leaked-secret.md), then [incident-response](incident-response.md) |
 
 | R | Runbook |
