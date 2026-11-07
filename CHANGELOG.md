@@ -7,113 +7,126 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.39.0] - 2026-11-07
+
 ### Added
 
-- **mobile:** `bun run android:dev` builds and runs the debug app on an Android emulator against a local dev backend (`EXPO_PUBLIC_API_BASE_URL` defaults to `http://10.0.2.2:3000`; debug builds already allow cleartext, release stays https-only). On Windows the native build runs in a short-path hoisted mirror (`C:\h`) because ninja cannot stat the 260+ character paths of bun's isolated `node_modules`. Runbook: `docs/runbooks/mobile-local-android.md`.
-
-- **perf:** Two partial indexes on `items` for the default listing (migrations `20261107000000` and `20261107000100`): page one of a type sorted by score reads the index instead of sorting every item (42.8 ms to 0.12 ms on 22,500 games) and the total count is an index-only scan (39.2 ms to 1.3 ms).
-- **docs:** `docs/runbooks/postgres-cost.md` (owner-run steps to measure, right-size the pool, fold staging into the production instance and size the volume) and ADR 0027 (stay on Postgres, SQLite deferred).
-- **ui:** The footer newsletter form is live: it posts the email (with a honeypot) from the browser to vukem-email's `/subscribe/hexascore` (`NEWSLETTER_API_URL`, default `https://email.hexascore.app` in production and `http://localhost:3100` otherwise; `NEWSLETTER_PROJECT_SLUG`), whose origin joins `connect-src`. States: sending, check your inbox, invalid, rate limited, error.
-- **auth:** Login and sign-up share one minimal centered layout (logo, title, Google and passkey buttons, divider, form, link to the other page); the two-factor step is its own `/2fa` page with six code boxes and a backup-code swap, and `/two-factor-challenge` redirects to it.
-- **perf:** The landing page's highlights and upcoming blocks are cached per locale for 5 minutes and forgotten when a trending snapshot lands, so a visit no longer runs 12 catalogue queries.
-
-- **ingest:** `wikidata-discover` chain (every 30 minutes, behind `FLAG_INGEST_WIKIDATA`): walks Wikidata below the top-N selection that capped the catalogue at 100,000 items, most popular first (sitelink count, floor 3) and one type at a time (films, series, games, books), stores the records of items not fetched yet and lets the normaliser create them. The position persists across runs. It needs no TMDB, Open Library or paid access, and Goodreads, Skoob, JustWatch and the IMDb datasets stay unused, as decided in `docs/data/SOURCES.md`
-- **admin:** A progress bar sweeps across the top and the content dims while an admin page loads (after a 120 ms delay, so fast pages do not flash).
-
-- **admin:** Every admin screen is now a React page in the new shell: ingestion and its runs, source records, the match, field and conflict review queues, the catalogue audit with revert, locks, item management (fields, affiliate links, offers, trending, merge), the moderation queue, detail, metrics and bulk result, and read-only list and detail screens for users, score bursts, rating flags, score actions, formula versions, reports, contact messages, items, job runs, ingest failures, data quality results, the audit log and the feature flags (`/admin/r/<slug>`, an allow-list of columns). Actions post to the same endpoints and show the server's message inline. Feature flags are changed from the flags screen and contact messages are marked handled from their detail page, both recorded in the audit log.
-
-- **admin:** A new React admin dashboard at `/admin/overview` (Inertia, TanStack Query, shadcn-style components over Base UI) with a sidebar, light and dark themes, headline counts, worker heartbeat and recent ingestion runs. It sits behind the panel guard (2FA, CSRF, ability) and refreshes every 30 seconds. The framework's own panel is no longer mounted: `/admin`, `/admin/_flags`, `/admin/_audit` and `/admin/<resource>` redirect to the React screens (ADR 0026, VF-083).
-
-- **catalog:** Upcoming releases within 90 days on the landing, 30-day activity ranking for released items, and a where-to-watch provider filter for movie and series listings
-- **ui:** A grouped footer with a disabled newsletter preview and a catalogue demo seed with future releases for each category
-- **catalog:** Where to watch or buy on every item page: streaming, rent, buy and free-with-ads providers from TMDB (display only, with the JustWatch credit), Steam, GOG, Epic, Google Play, App Store and Amazon links derived from the catalogue ids, a country switch that follows the locale, and `/go/{id}` as the only exit (rate limited, uncached, no user id or IP counted); affiliate tags are added at the redirect when `AFFILIATE_*_TAG` is set
-- **admin:** The item manage page lists, deactivates, restores and adds offers, and pins or bans an item on the trending lists; `/admin/ingest/conflicts` holds items that duplicate another until an admin allows or dismisses them
-- **catalog:** The normaliser no longer creates an item whose external id another item owns or whose English title and year match another item; unique indexes on the external ids back the rule
-- **ingest:** `refresh.existing` verifies covers and stores a quality score; `llm.normalise` (off by default, monthly budget `LLM_MONTHLY_BUDGET_USD`) queues model-extracted facts for review; the worker heartbeat and `WORKER_HEARTBEAT_CHECK` prepare the separate worker service (`docs/runbooks/worker.md`)
-- **release:** `changelog-sync.yml` checks that CHANGELOG.md and the GitHub releases match and that every released section is the one-commit-per-line git-cliff list (`scripts/release/check-sync.ts`)
-- **config:** `TELEGRAM_OPS_CHAT_ID` declared in `.env.example` for the catalogue worker digest (read by the app once RFC-001 CW-08 lands)
-- **docs:** Architect audit 2026-11-02: project map, web test report, technical review and cleanup ledger in `docs/audit/`; RFC-001 catalogue worker, RFC-002 trending, RFC-003 offers; ADR 0024 (Redis deferred) and ADR 0025 (MongoDB rejected); `docs/data/SOURCES.md`, `docs/ROADMAP-V1.md`, `docs/BACKLOG.md`, `docs/OPEN-QUESTIONS.md`; ROADMAP phase P8
-
-### Fixed
-
-- **auth:** A Google sign-in on an account with two-factor authentication goes to the `/2fa` code step (it went back to `/login`, which no longer opens a code dialog); both sign-in paths keep the locale prefix.
-- **auth:** The web two-factor challenge (`POST /2fa`) now also stops guessing per account, 10 tries per 15 minutes whatever the address, so rotating IPs no longer widens the budget (security audit 2026-11-07).
-- **uploads:** Community cover uploads and the covers fingerprint step refuse images over 25 megapixels before decoding them.
-- **mobile:** The Google sign-in nonce comes from the platform CSPRNG; the sign-in is skipped when none exists instead of falling back to `Math.random`.
-- **mobile:** Plural messages no longer crash the home screen on Android: Hermes has no `Intl.PluralRules`, so `translate` falls back to the en, es and pt-BR rules.
-
-- **trending:** The landing carousel requires a cover: an item with a synopsis, both translated titles and a date reached the quality floor without one, took a slot and was then hidden, leaving a gap; pins need a cover too. "For you", similar items and cross-media links leave items without a cover out as well
-- **ingest:** The Telegram digest counts right: `offers.tmdb` counts the items that got offers instead of every offer (it showed 447 thousand changed for 36 thousand seen), `refresh.existing` counts the items whose quality score moved instead of every checked item, and the pace and ETA use the last hour instead of a 15-minute window
-- **ingest:** A book edition whose source gives an implausible publication year (0 or 9999) no longer fails the item's editions step: years outside 1400 to 2100 are stored as unknown
-- **item:** An item whose trailers came from Wikidata (stored as a list of YouTube ids) no longer answers 500: the item page reads both that list and the older objects. Grand Theft Auto VI was the first to fail
-- **catalog:** The canonical genres are permanent: migration `20261104000000_canonicalize_genres` repairs every item whose genres still show Wikidata labels or lost their canonical link (the same repair as `genres:canonicalize`, as SQL), and the normaliser now canonicalises each item it saves, so a new ingest no longer brings the source labels back and the command no longer needs to be run by hand
-- **ingest:** An item whose alternative titles differ only in case or accents no longer fails its whole relations step (the insert now ignores any unique conflict, not only the exact title)
-- **ingest:** The worker heartbeat counts as stale after 8 minutes instead of 3: it queues behind two running ingest chunks of up to 5 minutes, so a busy worker was reported stale
-- **ratings:** Unreleased item pages explain when ratings open and disable guest and member rating controls; the existing server gate remains authoritative
-- **ui:** The navbar bottom border uses the same light border token as the catalogue cards
-- **ingest:** A cancelled refresh stops before opening a batch and between cover checks
-- **trending:** Flagged seed accounts no longer count in the trending signals or in the collaborative-filtering gate (OQ-07)
-- **a11y:** The Details links on the item page are 24 px touch targets again (Lighthouse target-size)
-- **web:** The render cache keys pages by their locale prefix again: `/pt-br/...` and `/es/...` no longer serve the English (or Spanish) copy rendered first
+- **i18n:** Shorter about intro in the three locales ([ae082af](https://github.com/AlexGalhardo/hexascore-app/commit/ae082af5bb451a9915ab2aa03b168c8003cf7310))
+- **ui:** Drop the title chips and reorder the item page at phone width ([2b107e2](https://github.com/AlexGalhardo/hexascore-app/commit/2b107e2a0df906aca253fb465a45e87b3bdf1cb3))
+- **api:** Group the reference by category and describe each operation ([ac1721f](https://github.com/AlexGalhardo/hexascore-app/commit/ac1721f427a95267d1aeb93ed242c3fd93983e12))
+- **catalog:** Canonical translated genres per category ([8e0b089](https://github.com/AlexGalhardo/hexascore-app/commit/8e0b08976db44b233c4c94e56c7a07cecb6a21cf))
+- **ui:** Page listings by 40, 80 or 120 and show two more-cards per row on phones ([4129950](https://github.com/AlexGalhardo/hexascore-app/commit/4129950c08448991af8bdc27ea8178f11966468a))
+- **catalog:** Map the most used unmapped genre labels ([658b448](https://github.com/AlexGalhardo/hexascore-app/commit/658b44832bbe5ba35ad6a7b78af8dad592a21667))
+- **ingest:** Cache the igdb app token until it expires ([4827ca5](https://github.com/AlexGalhardo/hexascore-app/commit/4827ca5930c1c82bae94ac637302fb1f15d30847))
+- **web:** Answer missing pages with 404 instead of a redirect home ([ddb0696](https://github.com/AlexGalhardo/hexascore-app/commit/ddb0696361f2155965bea0093a9baa61f348fff5))
+- **ops:** Prune old operational rows and index item_status by item ([95396af](https://github.com/AlexGalhardo/hexascore-app/commit/95396afa8a3139fbb2f583ecc4ba8146aee5cdf0))
+- **search:** Keep result links in the client-shell fallback ([f7978c0](https://github.com/AlexGalhardo/hexascore-app/commit/f7978c077d037576b230da158c4f671cc02442ab))
+- **ingest:** Persist host state and share the pressure signal through postgres ([578f5a5](https://github.com/AlexGalhardo/hexascore-app/commit/578f5a5ca262c28fff5d717e221cdde3e2f839d0))
+- **ingest:** Add provenance v2 and the field review queue ([4a7ec9e](https://github.com/AlexGalhardo/hexascore-app/commit/4a7ec9e602d66e98d64f26547da09ed56bb60fdd))
+- **ingest:** Add dispatch idempotency keys and jittered retries ([86849a4](https://github.com/AlexGalhardo/hexascore-app/commit/86849a4b15979f81f290c38d7188b20a6d38a5d5))
+- **alerts:** Add the ingestion digest and the ops chat ([7b40982](https://github.com/AlexGalhardo/hexascore-app/commit/7b40982b01e51569ada541df59a62f26f34e93ae))
+- **covers:** Add dhash dedupe, source image rights and cwebp resource limits ([d685f3a](https://github.com/AlexGalhardo/hexascore-app/commit/d685f3aedf13a4c61926e92f5876aa6bede183bf))
+- **ingest:** Partition source record history and export cold months ([2dfd1c9](https://github.com/AlexGalhardo/hexascore-app/commit/2dfd1c939e04e0f4a33edb08836f197c059945a3))
+- **catalog:** Trending v2, offers, and the catalogue worker remainder (phase P8) (#68) ([acba869](https://github.com/AlexGalhardo/hexascore-app/commit/acba86940dca500ab70f7a41802c3f8502c2edbd))
+- **item:** Lock unreleased items to want and add-to-list for logged-in users ([29107b0](https://github.com/AlexGalhardo/hexascore-app/commit/29107b0aa5bb4dcb14d85c9e335f83a490931062))
+- **item:** Hide time-to-beat block on unreleased items ([daa7790](https://github.com/AlexGalhardo/hexascore-app/commit/daa77905e404ef7dc2bc06155d4c25642c94a894))
+- **catalog:** Trending v2 listing, item page and ingest refresh updates ([3e7c61b](https://github.com/AlexGalhardo/hexascore-app/commit/3e7c61baa92baaaa8435f95d897f9cceddb34316))
+- **web:** Refresh catalogue cards, filters, home sections and tokens ([f635623](https://github.com/AlexGalhardo/hexascore-app/commit/f6356231df81e8f539b81ace7e6a515ca61b40f6))
+- **seed:** Keep 1000 items per type in the local production preview ([99da714](https://github.com/AlexGalhardo/hexascore-app/commit/99da714161a5397d4f314f9eba93ac729733869d))
+- **home:** Six upcoming cards per carousel slide without controls ([34fe6f6](https://github.com/AlexGalhardo/hexascore-app/commit/34fe6f6eb2f4d914143b7cd029400827e07bace9))
+- **home:** Poster cards and revealed arrows in the landing carousels ([ba56afd](https://github.com/AlexGalhardo/hexascore-app/commit/ba56afd23d93b234989b2941220ec57ab0f4930b))
+- **home:** Advance landing carousels automatically ([b8dd668](https://github.com/AlexGalhardo/hexascore-app/commit/b8dd6684a256c85d09d3cd3770fca67afa2595c1))
+- **home:** Remove carousel arrow buttons and rotate every two seconds ([55109ab](https://github.com/AlexGalhardo/hexascore-app/commit/55109abe77950d13dbb441bead265a48cf5fc9ef))
+- **item:** Show offers worldwide, with where-to-play for games ([f75a5b6](https://github.com/AlexGalhardo/hexascore-app/commit/f75a5b610ed6698a48096eb43c15e5c5f5c4d6ec))
+- **home:** Four cards per carousel slide in a wider grid ([a53b989](https://github.com/AlexGalhardo/hexascore-app/commit/a53b989e18923038a851f1d308c52c0faec65b0e))
+- **admin:** Add the shadcn-style UI kit over Base UI ([c2bd085](https://github.com/AlexGalhardo/hexascore-app/commit/c2bd085210e65718616912dadb22bb2be663b39c))
+- **admin:** Add the admin shell with sidebar, topbar and theme switch ([a30ad08](https://github.com/AlexGalhardo/hexascore-app/commit/a30ad088aacfc5fbb7cda0b194898c964681e7ae))
+- **admin:** Add the React dashboard at /admin/overview ([5419810](https://github.com/AlexGalhardo/hexascore-app/commit/541981051cd3a74b57b76b01f3b002c9845b9faf))
+- **admin:** Move ingestion and the review queues to React ([7cef10b](https://github.com/AlexGalhardo/hexascore-app/commit/7cef10bb6d92eddb1c1f84bfd8595f5278b06d20))
+- **admin:** Move audit, locks, item management and moderation to React ([7f53551](https://github.com/AlexGalhardo/hexascore-app/commit/7f5355162f4d02af8b10ebe2e897d5c6db377e03))
+- **admin:** Move the remaining admin screens to React ([d7dd28b](https://github.com/AlexGalhardo/hexascore-app/commit/d7dd28b4ff2d00a68f1058d5061bc6d84af11a26))
+- **profile:** Add a section menu next to the profile sections ([0e6fed3](https://github.com/AlexGalhardo/hexascore-app/commit/0e6fed3322c698b7e248f614ae4d3df446ee70fa))
+- **admin:** Show a progress bar while an admin page loads ([4934216](https://github.com/AlexGalhardo/hexascore-app/commit/4934216b2552736b5ee1edac07f6cd9a65258882))
+- **admin:** Drop the framework panel, keep React screens only ([14154f3](https://github.com/AlexGalhardo/hexascore-app/commit/14154f3b25310e80e94a63739b4f96de345e019c))
+- **ingest:** Send a 15-minute digest that shows real progress ([ec3c537](https://github.com/AlexGalhardo/hexascore-app/commit/ec3c5375548616ab25851a0e852411924278e469))
+- **catalog:** Hide items without a cover or a score from the landing and categories ([f3d7d10](https://github.com/AlexGalhardo/hexascore-app/commit/f3d7d10908d021e2ff0a3224bf44fdd2602d14ef))
+- **ingest:** Discover films and series by walking the TMDB id exports ([f0781e2](https://github.com/AlexGalhardo/hexascore-app/commit/f0781e24b5208811ee91c57b57e2c170f562f12e))
+- **ingest:** Discover items by walking Wikidata instead of the TMDB exports ([76daee7](https://github.com/AlexGalhardo/hexascore-app/commit/76daee7b49893cdf87471888e28f934a0eef4092))
+- **catalog:** Fold game modes into a few canonical names with a migration ([b508eb0](https://github.com/AlexGalhardo/hexascore-app/commit/b508eb0b6507767018a85ef8521fceea3a67d58c))
+- **ingest:** Run discovery as one lane per category ([d5e23fe](https://github.com/AlexGalhardo/hexascore-app/commit/d5e23feee1926b29b5b4377ef2f6531288a44069))
+- **ingest:** Let the language model fill gaps, translate synopses and search the web ([5685432](https://github.com/AlexGalhardo/hexascore-app/commit/56854321162b945350f81fb905630378729a074e))
+- **auth:** Redesign login and signup as one minimal centered column ([fb0c042](https://github.com/AlexGalhardo/hexascore-app/commit/fb0c0420f0c7030e7d3006d9099e5a9d8bda37f4))
+- **auth:** Move the two-factor step to its own /2fa page ([39c3fca](https://github.com/AlexGalhardo/hexascore-app/commit/39c3fcae0454014fca9ec92b200eed5717b80087))
+- **ui:** Enable the footer newsletter form ([41b4b54](https://github.com/AlexGalhardo/hexascore-app/commit/41b4b54c7c64f81d0a4529ef0ef9ca561e20840f))
+- **mobile:** One-command local Android debug run against a dev backend ([659aac0](https://github.com/AlexGalhardo/hexascore-app/commit/659aac06712c7c7d0d981548f4c7a09c27fe3e08))
+- **mobile:** Neutral zinc theme, 4/8/12 radii and Inter-only type ([9c17265](https://github.com/AlexGalhardo/hexascore-app/commit/9c17265c30c3ecae64fe7742e75e7d314ee76d8a))
+- **mobile:** Shadcn-style UI kit (Button, Input, Card, Badge, Sheet, Toast and friends) ([26f6b01](https://github.com/AlexGalhardo/hexascore-app/commit/26f6b0137e8514a0ac27d5b36d333d65da6d6873))
+- **mobile:** Flat hairline surfaces and segmented controls across screens ([5ab8f8b](https://github.com/AlexGalhardo/hexascore-app/commit/5ab8f8b069ad50e7e63ed5852c338e300b13ad73))
+- **mobile:** In-app toast host replaces ToastAndroid ([ba5a96a](https://github.com/AlexGalhardo/hexascore-app/commit/ba5a96a88f0a264a031db7c426a66a96735aaf72))
+- **mobile:** Migrate screens to Card, ListItem, EmptyState, Skeleton and Avatar ([ab1be19](https://github.com/AlexGalhardo/hexascore-app/commit/ab1be19d284a087b012a7e139bc9acec61281b42))
+- **mobile:** Redesigned sign-in and two-factor, safe-area detail screens, capture routine docs ([b51bf25](https://github.com/AlexGalhardo/hexascore-app/commit/b51bf2535328a76874736d66eb0ad22b8068f9b9))
+- **mobile:** Google sign-in on the login screen and link semantics for web actions ([557735e](https://github.com/AlexGalhardo/hexascore-app/commit/557735e7a2bd384eb3750dddc62c10ec0a4e4212))
+- **ui:** Adopt shadcn/ui components and the neutral zinc theme ([23dc55d](https://github.com/AlexGalhardo/hexascore-app/commit/23dc55dda0f26a5912029b5fb0f8dd6f8b5409c7))
+- **auth:** Server-issued single-use nonce for the Google ID-token exchange ([e209410](https://github.com/AlexGalhardo/hexascore-app/commit/e2094101ad94b3c37b31b29d3c6072cda851a1c0))
+- **mobile:** Google sign-in by authorization code with PKCE, state and a server-issued nonce ([656c4a2](https://github.com/AlexGalhardo/hexascore-app/commit/656c4a2e56c4e64f3f508ac4c00e70563594a55b))
+- **ui:** Render the sign-in pages standalone with a link back home ([0644e48](https://github.com/AlexGalhardo/hexascore-app/commit/0644e483d63b4766200c247af76d73678e2b8aee))
+- **ui:** Validate the newsletter address length and shape before posting ([a2dabfa](https://github.com/AlexGalhardo/hexascore-app/commit/a2dabfa789b6e8efdf04f49c9cc577955a2f9b9b))
 
 ### Changed
 
-- **auth:** `/login`, `/signup`, `/2fa`, password recovery and reset render as standalone pages without the site navbar and footer, with a "‹ Home" link at the top left.
-- **newsletter:** The footer form accepts addresses of 12 to 48 characters with a real domain, and says so before posting.
-- Require vukem v0.39.1, which sends Resend addresses as `email` or `Name <email>` (production mail failed with "Invalid from" on v0.39.0).
-- **auth:** Google sign-in in the Android app uses the authorization code flow with PKCE (S256) and `state` instead of the implicit ID-token flow. The app first calls the new `POST /app/v1/auth/google/nonce` (guest, rate limited); the ID token must carry that single-use, 5-minute nonce, which `POST /app/v1/tokens/google` checks after verifying the token and consumes when it mints the app token (migration `google_nonces`, hashed). `expo-crypto` 58.0.7 is a direct dependency of the app.
+- **home:** Cache the landing highlights and upcoming blocks ([919eb98](https://github.com/AlexGalhardo/hexascore-app/commit/919eb983e68e9b73c0f7969b9d9a64ccc1a62d61))
+- **catalog:** Add partial indexes for the default listing ([4dfb0a1](https://github.com/AlexGalhardo/hexascore-app/commit/4dfb0a1b626608dde2d1833f7cdd05807f13be7d))
 
-- **docs:** Agent guidance covers the shared framework feedback file (`HS-` ids), the `RUN_SLOW_CI` gate and `scripts/ci/local.sh`, the removed staging environment, integration and Windows test pitfalls, SSR private prefixes, JS-only forms, and the mobile local-dev notes.
-- **ui:** The public site adopts shadcn/ui components and a neutral zinc theme (ADR 0029, ported from PR #69): flat buttons and inputs, hairline borders, rounded-md 8 px, blurred navbar with a shadow once scrolled, dark mode on the same greys. The palette and radii match the Android kit (`neutral.json`), checked by `packages/tokens/neutral.test.ts`. New dependency: `@radix-ui/react-slot` 1.5.0.
-- **mobile:** The sign-in screen is rebuilt on the new kit (wordmark, labelled fields with Show/Hide, a separate two-factor page), screens use Card, ListItem, EmptyState, Skeleton and Avatar, toasts are in-app (`ToastHost`, announced to screen readers) instead of `ToastAndroid`, and detail screens keep clear of the status bar. Category accents stay as a 2 px rule on trending cards and the heading squares.
+### Fixed
 
-- **mobile:** The Android app wears the neutral zinc skin of the new web UI: grey palette in light and dark, 4/8/12 px radii, hairline borders instead of ledges, Inter as the only family (Playfair Display is no longer embedded). New shadcn-style kit in `apps/mobile/src/ui` (Button with default/secondary/outline/ghost/destructive and three sizes, Input, Label, TextField, Card, Badge, Separator, Skeleton, Avatar, SegmentedControl, Sheet, Toast, ListItem, EmptyState); `Btn` is replaced by `Button` and the language and theme pickers are segmented controls.
-
-- **ingest:** The language-model gap filler (only for items still missing data after every source, budget US$10 a month spread at most 1/30 a day): a value written in the stored Wikipedia introduction is applied to the item at once, anything else goes to review; a new stage translates the English synopsis into pt-BR and es when they are missing (the most popular items first, never replacing a synopsis); and with `LLM_WEB_SEARCH=true` the most popular items with no stored text are looked up with web search, always into review. The client no longer sends `temperature`, which Claude Haiku 5.5 rejects, so no call could succeed before
-- **ingest:** Discovery runs as four lanes, one per category (films, series, games, books): each lane walks and normalises only its type, so they run side by side, and with `INGEST_LANES=true` each goes to its own queue (`ingest-movie`, `ingest-series`, `ingest-game`, `ingest-book`); see the worker runbook for the order to switch them on
-- **catalog:** The game mode filter of /games shows a few canonical modes named with a capital first letter in en, pt-BR and es (Single player, Multiplayer, Co-op, PvP, Online multiplayer, Split screen, MMO) instead of the Wikidata labels ("single-player video game", "multiplayer online game"): migration `20261104100000_canonicalize_game_modes` folds the existing links, and the normaliser does the same for every new item
-- **item:** Where to watch shows plain text links instead of boxes, and each streaming service links to its own site (Netflix, Prime Video, Apple TV, Google Play, YouTube and the other known services) instead of TMDB's page about the title; a service with no known site is left out of the page and of the redirect
-- **ingest:** The 30-minute "fill" schedules of the Wikidata, Open Library and TMDB full chains are removed: they re-read the same top 100,000 records and held the ingest slots; the weekly runs and the `wikidata-discover` chain remain
-- **catalog:** The landing page and the four category pages hide items without a cover (`FLAG_HIDE_UNCOVERED`, on by default); an item without a score is still listed, and its score badge appears once it has one. The item page, search and the public API are unchanged
-- **ingest:** The Telegram ingestion digest goes out every 15 minutes and shows new items by type with the pace and ETA to 1,000,000, the running runs with age, counts and a warning for a stalled one, records fetched per source, an example error, and a warning when no item was created in 45 minutes
-- **home:** Release date badges on the landing carousel are larger, with bigger text, for easier reading.
-
-- **catalog:** Grid and category cover images fill their card, and the score badge is slightly larger.
-
-- **home:** Upcoming carousel cards show the release date as a bright orange badge with black text in the top-right corner.
-
-- **catalog:** Item cards in the grids and category pages no longer show the title on the cover; the score stays in the top-right corner, and the title is kept for screen readers.
-
-- **home:** Landing carousel covers fill their box (cropped to cover), and each card's footer shows only the release date; the title stays available to screen readers.
-
-- **home:** Landing carousels show four cards per slide in a four-column grid, with the twelve upcoming cards spread over three slides.
-
-- **item:** The where-to-watch and where-to-play block is hidden when an item has no offers, instead of showing an empty message.
-
-- **item:** Where to watch (films and series) and where to play (games) show offers from every country at once, with no country selector, so a service listed in one country appears for every visitor.
-
-- **ui:** Cover images are shown whole at every size (no cropping); the space left around them takes the card colour.
-
-- **item:** Where to watch moved into the Details card, below the action buttons, and its labels are now served to the page (the `offers.` namespace was missing from the page translations).
-
-- **home:** Landing carousels show 6 upcoming poster cards per row (12 in total); slides advance automatically every two seconds, pausing on hover or focus and when reduced motion is on; no arrow buttons; navigation is by arrow keys and swipe. Each carousel heading uses the trending label style, and each card shows its release date in the top-right corner.
-
-- **item:** On unreleased items, logged-in users can only use "want" and "add to list"; the other status buttons are disabled and the time-to-beat block is hidden. Clearing an existing status stays allowed.
-
-- **trending:** The landing carousels show upcoming announcements with their known release-date precision instead of scores and advance only when a visitor navigates; the released 30-day ranking fills the grids below them. The 7-day score v2 snapshots remain available to the API
-- **ui:** Narrower site container, flatter and squarer catalogue cards, permanent navbar shadow, item verdict labels, shorter runtime display, and Amazon links below eligible book and game covers
-- **ui:** Cards (landing rows, category grids, trending) have a soft grey edge instead of a category colour, and buttons, inputs and cards share one radius scale (`rounded-md` controls, `rounded-lg` cards, `rounded-sm` covers and badges); native controls follow the theme, text selection uses the brand colour and headings balance their line breaks
-- **catalog:** Canonical genres: one translated list per category (en, pt-BR, es) replaces the Wikidata genre labels; `genres:canonicalize` relinks the items and keeps the source links hidden in `item_genre_sources`; the rules cover the most used labels of the production dry run (85% of links before, more now: LGBTQ+, educational, telenovela, tokusatsu, science fiction and fantasy games); listing filters show the translated names and the public `/{type}/genres` endpoints take `locale` and return `name`
-- **api:** The API reference groups operations under games, movies, series, books and catalog, and every operation has a one-sentence description; the Python SDK modules follow the new tags
-- **ui:** Category listings page 40, 80 or 120 items (default 40); the landing's "More" grid shows two cards per row at phone width
-- **i18n:** Shorter /about intro in en, pt-BR and es
-- **ui:** The item page drops the genre and platform buttons under the title (Details still links them); at phone width the cover fills the width and the rating column follows Details, before the title and synopsis
-- **build:** `.dockerignore` keeps worktrees, tool state, venvs, nested env files and `node_modules` out of the Docker build context; `local.properties` is gitignored
-- **agents:** `PROMPT-WORKERS.md` rewritten: orchestrator reviews and merges, senior and intern in standby, ticket and report formats, autonomy limits
-
-### Removed
-
-- **infra:** The `staging` environment (app, worker, Postgres and bucket; deleted in Railway by the owner on 2026-11-07, ADR 0028) and everything that pointed at it: the staging runbook, the staging-only scheduling of `backup:drill` (the command stays, run by hand), the staging-merge step of `postgres-cost.md`, and the staging cost rows of SDD 11. `SEO_NOINDEX` and the non-production `robots.txt` stay for previews and local production builds.
+- **a11y:** Give the item details links 24 px targets ([bcfa15a](https://github.com/AlexGalhardo/hexascore-app/commit/bcfa15a71e9b7acf784901a389f51558233bf043))
+- **web:** Key the render cache by the stripped locale prefix ([695872f](https://github.com/AlexGalhardo/hexascore-app/commit/695872f5254fd3c48a6ec3d3f2fc482cdfb2d396))
+- **i18n:** Pluralise pricing rate, lowercase found labels, full search name ([659a5e1](https://github.com/AlexGalhardo/hexascore-app/commit/659a5e1a3988cebb0811f6c7a3c8f801a711f93b))
+- **i18n:** Give the home page a tagline title and lowercase the found labels ([20281e2](https://github.com/AlexGalhardo/hexascore-app/commit/20281e22bce137891c817c8e4eb1f279b439f8fb))
+- **scoring:** Run nightly recompute to completion in resumable chunks ([5108a33](https://github.com/AlexGalhardo/hexascore-app/commit/5108a33833a429c959acb451511165f35b0cb583))
+- **jobs:** Set explicit timeout and retries on every handler ([26daadc](https://github.com/AlexGalhardo/hexascore-app/commit/26daadc6726f6775100c77afcf662f366c1df109))
+- **privacy:** Erase scoring and search rows on account purge ([498a79d](https://github.com/AlexGalhardo/hexascore-app/commit/498a79dba50f076d470acf18b6b32e7a08427395))
+- **db:** Validate the scoring user foreign keys outside the migration transaction ([88fee9b](https://github.com/AlexGalhardo/hexascore-app/commit/88fee9bcc0a97ee189ebcd58ed798b49f14ba882))
+- **seo:** Use the item cover as the share image when no share card is set ([2a3c0bd](https://github.com/AlexGalhardo/hexascore-app/commit/2a3c0bd92e0347b990f19fd9524e739a0f9bdcb6))
+- **health:** Probe the bucket in the readiness storage check ([5f61286](https://github.com/AlexGalhardo/hexascore-app/commit/5f61286c72e6e89d9586bfd110d27f2120d24a1b))
+- **catalog:** Link back from a page past the end and keep filters in the canonical ([16f468d](https://github.com/AlexGalhardo/hexascore-app/commit/16f468d31e55351cbb945367d8849f503f9292ca))
+- **console:** List the scoring user foreign keys in the seed purge table ([d237190](https://github.com/AlexGalhardo/hexascore-app/commit/d237190b8203011c7cb492f0c7c2b3d7a4854dfc))
+- **i18n:** Give the web search trigger its own label key ([92476b1](https://github.com/AlexGalhardo/hexascore-app/commit/92476b154eb3fd8a0c2a96c9c22577683141fd19))
+- **docs:** Underline links in the docs prose ([789c03b](https://github.com/AlexGalhardo/hexascore-app/commit/789c03bfd55a758c16641e3942c91f213fd411a7))
+- **item:** Show title and synopsis before the score card on phones ([c347435](https://github.com/AlexGalhardo/hexascore-app/commit/c347435325d55ea331dc81bed7bdb655b8746b06))
+- **ui:** Restore the section signs in the item page comments ([524813e](https://github.com/AlexGalhardo/hexascore-app/commit/524813e207bc7ae5974d3fe106e3d82cb8b76f86))
+- **ingest:** Log a failed host state flush instead of dropping it ([c58d8f5](https://github.com/AlexGalhardo/hexascore-app/commit/c58d8f59c850922e462f04330061bf51f1073062))
+- **ingest:** Write the pressure signal every minute ([06b7d67](https://github.com/AlexGalhardo/hexascore-app/commit/06b7d6790129fbd25b1c16681350d68c9980c68a))
+- **catalog:** Return release date and precision from listing summaries ([5eb1ba0](https://github.com/AlexGalhardo/hexascore-app/commit/5eb1ba0f6e65d26b7502373293437b24bbea47b9))
+- **item:** Show where-to-watch in the Details card ([785c733](https://github.com/AlexGalhardo/hexascore-app/commit/785c733600cb0655224191934e265fe1505d1209))
+- **ui:** Show every cover whole with the card colour around it ([ae93bd5](https://github.com/AlexGalhardo/hexascore-app/commit/ae93bd5eb4c108f744a6d00549fae91e0b0c4a07))
+- **item:** Hide where-to-watch when an item has no offers ([4c869fc](https://github.com/AlexGalhardo/hexascore-app/commit/4c869fc3f68e683cb4521acb74f132887e11f5b3))
+- **home:** Explain the carousel tabindex to the linter ([2fc5121](https://github.com/AlexGalhardo/hexascore-app/commit/2fc51211a1ba684dff9715acc64540dfadf8b896))
+- **ingest:** Skip alt titles that collide on the normalised title ([715e6f5](https://github.com/AlexGalhardo/hexascore-app/commit/715e6f534529e1a03e3fb24d391055d5986cd645))
+- **catalog:** List items without a score and hide only their score badge ([16e8b01](https://github.com/AlexGalhardo/hexascore-app/commit/16e8b01c4688b575f335c8bbcf7e64c1316c950e))
+- **ingest:** Stop re-running the full chains every 30 minutes ([f600b7b](https://github.com/AlexGalhardo/hexascore-app/commit/f600b7b3b5b0aae852728ce7af67c502a344242d))
+- **catalog:** Make the canonical genres permanent with a migration and at ingest ([faa3745](https://github.com/AlexGalhardo/hexascore-app/commit/faa3745e61aff17cfce1f18c5e79838cc82ce2c1))
+- **catalog:** Create the hexascore data source in the genre repair only when needed ([6425c17](https://github.com/AlexGalhardo/hexascore-app/commit/6425c171f9c354b7439daa75a9d919fe5f4297c5))
+- **item:** Link where-to-watch services to their own sites as plain links ([136702b](https://github.com/AlexGalhardo/hexascore-app/commit/136702b9b432572a7d794fef3b41bc7929f033ee))
+- **item:** Read trailers stored as a list of YouTube ids ([9e02013](https://github.com/AlexGalhardo/hexascore-app/commit/9e020132b68968ba2d3ebf2a7a732c60c841d716))
+- **ingest:** Store an implausible edition year as unknown ([f5bc31b](https://github.com/AlexGalhardo/hexascore-app/commit/f5bc31ba15058d76aef36440bcb089debbbd91db))
+- **ingest:** Count items, not offers, in the digest and smooth its pace ([36d9eea](https://github.com/AlexGalhardo/hexascore-app/commit/36d9eea98d43068823e9294f5f1f8b0a6bf49338))
+- **recommend:** Keep items without a cover out of trending and recommendations ([ad70247](https://github.com/AlexGalhardo/hexascore-app/commit/ad7024776d5105bb24d778735b0f7590c9bd67e7))
+- **mobile:** Refresh bundled i18n catalogues from the web locales ([ef8c07b](https://github.com/AlexGalhardo/hexascore-app/commit/ef8c07b12caa571ebed29d53fa24929b75f9a6c2))
+- **e2e:** Keep crawler off honeypot links and send the browser user agent ([9af8a4a](https://github.com/AlexGalhardo/hexascore-app/commit/9af8a4a4249c9b5ed5ff73db83a03bf410cacf0e))
+- **e2e:** Simulate a cross-site post for the CSRF check ([0366feb](https://github.com/AlexGalhardo/hexascore-app/commit/0366feb4f3b9d0795035de8104ef10b5db2beb19))
+- **mobile:** Format plurals without Intl.PluralRules on Hermes ([8b670fb](https://github.com/AlexGalhardo/hexascore-app/commit/8b670fb73224e17f8bc58814f7b7adbd57a2fb26))
+- **ingest:** Keep canonical genre positions stable so an unchanged re-run records no change ([38e6eff](https://github.com/AlexGalhardo/hexascore-app/commit/38e6eff13773fbc3b286fe63cd14720223e294c6))
+- **dq:** Do not report the canonical taxonomy marker as an unknown provenance source ([9065bb0](https://github.com/AlexGalhardo/hexascore-app/commit/9065bb06831bc5231b2c9835acd692e6e61af5e4))
+- **ui:** Keep the newsletter form disabled until hydration ([87de367](https://github.com/AlexGalhardo/hexascore-app/commit/87de367d406ef2dcc345ff566c05c1400800100d))
+- **ssr:** Render /library and /lists on the client like the other private pages ([e1fb23f](https://github.com/AlexGalhardo/hexascore-app/commit/e1fb23fa7951d41ecded6c75a92786ee0be51f9f))
+- **mobile:** Keep the rating, status and list sheets clear of the status bar ([dc9189b](https://github.com/AlexGalhardo/hexascore-app/commit/dc9189bea6bdfe0902ad10524ad33881d4622a05))
+- **mobile:** The Sections tab picks a category instead of showing Unknown section ([0241213](https://github.com/AlexGalhardo/hexascore-app/commit/024121388f1de340f3df3232b070610cc942862a))
+- **mobile:** Draw the Google sign-in nonce from the platform CSPRNG, never Math.random ([823a8d1](https://github.com/AlexGalhardo/hexascore-app/commit/823a8d16f3e5133b97e1d975a90aada878bde18f))
+- **uploads:** Cap decoded pixels in cover upload and Fingerprint against decompression bombs ([895457b](https://github.com/AlexGalhardo/hexascore-app/commit/895457b9e660cfa4e897eb6c91e7b84715bb9c1f))
+- **auth:** Cap 2FA challenge guesses per account across all IPs ([b72c119](https://github.com/AlexGalhardo/hexascore-app/commit/b72c119f87a1a44fe11a7fdd169005bef64d82c3))
+- **profile:** Keep the section nav inside the viewport on mobile ([3b5c3b4](https://github.com/AlexGalhardo/hexascore-app/commit/3b5c3b44aafc4601ebf4b07838e5ca857da674c7))
+- **auth:** Send a Google sign-in with two-factor to the /2fa code step ([9333a2c](https://github.com/AlexGalhardo/hexascore-app/commit/9333a2c6821cbd5ddd9c5e4a0f1170b4e96c3955))
 
 ## [0.38.0] - 2026-11-02
 
@@ -1182,7 +1195,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **web:** Match localized routes in proxy and keep PGlite out of the server bundle ([898655b](https://github.com/AlexGalhardo/hexascore-app/commit/898655b310acd2680cf2c5b75406d2ef7e26ff96))
 - **web:** Route locale-less paths through the i18n proxy and run PGlite under Next ([1e216b1](https://github.com/AlexGalhardo/hexascore-app/commit/1e216b1085f189903d2eb72c344e6d9b1a0fa5dd))
 
-[Unreleased]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.38.0...HEAD
+[Unreleased]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.39.0...HEAD
+[0.39.0]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.38.0...v0.39.0
 [0.38.0]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.37.0...v0.38.0
 [0.37.0]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.36.0...v0.37.0
 [0.36.0]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.35.0...v0.36.0
