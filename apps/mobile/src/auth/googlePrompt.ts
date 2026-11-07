@@ -1,4 +1,5 @@
 import { AuthRequest, makeRedirectUri, ResponseType } from "expo-auth-session";
+import { secureNonce } from "./nonce";
 
 const GOOGLE_AUTHORIZATION_ENDPOINT = "https://accounts.google.com/o/oauth2/v2/auth";
 
@@ -9,7 +10,8 @@ export const googleClientId = process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID ?? "";
 // shortcut: implicit ID-token flow through the system browser; unverified against a real Google client
 // (no client id in this environment), switch to the Credential Manager if Google refuses it for Android clients.
 export async function promptGoogleIdToken(clientId: string): Promise<string | null> {
-	const nonce = `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`;
+	const nonce = secureNonce();
+	if (!nonce) return null;
 	const request = new AuthRequest({
 		clientId,
 		redirectUri: makeRedirectUri({ scheme: "hexascore", path: "auth/google" }),
