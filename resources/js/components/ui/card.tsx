@@ -19,7 +19,6 @@ export function CardHeader({ className, ...props }: ComponentProps<"div">) {
 }
 
 export function CardTitle({ className, ...props }: ComponentProps<"h3">) {
-	// biome-ignore lint/a11y/useHeadingContent: the caller passes the children
 	return (
 		<h3
 			className={cn("text-lg leading-none font-semibold tracking-tight", className)}
