@@ -175,9 +175,18 @@ func relinkOne(
 	code, ok := tax.match(g.typ, g.label)
 	var codeArg any // NULL marks a hidden label
 	if ok {
+		// The source label already is the canonical genre: relinking it would delete the very link it keeps.
+		if ids[code] == g.entity {
+			return true, nil
+		}
+
 		codeArg = code
+		// Several source labels can map to one canonical genre; it keeps the earliest position, so a re-run that
+		// re-adds the labels in any order lands on the same value.
 		if _, err := tx.ExecContext(ctx, `INSERT INTO item_entities (item_id, entity_id, role, position, source)
-VALUES ($1, $2, $5, $3, $4) ON CONFLICT DO NOTHING`, g.item, ids[code], g.position, g.source, tax.kind); err != nil {
+VALUES ($1, $2, $5, $3, $4)
+ON CONFLICT (item_id, role, entity_id) DO UPDATE SET position = LEAST(item_entities.position, EXCLUDED.position)`,
+			g.item, ids[code], g.position, g.source, tax.kind); err != nil {
 			return false, fmt.Errorf("genres: link %s: %w", g.item, err)
 		}
 	}
