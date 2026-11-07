@@ -22,3 +22,4 @@ paths:
 - Private and missing must look the same: a hidden list, an unknown profile and a missing page all give the same response (HTML pages: 301 home since owner item 14).
 - Production data commands (`seed:mark`, `covers:rekey`, imports, purges) run with `--dry-run` first, then the real run, then a dry run as the check, only with the owner's yes.
 - Signed-in forms (contact, profile) take identity from the session, never from posted fields; sign-up and recovery answers do not reveal whether an email or nickname exists.
+- Apply the vendored `security-audit` skill (`.agents/skills/security-audit`, Cloudflare) during development so security issues are audited as part of the work; use guidance mode unless the task is an explicit full audit. CI runs it in `.github/workflows/security-audit.yml`.
