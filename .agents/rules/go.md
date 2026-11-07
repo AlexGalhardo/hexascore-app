@@ -16,3 +16,4 @@ paths:
 - Use modern Go: `for i := range n`, `min`/`max`, `errors.AsType`, `t.Context()`, `b.Loop()`, `new(expr)`.
 - Windows 11 is a first-class target: `filepath` for OS paths, close files/roots/DB handles before deleting (use `t.Cleanup`), accept CRLF input, no `sh`/`bash` in code paths, no cgo.
 - Comment only the *why*; known limits use `// shortcut: <limit>, <when to upgrade>`.
+- Private pages skip SSR through `app/ssr.PrivatePrefixes` (`/library` and `/lists` included); add a prefix for every new signed-in page.

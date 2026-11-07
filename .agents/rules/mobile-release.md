@@ -16,3 +16,6 @@ Procedure: [docs/runbooks/mobile-release.md](../../docs/runbooks/mobile-release.
 - OTA (`eas update`) only for JS/asset changes with an unchanged fingerprint; anything native, a new permission or a new feature needs a store build. OTA stays off until `expo-updates` is approved.
 - Submissions go to the Play internal track as drafts; promotion and staged rollout are owner decisions.
 - No destructive EAS command (delete build, channel, branch, credentials) without an explicit owner yes.
+- Local Android: `bun run android:dev` against the local backend; on Windows it builds in a short-path mirror, see [docs/runbooks/mobile-local-android.md](../../docs/runbooks/mobile-local-android.md).
+- Hermes has no `Intl.PluralRules`; do not rely on it for plurals.
+- UI kit: `apps/mobile/src/ui` with the neutral theme; build screens from it instead of new variants.
