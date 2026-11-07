@@ -26,7 +26,14 @@ export default function LoginScreen(): ReactElement {
 				googleClientId === ""
 					? undefined
 					: {
-							prompt: () => promptGoogleIdToken(googleClientId),
+							prompt: () =>
+								promptGoogleIdToken(googleClientId, async () => {
+									const issued = await appClient.write(appClient.newIdempotencyKey(), (client) =>
+										client.authGoogleNonce({ body: {} }),
+									);
+									const nonce = (issued as { nonce?: unknown } | null)?.nonce;
+									return typeof nonce === "string" ? nonce : null;
+								}),
 							submit: (input) =>
 								appClient.write(appClient.newIdempotencyKey(), (client) =>
 									signInWithGoogle(client, input),
