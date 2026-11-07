@@ -163,3 +163,8 @@ Method note: the prompt asked for the `grill-me` skill; it is not installed (it 
 - **Question**: What is the monthly infrastructure budget ceiling at launch (USD), and is a single region with one app instance plus one Postgres acceptable for the first months?
 - **Context**: legacy estimate on Vercel+Neon was ~US$52/month at launch and ~US$160 in growth. On Railway the app, Postgres and a worker fit in one project; Redis is only needed when the app runs more than one instance (shared rate limits, cache, queue) and MongoDB has no identified use case, so both start absent (each later addition needs an ADR per requirement 4).
 - **Architect guess/recommendation**: ceiling US$60/month at launch; single region (us-east or South America if Railway offers it, decided by latency to Brazilian users); one app instance, one worker for ingestion/scheduler, one Postgres with daily backups; Redis added only when scaling to two app instances.
+
+## Owner decisions, 2026-11-07 (mobile)
+
+- **Passkeys on mobile are out of scope.** The Android app signs in with email and password (plus 2FA) and Google; adding passkeys would need a native credential dependency, so it is not planned. Web passkeys stay as they are.
+- **Google sign-in on Android ships in the debug APK only for now.** The implicit ID-token flow through the system browser (`apps/mobile/src/auth/googlePrompt.ts`) is unverified for Android OAuth clients; it is exercised with `bun run android:dev` and is not part of a release build until it is verified end to end with the production client.
