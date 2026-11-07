@@ -1338,6 +1338,7 @@
     "newsletterSending": "Inscrevendo…",
     "newsletterDone": "Confirme sua inscrição no link enviado ao seu email. Olhe também o spam.",
     "newsletterInvalid": "Informe um email válido.",
+    "newsletterLength": "Use um email com {min} a {max} caracteres.",
     "newsletterError": "Não foi possível se inscrever agora. Tente de novo mais tarde.",
     "newsletterRateLimited": "Muitas tentativas. Espere um minuto e tente de novo.",
     "affiliateDisclosure": "Podemos receber comissão por links de compra, sem custo adicional para você.",
