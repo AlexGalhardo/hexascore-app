@@ -90,7 +90,8 @@ func entitiesFingerprint(ctx context.Context, ex database.Executor, id string) (
 	var fp string
 
 	err := ex.QueryRowContext(ctx, `SELECT coalesce(string_agg(role || ':' || entity_id::text || ':' || position
-  || ':' || coalesce(character_name, ''), ',' ORDER BY role, entity_id), '') FROM item_entities WHERE item_id = $1`, id).
+  || ':' || coalesce(character_name, ''), ',' ORDER BY role, entity_id, position, character_name), '')
+  FROM item_entities WHERE item_id = $1`, id).
 		Scan(&fp)
 	if err != nil {
 		return "", fmt.Errorf("fingerprint credits of %s: %w", id, err)

@@ -1,6 +1,6 @@
 # Runbooks
 
-Operator procedures from SDD 12 §7.8 and §7.9. Alerts are `alert=<code>` lines in Railway log search (D-35: Railway native tools only, no Grafana). Rehearsals of R1 and R7 on staging are owner-gated and not recorded here yet.
+Operator procedures from SDD 12 §7.8 and §7.9. Alerts are `alert=<code>` lines in Railway log search (D-35: Railway native tools only, no Grafana). Rehearsals of R1 and R7 on a restored scratch database are owner-gated and not recorded here yet.
 
 | Alert | Meaning | Runbook |
 | --- | --- | --- |
@@ -15,7 +15,7 @@ Operator procedures from SDD 12 §7.8 and §7.9. Alerts are `alert=<code>` lines
 | A11 | disk over 80 % | [disk-full](disk-full.md) |
 | A12 | connection pool near its limit | [pg-connections](pg-connections.md) |
 | A13, A14 | score drift, trending stale | job logs; same pattern as [ingestion-stuck](ingestion-stuck.md) |
-| A15, A17 | cost | [cost](cost.md) |
+| A15, A17 | cost | [cost](cost.md), [postgres-cost](postgres-cost.md) |
 | leaked credential | any | [leaked-secret](leaked-secret.md), then [incident-response](incident-response.md) |
 
 | R | Runbook |
@@ -34,6 +34,6 @@ The ingestion worker service (RFC-001) has its own procedure: [worker](worker.md
 
 Search the logs with the code, for example `alert=A10`. Alert lines carry counts and names, never ids, emails or raw paths.
 
-Environments: [staging](staging.md) (URL, variables, deploy and seed).
+Environments: only `production` (the `staging` environment was removed on 2026-11-07, [ADR 0028](../adrs/0028-staging-removed.md)); rehearse on the local QA stack (AGENTS.md "Local QA").
 
 Release procedures: [sdk-release](sdk-release.md) (SDKs), [mobile-release](mobile-release.md) (Android app with EAS), [release-range](release-range.md) (how `scripts/release.sh` picks the changelog range).

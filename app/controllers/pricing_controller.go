@@ -35,7 +35,7 @@ func currencyForLocale(locale string) string {
 }
 
 // APICoverage is resources/data/api_coverage.json: per (type, field) percentages from qa/sql/api_coverage.sql.
-// MeasuredAt is nil until the first staging run; the pages then show the statement without numbers.
+// MeasuredAt is nil until the first measurement run (qa/sql/api_coverage.sql); the pages then show the statement without numbers.
 type APICoverage struct {
 	MeasuredAt *string `json:"measuredAt"`
 	Rows       []struct {

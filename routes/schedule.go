@@ -142,9 +142,9 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Func("ingest:frontend-fields", startChain(app, ingest.FrontendFields)).
 		DailyAt("05:30").In(saoPaulo).WithoutOverlapping()
 
-	// backup.drill (SDD 11 §7.4): staging only. Staging also runs APP_ENV=production, so the
-	// signal is the source bucket only staging is given. Cron ORs day-of-month with
-	// day-of-week, so the command itself skips Sundays after the 7th.
+	// backup.drill (SDD 11 §7.4): scheduled only where BACKUP_SOURCE_S3_BUCKET is set. Nothing sets it since the
+	// staging environment was removed (ADR 0028), so the drill is run by hand until the owner picks a host for it.
+	// Cron ORs day-of-month with day-of-week, so the command itself skips Sundays after the 7th.
 	if app.Source.Get("BACKUP_SOURCE_S3_BUCKET") != "" {
 		s.Command("backup:drill", "--first-sunday").WeeklyOn(time.Sunday, "07:00").In(saoPaulo).WithoutOverlapping()
 	}

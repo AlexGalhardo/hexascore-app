@@ -243,7 +243,7 @@ func TwoFactorQR(issuer, account, secret string) (uri, svg string, err error) {
 // StartTwoFactorChallenge is called after a correct password. For users
 // with 2FA it records the pending login in the session (new session id)
 // instead of logging in, and returns true: send them to
-// /two-factor-challenge.
+// /2fa.
 func (a *Accounts) StartTwoFactorChallenge(c *web.Ctx, u models.User, remember bool) (bool, error) {
 	tf, err := a.TwoFactor(c.Context(), u.ID)
 	if err != nil || !tf.Enabled() {

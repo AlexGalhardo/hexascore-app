@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { t } from "../i18n";
 import type { AppLocale } from "../i18n/locale";
 import { type CatalogType, SINGULAR } from "../navigation/catalog";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
 import type { Scores } from "./cache";
 import { CATEGORY_KEYS } from "./categories";
 import { StarInput } from "./StarInput";
@@ -48,7 +48,7 @@ export function RateSheet({ itemId, type, initial, locale, onDone }: RateSheetPr
 			{failed ? (
 				<Text className="text-16 text-fg dark:text-fg-dark">{t(locale, "ratings.notSaved")}</Text>
 			) : null}
-			<Btn
+			<Button
 				label={t(locale, hasRating ? "ratings.update" : "ratings.save")}
 				disabled={!complete}
 				onPress={() =>
@@ -56,7 +56,7 @@ export function RateSheet({ itemId, type, initial, locale, onDone }: RateSheetPr
 				}
 			/>
 			{hasRating ? (
-				<Btn
+				<Button
 					label={t(locale, "ratings.delete")}
 					variant="ghost"
 					onPress={() => void remove().then(finish)}

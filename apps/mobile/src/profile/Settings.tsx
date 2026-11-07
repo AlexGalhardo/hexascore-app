@@ -1,11 +1,12 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type ReactElement, type ReactNode, useState } from "react";
-import { Pressable, Switch, Text, View } from "react-native";
+import { Switch, Text, View } from "react-native";
 import { describeError } from "../api/problems";
 import { type AppLocale, t } from "../i18n";
 import { APP_LOCALES } from "../i18n/locale";
 import type { ThemePreference } from "../theme";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
+import { SegmentedControl } from "../ui/SegmentedControl";
 import { SettingsPage, SettingsSection } from "../ui/screens/SettingsPage";
 import { TextField } from "../ui/TextField";
 import { Devices } from "./Devices";
@@ -55,27 +56,13 @@ function LanguagePicker({
 	onChoose: (locale: AppLocale) => void;
 }): ReactElement {
 	return (
-		<View accessibilityRole="radiogroup" accessibilityLabel={label} className="flex-row">
-			{APP_LOCALES.map((option) => {
-				const on = option === locale;
-				return (
-					<Pressable
-						key={option}
-						accessibilityRole="radio"
-						accessibilityLabel={LANGUAGE_NAMES[option]}
-						accessibilityState={{ checked: on }}
-						onPress={() => onChoose(option)}
-						className={`min-h-11 flex-1 items-center justify-center border border-fg dark:border-fg-dark ${on ? "bg-fg dark:bg-fg-dark" : "bg-field-bg dark:bg-field-bg-dark"}`}
-					>
-						<Text
-							className={`font-text text-16 font-semibold ${on ? "text-bg dark:text-bg-dark" : FG}`}
-						>
-							{LANGUAGE_NAMES[option]}
-						</Text>
-					</Pressable>
-				);
-			})}
-		</View>
+		<SegmentedControl
+			radio
+			label={label}
+			value={locale}
+			onChange={onChoose}
+			options={APP_LOCALES.map((option) => ({ value: option, label: LANGUAGE_NAMES[option] }))}
+		/>
 	);
 }
 
@@ -125,7 +112,7 @@ function ProfileForm({
 						{`${t(locale, "account.details.nickname")}: ${me.username}`}
 					</Text>
 				)}
-				<Btn
+				<Button
 					label={t(locale, "account.details.save")}
 					onPress={() =>
 						void run({

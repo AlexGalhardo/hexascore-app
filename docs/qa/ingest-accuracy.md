@@ -1,12 +1,12 @@
 # Ingestion accuracy sampling (CW-12)
 
-Weekly procedure that measures how often the catalogue worker's stored fields match their sources. It implements RFC-001 §7 ("Sampling") and the CW-12 row of RFC-001 §11. The first report waits for CW-04 (`refresh-existing`) on staging: **every number below is pending staging** until then.
+Weekly procedure that measures how often the catalogue worker's stored fields match their sources. It implements RFC-001 §7 ("Sampling") and the CW-12 row of RFC-001 §11. The first report waits for CW-04 (`refresh-existing`) on the local QA stack: **every number below is pending a run** until then.
 
 ## Scope
 
 - Measures fields written by the ingest pipeline (`internal/ingest/**`), not the hand-written catalogue.
-- Runs on the staging database only, with the export of the week's sample. Production data is read only with the owner's yes.
-- Ingestion stays dark in production: `FLAG_INGEST_*` flags stay off. A sample taken from staging does not turn anything on.
+- Runs on a local scratch database only, with the export of the week's sample. Production data is read only with the owner's yes.
+- Ingestion stays dark in production: `FLAG_INGEST_*` flags stay off. A sample taken from the local scratch database does not turn anything on.
 - No external API is called by the procedure as code. The checker opens the public source pages in a browser, as a person would. Nothing here calls TMDB, IGDB, Wikidata or the LLM from a test or a script.
 
 ## Target and cadence
@@ -50,14 +50,14 @@ One line per field in the report table below. A miss is any field whose verdict 
 | --- | --- |
 | `sample_id` | `<item id>` from the export |
 | `field` | one of the seven fields in step 3 |
-| `stored` | the value in staging (short) |
+| `stored` | the value in the local scratch database (short) |
 | `source` | the value on the source page (short) |
 | `source_url` | the URL read, with the date read |
 | `verdict` | `ok`, `miss`, `unverifiable` or `n/a` |
 | `error_class` | for a miss: `wrong_work`, `wrong_value`, `stale`, `missing`, `mapping` (the source is right but the normaliser changed it) |
 | `action` | the follow-up: `field_reviews` row id, or the ticket if the cause is code |
 
-Misses are also written to `field_reviews` (the table RFC-001 §7 extends) when it exists on the staging database at run time. If it does not exist, the miss stays in the report and the report says so.
+Misses are also written to `field_reviews` (the table RFC-001 §7 extends) when it exists on a local scratch database at run time. If it does not exist, the miss stays in the report and the report says so.
 
 ## Step 5: compute accuracy
 
@@ -72,16 +72,16 @@ File: `docs/qa/ingest-accuracy-<YYYY-Www>.md` (new per week; not committed until
 ```markdown
 # Ingestion accuracy, <YYYY-Www>
 
-Status: pending staging | measured
+Status: pending a run | measured
 Export: qa/reports/ingest-sample-<date>.ndjson (<n> items per category)
 Sample: <n> items (<per category>), seed <ISO week number>
 Checker: <name>, date read <YYYY-MM-DD>
 
 | Metric | Target | Result |
 | --- | --- | --- |
-| Field accuracy (all fields) | >= 97 % | pending staging |
-| Items with at least one miss | recorded | pending staging |
-| Unverifiable items | recorded | pending staging |
+| Field accuracy (all fields) | >= 97 % | pending a run |
+| Items with at least one miss | recorded | pending a run |
+| Unverifiable items | recorded | pending a run |
 
 Per field: <table>
 Per category: <table>

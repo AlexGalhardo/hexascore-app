@@ -1,7 +1,12 @@
+import { useColorScheme } from "nativewind";
 import { type ReactElement, useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
+import { Button } from "../ui/Button";
+import { GoogleButton } from "../ui/GoogleButton";
+import { TextField } from "../ui/TextField";
 import { isValidDeviceName } from "./deviceName";
+import type { GoogleSignInInput } from "./google";
 import type { LoginInput, LoginOutcome } from "./login";
 import type { StoredToken } from "./tokenStore";
 
@@ -12,9 +17,12 @@ export type LoginFormProps = {
 	onSignedIn: (token: StoredToken) => Promise<void>;
 	/** Opens the web challenge, signup or recovery page. */
 	openWeb: (path: "/login" | "/signup" | "/forgot-password") => void;
+	/** Google sign-in; omitted when no Google client id is configured, which hides the button. */
+	google?: {
+		prompt: () => Promise<string | null>;
+		submit: (input: GoogleSignInInput) => Promise<LoginOutcome>;
+	};
 };
-
-const field = "rounded-md border border-border px-3 py-3 text-16 text-fg dark:text-fg-dark";
 
 export function LoginForm(props: LoginFormProps): ReactElement {
 	const { locale } = props;
@@ -26,11 +34,12 @@ export function LoginForm(props: LoginFormProps): ReactElement {
 	const [code, setCode] = useState("");
 	const [error, setError] = useState<string | null>(null);
 	const [busy, setBusy] = useState(false);
+	const [googleToken, setGoogleToken] = useState<string | null>(null);
+	const scheme = useColorScheme().colorScheme === "dark" ? "dark" : "light";
 
 	const canSubmit =
 		!busy &&
-		identifier.length > 0 &&
-		password.length > 0 &&
+		(googleToken !== null || (identifier.length > 0 && password.length > 0)) &&
 		isValidDeviceName(deviceName) &&
 		(!needsCode || code.trim().length > 0);
 
@@ -42,12 +51,15 @@ export function LoginForm(props: LoginFormProps): ReactElement {
 				? { recoveryCode: code.trim() }
 				: { code: code.trim() }
 			: {};
-		const outcome = await props.submit({
-			identifier,
-			password,
-			deviceName: deviceName.trim(),
-			...second,
-		});
+		const name = deviceName.trim();
+		const outcome =
+			googleToken !== null && props.google
+				? await props.google.submit({ idToken: googleToken, deviceName: name, ...second })
+				: await props.submit({ identifier, password, deviceName: name, ...second });
+		await finish(outcome);
+	};
+
+	const finish = async (outcome: LoginOutcome): Promise<void> => {
 		setBusy(false);
 		if (outcome.kind === "ok") await props.onSignedIn(outcome.token);
 		else if (outcome.kind === "twoFactor") setNeedsCode(true);
@@ -55,85 +67,142 @@ export function LoginForm(props: LoginFormProps): ReactElement {
 		else setError(t(locale, outcome.key));
 	};
 
+	const signInWithGoogle = async (): Promise<void> => {
+		if (!props.google || !isValidDeviceName(deviceName)) return;
+		setError(null);
+		const idToken = await props.google.prompt();
+		if (idToken === null) return;
+		setBusy(true);
+		setGoogleToken(idToken);
+		await finish(await props.google.submit({ idToken, deviceName: deviceName.trim() }));
+	};
+
+	const step = needsCode ? "twoFactor" : "credentials";
 	return (
-		<View className="flex-1 gap-3 bg-bg px-4 pt-12 dark:bg-bg-dark">
-			<Text accessibilityRole="header" className="text-20 text-fg dark:text-fg-dark">
-				{t(locale, "auth.login.title")}
+		<ScrollView
+			className="flex-1 bg-bg dark:bg-bg-dark"
+			contentContainerClassName="grow justify-center gap-6 px-6 py-12"
+			keyboardShouldPersistTaps="handled"
+		>
+			<Text
+				accessibilityElementsHidden
+				importantForAccessibility="no"
+				className="text-center font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark"
+			>
+				HexaScore
 			</Text>
-			<TextInput
-				accessibilityLabel={t(locale, "auth.fields.identifier")}
-				autoCapitalize="none"
-				autoComplete="username"
-				className={field}
-				onChangeText={setIdentifier}
-				value={identifier}
-			/>
-			<TextInput
-				accessibilityLabel={t(locale, "auth.fields.password")}
-				autoCapitalize="none"
-				autoComplete="current-password"
-				className={field}
-				onChangeText={setPassword}
-				secureTextEntry
-				value={password}
-			/>
-			{needsCode ? (
+			<View className="gap-1">
+				<Text
+					accessibilityRole="header"
+					className="font-display text-30 font-semibold tracking-tight text-fg dark:text-fg-dark"
+				>
+					{t(locale, step === "twoFactor" ? "auth.login.twoFactorTitle" : "auth.login.title")}
+				</Text>
+				<Text className="font-text text-16 text-muted dark:text-muted-dark">
+					{t(
+						locale,
+						step === "twoFactor"
+							? useRecovery
+								? "auth.login.backupHelp"
+								: "auth.login.twoFactorHelp"
+							: "auth.login.heading",
+					)}
+				</Text>
+			</View>
+			{step === "credentials" && props.google ? (
 				<>
-					<Text className="text-fg dark:text-fg-dark">
-						{t(locale, useRecovery ? "auth.login.backupHelp" : "auth.login.twoFactorHelp")}
-					</Text>
-					<TextInput
-						accessibilityLabel={t(
-							locale,
-							useRecovery ? "auth.login.backupCode" : "auth.login.code",
-						)}
-						autoCapitalize="none"
-						className={field}
-						keyboardType={useRecovery ? "default" : "number-pad"}
-						onChangeText={setCode}
-						value={code}
+					<GoogleButton
+						label={t(locale, "auth.googleSignIn")}
+						scheme={scheme}
+						onPress={() => void signInWithGoogle()}
+						disabled={busy}
 					/>
-					<Pressable
-						accessibilityRole="button"
+					<View className="flex-row items-center gap-4" accessibilityElementsHidden>
+						<View className="h-px flex-1 bg-border dark:bg-border-dark" />
+						<Text className="font-text text-14 text-muted dark:text-muted-dark">
+							{t(locale, "auth.or")}
+						</Text>
+						<View className="h-px flex-1 bg-border dark:bg-border-dark" />
+					</View>
+				</>
+			) : null}
+			{step === "credentials" ? (
+				<View className="gap-4">
+					<TextField
+						label={t(locale, "auth.fields.identifier")}
+						value={identifier}
+						onChangeText={setIdentifier}
+						autoComplete="username"
+					/>
+					<TextField
+						label={t(locale, "auth.fields.password")}
+						value={password}
+						onChangeText={setPassword}
+						autoComplete="current-password"
+						secure={{
+							show: t(locale, "auth.fields.showShort"),
+							hide: t(locale, "auth.fields.hideShort"),
+						}}
+					/>
+					<TextField
+						label={t(locale, "auth.fields.deviceName")}
+						value={deviceName}
+						onChangeText={setDeviceName}
+					/>
+				</View>
+			) : (
+				<View className="gap-4">
+					<TextField
+						label={t(locale, useRecovery ? "auth.login.backupCode" : "auth.login.code")}
+						value={code}
+						onChangeText={setCode}
+						keyboardType={useRecovery ? "default" : "number-pad"}
+					/>
+					<Button
+						variant="ghost"
+						label={t(locale, useRecovery ? "auth.login.useTotp" : "auth.login.useBackup")}
 						onPress={() => {
 							setUseRecovery(!useRecovery);
 							setCode("");
 						}}
-					>
-						<Text className="text-fg dark:text-fg-dark">
-							{t(locale, useRecovery ? "auth.login.useTotp" : "auth.login.useBackup")}
-						</Text>
-					</Pressable>
-				</>
-			) : null}
-			<TextInput
-				accessibilityLabel={t(locale, "auth.fields.deviceName")}
-				className={field}
-				maxLength={64}
-				onChangeText={setDeviceName}
-				value={deviceName}
-			/>
+					/>
+				</View>
+			)}
 			{error ? (
-				<Text accessibilityRole="alert" className="text-fg dark:text-fg-dark">
+				<Text
+					accessibilityRole="alert"
+					className="font-text text-14 text-danger dark:text-danger-dark"
+				>
 					{error}
 				</Text>
 			) : null}
-			<Pressable
-				accessibilityRole="button"
-				accessibilityState={{ disabled: !canSubmit }}
+			<Button
+				size="lg"
+				label={t(locale, needsCode ? "auth.login.verify" : "auth.login.submit")}
 				disabled={!canSubmit}
+				loading={busy}
 				onPress={() => void send()}
-			>
-				<Text className="text-fg dark:text-fg-dark">
-					{t(locale, needsCode ? "auth.login.verify" : "auth.login.submit")}
-				</Text>
-			</Pressable>
-			<Pressable accessibilityRole="link" onPress={() => props.openWeb("/forgot-password")}>
-				<Text className="text-fg dark:text-fg-dark">{t(locale, "auth.login.forgot")}</Text>
-			</Pressable>
-			<Pressable accessibilityRole="link" onPress={() => props.openWeb("/signup")}>
-				<Text className="text-fg dark:text-fg-dark">{t(locale, "auth.login.createAccount")}</Text>
-			</Pressable>
-		</View>
+			/>
+			{step === "credentials" ? (
+				<View className="items-center gap-1">
+					<Button
+						variant="ghost"
+						size="sm"
+						role="link"
+						label={t(locale, "auth.login.forgot")}
+						onPress={() => props.openWeb("/forgot-password")}
+					/>
+					<Text className="font-text text-14 text-muted dark:text-muted-dark">
+						{t(locale, "auth.login.noAccount")}
+					</Text>
+					<Button
+						variant="outline"
+						role="link"
+						label={t(locale, "auth.login.createAccount")}
+						onPress={() => props.openWeb("/signup")}
+					/>
+				</View>
+			) : null}
+		</ScrollView>
 	);
 }

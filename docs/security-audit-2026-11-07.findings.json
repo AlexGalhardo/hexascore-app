@@ -1,0 +1,206 @@
+[
+  {
+    "verdict": "confirmed",
+    "fingerprint": "hexascore:2fa-challenge-throttle-per-ip-only",
+    "title": "Web 2FA challenge guesses are throttled per user and IP only, so rotating addresses bypasses the limit",
+    "description": "POST /2fa lets an actor who already holds a user's password guess the six-digit second factor. The only limiter keys on the pending user id together with the client IP (IPv6 reduced to its network prefix), five tries per minute. Nothing caps guesses against one account across addresses, and a failed code does not end the pending login or lock the account, so a client with many source addresses can walk the code space.",
+    "root_cause": "TwoFactorThrottleKey builds the bucket key as \"2fa:\" + userID + \":\" + ByIP(r). The key space grows with the number of addresses the attacker controls, and no second, account-only bucket exists. The app API path has a per-account bucket (app.2fa) that the web path lacked.",
+    "intended_behavior": "A bounded number of second-factor guesses per account in a time window, whatever the source address, as the login path already does with login.account.",
+    "trace": [
+      {
+        "kind": "entrypoint",
+        "file": "routes/two_factor.go",
+        "line": 62,
+        "scope": "POST /2fa registration",
+        "description": "Route is guarded by auth.Guest and the challenge limiter only."
+      },
+      {
+        "kind": "propagation",
+        "file": "app/controllers/account/two_factor_login.go",
+        "line": 36,
+        "scope": "TwoFactorThrottleKey",
+        "description": "Bucket key combines the pending user id with the client IP."
+      },
+      {
+        "kind": "sink",
+        "file": "app/controllers/account/two_factor.go",
+        "line": 205,
+        "scope": "TwoFactorHandlers.Challenge",
+        "description": "VerifyTwoFactor runs for every request that passes the limiter; a failure leaves the pending login in place."
+      }
+    ],
+    "evidence": [
+      {
+        "file": "app/http/limits/limits.go",
+        "line": 36,
+        "description": "two-factor.challenge is five requests per minute per key and the only web limiter on the route before the fix."
+      },
+      {
+        "file": "app/accounts/two_factor.go",
+        "line": 141,
+        "description": "A failed code returns false without counting a failure on the account or clearing the pending login."
+      }
+    ],
+    "conditions": [
+      {
+        "kind": "authentication_level",
+        "description": "The actor must know the account password to reach the challenge."
+      },
+      {
+        "kind": "network_routing",
+        "description": "The actor needs many source addresses, or an IPv6 range wider than the rate-limit prefix."
+      },
+      {
+        "kind": "timing_dependency",
+        "description": "At five guesses per minute per address the attack scales with the number of addresses."
+      }
+    ],
+    "execution": {
+      "attacker_perspective": "A client with the victim's password and a pool of source addresses.",
+      "payloads": [
+        "POST /2fa with {\"code\":\"<six digits>\"} from each address"
+      ],
+      "instructions": [
+        "Sign in with the known password to start a pending two-factor login.",
+        "Send five wrong codes from one address and observe the 429.",
+        "Repeat from a new address: the bucket key differs, so five more guesses are accepted."
+      ],
+      "observed_result": "Each address has its own five-per-minute budget; the key function ignores any account-level count. A unit test now asserts the account key is identical across addresses."
+    },
+    "remediation": {
+      "strategy": "Add a second limiter keyed on the pending user id alone (two-factor.account, 10 per 15 minutes) after the per-IP one on POST /2fa."
+    },
+    "severity": {
+      "likelihood": {
+        "score": "low",
+        "reason": "Needs the password and a pool of addresses; at the per-account cap of 10 per 15 minutes this is now infeasible, before it was about five per minute per address."
+      },
+      "impact": {
+        "score": "medium",
+        "reason": "Defeats the second factor of a single account once the password is known."
+      },
+      "overall_severity": "low"
+    },
+    "confidence": {
+      "score": "high",
+      "reason": "The key function and route wiring show no account-wide bucket; fixed in commit f78b356e."
+    }
+  },
+  {
+    "verdict": "rejected",
+    "fingerprint": "hexascore:cover-pixel-cap-missing",
+    "title": "Cover upload and Fingerprint decode images without a pixel cap",
+    "description": "measureCover read only the header size and enforced a 300 px minimum; Fingerprint decoded a PNG or JPEG fully before the encoder's 25 MP check.",
+    "claimed_root_cause": "No maximum width times height before a full decode allocates width*height*4 bytes.",
+    "trace": [
+      {
+        "kind": "entrypoint",
+        "file": "app/community/uploads.go",
+        "line": 55,
+        "scope": "UploadCover",
+        "description": "A verified user uploads up to 5 MiB."
+      },
+      {
+        "kind": "sink",
+        "file": "internal/ingest/covers/dhash.go",
+        "line": 65,
+        "scope": "Fingerprint",
+        "description": "Full decode of ingest-fetched bodies."
+      }
+    ],
+    "evidence": [
+      {
+        "file": "app/community/uploads.go",
+        "line": 154,
+        "description": "measureCover had no upper bound on the declared dimensions."
+      },
+      {
+        "file": "internal/ingest/covers/webp.go",
+        "line": 122,
+        "description": "The encoder already enforced MaxPixels, after Fingerprint ran."
+      }
+    ],
+    "reason": "No lower-trust principal reaches a full decode of an oversized image: Fingerprint only receives bodies from configured ingest sources, and a community cover needs moderator approval and is not shown to have a decode path before then. The cap was added anyway as hardening in commit 66386651 with tests."
+  },
+  {
+    "verdict": "needs_validation",
+    "fingerprint": "hexascore:google-id-token-not-bound-to-request",
+    "title": "Google ID token exchange accepts any unexpired token for the client id and the mobile flow is an implicit flow over a custom scheme",
+    "description": "POST /app/v1/tokens/google verifies issuer, audience, expiry and RS256 signature, then mints an app token for the account. It does not bind the token to the request: no nonce, no single-use record. The mobile app obtains the token through an implicit ID-token flow that returns to the custom hexascore:// scheme, which another installed app can claim.",
+    "claimed_root_cause": "verifyGoogle relies on auth/jwt.Verifier, which has no nonce or replay option, and the client flow has no PKCE or verified redirect to bind the response to the app that asked.",
+    "trace": [
+      {
+        "kind": "entrypoint",
+        "file": "routes/app_api.go",
+        "line": 81,
+        "scope": "POST /tokens/google",
+        "description": "Exchange endpoint behind the issue limiter and proof of work."
+      },
+      {
+        "kind": "propagation",
+        "file": "app/controllers/appapi/tokens_controller.go",
+        "line": 165,
+        "scope": "verifyGoogle",
+        "description": "Tries each audience verifier; success needs only a valid signature, issuer, audience and expiry."
+      },
+      {
+        "kind": "sink",
+        "file": "app/controllers/appapi/tokens_controller.go",
+        "line": 121,
+        "scope": "Tokens.Google",
+        "description": "Finds or creates the account and issues an app token."
+      }
+    ],
+    "evidence": [
+      {
+        "file": "apps/mobile/src/auth/googlePrompt.ts",
+        "line": 17,
+        "description": "redirectUri is the custom scheme hexascore://auth/google with usePKCE false."
+      },
+      {
+        "file": "apps/mobile/src/auth/googlePrompt.ts",
+        "line": 11,
+        "description": "A shortcut comment states the flow is unverified against a real Google client."
+      }
+    ],
+    "blockers": [
+      "Whether Google issues ID tokens to the configured Android or web client through a custom-scheme implicit redirect is not visible in source; Google may refuse it, in which case the exposure does not exist.",
+      "Whether a second app can register the hexascore:// scheme on a given device depends on the OS and installed apps."
+    ],
+    "validation_plan": {
+      "local": "With a real client id in a test project, run the flow on an emulator with a second dummy app registering the scheme and observe which app receives the redirect.",
+      "deployment": "The owner checks the Google Cloud client type and whether the sign-in works at all; if it does, switch to the authorization code flow with PKCE or the native Credential Manager and bind a server-issued nonce."
+    }
+  },
+  {
+    "verdict": "rejected",
+    "fingerprint": "hexascore:mobile-open-source-url",
+    "title": "Mobile Linking.openURL(sourceUrl) opens a server-provided URL without a scheme check",
+    "description": "The entity screen opens the description source URL from the API in the system handler.",
+    "claimed_root_cause": "No https scheme allow-list on the client before Linking.openURL.",
+    "trace": [
+      {
+        "kind": "entrypoint",
+        "file": "apps/mobile/src/screens/Entity.tsx",
+        "line": 108,
+        "scope": "sourceUrl",
+        "description": "Read from the entity description payload."
+      },
+      {
+        "kind": "sink",
+        "file": "apps/mobile/src/screens/Entity.tsx",
+        "line": 137,
+        "scope": "onSource",
+        "description": "Passed to Linking.openURL."
+      }
+    ],
+    "evidence": [
+      {
+        "file": "app/catalog/api_entities.go",
+        "line": 49,
+        "description": "description_source_url is written by the ingest pipeline from Wikipedia, not by users."
+      }
+    ],
+    "reason": "The value is set by the ingest pipeline from configured public sources; no lower-trust principal controls it, so no boundary is crossed."
+  }
+]

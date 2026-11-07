@@ -1,7 +1,8 @@
 import { type ReactElement, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
+import { Card } from "../ui/Card";
 import { Icon } from "../ui/Icon";
 import { TextField } from "../ui/TextField";
 import { type ListsDeps, type ListType, useListActions, useMyLists, useOnline } from "./data";
@@ -37,11 +38,11 @@ export function AddToListSheet({
 	};
 
 	return (
-		<View
-			testID="add-to-list-sheet"
-			className="gap-4 border-t-2 border-primary bg-surface p-4 dark:border-primary-dark dark:bg-surface-dark"
-		>
-			<Text accessibilityRole="header" className={`font-display text-24 font-bold ${FG}`}>
+		<Card testID="add-to-list-sheet">
+			<Text
+				accessibilityRole="header"
+				className={`font-display text-24 font-semibold tracking-tight ${FG}`}
+			>
 				{t(locale, "lists.addToList")}
 			</Text>
 			{rows.length === 0 && !lists.isPending ? (
@@ -49,7 +50,7 @@ export function AddToListSheet({
 					{t(locale, `lists.noListsOfType.${type === "book" ? "other" : type}`)}
 				</Text>
 			) : null}
-			<View className="border-t-2 border-fg dark:border-fg-dark">
+			<View className="border-t border-border dark:border-border-dark">
 				{rows.map((list) => {
 					const count = t(locale, "lists.itemCount", { count: list.itemCount });
 					return (
@@ -70,13 +71,13 @@ export function AddToListSheet({
 				})}
 			</View>
 			<TextField label={t(locale, "lists.fieldTitle")} value={title} onChangeText={setTitle} />
-			<Btn
-				variant="secondary"
+			<Button
+				variant="outline"
 				label={t(locale, "lists.newWithItem")}
 				onPress={() => void createWithItem()}
 				disabled={!online || title.trim() === ""}
 			/>
 			{online ? null : <Text className={MUTED}>{t(locale, "lists.offline")}</Text>}
-		</View>
+		</Card>
 	);
 }

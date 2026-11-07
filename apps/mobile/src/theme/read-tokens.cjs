@@ -25,19 +25,17 @@ function exportedArray(name) {
 	return JSON.parse(match[1]);
 }
 
-function exportedObject(name) {
-	const match = new RegExp(`export const ${name} = (\\{[^}]+\\})`).exec(source);
-	if (!match) throw new Error(`missing export ${name}`);
-	return JSON.parse(match[1]);
-}
+// The app wears the neutral (zinc, Vercel-like) skin of the web UI: neutral.json overrides the shared
+// tokens it names; category accents, score bands, stars and danger stay as in packages/tokens.
+const neutral = require("./neutral.json");
 
 function palette(mode) {
-	return block(mode);
+	return { ...block(mode), ...neutral[mode] };
 }
 
 module.exports = {
 	palette,
 	spacing: exportedArray("spacing"),
 	fontSize: exportedArray("fontSize"),
-	radius: exportedObject("radius"),
+	radius: neutral.radius,
 };

@@ -78,6 +78,7 @@ func AppAPI(r *router.Router, app *vukem.App) error {
 		g.Use(middleware.JSONOnly())
 
 		g.Post("/tokens", h.Create).Name("tokens.create").Use(issueLimit, accountLimit, pow.Require("token"))
+		g.Post("/auth/google/nonce", h.GoogleNonce).Name("auth.google_nonce").Use(issueLimit)
 		g.Post("/tokens/google", h.Google).Name("tokens.google").Use(issueLimit, pow.Require("token"))
 		g.Post("/tokens/rotate", h.Rotate).Name("tokens.rotate").Use(rotateStack...)
 		g.Get("/tokens", h.List).Name("tokens.index").Use(append(bearer, auth.Ability(acc.API, "catalog:read"))...)

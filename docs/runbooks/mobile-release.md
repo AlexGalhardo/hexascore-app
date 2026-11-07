@@ -10,6 +10,7 @@ Scope today: **Android only** (SDD 10 §1, iOS is later). Every `--platform` bel
 | Build and submit profiles | `apps/mobile/eas.json` (`development`, `preview`, `e2e-test`, `production`) |
 | `versionCode` | EAS remote source, `autoIncrement` on `production` (SDD 10 [E8]); never edit it by hand |
 | CI | `.github/workflows/mobile-release.yml` (manual dispatch or tag `mobile-v*`; EAS build, owner-gated submit); `.github/workflows/mobile-gradle.yml` (Gradle fallback, manual) |
+| Local debug run | [mobile-local-android.md](mobile-local-android.md) (`bun run android:dev` in `apps/mobile`, emulator against a local backend) |
 | CLI | `eas-cli` pinned `27.2.0`, run as `bunx eas-cli@27.2.0` (no global install needed) |
 
 ## Hard rules

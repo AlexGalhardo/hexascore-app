@@ -28,7 +28,7 @@ Out: IMDb datasets (ADR 0006); critic scores (D-09); HTML scraping; IGDB webhook
 
 ## 4. Non-functional requirements
 
-- NFR-06-1 Priority: during the weekly TMDB run, item-page p95 rises ≤ 20 %. Verify: k6 on staging.
+- NFR-06-1 Priority: during the weekly TMDB run, item-page p95 rises ≤ 20 %. Verify: k6 on the local QA stack.
 - NFR-06-2 CPU: ≤ 2 ingestion jobs at once; one WebP encode at a time; 100 ms between batches; pressure gate (§7.5).
 - NFR-06-3 Memory: ≤ 256 MB; rows streamed in batches of 200; selections read only needed JSON keys (legacy `covers.py` `targets`).
 - NFR-06-4 Freshness: Wikidata edits live within 26 h; TMDB ≤ 7 days in steady state, cap 180.
@@ -310,7 +310,7 @@ Parity: `testdata/parity/qids.txt`, 200 QIDs (50 per type; top/mid/tail; non-Lat
 - [ ] `psql -c "select count(*) from source_records where source='tmdb' and checked_at < now()-interval '180 days'"` → `0`.
 - [ ] `ingest_tmdb` off, run triggered → `skipped`, zero stub hits.
 - [ ] Latest `dq.asserts`: `select code from dq_results where run_id=$1 and not passed and severity='error'` → no rows.
-- [ ] Book covers ≥ 60 % on staging after the edition backfill (if A-05 passes).
+- [ ] Book covers ≥ 60 % on the local QA stack after the edition backfill (if A-05 passes).
 - [ ] k6 item-page p95 during the Friday TMDB run ≤ 1.2 × idle.
 
 ## 10. Test strategy

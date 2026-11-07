@@ -1,7 +1,11 @@
 import { Head, Link, useForm } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
-import AuthFrame, { authLink, GoogleButton, OrRule } from "../../components/auth/AuthFrame";
-import TwoFactorDialog from "../../components/auth/TwoFactorDialog";
+import AuthFrame, {
+	AuthFooter,
+	authLink,
+	GoogleButton,
+	OrRule,
+} from "../../components/auth/AuthFrame";
 import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
@@ -55,7 +59,7 @@ export function PasskeySignIn(): React.ReactElement {
 	};
 
 	return (
-		<div className="mt-4">
+		<div>
 			<button
 				type="button"
 				onClick={() => void signIn()}
@@ -72,7 +76,7 @@ export function PasskeySignIn(): React.ReactElement {
 	);
 }
 
-export default function Login({ twoFactor = false }: { twoFactor?: boolean }) {
+export default function Login() {
 	const t = useT();
 	const l = useLocalized();
 	const form = useForm({ identifier: "", password: "", remember: false });
@@ -97,7 +101,10 @@ export default function Login({ twoFactor = false }: { twoFactor?: boolean }) {
 	return (
 		<AuthFrame title={t("auth.login.title")}>
 			<Head title={t("auth.login.metaTitle")} />
-			<GoogleButton mode="signIn" />
+			<div className="space-y-3">
+				<GoogleButton mode="signIn" />
+				<PasskeySignIn />
+			</div>
 			<OrRule />
 			<form method="post" action={l("/login")} onSubmit={submit} className="space-y-5">
 				<Field
@@ -141,14 +148,12 @@ export default function Login({ twoFactor = false }: { twoFactor?: boolean }) {
 				</SubmitButton>
 				<ChallengeStatus checking={checking} />
 			</form>
-			<PasskeySignIn />
-			<p className="mt-8 text-muted">
+			<AuthFooter>
 				{t("auth.login.newHere")}{" "}
 				<Link href={l("/signup")} className={authLink}>
 					{t("auth.login.createAccount")}
 				</Link>
-			</p>
-			<TwoFactorDialog open={twoFactor} />
+			</AuthFooter>
 		</AuthFrame>
 	);
 }

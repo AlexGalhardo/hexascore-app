@@ -29,7 +29,7 @@ Out: follows, feed, follower counts (D-06); badges; avatar upload; push; reviews
 
 ## 4. Non-functional requirements
 
-- NFR-14-1: Public list/profile SSR p95 ≤ 400 ms at 30 rps, errors < 0.5 %; `/app/v1` list reads p95 ≤ 150 ms (k6, staging).
+- NFR-14-1: Public list/profile SSR p95 ≤ 400 ms at 30 rps, errors < 0.5 %; `/app/v1` list reads p95 ≤ 150 ms (k6, local QA stack).
 - NFR-14-2: Library for a 5,000-item user: ≤ 6 queries, p95 ≤ 300 ms (query-counting integration test).
 - NFR-14-3: Export of a 20,000-rating user ≤ 60 s, ZIP ≤ 50 MiB, worker memory ≤ 128 MiB.
 - NFR-14-4: Rate limits: list writes 60/min per user (legacy `actions/lists.ts`), reports 10/h (legacy `actions/reports.ts`), contact 5/h per IP (legacy `lib/contact.ts` `CONTACT_LIMIT`), mark-read 60/min; keyed with `ratelimit.ByUser(guard)` / `ratelimit.ByIP` (<https://vukem.dev/docs/security/rate-limiting> "Keys"). 429 `rate-limited`.

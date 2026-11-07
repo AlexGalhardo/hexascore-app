@@ -26,7 +26,7 @@ In (v1): web (including passkeys, ADR 0017), `/api/v1`, `/app/v1`, admin, webhoo
 
 - NFR-13-1: Security middleware adds ≤ 2 ms p95. Verify: k6 delta between `/up` and a static page.
 - NFR-13-2: Limiters fail closed (503) when the store errors ([RL] "fail closed"). Verify: vukem `TestSecurity_A06_RateLimitMiddlewareFailsClosed` plus Hexa wiring test.
-- NFR-13-3: 0 High in ZAP (baseline + active) on staging before every release and the cutover (D-21).
+- NFR-13-3: 0 High in ZAP (baseline + active) on the local QA stack before every release and the cutover (D-21).
 - NFR-13-4: Logs with IPs ≤ 30 days. No raw emails, tokens or keys. User ids are logged as `HMAC-SHA256(app.DeriveKey("log", 32), id)[:16]` (SDD 12 FR-12-8).
 - NFR-13-5: A called govulncheck finding or a `bun audit` high blocks merge. Fix SLA: critical 72 h, high 7 days, medium 30 days.
 - NFR-13-6: Breach notification target: 72 h (§7.9).
@@ -299,7 +299,7 @@ Legacy text is `legacy/apps/web/messages/en/legal.json`; drop its Vercel, Neon, 
 | When | What |
 | --- | --- |
 | PR | `go test ./... -run TestSecurity_`, govulncheck, osv-scanner, `bun audit`, Playwright `headers`/`csp`, Schemathesis (both documents) |
-| Weekly | ZAP baseline + active scan vs staging (`qa/zap/plan.yaml` port, `errorLevel: High`), govulncheck, Dependabot |
+| Weekly | ZAP baseline + active scan vs the local QA stack (`qa/zap/plan.yaml` port, `errorLevel: High`), govulncheck, Dependabot |
 | Release | ZAP active 0 High; new routes checked against §6.1 (port of legacy `hexascore-secure-endpoint` skill) |
 | Yearly | key rotation, admin and Railway member review, Stripe key scopes, retention jobs, policy current, restore drill with deletion replay, ASVS L2 walk |
 
@@ -336,13 +336,13 @@ Review in `docs/incidents/YYYY-MM-DD-<slug>.md` within 5 working days: UTC timel
 
 ## 9. Acceptance criteria
 
-- [ ] `curl -sI https://staging.hexascore.app/` → CSP has `'nonce-` and `'strict-dynamic'`, no `unsafe-inline`; HSTS without `preload`; `Permissions-Policy` as §6.2.
-- [ ] `curl -sI https://api.staging.hexascore.app/v1/items` → API CSP of §6.2, `access-control-allow-origin: *`, no credentials header.
-- [ ] `curl -si -X POST https://staging.hexascore.app/contact -H 'Sec-Fetch-Site: cross-site'` → 403.
+- [ ] `curl -sI http://localhost:3000/` → CSP has `'nonce-` and `'strict-dynamic'`, no `unsafe-inline`; HSTS without `preload`; `Permissions-Policy` as §6.2.
+- [ ] `curl -sI http://localhost:3000/api/v1/items` → API CSP of §6.2, `access-control-allow-origin: *`, no credentials header.
+- [ ] `curl -si -X POST http://localhost:3000/contact -H 'Sec-Fetch-Site: cross-site'` → 403.
 - [ ] Sixth `POST /login` in 1 min from one IP → 429 with `Retry-After` and `RateLimit-Remaining: 0`.
 - [ ] `go test ./... -run 'TestSecurity_'` → PASS.
 - [ ] `go tool govulncheck ./...`, `osv-scanner`, `bun audit --audit-level=high` → exit 0.
-- [ ] `bash qa/zap/run.sh staging` → exit 0.
+- [ ] `bash qa/zap/run.sh` against the local QA stack → exit 0.
 - [ ] `bunx playwright test headers csp` → pass, 0 CSP violations.
 - [ ] A JPEG uploaded with GPS EXIF → `exiftool` on the stored file shows no EXIF.
 - [ ] An export link with an altered `signature`, or used after 24 h → 403.

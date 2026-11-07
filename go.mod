@@ -3,18 +3,18 @@ module github.com/AlexGalhardo/hexascore-app
 go 1.27.3
 
 require (
-	github.com/AlexGalhardo/vukem v0.37.0
+	github.com/AlexGalhardo/vukem v0.38.0
 	github.com/AlexGalhardo/vukem/contrib/stripe v0.5.1
 	github.com/AlexGalhardo/vukem/drivers/postgres v0.6.1
 	github.com/AlexGalhardo/vukem/drivers/s3 v0.4.2
 	github.com/google/go-cmp v0.7.0
+	github.com/google/uuid v1.6.0
 	golang.org/x/crypto v0.58.0
 	golang.org/x/text v0.43.0
 )
 
 require (
 	github.com/dustin/go-humanize v1.1.0 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/pgx/v5 v5.11.0 // indirect

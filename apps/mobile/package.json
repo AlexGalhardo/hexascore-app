@@ -5,7 +5,8 @@
 	"main": "expo-router/entry",
 	"scripts": {
 		"start": "expo start",
-		"android": "expo start --android",
+		"android": "expo run:android",
+		"android:dev": "node scripts/android-dev.cjs",
 		"lint": "biome ci .",
 		"typecheck": "tsc --noEmit",
 		"test": "bun scripts/run-jest.cjs",
@@ -21,6 +22,7 @@
 		"expo": "58.0.21",
 		"expo-auth-session": "58.0.16",
 		"expo-constants": "58.0.14",
+		"expo-crypto": "58.0.7",
 		"expo-device": "58.0.5",
 		"expo-font": "58.0.11",
 		"expo-haptics": "58.0.7",

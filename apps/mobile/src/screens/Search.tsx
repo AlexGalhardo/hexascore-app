@@ -42,11 +42,11 @@ function Chip({
 		<Pressable
 			accessibilityRole="button"
 			accessibilityState={{ selected }}
-			className={`min-h-11 justify-center rounded-full border px-3 ${selected ? "border-fg bg-fg dark:border-fg-dark dark:bg-fg-dark" : "border-border dark:border-border-dark"}`}
+			className={`min-h-11 justify-center rounded-full border px-3 ${selected ? "border-primary bg-primary dark:border-primary-dark dark:bg-primary-dark" : "border-border dark:border-border-dark"}`}
 			onPress={onPress}
 		>
 			<Text
-				className={`font-text text-14 ${selected ? "text-bg dark:text-bg-dark" : "text-fg dark:text-fg-dark"}`}
+				className={`font-text text-14 ${selected ? "text-on-primary dark:text-on-primary-dark" : "text-fg dark:text-fg-dark"}`}
 			>
 				{label}
 			</Text>

@@ -1,7 +1,8 @@
 import type { ReactElement } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { Btn } from "../Btn";
+import { Button } from "../Button";
 import { Cover } from "../Cover";
+import { EmptyState } from "../EmptyState";
 import { Icon } from "../Icon";
 import { ScoreBadge } from "../ScoreBadge";
 
@@ -79,7 +80,9 @@ function Row({
 		>
 			<Cover uri={row.coverUri} title={row.title} className="w-10" />
 			<View className="flex-1">
-				<Text className={`font-display text-18 font-bold ${FG}`}>{row.title}</Text>
+				<Text className={`font-display text-18 font-semibold tracking-tight ${FG}`}>
+					{row.title}
+				</Text>
 				<Text className={MUTED}>{labels.meta(row)}</Text>
 			</View>
 			<ScoreBadge score={row.score} locale={locale} label={labels.score(row)} />
@@ -90,9 +93,12 @@ function Row({
 function Group({ group, props }: { group: LibraryGroup; props: LibraryPageProps }): ReactElement {
 	const { labels } = props;
 	return (
-		<View className="border-t-2 border-fg pt-4 dark:border-fg-dark">
+		<View className="border-t border-border pt-4 dark:border-border-dark">
 			<View className="flex-row flex-wrap items-baseline gap-x-3">
-				<Text accessibilityRole="header" className={`font-display text-24 font-bold ${FG}`}>
+				<Text
+					accessibilityRole="header"
+					className={`font-display text-24 font-semibold tracking-tight ${FG}`}
+				>
 					{group.title}
 				</Text>
 				<Text className={`${MUTED} tabular-nums`}>{labels.groupCount(group)}</Text>
@@ -129,7 +135,10 @@ export function LibraryPage(props: LibraryPageProps): ReactElement {
 				<Text className="font-text text-12 font-bold uppercase tracking-wider text-primary dark:text-primary-dark">
 					{props.kicker}
 				</Text>
-				<Text accessibilityRole="header" className={`font-display text-36 font-bold ${FG}`}>
+				<Text
+					accessibilityRole="header"
+					className={`font-display text-36 font-semibold tracking-tight ${FG}`}
+				>
 					{props.title}
 				</Text>
 				<Text className={`${MUTED} tabular-nums`}>{labels.summary(props.titles, props.rated)}</Text>
@@ -140,19 +149,21 @@ export function LibraryPage(props: LibraryPageProps): ReactElement {
 					accessibilityRole="button"
 					accessibilityLabel={labels.status(props.statusLabel)}
 					onPress={props.onStatus}
-					className="min-h-11 flex-1 flex-row items-center justify-between rounded-sm border border-field bg-field-bg px-3 dark:border-field-dark dark:bg-field-bg-dark"
+					className="min-h-11 flex-1 flex-row items-center justify-between rounded-md border border-field bg-field-bg px-3 dark:border-field-dark dark:bg-field-bg-dark"
 				>
 					<Text numberOfLines={1} className={`flex-1 font-text text-16 ${FG}`}>
 						{props.statusLabel}
 					</Text>
 					<Icon name="chevron-down" size={18} className={FG} />
 				</Pressable>
-				<Btn variant="secondary" label={labels.filters} onPress={props.onFilters} />
+				<Button variant="outline" label={labels.filters} onPress={props.onFilters} />
 			</View>
 			{props.groups.length === 0 ? (
-				<View accessibilityLiveRegion="polite" className="items-start gap-4 py-8">
-					<Text className={`font-text text-16 ${FG}`}>{labels.empty}</Text>
-					<Btn variant="secondary" label={labels.browse} onPress={props.onBrowse} />
+				<View className="py-6">
+					<EmptyState
+						title={labels.empty}
+						action={{ label: labels.browse, onPress: props.onBrowse }}
+					/>
 				</View>
 			) : (
 				props.groups.map((group) => <Group key={group.key} group={group} props={props} />)

@@ -13,6 +13,7 @@ const props = vi.hoisted(() => ({
 	auth: { user: null } as { user: null | Record<string, unknown> },
 	unreadNotifications: 0,
 	flags: {} as { social?: boolean },
+	newsletterUrl: "https://email.test/subscribe/hexascore",
 }));
 
 vi.mock("@inertiajs/react", () => ({
@@ -27,17 +28,16 @@ vi.mock("../lib/useT", () => ({ useT: () => (key: string) => key }));
 
 afterEach(cleanup);
 
-test("btnClass gives every kind a 44 px target, a ledge and a reduced-motion press", () => {
-	for (const kind of ["primary", "secondary"] as const) {
+test("btnClass renders the shadcn button: a 44 px target and a visible focus ring for every kind", () => {
+	for (const kind of ["primary", "secondary", "ghost"] as const) {
 		const cls = btnClass(kind);
-		expect(cls).toContain("min-h-11");
-		expect(cls).toContain(`shadow-ledge-${kind}`);
-		expect(cls).toContain(`active:shadow-ledge-${kind}-pressed`);
-		expect(cls).toContain("active:translate-y-px");
-		expect(cls).toContain("motion-reduce:active:translate-y-0");
-		expect(cls).toContain("focus-visible:outline-2");
+		expect(cls).toContain("h-11");
+		expect(cls).toContain("focus-visible:ring-[3px]");
+		expect(cls).toContain("rounded-md");
 	}
-	expect(btnClass("ghost")).not.toContain("shadow-ledge");
+	expect(btnClass("primary")).toContain("bg-primary");
+	expect(btnClass("secondary")).toContain("border-border");
+	expect(btnClass("ghost", "w-full")).toContain("w-full");
 	render(<Btn kind="secondary">Reset</Btn>);
 	expect(screen.getByRole("button", { name: "Reset" }).getAttribute("type")).toBe("button");
 });
@@ -85,14 +85,8 @@ test("navbar has the search trigger, moon/sun toggle and four sections; footer h
 	expect(source.getAttribute("target")).toBe("_blank");
 	expect(source.getAttribute("rel")).toBe("noopener noreferrer");
 	expect(screen.getByRole("button", { name: "footer.cookieSettings" })).toBeTruthy();
-	expect(
-		(screen.getByRole("textbox", { name: "footer.newsletterPlaceholder" }) as HTMLInputElement)
-			.disabled,
-	).toBe(true);
-	expect(
-		(screen.getByRole("button", { name: "footer.newsletterSubmit" }) as HTMLButtonElement)
-			.disabled,
-	).toBe(true);
+	expect(screen.getByRole("textbox", { name: "footer.newsletterPlaceholder" })).toBeTruthy();
+	expect(screen.getByRole("button", { name: "footer.newsletterSubmit" })).toBeTruthy();
 	expect(footer.querySelector("[hreflang]")).toBeNull();
 });
 

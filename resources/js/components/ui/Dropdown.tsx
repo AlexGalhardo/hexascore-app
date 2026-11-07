@@ -64,7 +64,7 @@ export default function Dropdown({
 				onClick={(e) => {
 					if ((e.target as HTMLElement).closest("a,button")) setOpen(false);
 				}}
-				className={`absolute right-0 z-50 mt-1 min-w-52 border border-fg bg-bg py-1 shadow-[0_4px_0_var(--color-border)] ${panelClassName}`}
+				className={`absolute right-0 z-50 mt-1 min-w-52 rounded-lg border border-border bg-bg py-1 shadow-lg ${panelClassName}`}
 			>
 				{children}
 			</div>

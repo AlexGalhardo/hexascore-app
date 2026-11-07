@@ -12,7 +12,7 @@ import (
 )
 
 // Robots serves /robots.txt (SDD 09 §7.7, ADR 0022). Only production without SEO_NOINDEX is
-// indexable, so staging, previews and local builds never compete with it in search results.
+// indexable, so previews, local production builds and local development never compete with it in search results.
 func Robots(app *vukem.App) web.HandlerFunc {
 	var b strings.Builder
 

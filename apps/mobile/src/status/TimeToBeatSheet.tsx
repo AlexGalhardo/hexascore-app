@@ -1,11 +1,12 @@
 import { type ReactElement, useState } from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import { t } from "../i18n";
 import type { AppLocale } from "../i18n/locale";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
+import { Card } from "../ui/Card";
 import { TextField } from "../ui/TextField";
 import { parseHours, STYLES, type TimeToBeat } from "./cache";
-import { SHEET, SHEET_TITLE, useStatusWrite } from "./StatusSheet";
+import { SHEET_TITLE, useStatusWrite } from "./StatusSheet";
 
 const FG = "text-fg dark:text-fg-dark";
 const LABEL = {
@@ -58,7 +59,7 @@ export function TimeToBeatSheet({
 	};
 
 	return (
-		<View testID="time-to-beat-sheet" className={SHEET}>
+		<Card testID="time-to-beat-sheet">
 			<Text accessibilityRole="header" className={SHEET_TITLE}>
 				{t(locale, "item.timeToBeat.yours")}
 			</Text>
@@ -78,14 +79,14 @@ export function TimeToBeatSheet({
 			{failed ? (
 				<Text className={`text-16 ${FG}`}>{t(locale, "item.timeToBeat.notSaved")}</Text>
 			) : null}
-			<Btn label={t(locale, "item.timeToBeat.save")} onPress={save} />
+			<Button label={t(locale, "item.timeToBeat.save")} onPress={save} />
 			{current !== null ? (
-				<Btn
+				<Button
 					label={t(locale, "item.timeToBeat.delete")}
 					variant="ghost"
 					onPress={() => void write(null, { method: "delete" }).then(finish)}
 				/>
 			) : null}
-		</View>
+		</Card>
 	);
 }

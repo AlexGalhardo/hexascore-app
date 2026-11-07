@@ -25,7 +25,7 @@ func TestLocalePrefix_AccountRedirects(t *testing.T) {
 
 	app.Client(t).Inertia("").
 		PostJSON("/pt-br/login", map[string]any{"identifier": "pt2fa@example.com", "password": testPassword}).
-		AssertRedirect("/pt-br/login")
+		AssertRedirect("/pt-br/2fa")
 
 	c := app.Client(t).Inertia("")
 	register(t, app, c, "ptflows@example.com")

@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **mobile:** `bun run android:dev` builds and runs the debug app on an Android emulator against a local dev backend (`EXPO_PUBLIC_API_BASE_URL` defaults to `http://10.0.2.2:3000`; debug builds already allow cleartext, release stays https-only). On Windows the native build runs in a short-path hoisted mirror (`C:\h`) because ninja cannot stat the 260+ character paths of bun's isolated `node_modules`. Runbook: `docs/runbooks/mobile-local-android.md`.
+
+- **perf:** Two partial indexes on `items` for the default listing (migrations `20261107000000` and `20261107000100`): page one of a type sorted by score reads the index instead of sorting every item (42.8 ms to 0.12 ms on 22,500 games) and the total count is an index-only scan (39.2 ms to 1.3 ms).
+- **docs:** `docs/runbooks/postgres-cost.md` (owner-run steps to measure, right-size the pool, fold staging into the production instance and size the volume) and ADR 0027 (stay on Postgres, SQLite deferred).
+- **ui:** The footer newsletter form is live: it posts the email (with a honeypot) from the browser to vukem-email's `/subscribe/hexascore` (`NEWSLETTER_API_URL`, default `https://email.hexascore.app` in production and `http://localhost:3100` otherwise; `NEWSLETTER_PROJECT_SLUG`), whose origin joins `connect-src`. States: sending, check your inbox, invalid, rate limited, error.
+- **auth:** Login and sign-up share one minimal centered layout (logo, title, Google and passkey buttons, divider, form, link to the other page); the two-factor step is its own `/2fa` page with six code boxes and a backup-code swap, and `/two-factor-challenge` redirects to it.
+- **perf:** The landing page's highlights and upcoming blocks are cached per locale for 5 minutes and forgotten when a trending snapshot lands, so a visit no longer runs 12 catalogue queries.
+
 - **ingest:** `wikidata-discover` chain (every 30 minutes, behind `FLAG_INGEST_WIKIDATA`): walks Wikidata below the top-N selection that capped the catalogue at 100,000 items, most popular first (sitelink count, floor 3) and one type at a time (films, series, games, books), stores the records of items not fetched yet and lets the normaliser create them. The position persists across runs. It needs no TMDB, Open Library or paid access, and Goodreads, Skoob, JustWatch and the IMDb datasets stay unused, as decided in `docs/data/SOURCES.md`
 - **admin:** A progress bar sweeps across the top and the content dims while an admin page loads (after a 120 ms delay, so fast pages do not flash).
 
@@ -28,6 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **auth:** The web two-factor challenge (`POST /2fa`) now also stops guessing per account, 10 tries per 15 minutes whatever the address, so rotating IPs no longer widens the budget (security audit 2026-11-07).
+- **uploads:** Community cover uploads and the covers fingerprint step refuse images over 25 megapixels before decoding them.
+- **mobile:** The Google sign-in nonce comes from the platform CSPRNG; the sign-in is skipped when none exists instead of falling back to `Math.random`.
+- **mobile:** Plural messages no longer crash the home screen on Android: Hermes has no `Intl.PluralRules`, so `translate` falls back to the en, es and pt-BR rules.
+
 - **trending:** The landing carousel requires a cover: an item with a synopsis, both translated titles and a date reached the quality floor without one, took a slot and was then hidden, leaving a gap; pins need a cover too. "For you", similar items and cross-media links leave items without a cover out as well
 - **ingest:** The Telegram digest counts right: `offers.tmdb` counts the items that got offers instead of every offer (it showed 447 thousand changed for 36 thousand seen), `refresh.existing` counts the items whose quality score moved instead of every checked item, and the pace and ETA use the last hour instead of a 15-minute window
 - **ingest:** A book edition whose source gives an implausible publication year (0 or 9999) no longer fails the item's editions step: years outside 1400 to 2100 are stored as unknown
@@ -43,6 +56,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **web:** The render cache keys pages by their locale prefix again: `/pt-br/...` and `/es/...` no longer serve the English (or Spanish) copy rendered first
 
 ### Changed
+
+- **auth:** Google sign-in in the Android app uses the authorization code flow with PKCE (S256) and `state` instead of the implicit ID-token flow. The app first calls the new `POST /app/v1/auth/google/nonce` (guest, rate limited); the ID token must carry that single-use, 5-minute nonce, which `POST /app/v1/tokens/google` checks after verifying the token and consumes when it mints the app token (migration `google_nonces`, hashed). `expo-crypto` 58.0.7 is a direct dependency of the app.
+
+- **docs:** Agent guidance covers the shared framework feedback file (`HS-` ids), the `RUN_SLOW_CI` gate and `scripts/ci/local.sh`, the removed staging environment, integration and Windows test pitfalls, SSR private prefixes, JS-only forms, and the mobile local-dev notes.
+- **ui:** The public site adopts shadcn/ui components and a neutral zinc theme (ADR 0029, ported from PR #69): flat buttons and inputs, hairline borders, rounded-md 8 px, blurred navbar with a shadow once scrolled, dark mode on the same greys. The palette and radii match the Android kit (`neutral.json`), checked by `packages/tokens/neutral.test.ts`. New dependency: `@radix-ui/react-slot` 1.5.0.
+- **mobile:** The sign-in screen is rebuilt on the new kit (wordmark, labelled fields with Show/Hide, a separate two-factor page), screens use Card, ListItem, EmptyState, Skeleton and Avatar, toasts are in-app (`ToastHost`, announced to screen readers) instead of `ToastAndroid`, and detail screens keep clear of the status bar. Category accents stay as a 2 px rule on trending cards and the heading squares.
+
+- **mobile:** The Android app wears the neutral zinc skin of the new web UI: grey palette in light and dark, 4/8/12 px radii, hairline borders instead of ledges, Inter as the only family (Playfair Display is no longer embedded). New shadcn-style kit in `apps/mobile/src/ui` (Button with default/secondary/outline/ghost/destructive and three sizes, Input, Label, TextField, Card, Badge, Separator, Skeleton, Avatar, SegmentedControl, Sheet, Toast, ListItem, EmptyState); `Btn` is replaced by `Button` and the language and theme pickers are segmented controls.
 
 - **ingest:** The language-model gap filler (only for items still missing data after every source, budget US$10 a month spread at most 1/30 a day): a value written in the stored Wikipedia introduction is applied to the item at once, anything else goes to review; a new stage translates the English synopsis into pt-BR and es when they are missing (the most popular items first, never replacing a synopsis); and with `LLM_WEB_SEARCH=true` the most popular items with no stored text are looked up with web search, always into review. The client no longer sends `temperature`, which Claude Haiku 5.5 rejects, so no call could succeed before
 - **ingest:** Discovery runs as four lanes, one per category (films, series, games, books): each lane walks and normalises only its type, so they run side by side, and with `INGEST_LANES=true` each goes to its own queue (`ingest-movie`, `ingest-series`, `ingest-game`, `ingest-book`); see the worker runbook for the order to switch them on
@@ -65,7 +86,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **item:** The where-to-watch and where-to-play block is hidden when an item has no offers, instead of showing an empty message.
 
-
 - **item:** Where to watch (films and series) and where to play (games) show offers from every country at once, with no country selector, so a service listed in one country appears for every visitor.
 
 - **ui:** Cover images are shown whole at every size (no cropping); the space left around them takes the card colour.
@@ -86,6 +106,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **ui:** The item page drops the genre and platform buttons under the title (Details still links them); at phone width the cover fills the width and the rating column follows Details, before the title and synopsis
 - **build:** `.dockerignore` keeps worktrees, tool state, venvs, nested env files and `node_modules` out of the Docker build context; `local.properties` is gitignored
 - **agents:** `PROMPT-WORKERS.md` rewritten: orchestrator reviews and merges, senior and intern in standby, ticket and report formats, autonomy limits
+
+### Removed
+
+- **infra:** The `staging` environment (app, worker, Postgres and bucket; deleted in Railway by the owner on 2026-11-07, ADR 0028) and everything that pointed at it: the staging runbook, the staging-only scheduling of `backup:drill` (the command stays, run by hand), the staging-merge step of `postgres-cost.md`, and the staging cost rows of SDD 11. `SEO_NOINDEX` and the non-production `robots.txt` stay for previews and local production builds.
 
 ## [0.38.0] - 2026-11-02
 

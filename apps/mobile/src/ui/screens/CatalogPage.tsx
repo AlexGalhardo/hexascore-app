@@ -1,7 +1,8 @@
 import type { ReactElement, ReactNode } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { Btn } from "../Btn";
+import { Button } from "../Button";
 import { Cover } from "../Cover";
+import { EmptyState } from "../EmptyState";
 import { Icon } from "../Icon";
 import { ScoreBadge } from "../ScoreBadge";
 
@@ -63,8 +64,8 @@ function Pager({
 }: Pick<CatalogPageProps, "page" | "pages" | "labels" | "onPage">): ReactElement {
 	return (
 		<View className="flex-row items-center justify-between gap-2 py-3">
-			<Btn
-				variant="secondary"
+			<Button
+				variant="outline"
 				label={labels.previous}
 				disabled={page <= 1}
 				onPress={() => onPage(page - 1)}
@@ -72,8 +73,8 @@ function Pager({
 			<Text className="font-text text-14 font-semibold tabular-nums text-fg dark:text-fg-dark">
 				{labels.page(page, pages)}
 			</Text>
-			<Btn
-				variant="secondary"
+			<Button
+				variant="outline"
 				label={labels.next}
 				disabled={page >= pages}
 				onPress={() => onPage(page + 1)}
@@ -102,7 +103,7 @@ function Row({
 		>
 			<Cover uri={row.coverUri} title={row.title} className="w-12" />
 			<View className="flex-1">
-				<Text className="font-display text-18 font-bold text-fg dark:text-fg-dark">
+				<Text className="font-display text-18 font-semibold tracking-tight text-fg dark:text-fg-dark">
 					{row.title}
 				</Text>
 				<Text className={MUTED}>{labels.meta(row)}</Text>
@@ -116,9 +117,11 @@ function Row({
 export function CatalogPage(props: CatalogPageProps): ReactElement {
 	const { title, rows, total, page, pages, activeFilters, sortLabel, filtersOpen, labels } = props;
 	const toggle = filtersOpen
-		? "bg-fg border-fg dark:bg-fg-dark dark:border-fg-dark"
-		: "bg-field-bg border-fg dark:bg-field-bg-dark dark:border-fg-dark";
-	const toggleText = filtersOpen ? "text-bg dark:text-bg-dark" : "text-fg dark:text-fg-dark";
+		? "bg-primary border-primary dark:bg-primary-dark dark:border-primary-dark"
+		: "bg-bg border-border dark:bg-bg-dark dark:border-border-dark";
+	const toggleText = filtersOpen
+		? "text-on-primary dark:text-on-primary-dark"
+		: "text-fg dark:text-fg-dark";
 	return (
 		<ScrollView
 			testID="listing"
@@ -127,17 +130,17 @@ export function CatalogPage(props: CatalogPageProps): ReactElement {
 		>
 			<Text
 				accessibilityRole="header"
-				className="pb-4 pt-6 font-display text-36 font-bold text-fg dark:text-fg-dark"
+				className="pb-4 pt-6 font-display text-36 font-semibold tracking-tight text-fg dark:text-fg-dark"
 			>
 				{title}
 			</Text>
-			<View className="flex-row gap-2 border-y border-fg py-3 dark:border-fg-dark">
+			<View className="flex-row gap-2 border-y border-border py-3 dark:border-border-dark">
 				<Pressable
 					accessibilityRole="button"
 					accessibilityLabel={filtersOpen ? labels.closeFilters : labels.filters(activeFilters)}
 					accessibilityState={{ expanded: filtersOpen }}
 					onPress={props.onToggleFilters}
-					className={`min-h-11 flex-row items-center gap-2 rounded-sm border px-3 ${toggle}`}
+					className={`min-h-11 flex-row items-center gap-2 rounded-md border px-3 ${toggle}`}
 				>
 					<Icon name={filtersOpen ? "close" : "options-outline"} size={18} className={toggleText} />
 					<Text className={`font-text text-16 font-semibold ${toggleText}`}>
@@ -148,7 +151,7 @@ export function CatalogPage(props: CatalogPageProps): ReactElement {
 					accessibilityRole="button"
 					accessibilityLabel={labels.sort(sortLabel)}
 					onPress={props.onSort}
-					className="min-h-11 flex-1 flex-row items-center justify-between rounded-sm border border-field bg-field-bg px-3 dark:border-field-dark dark:bg-field-bg-dark"
+					className="min-h-11 flex-1 flex-row items-center justify-between rounded-md border border-field bg-field-bg px-3 dark:border-field-dark dark:bg-field-bg-dark"
 				>
 					<Text numberOfLines={1} className="flex-1 font-text text-16 text-fg dark:text-fg-dark">
 						{labels.sort(sortLabel)}
@@ -161,17 +164,19 @@ export function CatalogPage(props: CatalogPageProps): ReactElement {
 					{props.filterPanel}
 					<View className="flex-row gap-3">
 						<View className="flex-1">
-							<Btn label={labels.apply} onPress={props.onApply} />
+							<Button label={labels.apply} onPress={props.onApply} />
 						</View>
 						<View className="flex-1">
-							<Btn variant="secondary" label={labels.reset} onPress={props.onReset} />
+							<Button variant="outline" label={labels.reset} onPress={props.onReset} />
 						</View>
 					</View>
 				</View>
 			) : rows.length === 0 ? (
-				<View accessibilityLiveRegion="polite" className="items-start gap-4 py-8">
-					<Text className="font-text text-16 text-fg dark:text-fg-dark">{labels.empty}</Text>
-					<Btn variant="secondary" label={labels.reset} onPress={props.onReset} />
+				<View className="py-6">
+					<EmptyState
+						title={labels.empty}
+						action={{ label: labels.reset, onPress: props.onReset }}
+					/>
 				</View>
 			) : (
 				<>

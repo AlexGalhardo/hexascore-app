@@ -152,6 +152,7 @@
 	"auth.googleSignUp": "Registrarse con Google",
 	"account.metaTitle": "Perfil",
 	"account.title": "Tu perfil",
+	"account.nav": "Secciones del perfil",
 	"account.saved": "Guardado.",
 	"account.details.title": "Datos de la cuenta",
 	"account.details.name": "Nombre",

@@ -421,6 +421,23 @@ func googleHarness(t *testing.T) (env map[string]string, sign func(aud string, e
 	}
 }
 
+// googleNonce asks the server for a single-use nonce, as the app does before opening the browser.
+func googleNonce(t *testing.T, c *vukemtest.Client) string {
+	t.Helper()
+
+	var out struct {
+		Nonce string `json:"nonce"`
+	}
+
+	c.PostJSON("/app/v1/auth/google/nonce", map[string]any{}).AssertCreated().JSON(&out)
+
+	if len(out.Nonce) != 32 {
+		t.Fatalf("nonce = %q", out.Nonce)
+	}
+
+	return out.Nonce
+}
+
 func TestSecurity_A07_GoogleIDTokenAudience(t *testing.T) {
 	t.Parallel()
 
@@ -428,28 +445,84 @@ func TestSecurity_A07_GoogleIDTokenAudience(t *testing.T) {
 	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env})
 	c := app.Client(t)
 
-	claims := map[string]any{"email": "g.user@example.com", "email_verified": true, "name": "G User"}
+	claims := func(nonce string) map[string]any {
+		return map[string]any{"email": "g.user@example.com", "email_verified": true, "name": "G User", "nonce": nonce}
+	}
 	post := func(idToken string) *vukemtest.Response {
 		return c.PostJSON("/app/v1/tokens/google", map[string]any{"idToken": idToken, "deviceName": "Pixel"})
 	}
 
 	// A token Google issued to another app is refused even though the signature is valid.
-	if got := codeOf(post(sign("someone-elses-client", claims)).AssertUnauthorized()); got != "invalid-id-token" {
+	if got := codeOf(
+		post(sign("someone-elses-client", claims(googleNonce(t, c)))).AssertUnauthorized(),
+	); got != "invalid-id-token" {
 		t.Errorf("foreign audience code = %q", got)
 	}
 
 	post("not-a-jwt").AssertUnauthorized()
 
-	// Both configured clients are accepted.
-	post(sign("android-client", claims)).AssertCreated()
-	post(sign("web-client", claims)).AssertCreated()
+	// Both configured clients are accepted, each with a nonce of its own.
+	post(sign("android-client", claims(googleNonce(t, c)))).AssertCreated()
+	post(sign("web-client", claims(googleNonce(t, c)))).AssertCreated()
 
-	unverified := map[string]any{"email": "u@example.com", "email_verified": false}
+	unverified := map[string]any{"email": "u@example.com", "email_verified": false, "nonce": googleNonce(t, c)}
 	if got := codeOf(
 		post(sign("android-client", unverified)).AssertStatus(http.StatusConflict),
 	); got != "email-unverified-at-provider" {
 		t.Errorf("unverified code = %q", got)
 	}
+}
+
+// TestSecurity_A07_GoogleNonce: the ID token must carry a nonce this server issued, once, before it expires. A token
+// with no nonce, a made-up one, a replayed one or an expired one is refused even though the signature is valid.
+func TestSecurity_A07_GoogleNonce(t *testing.T) {
+	t.Parallel()
+
+	env, sign := googleHarness(t)
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env})
+	c := app.Client(t)
+
+	token := func(nonce string) string {
+		extra := map[string]any{"email": "n.user@example.com", "email_verified": true}
+		if nonce != "" {
+			extra["nonce"] = nonce
+		}
+
+		return sign("android-client", extra)
+	}
+	post := func(idToken string) *vukemtest.Response {
+		return c.PostJSON("/app/v1/tokens/google", map[string]any{"idToken": idToken, "deviceName": "Pixel"})
+	}
+	rejected := func(name string, res *vukemtest.Response) {
+		t.Helper()
+
+		if got := codeOf(res.AssertUnauthorized()); got != "invalid-id-token" {
+			t.Errorf("%s: code = %q", name, got)
+		}
+	}
+
+	rejected("missing nonce", post(token("")))
+	rejected("unknown nonce", post(token("0123456789abcdef0123456789abcdef")))
+
+	valid := googleNonce(t, c)
+	post(token(valid)).AssertCreated()
+	rejected("replayed nonce", post(token(valid)))
+
+	other := googleNonce(t, c)
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := db.ExecContext(
+		t.Context(),
+		"UPDATE google_nonces SET expires_at = "+db.Dialect().Placeholder(1),
+		time.Now().Add(-time.Minute),
+	); err != nil {
+		t.Fatal(err)
+	}
+
+	rejected("expired nonce", post(token(other)))
 }
 
 // TestSecurity_A07_AppTokenRotationSingleUse: the token a rotation consumes

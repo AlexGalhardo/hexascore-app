@@ -21,3 +21,8 @@ paths:
 - Lighthouse is valid only in the `lhci-runner:local` Linux container on this Windows host (Kaspersky injects into host Chrome); budgets LCP 2500 ms, script 170 KB (Q-A20).
 - Tool user agents (curl, python-requests, Go-http-client) get 403 from the page scrape guard (ADR 0022); use a browser UA or `/up` for manual checks of production pages.
 - Run tests on a loaded host with `-p 1`/`--maxWorkers=1`; a rate-limit test that depends on wall time must stretch its window rather than assume a fast host.
+- Remote CI skips slow jobs unless the repo variable `RUN_SLOW_CI=true`; run `scripts/ci/local.sh` (lint, test-go, test-go-integration, test-ts, build, openapi) before calling a PR green. Plain `go test` does not compile the integration tests; they need `-tags integration`.
+- Windows: `TestBackupDrill` cannot reach the host Postgres from docker-run pg tools, so run it on Linux CI. A leftover `resources/public/hot` sends SSR to the Vite dev server; delete it before Go or e2e tests.
+- e2e helpers use `getByLabel(..., { exact: true })`: the footer newsletter input also matches "Email".
+- The crawler skips honeypot, hidden and `nofollow` links and robots-disallowed paths.
+- Forms that only work with JavaScript stay disabled until hydration (React 19 resets input values typed before it); see the vukem docs page "Forms that only work with JavaScript".

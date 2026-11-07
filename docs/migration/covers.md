@@ -24,7 +24,7 @@ bun scripts/legacy/blob-export.ts --delta --since <ISO time> --db "$NEON_RO_URL"
 | --- | --- | --- | --- | --- | --- | --- |
 | Unit test (`scripts/legacy/blob-export.test.ts`, first run then re-run) | 2 | 1 | 2, then 0 | 0, then 2 | 0 | n/a |
 | Local smoke (scratch DB, rustfs path-style) | 0 | 2 | 0 | 0 | 0 | n/a |
-| Staging rehearsal | owner-gated | | | | | |
+| Local rehearsal | owner-gated | | | | | |
 | Production T-7 d and delta | owner-gated | | | | | |
 
-`Bun.S3Client` with `virtualHostedStyle: false` (from `S3_USE_PATH_STYLE=true`) was verified against the local RustFS (write, exists, delete); the Railway bucket's addressing style is still to be checked on staging.
+`Bun.S3Client` with `virtualHostedStyle: false` (from `S3_USE_PATH_STYLE=true`) was verified against the local RustFS (write, exists, delete); the Railway bucket's addressing style is still to be checked in production.

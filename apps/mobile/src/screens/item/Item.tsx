@@ -13,8 +13,9 @@ import { RateSheet } from "../../rating/RateSheet";
 import { statusOf, timeToBeatOf } from "../../status/cache";
 import { StatusSheet } from "../../status/StatusSheet";
 import { TimeToBeatSheet } from "../../status/TimeToBeatSheet";
-import { Btn } from "../../ui/Btn";
+import { Button } from "../../ui/Button";
 import { formatScore } from "../../ui/format";
+import { Screen } from "../../ui/Screen";
 import { EditionsList } from "../../ui/screens/EditionsList";
 import {
 	ItemDetail,
@@ -51,7 +52,7 @@ function groupByRole(entities: EntityRef[]): [string, EntityRef[]][] {
 	return [...groups];
 }
 
-const H2 = "font-display text-24 font-bold text-fg dark:text-fg-dark";
+const H2 = "font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark";
 
 function detailOf(item: AppItemJSON, type: CatalogType, locale: AppLocale): ItemDetailView {
 	const year = item.releaseDate?.slice(0, 4);
@@ -189,9 +190,9 @@ export function ItemView({
 				onOpenSimilar={noop}
 			>
 				<View className="gap-2">
-					<Btn label={t(locale, "item.status.title")} onPress={() => setSheet("status")} />
+					<Button label={t(locale, "item.status.title")} onPress={() => setSheet("status")} />
 					{type === "games" ? (
-						<Btn
+						<Button
 							label={t(locale, "item.timeToBeat.yours")}
 							onPress={() => setSheet("timeToBeat")}
 						/>
@@ -231,41 +232,45 @@ export function ItemView({
 				<Attribution item={resolved} locale={locale} />
 			</ItemDetail>
 			<Modal visible={sheet !== null} animationType="slide" onRequestClose={() => setSheet(null)}>
-				{sheet === "status" ? (
-					<StatusSheet
-						itemId={id}
-						type={type}
-						current={statusOf(me.data)}
-						locale={locale}
-						onDone={() => setSheet(null)}
-					/>
-				) : null}
-				{sheet === "list" && lists ? (
-					<AddToListSheet
-						deps={lists}
-						itemId={id}
-						type={SINGULAR[type] as ListType}
-						locale={locale}
-						onDone={() => setSheet(null)}
-					/>
-				) : null}
-				{sheet === "timeToBeat" ? (
-					<TimeToBeatSheet
-						itemId={id}
-						current={timeToBeatOf(me.data)}
-						locale={locale}
-						onDone={() => setSheet(null)}
-					/>
-				) : null}
+				<Screen>
+					{sheet === "status" ? (
+						<StatusSheet
+							itemId={id}
+							type={type}
+							current={statusOf(me.data)}
+							locale={locale}
+							onDone={() => setSheet(null)}
+						/>
+					) : null}
+					{sheet === "list" && lists ? (
+						<AddToListSheet
+							deps={lists}
+							itemId={id}
+							type={SINGULAR[type] as ListType}
+							locale={locale}
+							onDone={() => setSheet(null)}
+						/>
+					) : null}
+					{sheet === "timeToBeat" ? (
+						<TimeToBeatSheet
+							itemId={id}
+							current={timeToBeatOf(me.data)}
+							locale={locale}
+							onDone={() => setSheet(null)}
+						/>
+					) : null}
+				</Screen>
 			</Modal>
 			<Modal visible={rating} animationType="slide" onRequestClose={() => setRating(false)}>
-				<RateSheet
-					itemId={id}
-					type={type}
-					initial={ratingOf(me.data)}
-					locale={locale}
-					onDone={() => setRating(false)}
-				/>
+				<Screen>
+					<RateSheet
+						itemId={id}
+						type={type}
+						initial={ratingOf(me.data)}
+						locale={locale}
+						onDone={() => setRating(false)}
+					/>
+				</Screen>
 			</Modal>
 		</>
 	);

@@ -66,9 +66,8 @@ func TestInertiaPages(t *testing.T) {
 				pending,
 				email,
 				false,
-			).AssertRedirect("/login")
-			// Inertia: the login page opens the code dialog
-			pending.Get(l.prefix+"/two-factor-challenge").AssertOK().AssertInertia("Auth/TwoFactorChallenge").
+			).AssertRedirect("/2fa")
+			pending.Get(l.prefix+"/2fa").AssertOK().AssertInertia("Auth/TwoFactorChallenge").
 				PropEquals("locale", l.locale).HasProp("messages")
 		})
 	}

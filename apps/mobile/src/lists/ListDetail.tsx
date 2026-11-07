@@ -1,8 +1,10 @@
 import { type ReactElement, useState } from "react";
 import { Alert, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
+import { EmptyState } from "../ui/EmptyState";
 import type { ItemRowData } from "../ui/ItemRow";
+import { ListSkeleton } from "../ui/Skeleton";
 import { ListDetailPage } from "../ui/screens/ListDetailPage";
 import { TextField } from "../ui/TextField";
 import {
@@ -43,7 +45,23 @@ export function ListDetailScreen({
 	const [draft, setDraft] = useState<string | null>(null);
 
 	const data = list.data;
-	if (!data) return null;
+	if (list.isError) {
+		return (
+			<View className="px-4 pt-6">
+				<EmptyState
+					title={t(locale, "errors.serverTitle")}
+					action={{ label: t(locale, "errors.retry"), onPress: () => void list.refetch() }}
+				/>
+			</View>
+		);
+	}
+	if (!data) {
+		return (
+			<View className="px-4 pt-6">
+				<ListSkeleton label={t(locale, "item.loading")} />
+			</View>
+		);
+	}
 	// GET /lists/{id} has no owner field; the viewer owns it when it is in GET /me/lists.
 	const editable = (mine.data ?? []).some((l) => l.id === id);
 	const byId = new Map(data.items.map((e) => [e.item.id, e]));
@@ -72,7 +90,7 @@ export function ListDetailScreen({
 			{draft === null ? null : (
 				<View className="gap-2 px-4 pt-4">
 					<TextField label={t(locale, "lists.fieldTitle")} value={draft} onChangeText={setDraft} />
-					<Btn
+					<Button
 						label={t(locale, "lists.save")}
 						onPress={() => void saveTitle()}
 						disabled={!online || draft.trim() === ""}

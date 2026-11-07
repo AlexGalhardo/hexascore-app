@@ -41,7 +41,7 @@ export default function ActivityCard({ entry }: { entry: ActivityEntry }) {
 	}
 
 	const link =
-		"font-semibold hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
+		"font-semibold hover:text-primary outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
 
 	return (
 		<article className="flex gap-3 py-5">

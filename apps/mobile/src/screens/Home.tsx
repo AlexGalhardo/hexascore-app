@@ -106,7 +106,7 @@ export function HomeBody({
 			<View className="px-4 pt-4">
 				<Text
 					accessibilityRole="header"
-					className="font-display text-24 font-bold text-fg dark:text-fg-dark"
+					className="font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark"
 				>
 					HexaScore
 				</Text>

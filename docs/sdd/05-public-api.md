@@ -151,7 +151,7 @@ Cursors: legacy sorts need keyset on `(sort column, id)`; vukem `req.CursorPagin
 }
 ```
 
-Coverage (published on `/docs/coverage` and stated on `/pricing` per D-33, ADR 0006). `qa/sql/api_coverage.sql` returns one row per (type, field) with `pct` 0–100: the share of public items whose value has an allowed source under the serialiser's rules (`TestAPICoverageSQL` keeps both in step). `scripts/api-coverage-json.ts` turns its CSV into `resources/data/api_coverage.json`, which both pages render; the staging percentages are [NOT VERIFIED] until the first run on a staging copy:
+Coverage (published on `/docs/coverage` and stated on `/pricing` per D-33, ADR 0006). `qa/sql/api_coverage.sql` returns one row per (type, field) with `pct` 0–100: the share of public items whose value has an allowed source under the serialiser's rules (`TestAPICoverageSQL` keeps both in step). `scripts/api-coverage-json.ts` turns its CSV into `resources/data/api_coverage.json`, which both pages render; the local-copy percentages are [NOT VERIFIED] until the first run on a local copy:
 
 | Field | Allowed sources | Expected gap |
 | --- | --- | --- |
@@ -313,9 +313,9 @@ Key resolution and quota read only `subscriptions(plan, state, current_period_en
 - `vukem openapi:export -prefix /api/v1 | diff - openapi/api-v1.json` → empty (same for `/app/v1`); Redocly lint (pinned) → 0 errors.
 - `schemathesis run openapi/api-v1.json --url http://localhost:3000 -H "Authorization: Bearer $HX_TEST_KEY" --checks all` (pinned) → 0 failures.
 - `k6 run qa/k6/api-v1.js` → list `p(95)<300`, detail `p(95)<150` at 50 rps, `http_req_failed<0.001`.
-- `curl -si -H "Authorization: Bearer $K" -H "If-None-Match: $ETAG" https://staging-api.hexascore.app/v1/games/1` → 304, `X-Quota-Remaining` down by 1.
+- `curl -si -H "Authorization: Bearer $K" -H "If-None-Match: $ETAG" http://localhost:3000/api/v1/games/1` → 304, `X-Quota-Remaining` down by 1.
 - `go test ./tests -run 'TestStripeWebhook|TestWebhookDelivery|TestAppMinVersion'` → duplicate processed once, forged 400, `past_due` → free; signed batch received, 410 disables; 426 below minimum.
-- `cd sdks/ts && bun run sdk:generate && bun test`; `cd sdks/python && uv run pytest -q` → pass, plus smoke calls `listItems`, `getItem`, `getUsage` against staging.
+- `cd sdks/ts && bun run sdk:generate && bun test`; `cd sdks/python && uv run pytest -q` → pass, plus smoke calls `listItems`, `getItem`, `getUsage` against the local QA stack.
 
 ## 10. Test strategy
 
@@ -339,4 +339,4 @@ Key resolution and quota read only `subscriptions(plan, state, current_period_en
 8. Keyset cursor on allowlisted sorts is [NOT IN VUKEM DOCS]; custom cursor used. Owner: vukem. Closes when `api.Query` supports it.
 9. Problem code casing. Decided: kebab-case; SDD 03 updated.
 10. Prices and limits. Decided: legacy table kept at launch, review 90 days after cutover, coverage stated on the pricing page (D-33).
-11. Field coverage percentages unmeasured. Owner: architect. Closes after `qa/sql/api_coverage.sql` runs on the first staging copy.
+11. Field coverage percentages unmeasured. Owner: architect. Closes after `qa/sql/api_coverage.sql` runs on the first copy of production data.

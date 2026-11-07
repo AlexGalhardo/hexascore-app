@@ -42,7 +42,7 @@ export default function ProfileNav({
 	}, [items]);
 
 	return (
-		<nav aria-label={label} className="lg:sticky lg:top-24">
+		<nav aria-label={label} className="min-w-0 lg:sticky lg:top-24">
 			<ul className="flex gap-1 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
 				{items.map((i) => (
 					<li key={i.id} className="shrink-0">

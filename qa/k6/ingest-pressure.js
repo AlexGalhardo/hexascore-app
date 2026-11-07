@@ -1,5 +1,5 @@
 // k6: item-page p95 stays within 1.2x the idle p95 while a heavy ingestion run (Friday TMDB) is under way (SDD 06 §9, NFR-06-1).
-// Run it twice against staging: once idle to read IDLE_P95_MS from http_req_duration p(95), once during the run with
+// Run it twice against the local QA stack: once idle to read IDLE_P95_MS from http_req_duration p(95), once during the run with
 // IDLE_P95_MS set. Env: BASE_URL, API_KEY (only to pick item slugs), IDLE_P95_MS (default 300), DURATION (5m). Run:
 // docker run --rm --network host -e BASE_URL -e API_KEY -e IDLE_P95_MS -v "$PWD/qa:/qa" grafana/k6:2.3.0 run /qa/k6/ingest-pressure.js
 import { check, fail } from "k6";

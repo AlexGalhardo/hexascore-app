@@ -1,4 +1,4 @@
-# P5.B.4.1 smoke (staging, owner-gated): sign in first (login flow, P5.B.5.2), then create a list and open it.
+# P5.B.4.1 smoke (a local stack seeded with DemoCatalog, owner-gated): sign in first (login flow, P5.B.5.2), then create a list and open it.
 appId: app.hexascore
 ---
 - launchApp

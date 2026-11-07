@@ -44,11 +44,11 @@ export default function Index({ lists, limits }: Props) {
 				{t("userLists.limit", { limit: limits.perType })}
 			</p>
 			{lists.length === 0 ? (
-				<p className="mt-8 border-t-2 border-fg pt-6 font-display text-2xl">
+				<p className="mt-8 border-t border-border pt-6 font-display text-2xl">
 					{t("lists.noLists")}
 				</p>
 			) : (
-				<ul className="mt-8 divide-y divide-border border-t-2 border-fg">
+				<ul className="mt-8 divide-y divide-border border-t border-border">
 					{lists.map((l) => (
 						<li key={l.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 py-3">
 							<Link
@@ -71,7 +71,10 @@ export default function Index({ lists, limits }: Props) {
 					))}
 				</ul>
 			)}
-			<form onSubmit={submit} className="mt-10 max-w-md space-y-5 border-t-2 border-fg pt-4">
+			<form
+				onSubmit={submit}
+				className="mt-10 max-w-md space-y-5 border-t border-border pt-4"
+			>
 				<h2 className="font-display text-[28px] leading-tight font-bold">
 					{t("userLists.new")}
 				</h2>

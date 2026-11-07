@@ -5,7 +5,13 @@ const config: ExpoConfig = {
 	name: "HexaScore",
 	slug: "hexascore",
 	owner: "alexgalhardo",
-	scheme: "hexascore",
+	// Google sign-in redirects to the reversed client id (src/auth/googlePrompt.ts); registered only when a client is configured.
+	scheme: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID
+		? [
+				"hexascore",
+				`com.googleusercontent.apps.${process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID.replace(/\.apps\.googleusercontent\.com$/, "")}`,
+			]
+		: "hexascore",
 	version: "1.0.0",
 	orientation: "portrait",
 	userInterfaceStyle: "automatic",
@@ -53,7 +59,7 @@ const config: ExpoConfig = {
 		"expo-sqlite",
 		"expo-image",
 		// Fonts are embedded at build time (no runtime load, no flash of fallback text).
-		// Static OFL instances: Inter 4.1 (rsms/inter release), Playfair Display 700 (Google Fonts).
+		// Static OFL instances: Inter 4.1 (rsms/inter release); Inter is the only family, as on the web.
 		[
 			"expo-font",
 			{
@@ -66,10 +72,6 @@ const config: ExpoConfig = {
 								{ path: "./assets/fonts/Inter-SemiBold.ttf", weight: 600 },
 								{ path: "./assets/fonts/Inter-Bold.ttf", weight: 700 },
 							],
-						},
-						{
-							fontFamily: "Playfair Display",
-							fontDefinitions: [{ path: "./assets/fonts/PlayfairDisplay-Bold.ttf", weight: 700 }],
 						},
 					],
 				},

@@ -24,11 +24,14 @@ export function EditionsList({ title, editions }: EditionsListProps): ReactEleme
 	if (editions.length === 0) return null;
 	return (
 		<View className="gap-2">
-			<Text accessibilityRole="header" className={`font-display text-24 font-bold ${FG}`}>
+			<Text
+				accessibilityRole="header"
+				className={`font-display text-24 font-semibold tracking-tight ${FG}`}
+			>
 				{title}
 			</Text>
 			{editions.map((edition) => (
-				<View key={edition.id} className="border-t-2 border-fg pt-2 dark:border-fg-dark">
+				<View key={edition.id} className="border-t border-border pt-2 dark:border-border-dark">
 					<Text className={`font-text text-16 font-semibold ${FG}`}>{edition.title}</Text>
 					{edition.facts.map((fact) => (
 						<View

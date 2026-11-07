@@ -26,9 +26,9 @@ Restores an encrypted `backup:run` dump (SDD 11 §7.3) into a new Postgres datab
 
 ## Monthly drill
 
-`backup:drill` runs on staging only, first Sunday 07:00 America/Sao_Paulo (scheduled when `BACKUP_SOURCE_S3_BUCKET` is set; staging also runs `APP_ENV=production`). It reads `BACKUP_SOURCE_<name>` first and falls back to `<name>`, so `BACKUP_SOURCE_S3_*` and `BACKUP_SOURCE_BACKUP_KEY` point it at production's bucket. Granting staging read access to the production bucket is the owner's call.
+`backup:drill` is run by hand since the staging environment was removed (ADR 0028); it is scheduled for the first Sunday 07:00 America/Sao_Paulo only where `BACKUP_SOURCE_S3_BUCKET` is set, and no deployment sets it. The owner has to pick a host (a local machine or a scratch database next to the production instance, see `postgres-cost.md`) to restore the monthly drill. It reads `BACKUP_SOURCE_<name>` first and falls back to `<name>`, so `BACKUP_SOURCE_S3_*` and `BACKUP_SOURCE_BACKUP_KEY` point it at production's bucket. Granting a drill host read access to the production bucket is the owner's call.
 
-Steps: latest daily dump and its manifest → `DROP DATABASE IF EXISTS hexascore_drill WITH (FORCE)`, `CREATE DATABASE hexascore_drill` on the staging server → restore → row counts equal to the manifest → `catalog:check` asserts (SDD 01 §7.6 plus scoring; SDD 06 asserts join in P6) with 0 errors → drop → `backup_runs(kind='drill')` `verified`, or `failed` with the reason. Pass also needs `duration_s < 3600` (FR-11-6). The drill never restores over the staging database.
+Steps: latest daily dump and its manifest → `DROP DATABASE IF EXISTS hexascore_drill WITH (FORCE)`, `CREATE DATABASE hexascore_drill` on the drill host's server → restore → row counts equal to the manifest → `catalog:check` asserts (SDD 01 §7.6 plus scoring; SDD 06 asserts join in P6) with 0 errors → drop → `backup_runs(kind='drill')` `verified`, or `failed` with the reason. Pass also needs `duration_s < 3600` (FR-11-6). The drill never restores over the drill host's own database.
 
 Manual run: `/app/app backup:drill` (without `--first-sunday` it runs any day). A mismatch prints one `count mismatch <table>: want N, got M` line per table.
 

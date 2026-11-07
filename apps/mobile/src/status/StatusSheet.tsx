@@ -5,15 +5,15 @@ import type { AppLocale } from "../i18n/locale";
 import { type CatalogType, SINGULAR } from "../navigation/catalog";
 import type { QueuePayload } from "../queue/store";
 import { useRatingQueue } from "../rating/useRateMutation";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
+import { Card } from "../ui/Card";
 import { Icon } from "../ui/Icon";
 import { type ItemStatus, STATUSES } from "./cache";
 
 const FG = "text-fg dark:text-fg-dark";
 // v1 look of the rating sheet (no separate frame for status and time to beat).
-export const SHEET =
-	"gap-4 border-t-2 border-primary bg-surface p-4 dark:border-primary-dark dark:bg-surface-dark";
-export const SHEET_TITLE = "font-display text-24 font-bold text-fg dark:text-fg-dark";
+export const SHEET_TITLE =
+	"font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark";
 
 /** Optimistic write on the `status` or `timeToBeat` lane; false when the queue refused it (full or signed out). */
 export function useStatusWrite(
@@ -57,7 +57,7 @@ export function StatusSheet({
 	};
 
 	return (
-		<View testID="status-sheet" className={SHEET}>
+		<Card testID="status-sheet">
 			<Text accessibilityRole="header" className={SHEET_TITLE}>
 				{t(locale, "item.status.title")}
 			</Text>
@@ -71,17 +71,21 @@ export function StatusSheet({
 							accessibilityRole="radio"
 							accessibilityLabel={label}
 							accessibilityState={{ checked: on }}
-							className={`min-h-11 flex-row items-center justify-between gap-3 rounded-sm border border-b-2 border-fg px-4 active:border-b dark:border-fg-dark ${on ? "bg-fg dark:bg-fg-dark" : "bg-field-bg dark:bg-field-bg-dark"}`}
+							className={`min-h-11 flex-row items-center justify-between gap-3 rounded-md border border-border px-4 dark:border-border-dark ${on ? "bg-primary dark:bg-primary-dark" : "bg-bg dark:bg-bg-dark"}`}
 							onPress={() => void write(status, { method: "put", body: { status } }).then(finish)}
 						>
 							<Text
-								className={`font-text text-16 font-semibold ${on ? "text-bg dark:text-bg-dark" : FG}`}
+								className={`font-text text-16 font-semibold ${on ? "text-on-primary dark:text-on-primary-dark" : FG}`}
 							>
 								{label}
 							</Text>
 							{on ? (
 								<View testID="status-checked">
-									<Icon name="checkmark" size={20} className="text-bg dark:text-bg-dark" />
+									<Icon
+										name="checkmark"
+										size={20}
+										className="text-on-primary dark:text-on-primary-dark"
+									/>
 								</View>
 							) : null}
 						</Pressable>
@@ -90,12 +94,12 @@ export function StatusSheet({
 			</View>
 			{failed ? <Text className={`text-16 ${FG}`}>{t(locale, "item.status.notSaved")}</Text> : null}
 			{current !== null ? (
-				<Btn
+				<Button
 					label={t(locale, "item.status.none")}
 					variant="ghost"
 					onPress={() => void write(null, { method: "delete" }).then(finish)}
 				/>
 			) : null}
-		</View>
+		</Card>
 	);
 }

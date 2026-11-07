@@ -6,6 +6,7 @@
       "dependencies": {
         "@base-ui/react": "1.9.0",
         "@inertiajs/react": "3.9.1",
+        "@radix-ui/react-slot": "1.5.0",
         "@tanstack/react-query": "5.105.0",
         "class-variance-authority": "0.7.1",
         "clsx": "2.1.1",
@@ -48,6 +49,7 @@
         "expo": "58.0.21",
         "expo-auth-session": "58.0.16",
         "expo-constants": "58.0.14",
+        "expo-crypto": "58.0.7",
         "expo-device": "58.0.5",
         "expo-font": "58.0.11",
         "expo-haptics": "58.0.7",

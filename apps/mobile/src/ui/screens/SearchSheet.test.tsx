@@ -83,7 +83,7 @@ test("empty state without trending rows says so under the trending heading", asy
 test("loading and no-results states", async () => {
 	const props = setup({ query: "zzz", state: { kind: "loading" } });
 	const { rerender } = await render(<SearchSheet {...props} />);
-	expect(screen.getByText("Searching…")).toBeTruthy();
+	expect(screen.getByLabelText("Searching…")).toBeTruthy();
 	await rerender(<SearchSheet {...props} state={{ kind: "results", rows: [], total: 0 }} />);
 	expect(screen.getByText("No results for “zzz”")).toBeTruthy();
 	expect(screen.queryByText(/See all/)).toBeNull();

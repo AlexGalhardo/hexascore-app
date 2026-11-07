@@ -28,7 +28,39 @@ const (
 	trendingTTL  = 5 * time.Minute
 	trendingDays = 30
 	trendingTop  = 12
+	// highlightsTTL bounds how long a new or edited item can be missing from the landing blocks.
+	highlightsTTL = 5 * time.Minute
 )
+
+// homeHighlights is the cached, locale-specific part of the landing page that does not depend on the visitor.
+type homeHighlights struct {
+	Sections []catalog.SectionHighlights    `json:"sections"`
+	Upcoming map[string][]catalog.Highlight `json:"upcoming"`
+}
+
+func loadHomeHighlights(
+	ctx context.Context,
+	db catalog.Querier,
+	locale string,
+	sc catalog.Showcase,
+) (homeHighlights, error) {
+	out := homeHighlights{Upcoming: map[string][]catalog.Highlight{}}
+
+	for _, typ := range homeTypes {
+		s, err := catalog.Highlights(ctx, db, typ, locale, sc)
+		if err != nil {
+			return out, err
+		}
+
+		out.Sections = append(out.Sections, s)
+
+		if out.Upcoming[typ], err = catalog.Upcoming(ctx, db, typ, locale, sc); err != nil {
+			return out, err
+		}
+	}
+
+	return out, nil
+}
 
 var homeTypes = []string{"game", "movie", "series", "book"}
 
@@ -57,19 +89,35 @@ func Home(app *vukem.App) web.HandlerFunc {
 			showcase = catalog.ShowcaseFrom(c.Context(), ff)
 		}
 
-		for _, typ := range homeTypes {
-			s := catalog.SectionHighlights{Type: typ, Pool: []catalog.Highlight{}}
-			// catalog tables exist only on Postgres (VF-033).
-			if db.Dialect().Name() == "postgres" {
-				if s, err = catalog.Highlights(c.Context(), db, typ, i18n.Locale(c.Context()), showcase); err != nil {
-					return err
-				}
-				upcoming[typ], err = catalog.Upcoming(c.Context(), db, typ, i18n.Locale(c.Context()), showcase)
-				if err != nil {
-					return err
-				}
+		// catalog tables exist only on Postgres (VF-033).
+		if db.Dialect().Name() == "postgres" {
+			locale := i18n.Locale(c.Context())
+
+			store, err := app.Cache()
+			if err != nil {
+				return err
 			}
-			sections = append(sections, s)
+
+			// Twelve queries per visit otherwise; the entry ages out after highlightsTTL and is forgotten when
+			// the trending snapshot lands (ComputeTrending), the same moment the carousel changes.
+			hl, err := cache.Remember(
+				c.Context(),
+				store,
+				trending.HighlightsCacheKey(locale, showcase.Cover),
+				highlightsTTL,
+				func(ctx context.Context) (homeHighlights, error) {
+					return loadHomeHighlights(ctx, db, locale, showcase)
+				},
+			)
+			if err != nil {
+				return err
+			}
+
+			sections, upcoming = hl.Sections, hl.Upcoming
+		} else {
+			for _, typ := range homeTypes {
+				sections = append(sections, catalog.SectionHighlights{Type: typ, Pool: []catalog.Highlight{}})
+			}
 		}
 
 		if db.Dialect().Name() == "postgres" {

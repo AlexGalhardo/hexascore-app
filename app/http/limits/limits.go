@@ -35,6 +35,9 @@ var (
 	Mails        = Rule{"mails", 3, time.Minute}                // IP: verification resend
 	TwoFactor    = Rule{"two-factor.challenge", 5, time.Minute}
 	TwoFactorSet = Rule{"two-factor.confirm", 5, time.Minute}
+	// TwoFactorAcc caps guesses at one account across every IP: the per-IP bucket alone lets a client with the
+	// password rotate addresses through the 6-digit space.
+	TwoFactorAcc = Rule{"two-factor.account", 10, 15 * time.Minute}
 	Deletion     = Rule{"deletion", 5, time.Hour}
 	Contact      = Rule{"contact", 5, time.Hour}
 	Ratings      = Rule{"rating", 30, time.Minute}
@@ -106,6 +109,7 @@ func All() []Rule {
 		Mails,
 		TwoFactor,
 		TwoFactorSet,
+		TwoFactorAcc,
 		Deletion,
 		Contact,
 		Ratings,

@@ -1,9 +1,10 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type ReactElement, useState } from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import { describeError } from "../api/problems";
 import { type AppLocale, t } from "../i18n";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
+import { Card } from "../ui/Card";
 import { SettingsSection } from "../ui/screens/SettingsPage";
 import { type Device, devicesKey, type ProfileApi, parseDevices } from "./me";
 
@@ -43,7 +44,7 @@ export function Devices({
 	return (
 		<SettingsSection title={t(locale, "account.sessions.title")}>
 			{(devices.data ?? []).map((device) => (
-				<View key={device.id} testID={`device-${device.id}`} className="gap-2">
+				<Card key={device.id} testID={`device-${device.id}`} className="gap-2">
 					<Text className="font-text text-16 font-semibold text-fg dark:text-fg-dark">
 						{device.name}
 						{device.current ? ` · ${t(locale, "account.sessions.current")}` : ""}
@@ -53,13 +54,13 @@ export function Devices({
 							{`${t(locale, "account.sessions.lastSeen")}: ${new Date(device.lastUsedAt).toLocaleDateString(locale)}`}
 						</Text>
 					) : null}
-					<Btn
-						variant="secondary"
+					<Button
+						variant="outline"
 						label={t(locale, "account.sessions.revoke")}
 						accessibilityHint={device.name}
 						onPress={() => void revoke(device)}
 					/>
-				</View>
+				</Card>
 			))}
 			{error ? (
 				<Text accessibilityRole="alert" className="font-text text-14 text-fg dark:text-fg-dark">

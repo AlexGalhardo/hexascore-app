@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import { Pressable, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
 import { type NotificationsApi, useUnread } from "../notifications/useUnread";
-import { Btn } from "../ui/Btn";
+import { Button } from "../ui/Button";
 import { DeleteAccount, type DeletionWrite } from "./DeleteAccount";
 import { ExportData, type ExportWrite } from "./Export";
 
@@ -33,9 +33,9 @@ export function AccountExtras({
 						accessibilityRole="button"
 						accessibilityLabel={unread > 0 ? `${inbox}, ${count}` : inbox}
 						onPress={() => onOpen("/notifications")}
-						className="min-h-11 flex-row items-center justify-between gap-3 border-t-2 border-fg pt-4 dark:border-fg-dark"
+						className="min-h-11 flex-row items-center justify-between gap-3 border-t border-border pt-4 dark:border-border-dark"
 					>
-						<Text className="font-display text-24 font-bold text-fg dark:text-fg-dark">
+						<Text className="font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark">
 							{inbox}
 						</Text>
 						{unread > 0 ? (
@@ -53,7 +53,7 @@ export function AccountExtras({
 					<DeleteAccount locale={locale} write={write} onScheduled={onScheduled} />
 				</>
 			) : null}
-			<Btn
+			<Button
 				variant="ghost"
 				label={t(locale, "account.about.title")}
 				onPress={() => onOpen("/about")}

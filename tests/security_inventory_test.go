@@ -104,6 +104,20 @@ func stackViolation(stack, method, path string, mw []string) string {
 		// Every other /app/v1 route still needs a bearer.
 		optionalSearch := path == "/app/v1/search" || strings.HasPrefix(path, "/app/v1/search/")
 		telemetry := path == "/app/v1/client-errors" || path == "/app/v1/client-metrics"
+		// The Google sign-in nonce is issued before there is an account; /tokens/google, which spends it, keeps
+		// the challenge.
+		if path == "/app/v1/auth/google/nonce" {
+			if has("auth.Required") || has("auth.Optional") {
+				return "the Google nonce route must stay anonymous"
+			}
+
+			if !slices.ContainsFunc(mw, func(m string) bool { return strings.HasPrefix(m, "ratelimit.") }) {
+				return "the Google nonce route needs a rate limit"
+			}
+
+			break
+		}
+
 		if telemetry {
 			if has("auth.Required") || has("auth.Optional") || has("middleware.(*Challenger).Require") {
 				return "telemetry route must stay anonymous"

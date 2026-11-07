@@ -24,7 +24,9 @@ import (
 
 const (
 	minCoverSide = 300
-	coverDir     = "community/covers"
+	// maxCoverPixels bounds the decoded size (width*height*4 bytes) of an upload; the covers pipeline allows the same.
+	maxCoverPixels = 25_000_000
+	coverDir       = "community/covers"
 )
 
 // Cover is a stored community cover.
@@ -151,6 +153,14 @@ func RememberCover(ctx context.Context, db *database.DB, suggestionID, status st
 
 func measureCover(ctx context.Context, disk storage.Disk, file upload.File) (Cover, error) {
 	width, height, err := imageSize(ctx, disk, file.Path, file.Type)
+	if err == nil && width*height > maxCoverPixels {
+		if delErr := disk.Delete(ctx, file.Path); delErr != nil && !errors.Is(delErr, storage.ErrNotFound) {
+			return Cover{}, fmt.Errorf("community: delete oversized cover: %w", delErr)
+		}
+
+		return Cover{}, errs.NewValidation().Add("cover", "The image is too large (at most 25 megapixels).")
+	}
+
 	if err != nil || width < minCoverSide || height < minCoverSide {
 		if delErr := disk.Delete(ctx, file.Path); delErr != nil && !errors.Is(delErr, storage.ErrNotFound) {
 			return Cover{}, fmt.Errorf("community: delete small cover: %w", delErr)

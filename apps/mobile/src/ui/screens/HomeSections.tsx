@@ -52,11 +52,13 @@ const ACCENT_BG: Record<ItemType, string> = {
 	series: "bg-accent-series dark:bg-accent-series-dark",
 	book: "bg-accent-book dark:bg-accent-book-dark",
 };
-const ACCENT_BORDER: Record<ItemType, string> = {
-	game: "border-t-accent-game dark:border-t-accent-game-dark",
-	movie: "border-t-accent-movie dark:border-t-accent-movie-dark",
-	series: "border-t-accent-series dark:border-t-accent-series-dark",
-	book: "border-t-accent-book dark:border-t-accent-book-dark",
+
+// A 2 px category rule on the card edge: the accent stays, the rest of the card is neutral.
+const ACCENT_RULE: Record<ItemType, string> = {
+	game: "border-l-2 border-l-accent-game dark:border-l-accent-game-dark",
+	movie: "border-l-2 border-l-accent-movie dark:border-l-accent-movie-dark",
+	series: "border-l-2 border-l-accent-series dark:border-l-accent-series-dark",
+	book: "border-l-2 border-l-accent-book dark:border-l-accent-book-dark",
 };
 
 const MUTED = "font-text text-14 text-muted dark:text-muted-dark";
@@ -86,7 +88,7 @@ function TrendingCard({
 				", ",
 			)}
 			onPress={() => onOpen(item, section.type)}
-			className={`flex-row gap-3 border border-t-2 border-border bg-surface p-3 active:opacity-80 dark:border-border-dark dark:bg-surface-dark ${ACCENT_BORDER[section.type]}`}
+			className={`flex-row gap-3 rounded-lg border border-border bg-surface p-3 active:opacity-80 dark:border-border-dark dark:bg-surface-dark ${ACCENT_RULE[section.type]}`}
 		>
 			<Cover uri={item.coverUri} title={item.title} className="w-16" />
 			<View className="flex-1 gap-1">
@@ -94,7 +96,7 @@ function TrendingCard({
 				<Text className="font-text text-12 font-bold text-fg dark:text-fg-dark">
 					{labels.rank(position, item)}
 				</Text>
-				<Text className="font-display text-20 font-bold text-fg dark:text-fg-dark">
+				<Text className="font-display text-20 font-semibold tracking-tight text-fg dark:text-fg-dark">
 					{item.title}
 				</Text>
 				<Text className={MUTED}>{meta}</Text>
@@ -153,7 +155,7 @@ export function HomeSections({
 						<View className={`h-3 w-3 ${ACCENT_BG[section.type]}`} />
 						<Text
 							accessibilityRole="header"
-							className="flex-1 font-display text-24 font-bold text-fg dark:text-fg-dark"
+							className="flex-1 font-display text-24 font-semibold tracking-tight text-fg dark:text-fg-dark"
 						>
 							{section.title}
 						</Text>

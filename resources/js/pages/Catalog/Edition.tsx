@@ -74,7 +74,7 @@ export default function Edition({ work, edition }: Props) {
 					{pencil}
 					{t("community.suggest.link")}
 				</Link>
-				<dl className="mt-4 border-t-2 border-fg">
+				<dl className="mt-4 border-t border-border">
 					{rows
 						.filter(([, v]) => v !== null)
 						.map(([k, v]) => (

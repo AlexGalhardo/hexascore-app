@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { Btn } from "../Btn";
+import { Button } from "../Button";
+import { EmptyState } from "../EmptyState";
 import { Icon, type IconName } from "../Icon";
 import { ItemRow, type ItemRowData } from "../ItemRow";
 
@@ -54,7 +55,7 @@ function IconBtn({
 			accessibilityState={{ disabled }}
 			disabled={disabled}
 			onPress={onPress}
-			className={`h-11 w-11 items-center justify-center rounded-sm active:bg-surface dark:active:bg-surface-dark ${disabled ? "opacity-50" : ""}`}
+			className={`h-11 w-11 items-center justify-center rounded-md active:bg-surface dark:active:bg-surface-dark ${disabled ? "opacity-50" : ""}`}
 		>
 			<Icon name={name} size={20} className={FG} />
 		</Pressable>
@@ -73,7 +74,10 @@ export function ListDetailPage(props: ListDetailProps): ReactElement {
 				<Text className="font-text text-12 font-bold uppercase tracking-wider text-primary dark:text-primary-dark">
 					{props.kicker}
 				</Text>
-				<Text accessibilityRole="header" className={`font-display text-36 font-bold ${FG}`}>
+				<Text
+					accessibilityRole="header"
+					className={`font-display text-36 font-semibold tracking-tight ${FG}`}
+				>
 					{props.title}
 				</Text>
 				{props.description ? (
@@ -84,13 +88,13 @@ export function ListDetailPage(props: ListDetailProps): ReactElement {
 			{editable ? (
 				<View className="gap-2">
 					<View className="flex-row flex-wrap gap-2">
-						<Btn
-							variant="secondary"
+						<Button
+							variant="outline"
 							label={labels.rename}
 							onPress={props.onRename}
 							disabled={!online}
 						/>
-						<Btn
+						<Button
 							variant="ghost"
 							label={labels.remove}
 							onPress={props.onDelete}
@@ -101,11 +105,9 @@ export function ListDetailPage(props: ListDetailProps): ReactElement {
 				</View>
 			) : null}
 			{rows.length === 0 ? (
-				<Text accessibilityLiveRegion="polite" className={`py-8 font-text text-16 ${FG}`}>
-					{labels.empty}
-				</Text>
+				<EmptyState title={labels.empty} />
 			) : (
-				<View className="border-t-2 border-fg dark:border-fg-dark">
+				<View className="border-t border-border dark:border-border-dark">
 					{rows.map((row, index) => (
 						<ItemRow
 							key={row.id}

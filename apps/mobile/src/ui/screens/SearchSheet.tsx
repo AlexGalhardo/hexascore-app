@@ -3,6 +3,7 @@ import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { Cover } from "../Cover";
 import { Icon } from "../Icon";
 import { ScoreBadge } from "../ScoreBadge";
+import { ListSkeleton } from "../Skeleton";
 
 /** Round 2 item 5: first 8 matches, "see all" goes to the full search page. */
 export const MAX_ROWS = 8;
@@ -191,9 +192,9 @@ export function SearchSheet({
 					</>
 				)}
 				{state.kind === "loading" && (
-					<Text accessibilityLiveRegion="polite" className={`${MUTED} px-4 py-4`}>
-						{labels.loading}
-					</Text>
+					<View className="px-4 py-4">
+						<ListSkeleton label={labels.loading} rows={3} />
+					</View>
 				)}
 				{state.kind === "error" && (
 					<Text accessibilityLiveRegion="polite" className={`${MUTED} px-4 py-4`}>

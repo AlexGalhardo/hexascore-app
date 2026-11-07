@@ -30,7 +30,7 @@ export default function ItemTile({
 		<li className="grid content-start">
 			<Link
 				href={href}
-				className="group relative block overflow-hidden rounded-sm border border-border bg-surface hover:border-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+				className="group relative block overflow-hidden rounded-sm border border-border bg-surface hover:border-fg outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 			>
 				<CoverThumb cover={item.cover} alt="" size={coverSize} />
 				{badge !== null && (badge !== undefined || item.score !== null) && (

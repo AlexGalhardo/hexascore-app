@@ -96,8 +96,9 @@ web   POST   /user/two-factor/disable
 web   POST   /user/passkeys/options
 web   POST   /user/passkeys
 web   DELETE /profile/passkeys/{id}
+web   GET    /2fa
+web   POST   /2fa
 web   GET    /two-factor-challenge
-web   POST   /two-factor-challenge
 web   GET    /profile
 web   PATCH  /profile/details
 web   PUT    /profile/password
@@ -301,6 +302,7 @@ app   POST   /app/v1/me/deletion
 app   DELETE /app/v1/me/deletion
 web   GET    /exports/
 web   GET    /backups/offsite/
+app   POST   /app/v1/auth/google/nonce
 app   POST   /app/v1/tokens
 app   POST   /app/v1/tokens/google
 app   POST   /app/v1/tokens/rotate

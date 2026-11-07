@@ -22,22 +22,57 @@
 	--font-display: var(--font-sans);
 }
 
-/* Derived from the colour tokens (no new hues): button ledges (2 px at rest, 1 px pressed) over a
-   soft drop for depth, the inset of a pressed flat button, and the soft shadow of the scrolled navbar.
-   ledge-secondary is near black in both themes, so the drop reads in light and dark mode. */
+/* Vercel-like theme over the shared tokens (owner experiment, 2026-11-03; ADR 0029): neutral greys, near-black primary,
+   hairline borders and soft shadows instead of ledges. The overrides live here, not in packages/tokens; the Android
+   kit mirrors them in apps/mobile/src/theme/neutral.json and packages/tokens/neutral.test.ts fails when the two drift.
+   Category accents, score bands and star colours are unchanged. */
+:root {
+	--hs-bg: oklch(1 0 0);
+	--hs-fg: oklch(0.205 0 0);
+	--hs-muted: oklch(0.48 0 0);
+	--hs-surface: oklch(0.985 0 0);
+	--hs-border: oklch(0.922 0 0);
+	--hs-primary: oklch(0.205 0 0);
+	--hs-primary-hover: oklch(0.3 0 0);
+	--hs-on-primary: oklch(0.985 0 0);
+	--hs-hover: oklch(0.955 0 0);
+	--hs-field: oklch(0.66 0 0);
+	--hs-field-bg: oklch(1 0 0);
+	--hs-ring: oklch(0.45 0 0);
+	--hs-ledge-secondary: oklch(0 0 0);
+}
+.dark {
+	--hs-bg: oklch(0.145 0 0);
+	--hs-fg: oklch(0.97 0 0);
+	--hs-muted: oklch(0.71 0 0);
+	--hs-surface: oklch(0.19 0 0);
+	--hs-border: oklch(0.27 0 0);
+	--hs-primary: oklch(0.97 0 0);
+	--hs-primary-hover: oklch(0.87 0 0);
+	--hs-on-primary: oklch(0.205 0 0);
+	--hs-hover: oklch(0.24 0 0);
+	--hs-field: oklch(0.5 0 0);
+	--hs-field-bg: oklch(0.17 0 0);
+	--hs-ring: oklch(0.75 0 0);
+	--hs-ledge-secondary: oklch(0 0 0);
+}
+
 @theme inline {
-	/* Primary buttons take the near-black ledge, 3px: the purple ledge disappeared on the purple face (owner 2026-11-02). */
-	--shadow-ledge-primary:
-		0 3px 0 var(--color-ledge-secondary),
-		0 6px 12px -4px color-mix(in oklch, var(--color-ledge-secondary) 55%, transparent);
-	--shadow-ledge-primary-pressed: 0 1px 0 var(--color-ledge-secondary);
+	--color-ring: var(--hs-ring);
+	--radius-sm: 4px;
+	--radius-md: 8px;
+	--radius-lg: 12px;
+	--radius-xl: 16px;
+	--shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	/* The old ledge names stay so pages keep compiling; they are now a hairline plus a soft drop. */
+	--shadow-ledge-primary: 0 1px 2px 0 rgb(0 0 0 / 0.08);
+	--shadow-ledge-primary-pressed: none;
 	--shadow-ledge-secondary:
-		0 2px 0 var(--color-ledge-secondary),
-		0 4px 10px -4px color-mix(in oklch, var(--color-ledge-secondary) 35%, transparent);
-	--shadow-ledge-secondary-pressed: 0 1px 0 var(--color-ledge-secondary);
-	--shadow-pressed: inset 0 2px 3px color-mix(in oklch, var(--color-ledge-secondary) 25%, transparent);
-	--shadow-nav: 0 4px 12px var(--color-border);
-	--shadow-nav-dark: 0 4px 12px oklch(0 0 0);
+		0 0 0 1px color-mix(in oklch, var(--color-border) 60%, transparent), 0 1px 2px 0 rgb(0 0 0 / 0.04);
+	--shadow-ledge-secondary-pressed: none;
+	--shadow-pressed: inset 0 1px 2px rgb(0 0 0 / 0.08);
+	--shadow-nav: 0 1px 0 var(--color-border);
+	--shadow-nav-dark: 0 1px 0 var(--color-border);
 }
 
 /* One content container for navbar, pages and footer, narrowed by 10%. */
@@ -71,22 +106,15 @@
 	h1[tabindex="-1"]:focus {
 		outline: none;
 	}
-	/* Every button presses 1 px down, including the ones a page styles itself; btnClass and
-	   iconButton add the ledge or inset on top. Utilities win over this base rule. */
 	button:not(:disabled),
 	[role="button"]:not([aria-disabled="true"]) {
-		transition-property: translate, box-shadow, background-color;
-		transition-duration: 100ms;
+		transition-property: background-color, border-color, color, box-shadow;
+		transition-duration: 120ms;
 	}
-	button:not(:disabled):active,
-	[role="button"]:not([aria-disabled="true"]):active {
-		translate: 0 1px;
-	}
-	@media (prefers-reduced-motion: reduce) {
-		button:not(:disabled):active,
-		[role="button"]:not([aria-disabled="true"]):active {
-			translate: none;
-		}
+	/* Tight tracking on headings, as on vercel.com. */
+	h1,
+	h2 {
+		letter-spacing: -0.025em;
 	}
 }
 
