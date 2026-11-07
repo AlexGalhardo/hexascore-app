@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **auth:** A Google sign-in on an account with two-factor authentication goes to the `/2fa` code step (it went back to `/login`, which no longer opens a code dialog); both sign-in paths keep the locale prefix.
 - **auth:** The web two-factor challenge (`POST /2fa`) now also stops guessing per account, 10 tries per 15 minutes whatever the address, so rotating IPs no longer widens the budget (security audit 2026-11-07).
 - **uploads:** Community cover uploads and the covers fingerprint step refuse images over 25 megapixels before decoding them.
 - **mobile:** The Google sign-in nonce comes from the platform CSPRNG; the sign-in is skipped when none exists instead of falling back to `Math.random`.
@@ -57,6 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **auth:** `/login`, `/signup`, `/2fa`, password recovery and reset render as standalone pages without the site navbar and footer, with a "‹ Home" link at the top left.
+- **newsletter:** The footer form accepts addresses of 12 to 48 characters with a real domain, and says so before posting.
 - Require vukem v0.39.0.
 - **auth:** Google sign-in in the Android app uses the authorization code flow with PKCE (S256) and `state` instead of the implicit ID-token flow. The app first calls the new `POST /app/v1/auth/google/nonce` (guest, rate limited); the ID token must carry that single-use, 5-minute nonce, which `POST /app/v1/tokens/google` checks after verifying the token and consumes when it mints the app token (migration `google_nonces`, hashed). `expo-crypto` 58.0.7 is a direct dependency of the app.
 
