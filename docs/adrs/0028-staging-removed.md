@@ -16,8 +16,8 @@ The Railway environment `staging` (created 2026-11-01) held `app`, `worker-stagi
 
 ## Pending on the owner
 
-- Remove the DNS record `staging.hexascore.app` (Cloudflare).
-- The remote branch `staging` holds PR #69 (shadcn/ui work, never merged to `main`); decide whether to keep or delete it.
+- Done 2026-11-07: the owner removed the DNS record `staging.hexascore.app` (Cloudflare).
+- Done 2026-11-07: the remote branch `staging` was deleted; its tip (PR #69, shadcn/ui work never merged to `main`) is kept as tag `archive/staging-2026-11-07`.
 
 ## Consequences
 
