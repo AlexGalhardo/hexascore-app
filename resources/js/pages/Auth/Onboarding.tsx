@@ -31,18 +31,22 @@ export default function Onboarding({ socialEnabled = false }: { socialEnabled?: 
 			<h1 className="mb-2 text-2xl font-semibold">{t("auth.onboarding.title")}</h1>
 			<p className="mb-4 text-zinc-600 dark:text-zinc-400">{t("auth.onboarding.body")}</p>
 			<form onSubmit={submit} className="space-y-4">
-				<Field
-					label={t("auth.fields.nickname")}
-					autoComplete="username"
-					autoCapitalize="none"
-					minLength={NICKNAME_MIN}
-					maxLength={NICKNAME_MAX}
-					pattern={NICKNAME_PATTERN}
-					required
-					value={form.data.nickname}
-					onChange={(e) => form.setData("nickname", normalizeNickname(e.target.value))}
-					error={error}
-				/>
+				<div className="mx-auto w-full max-w-sm">
+					<Field
+						label={t("auth.fields.nickname")}
+						autoComplete="username"
+						autoCapitalize="none"
+						minLength={NICKNAME_MIN}
+						maxLength={NICKNAME_MAX}
+						pattern={NICKNAME_PATTERN}
+						required
+						value={form.data.nickname}
+						onChange={(e) =>
+							form.setData("nickname", normalizeNickname(e.target.value))
+						}
+						error={error}
+					/>
+				</div>
 				<p className="text-sm text-zinc-600 dark:text-zinc-400">
 					{t("auth.signup.nicknameHint")}
 				</p>
