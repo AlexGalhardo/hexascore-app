@@ -160,7 +160,7 @@ export async function completeOnboarding(
 	await page.waitForURL((url) => !/\/(login|signup)/.test(url.pathname), {
 		timeout: POW_TIMEOUT,
 	});
-	// Login lands on the dashboard; the nickname form is only shown when asked for.
+	// Login lands on the profile; the nickname form is only shown when asked for.
 	// open(), not goto(): a nickname filled before React hydrates is wiped and the submit then goes out empty.
 	await open(page, "/onboarding");
 	const nickname = page.getByLabel(t("auth.fields.nickname"));

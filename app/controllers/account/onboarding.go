@@ -22,7 +22,7 @@ func (h *Handlers) ShowOnboarding(c *web.Ctx) error {
 			return err
 		}
 
-		return c.Redirect("/dashboard")
+		return c.Redirect("/profile")
 	}
 
 	return inertia.Render(c, "Auth/Onboarding", inertia.Props{"socialEnabled": h.Social.Enabled(c.Context())})
@@ -52,5 +52,5 @@ func (h *Handlers) Onboarding(c *web.Ctx) error {
 		}
 	}
 
-	return c.Redirect("/dashboard")
+	return c.Redirect("/profile")
 }

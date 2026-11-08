@@ -70,7 +70,7 @@ func TestDeletionScheduleAndCancel(t *testing.T) {
 		// guests cannot schedule
 	c.PostJSON("/profile/deletion", map[string]any{"confirm": false}).AssertUnprocessable()
 	c.PostJSON("/profile/deletion", map[string]any{"confirm": true}).AssertRedirect("/login")
-	c.Get("/dashboard").AssertRedirect("/login")
+	c.Get("/profile").AssertRedirect("/login")
 
 	if n := count(t, db, `SELECT count(*) FROM users WHERE deletion_scheduled_at IS NOT NULL`); n != 1 {
 		t.Fatalf("scheduled users = %d", n)
@@ -83,8 +83,8 @@ func TestDeletionScheduleAndCancel(t *testing.T) {
 	// The grace period lets the user back in to cancel.
 	c.PostJSON("/login", map[string]any{"identifier": "ana@example.com", "password": testPassword}).
 		AssertRedirect("/onboarding") // verified, no nickname yet (P1.C.2.1b)
-	c.Get("/dashboard").AssertOK()
-	c.Delete("/profile/deletion").AssertRedirect("/dashboard")
+	c.Get("/profile").AssertOK()
+	c.Delete("/profile/deletion").AssertRedirect("/profile")
 	c.Delete("/profile/deletion").AssertStatus(409)
 
 	if n := count(t, db, `SELECT count(*) FROM users WHERE deletion_scheduled_at IS NOT NULL`); n != 0 {

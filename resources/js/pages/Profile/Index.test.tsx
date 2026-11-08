@@ -3,13 +3,15 @@ import { afterEach, expect, test, vi } from "vitest";
 
 import Profile from "./Index";
 
+let nickname: string | null = null;
+
 vi.mock("@inertiajs/react", () => ({
 	Head: () => null,
 	Link: ({ children, href }: { children: React.ReactNode; href: string }) => (
 		<a href={href}>{children}</a>
 	),
 	router: { delete: () => undefined, post: () => undefined, reload: () => undefined },
-	usePage: () => ({ props: { auth: { user: null } } }),
+	usePage: () => ({ props: { auth: { user: nickname ? { nickname } : null } } }),
 	useForm: <T extends object>(data: T) => ({
 		data,
 		errors: {},
@@ -24,7 +26,10 @@ vi.mock("@inertiajs/react", () => ({
 vi.mock("../../lib/useLocalized", () => ({ useLocalized: () => (path: string) => path }));
 vi.mock("../../lib/useT", () => ({ useT: () => (key: string) => key }));
 
-afterEach(cleanup);
+afterEach(() => {
+	cleanup();
+	nickname = null;
+});
 
 const baseProps = {
 	details: { name: "Ana", email: "ana@example.com", locale: "en" },
@@ -147,4 +152,35 @@ test("the API keys section lives in /profile and only shows when the server send
 	expect(
 		screen.getByRole("navigation", { name: "account.nav" }).querySelector('a[href="#api"]'),
 	).not.toBeNull();
+});
+
+test("the header links to the public profile in a new tab and to the library and lists", () => {
+	nickname = "AnaLuiza";
+	render(<Profile {...baseProps} />);
+
+	const link = screen.getByRole("link", { name: "account.publicProfile" });
+	expect(link.getAttribute("href")).toBe("/u/analuiza");
+	expect(link.getAttribute("target")).toBe("_blank");
+	expect(link.getAttribute("rel")).toBe("noopener noreferrer");
+	expect(
+		screen.getByRole("link", { name: /^account.shortcuts.library/ }).getAttribute("href"),
+	).toBe("/library");
+	expect(
+		screen.getByRole("link", { name: /^account.shortcuts.lists/ }).getAttribute("href"),
+	).toBe("/lists");
+});
+
+test("no nickname yet: no public profile link", () => {
+	render(<Profile {...baseProps} />);
+	expect(screen.queryByRole("link", { name: "account.publicProfile" })).toBeNull();
+});
+
+test("the passkey button comes below the Google confirmation link", () => {
+	render(<Profile {...baseProps} passwordSet={false} />);
+
+	const google = screen.getByRole("link", { name: "account.passkeys.confirmGoogle" });
+	const add = screen.getByRole("button", { name: "account.passkeys.add" });
+	expect(google.compareDocumentPosition(add) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+	expect(google.className).toContain("block");
+	expect(add.className).toContain("block");
 });

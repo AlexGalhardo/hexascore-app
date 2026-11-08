@@ -79,7 +79,7 @@ func TestSecurity_A07_SignupNicknameStoredLowercaseAndEnumerationSafe(t *testing
 	verifyEmail(t, app, "ana@example.com")
 	// The nickname is stored lowercase, so the account skips onboarding and answers to it.
 	app.Client(t).PostJSON("/login", map[string]any{"identifier": "analuiza", "password": testPassword}).
-		AssertRedirect("/dashboard")
+		AssertRedirect("/profile")
 
 	// A taken nickname answers the same for a new and an existing email: no account enumeration.
 	postSignup(t, c, signUpWithNickname(app, "new@example.com", "analuiza")).

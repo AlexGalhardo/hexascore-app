@@ -105,7 +105,7 @@ func (a *Accounts) RedirectAfterLogin(c *web.Ctx, u models.User) error {
 		}
 	}
 
-	return c.Redirect(web.SafeRedirect(c.Request(), target, "/dashboard"))
+	return c.Redirect(web.SafeRedirect(c.Request(), target, "/profile"))
 }
 
 // EmailForIdentifier maps a login identifier to an email: anything with "@"

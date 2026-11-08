@@ -30,9 +30,9 @@ func TestOnboardingNickname(t *testing.T) {
 
 	ana.Get("/onboarding").AssertOK()
 	ana.PostJSON("/onboarding", map[string]any{"nickname": "ab1"}).AssertUnprocessable()
-	ana.PostJSON("/onboarding", map[string]any{"nickname": "  MariaLuiza "}).AssertRedirect("/dashboard")
+	ana.PostJSON("/onboarding", map[string]any{"nickname": "  MariaLuiza "}).AssertRedirect("/profile")
 	// The nickname is kept lowercase and the page is no longer offered.
-	ana.Get("/onboarding").AssertRedirect("/dashboard")
+	ana.Get("/onboarding").AssertRedirect("/profile")
 
 	other := app.Client(t)
 	register(t, app, other, "carla@example.com")

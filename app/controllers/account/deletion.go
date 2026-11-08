@@ -67,7 +67,7 @@ func (h *Handlers) CancelDeletion(c *web.Ctx) error {
 		return err
 	}
 
-	return c.Redirect("/dashboard")
+	return c.Redirect("/profile")
 }
 
 // HelpDeleteAccount is the public page Google Play requires.

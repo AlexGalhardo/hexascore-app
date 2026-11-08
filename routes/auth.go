@@ -118,7 +118,7 @@ func Auth(r *router.Router, app *vukem.App) error {
 	r.Post("/user/passkeys", h.PasskeyCreate).Name("passkey.create").Use(required, verified)
 	r.Delete("/profile/passkeys/{id}", h.PasskeyDelete).Name("passkey.delete").Use(required, verified)
 
-	r.Get("/dashboard", h.Dashboard).Name("dashboard").Use(required, verified)
+	r.Get("/dashboard", h.Dashboard).Name("dashboard")
 
 	return nil
 }

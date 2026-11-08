@@ -27,7 +27,7 @@ Routes come from `routes/*.go`. Auth pages (`/login`, `/signup`, `/2fa`) are out
 | `/recover-password`                                                                 | public-pages                                                   | flow not covered (Senior)                             |
 | `/profile`, `/profile/{details,password,privacy,notifications}`                     | profile, account helpers                                       | per-route PATCH/PUT validation not covered            |
 | `/profile/sessions/*`                                                               | none                                                           | no spec                                               |
-| `/profile`, `/profile/api/keys*`                                                | api-keys                                                       | none                                                  |
+| `/profile`, `/profile/api/keys*`                                                    | api-keys                                                       | none                                                  |
 | `/profile/export`, `/me/export`                                                     | none                                                           | no spec                                               |
 | `/user/two-factor*`                                                                 | passkeys (partial)                                             | no direct spec                                        |
 | `/u/{nickname}`, `/u/{nickname}/lists/{id}`                                         | profile, social                                                | none                                                  |

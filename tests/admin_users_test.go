@@ -150,7 +150,7 @@ func TestSecurity_A07_Ban(t *testing.T) {
 	// A real account with a password and a live session.
 	victim := app.Client(t).Inertia("")
 	register(t, app, victim, "victim@example.com")
-	victim.Get("/dashboard").AssertOK()
+	victim.Get("/profile").AssertOK()
 
 	acc, err := accounts.New(app.App)
 	if err != nil {
@@ -175,7 +175,7 @@ func TestSecurity_A07_Ban(t *testing.T) {
 	}
 
 	// The ban ended the live session ...
-	victim.Get("/dashboard").AssertRedirect("/login")
+	victim.Get("/profile").AssertRedirect("/login")
 
 	// ... and the correct password no longer logs in.
 	victim.PostJSON("/login", map[string]any{"identifier": "victim@example.com", "password": testPassword}).
@@ -214,7 +214,7 @@ func TestSecurity_A07_BanSurvivorsAnswer403(t *testing.T) {
 	app := newAdminApp(t, nil)
 	u := makeUser(t, app, "survivor@example.com", "user", true)
 	c := browserFor(t, app, u)
-	c.Get("/dashboard").AssertOK()
+	c.Get("/profile").AssertOK()
 
 	db, err := app.DB()
 	if err != nil {
@@ -226,7 +226,7 @@ func TestSecurity_A07_BanSurvivorsAnswer403(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	c.Get("/dashboard").AssertStatus(403).AssertSee("account-banned")
+	c.Get("/profile").AssertStatus(403).AssertSee("account-banned")
 	c.Get("/").AssertStatus(403)
 
 	// An expired ban no longer counts.
@@ -235,7 +235,7 @@ func TestSecurity_A07_BanSurvivorsAnswer403(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	c.Get("/dashboard").AssertOK()
+	c.Get("/profile").AssertOK()
 }
 
 func assertEvent(t *testing.T, app *vukemtest.App, userID int64, kind string, actor int64) {
@@ -343,7 +343,7 @@ func TestResetTwoFactorCLI(t *testing.T) {
 		t.Fatalf("2FA not cleared: %+v %v", tf, err)
 	}
 
-	c.Get("/dashboard").AssertRedirect("/login")
+	c.Get("/profile").AssertRedirect("/login")
 
 	if len(app.Mails().SentTo("twofa@example.com")) == 0 {
 		t.Fatal("no mail sent")
