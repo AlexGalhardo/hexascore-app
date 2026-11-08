@@ -40,7 +40,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 				page.props.locale,
 			)
 		: null;
-	const flash = page.flash as { status?: string; success?: string; error?: string } | undefined;
+	const flash = page.flash as
+		| { status?: string; success?: string; warning?: string; error?: string }
+		| undefined;
 	const success = flash?.success ?? flash?.status;
 
 	return (
@@ -70,6 +72,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 			<Footer />
 			{typeof success === "string" && (
 				<Flash message={success} kind="status" position={toastPosition} />
+			)}
+			{typeof flash?.warning === "string" && (
+				<Flash message={flash.warning} kind="warning" position={toastPosition} />
 			)}
 			{typeof flash?.error === "string" && (
 				<Flash message={flash.error} kind="error" position={toastPosition} />
