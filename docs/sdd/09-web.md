@@ -106,7 +106,7 @@ Paths shown without locale prefix; every public path also exists under `/pt-br` 
 | `Lists/Edit` | `/lists/{id}/edit` | CSR, `noindex` | SDD 14 §6.2 |
 | `Auth/*` | SDD 03 §6.1 | SSR, `noindex` | SDD 03 |
 | `Profile/Index` | `/profile` | CSR | sections per SDD 03 §6.1 |
-| `Developer/ApiKeys` | `/profile/api` (legacy path) | CSR | `keys`, `plan`, `usage` (30 days), `newKey` (flash, shown once) |
+| (section of `Profile/Index`) | `/profile#api` (`/profile/api` answers 301) | CSR | `apiKeys.keys`, `apiKeys.maxKeys`, `newKey` (flash, shown once) |
 | `Billing/Index` | `/billing` | CSR | SDD 05 §6.3 |
 | `Pricing/Index` | `/pricing` | SSR | `plans`, `currency`, `coverage` |
 | `Account/Notifications` | `/me/notifications` | CSR | `notifications` (`Scroll`, 20), SDD 14 §6.2 |

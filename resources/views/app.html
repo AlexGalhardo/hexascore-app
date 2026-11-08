@@ -2,7 +2,6 @@
 {{- $csr := "" -}}
 {{- if not .Head -}}
 {{- if eq .Page.Component "Profile/Index" -}}{{- $csr = "account.metaTitle" -}}
-{{- else if eq .Page.Component "Developer/ApiKeys" -}}{{- $csr = "api.profile.metaTitle" -}}
 {{- else if eq .Page.Component "Billing/Index" -}}{{- $csr = "billing.checkout.metaTitle" -}}
 {{- else if eq .Page.Component "Account/Notifications" -}}{{- $csr = "notifications.title" -}}
 {{- else if eq .Page.Component "Library/Index" -}}{{- $csr = "library.title" -}}

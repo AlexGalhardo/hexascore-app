@@ -7,6 +7,7 @@ import (
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/api"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/account"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
@@ -18,6 +19,8 @@ type Handlers struct {
 	a *accounts.Accounts
 	// Social adds the feed opt-in switch while the feature flag `social` is on (SDD 14 FR-14-18); nil on SQLite.
 	Social *social.Follows
+	// Keys adds the API key section to the page; nil on SQLite (the table exists only on PostgreSQL, VF-033).
+	Keys *api.Keys
 	// Issuer names the app in authenticator apps (the two-factor section).
 	Issuer string
 }
@@ -82,6 +85,15 @@ func (h *Handlers) Show(c *web.Ctx) error {
 		}
 
 		props["social"] = inertia.Props{"feedOptIn": on}
+	}
+
+	if h.Keys != nil {
+		keys, err := h.Keys.List(c.Context(), u.ID)
+		if err != nil {
+			return err
+		}
+
+		props["apiKeys"] = inertia.Props{"keys": keys, "maxKeys": api.MaxLiveKeys}
 	}
 
 	return inertia.Render(c, "Profile/Index", props)

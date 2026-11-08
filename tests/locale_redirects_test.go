@@ -33,7 +33,7 @@ func TestLocalePrefix_AccountRedirects(t *testing.T) {
 	c.PutJSON("/es/profile/password", map[string]any{
 		"currentPassword": testPassword, "newPassword": "Another horse 7 staple!",
 	}).AssertRedirect("/es/profile")
-	c.PostJSON("/pt-br/profile/api/keys", map[string]any{"name": "k"}).AssertRedirect("/pt-br/profile/api")
+	c.PostJSON("/pt-br/profile/api/keys", map[string]any{"name": "k"}).AssertRedirect("/pt-br/profile")
 	c.WithHeader("Referer", "/es/lists").
 		PostJSON("/es/lists", map[string]any{"type": "game", "title": "Locale", "isPublic": true}).
 		AssertRedirect("/es/lists")

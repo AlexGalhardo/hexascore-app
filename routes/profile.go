@@ -6,6 +6,7 @@ import (
 	"github.com/AlexGalhardo/vukem/router"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/api"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/profile"
 )
 
@@ -18,6 +19,7 @@ func Profile(r *router.Router, app *vukem.App) error {
 
 	h := profile.New(acc, app.Config.Name)
 	if acc.DB.Dialect().Name() == "postgres" {
+		h.Keys = &api.Keys{DB: acc.DB, Now: app.Now}
 		if h.Social, err = SocialService(app, acc); err != nil {
 			return err
 		}

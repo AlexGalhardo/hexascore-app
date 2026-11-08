@@ -136,3 +136,15 @@ test("no password yet: the section explains a password is needed and offers no c
 	);
 	expect(screen.queryByRole("button", { name: "account.twoFactor.enable" })).toBeNull();
 });
+
+test("the API keys section lives in /profile and only shows when the server sends it", () => {
+	const { rerender } = render(<Profile {...baseProps} />);
+	expect(document.getElementById("api")).toBeNull();
+
+	rerender(<Profile {...baseProps} apiKeys={{ keys: [], maxKeys: 5 }} />);
+	expect(document.getElementById("api")).not.toBeNull();
+	expect(screen.getByText("api.profile.keys.empty")).toBeTruthy();
+	expect(
+		screen.getByRole("navigation", { name: "account.nav" }).querySelector('a[href="#api"]'),
+	).not.toBeNull();
+});

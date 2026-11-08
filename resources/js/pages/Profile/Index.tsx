@@ -1,5 +1,6 @@
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
+import ApiKeysSection, { type ApiKeysState } from "../../components/account/ApiKeysSection";
 import ProfileNav from "../../components/account/ProfileNav";
 import TwoFactorSection, { type TwoFactorState } from "../../components/account/TwoFactorSection";
 import DataExport from "../../components/DataExport";
@@ -31,6 +32,8 @@ interface Props {
 	passwordSet: boolean;
 	twoFactor: TwoFactorState;
 	passkeys?: PasskeyRow[];
+	/** Present only when the API key table exists (PostgreSQL). */
+	apiKeys?: ApiKeysState;
 	sessions: SessionRow[];
 	privacy: { profilePrivate: boolean; personalizationOptOut: boolean };
 	notifications: { communityMailOptOut: boolean };
@@ -165,6 +168,7 @@ export default function Index({
 	passwordSet,
 	twoFactor,
 	passkeys = [],
+	apiKeys,
 	sessions,
 	privacy,
 	notifications,
@@ -202,6 +206,7 @@ export default function Index({
 		},
 		{ id: "two-factor", label: t("account.twoFactor.title") },
 		{ id: "passkeys", label: t("account.passkeys.title") },
+		...(apiKeys ? [{ id: "api", label: t("api.profile.title") }] : []),
 		{ id: "sessions", label: t("account.sessions.title") },
 		{ id: "privacy", label: t("account.privacy.title") },
 		{ id: "notifications", label: t("account.notifications.title") },
@@ -316,6 +321,12 @@ export default function Index({
 					</Section>
 
 					<Passkeys passwordSet={passwordSet} passkeys={passkeys} />
+
+					{apiKeys && (
+						<Section id="api" title={t("api.profile.title")}>
+							<ApiKeysSection {...apiKeys} />
+						</Section>
+					)}
 
 					<Section id="sessions" title={t("account.sessions.title")}>
 						{sessions.length === 0 ? (
