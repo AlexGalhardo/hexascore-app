@@ -68,6 +68,12 @@ export default function NewsletterForm({ endpoint }: { endpoint: string }) {
 	const failed =
 		state === "invalid" || state === "length" || state === "limited" || state === "error";
 
+	const tone = failed
+		? "rounded-sm bg-red-500 px-3 py-2 font-semibold text-black"
+		: state === "done"
+			? "rounded-sm bg-green-500 px-3 py-2 font-semibold text-black"
+			: "text-footer-muted";
+
 	return (
 		<form
 			onSubmit={(e) => void submit(e)}
@@ -109,7 +115,7 @@ export default function NewsletterForm({ endpoint }: { endpoint: string }) {
 			<p
 				id={`${id}-status`}
 				role={failed ? "alert" : "status"}
-				className="mt-2 min-h-5 text-sm text-footer-muted"
+				className={`mt-2 min-h-5 text-sm ${tone}`}
 			>
 				{message[state]}
 			</p>

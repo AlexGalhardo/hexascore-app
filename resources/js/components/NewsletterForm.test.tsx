@@ -28,6 +28,7 @@ test("posts the email and the empty honeypot without credentials, then asks to c
 	await waitFor(() =>
 		expect(screen.getByRole("status").textContent).toBe("footer.newsletterDone"),
 	);
+	expect(screen.getByRole("status").className).toContain("bg-green-500");
 	const [url, init] = fetchMock.mock.calls[0];
 	expect(url).toBe("https://email.test/subscribe/hexascore");
 	expect(init.credentials).toBeUndefined();
@@ -43,6 +44,7 @@ test.each([
 	submit();
 
 	await waitFor(() => expect(screen.getByRole("alert").textContent).toBe(key));
+	expect(screen.getByRole("alert").className).toContain("bg-red-500");
 });
 
 test("a network failure shows the generic error", async () => {
