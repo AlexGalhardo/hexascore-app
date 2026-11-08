@@ -563,6 +563,7 @@
     "title": "Your profile",
     "nav": "Profile sections",
     "publicProfile": "Public profile",
+    "verifyNotice": "Verify your email to rate and keep lists.",
     "shortcuts": {
       "library": "Your library",
       "libraryHelp": "Everything you marked as want, playing, completed or dropped.",

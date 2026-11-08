@@ -193,9 +193,11 @@ func TestSecurity_A07_SignupIsEnumerationSafe(t *testing.T) {
 		AssertRedirect("/onboarding")
 }
 
-// An unverified account can log in but reaches only the verification
-// notice, so an account someone pre-registered with another person's
-// address is useless until its owner verifies it.
+// An unverified account can log in, but every action that writes data needs
+// a verified email, so an account someone pre-registered with another
+// person's address is useless until its owner verifies it. /profile stays
+// reachable so the owner of a mistyped account can still delete it; it
+// carries the verification notice.
 func TestUnverifiedUsersSeeTheNotice(t *testing.T) {
 	t.Parallel()
 
@@ -206,7 +208,8 @@ func TestUnverifiedUsersSeeTheNotice(t *testing.T) {
 		AssertRedirect("/signup/check-email")
 	c.PostJSON("/login", map[string]any{"identifier": "uma@example.com", "password": testPassword}).
 		AssertRedirect("/profile")
-	c.Get("/profile").AssertRedirect("/verify-email")
+	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("auth.user.email_verified_at", nil)
+	c.PatchJSON("/profile/details", map[string]any{"name": "Mallory"}).AssertRedirect("/verify-email")
 	c.Get("/verify-email").AssertInertia("Auth/VerifyNotice").PropEquals("auth.user.email", "uma@example.com")
 
 	c.Get(link(t, app, "uma@example.com")).AssertRedirect("/onboarding")

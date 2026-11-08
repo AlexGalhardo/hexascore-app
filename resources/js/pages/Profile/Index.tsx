@@ -177,7 +177,8 @@ export default function Index({
 }: Props) {
 	const t = useT();
 	const l = useLocalized();
-	const nickname = usePage<SharedProps>().props.auth?.user?.nickname;
+	const user = usePage<SharedProps>().props.auth?.user;
+	const nickname = user?.nickname;
 	const detailsForm = useForm({ name: details.name, locale: details.locale });
 	const passwordForm = useForm({ currentPassword: "", newPassword: "" });
 	const privacyForm = useForm(privacy);
@@ -232,6 +233,13 @@ export default function Index({
 					</a>
 				)}
 			</div>
+			{user && !user.email_verified_at && (
+				<p className="mb-6">
+					<Link href="/verify-email" className="font-medium underline">
+						{t("account.verifyNotice")}
+					</Link>
+				</p>
+			)}
 			<div className="mb-8 grid max-w-2xl gap-3 sm:grid-cols-2">
 				{(["library", "lists"] as const).map((key) => (
 					<Link
