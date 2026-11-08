@@ -27,7 +27,8 @@ func Profile(r *router.Router, app *vukem.App) error {
 
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 
-	r.Get("/profile", h.Show).Name("profile").Use(required, verified)
+	// Unverified members still reach /profile: account deletion and sessions live there. The page asks them to verify.
+	r.Get("/profile", h.Show).Name("profile").Use(required)
 	r.Patch("/profile/details", h.UpdateDetails).Name("profile.details").Use(required, verified)
 	r.Put("/profile/password", h.UpdatePassword).Name("profile.password").Use(required, verified)
 	r.Patch("/profile/privacy", h.UpdatePrivacy).Name("profile.privacy").Use(required, verified)

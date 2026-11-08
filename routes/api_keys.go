@@ -19,6 +19,9 @@ func APIKeys(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
+	// The redirect does not need the keys table, so old bookmarks keep working on SQLite too.
+	r.Get("/profile/api", new(developer.APIKeys).Index).Name("profile.api")
+
 	if acc.DB.Dialect().Name() != "postgres" {
 		return nil
 	}
@@ -26,7 +29,6 @@ func APIKeys(r *router.Router, app *vukem.App) error {
 	h := &developer.APIKeys{Keys: &api.Keys{DB: acc.DB, Now: app.Now}, Guard: acc.Web.Name()}
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 
-	r.Get("/profile/api", h.Index).Name("profile.api")
 	r.Post("/profile/api/keys", h.Create).Name("profile.api.keys.create").Use(required, verified)
 	r.Delete("/profile/api/keys/{id}", h.Revoke).Name("profile.api.keys.revoke").Use(required)
 
