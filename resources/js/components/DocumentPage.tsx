@@ -69,7 +69,7 @@ export default function DocumentPage({
 	const current = useCurrentSection(sections.map((s) => s.id));
 
 	return (
-		<div className="mx-auto grid max-w-[66rem] gap-12 lg:grid-cols-[15rem_minmax(0,45rem)] lg:justify-center lg:gap-16">
+		<div className="grid max-w-[66rem] gap-12 lg:grid-cols-[15rem_minmax(0,45rem)] lg:gap-16">
 			<Seo title={title} description={description} />
 			<aside className="lg:sticky lg:top-24 lg:self-start">
 				<nav aria-labelledby="document-contents">

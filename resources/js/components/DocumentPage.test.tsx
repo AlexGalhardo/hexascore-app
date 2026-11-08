@@ -50,3 +50,18 @@ test("the contents list is the first element and marks the section in view", () 
 	expect(screen.getByRole("link", { name: "Two" }).getAttribute("aria-current")).toBe("location");
 	expect(screen.getByRole("link", { name: "One" }).getAttribute("aria-current")).toBeNull();
 });
+
+test("the layout starts at the left edge of the site container", () => {
+	const { container } = render(
+		<DocumentPage
+			title="T"
+			description="d"
+			intro="i"
+			sections={[{ id: "a", heading: "A", body: "x" }]}
+			contentsLabel="Contents"
+		/>,
+	);
+	const root = container.firstElementChild as HTMLElement;
+	expect(root.className).not.toContain("mx-auto");
+	expect(root.className).not.toContain("justify-center");
+});
