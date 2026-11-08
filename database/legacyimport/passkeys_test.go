@@ -97,7 +97,7 @@ VALUES ('p01k', 'u01', 'Yubikey', $1, $2, 0, 'singleDevice', false, 'internal', 
 		t.Fatal(err)
 	}
 
-	c.Do(http.MethodPost, "/login/passkey", bytes.NewReader(assertion), "application/json").AssertRedirect("/dashboard")
+	c.Do(http.MethodPost, "/login/passkey", bytes.NewReader(assertion), "application/json").AssertRedirect("/profile")
 
 	var (
 		gotAAGUID  string
