@@ -54,7 +54,7 @@ export default function ScoreBlock({
 				</p>
 				<Link
 					href={localized("/how-score-works", locale)}
-					className="w-fit text-sm font-medium text-primary underline-offset-2 hover:underline"
+					className="w-fit text-sm font-medium text-blue-700 dark:text-blue-400 underline-offset-2 hover:underline"
 				>
 					{t("item.howScoreWorks")} <span aria-hidden="true">→</span>
 				</Link>

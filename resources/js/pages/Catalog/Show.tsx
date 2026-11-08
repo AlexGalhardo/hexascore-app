@@ -299,7 +299,7 @@ export default function Show({
 											<li key={e.id}>
 												<Link
 													href={entityHref(e)}
-													className="inline-flex min-h-6 items-center text-primary hover:underline"
+													className="inline-flex min-h-6 items-center text-blue-700 dark:text-blue-400 hover:underline"
 												>
 													{e.name}
 												</Link>

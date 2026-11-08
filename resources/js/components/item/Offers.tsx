@@ -25,7 +25,7 @@ export interface OffersData {
 
 // Plain text links (owner 2026-11-04): no boxes around the services.
 const LINK =
-	"inline-flex min-h-8 items-center text-[15px] text-primary underline underline-offset-4 hover:no-underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
+	"inline-flex min-h-8 items-center text-[15px] text-blue-700 dark:text-blue-400 underline underline-offset-4 hover:no-underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
 
 // Same order as the server (app/offers kindOrder): subscriptions and free first, physical last.
 const KIND_ORDER = ["stream", "free", "rent", "buy", "buy_digital", "mobile", "physical", "read"];

@@ -82,6 +82,9 @@ test("logged out: score block with explanation, chips, disabled stars and a log 
 	expect(screen.getAllByRole("link", { name: "MMORPG" })[0].getAttribute("href")).toBe(
 		"/games?genre=mmorpg&per=40&sort=-popularity",
 	);
+	expect(screen.getByRole("link", { name: "Blizzard Entertainment" }).className).toContain(
+		"text-blue-700",
+	);
 	expect(screen.queryByText(/itemTypes.game · 2004/)).toBeNull();
 	expect(screen.queryByText(/item.attribution/)).toBeNull();
 	expect(screen.getAllByRole("radiogroup")).toHaveLength(6);
