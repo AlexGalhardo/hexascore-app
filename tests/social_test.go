@@ -31,7 +31,7 @@ func TestSocialSignUpAndLogin(t *testing.T) {
 
 	c := app.Client(t)
 	signIn(t, c).AssertRedirect("/onboarding")
-	c.Get("/dashboard").AssertOK().AssertSee("Lia").AssertSee("verified")
+	c.Get("/profile").AssertOK().AssertSee("Lia").AssertSee("verified")
 
 	vukemtest.AssertDatabaseCount(t, app, "users", 1)
 	vukemtest.AssertDatabaseHas(t, app, "social_accounts", map[string]any{
@@ -62,13 +62,13 @@ func TestSecurity_A07_SocialLinkEndsSquatterAccess(t *testing.T) {
 	}).AssertRedirect("/signup/check-email")
 	squatter.PostForm("/login", url.Values{
 		"identifier": {"vic@example.com"}, "password": {testPassword}, "remember": {"true"},
-	}).AssertRedirect("/dashboard")
+	}).AssertRedirect("/profile")
 
 	userID := apiTokenFor(t, app, "vic@example.com")
 
 	c := app.Client(t)
 	signIn(t, c).AssertRedirect("/onboarding")
-	c.Get("/dashboard").AssertOK()
+	c.Get("/profile").AssertOK()
 
 	squatter.Get("/verify-email").AssertRedirect("/login")
 	vukemtest.AssertDatabaseMissing(t, app, "remember_tokens", map[string]any{"user_id": userID})
@@ -110,5 +110,5 @@ func TestSecurity_A07_SocialLoginWithTwoFactorOpensChallenge(t *testing.T) {
 	c := app.Client(t)
 	signIn(t, c).AssertRedirect("/2fa")
 	c.Get("/2fa").AssertOK().AssertInertia("Auth/TwoFactorChallenge")
-	c.Get("/dashboard").AssertRedirect("/login")
+	c.Get("/profile").AssertRedirect("/login")
 }

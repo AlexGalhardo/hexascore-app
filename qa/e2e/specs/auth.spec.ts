@@ -63,13 +63,13 @@ test.describe("auth", () => {
 			await expectSignedIn(page, prefix);
 		});
 
-		test("unverified account cannot reach the dashboard", async ({ page, prefix, t }) => {
+		test("unverified account cannot reach the profile", async ({ page, prefix, t }) => {
 			const account = newAccount();
 			await fillSignup(page, prefix, t, account);
 			await page.getByRole("button", { name: t("auth.signup.submit") }).click();
 			await expect(page).toHaveURL(/\/signup\/check-email$/, { timeout: POW_TIMEOUT });
 			await logIn(page, prefix, t, account.email, account.password);
-			await page.goto(`${prefix}/dashboard`);
+			await page.goto(`${prefix}/profile`);
 			await expect(page).toHaveURL(/verify-email/);
 		});
 

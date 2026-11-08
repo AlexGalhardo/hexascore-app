@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/AlexGalhardo/vukem/auth"
+	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/web"
@@ -137,6 +138,7 @@ func (h *Handlers) Logout(c *web.Ctx) error {
 	return c.Redirect("/")
 }
 
-// Dashboard is the first page after login; the user arrives as the shared
-// auth.user prop.
-func (*Handlers) Dashboard(c *web.Ctx) error { return inertia.Render(c, "Dashboard", nil) }
+// Dashboard redirects the removed /dashboard page to /profile, which holds everything it showed.
+func (*Handlers) Dashboard(c *web.Ctx) error {
+	return c.RedirectStatus(http.StatusMovedPermanently, i18n.PathPrefix(c.Context())+"/profile")
+}

@@ -64,7 +64,7 @@ func postAssertion(c *vukemtest.Client, body []byte) *vukemtest.Response {
 func stillGuest(t *testing.T, c *vukemtest.Client) {
 	t.Helper()
 
-	c.Get("/dashboard").AssertRedirect("/login")
+	c.Get("/profile").AssertRedirect("/login")
 }
 
 func passkeyID(t *testing.T, app *vukemtest.App) int64 {

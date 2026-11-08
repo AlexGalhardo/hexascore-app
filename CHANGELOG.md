@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **ui:** Public profile link, library and lists shortcuts in the /profile header
+- **ui:** Warning toasts, and vibrant green, yellow and red toasts with bold uppercase text
+
+### Changed
+
+- **profile:** API key management moved from /profile/api into the /profile "API keys" section; /profile/api answers 301 to /profile#api
+- **profile:** /dashboard removed; logins, onboarding, verification and account deletion land on /profile and /dashboard answers 301 to /profile
+- **ui:** Contact feedback shows below the send button (green on success, red on error)
+- **ui:** Newsletter success and error messages are coloured green and red
+- **ui:** Onboarding nickname field has a max width and is centred
+- **ui:** About, terms, privacy and how-score-works start at the left edge of the site container
+- **ui:** Links in the item details card and the "How the score works" link use the standard blue
+- **i18n:** Simpler, shorter how-score-works text in en, pt-BR and es
+
+### Fixed
+
+- **ui:** The footer API reference link opens with a full page navigation instead of an Inertia modal
+- **ui:** The passkey button sits below the Google confirmation link
+
 ## [0.39.0] - 2026-11-07
 
 ### Added

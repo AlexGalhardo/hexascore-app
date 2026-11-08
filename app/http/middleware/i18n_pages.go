@@ -22,7 +22,6 @@ var PageNamespaces = map[string][]string{
 	"/pricing":         {"billing.", "coverage."},
 	"/profile":         {"api."},
 	"/contact":         {"contact."},
-	"/dashboard":       {"dashboard."},
 }
 
 // PageI18n replaces inertia.I18n (same locale, locales and messages props) with a page-scoped prefix list: base

@@ -96,7 +96,7 @@ func TestFeedDisabledByDefault(t *testing.T) {
 
 	fresh := makeUser(t, r.app, "fd-new@example.com", "user", true)
 	browserFor(t, r.app, fresh).PostJSON("/onboarding", map[string]any{"nickname": "offnew", "feedOptIn": true}).
-		AssertRedirect("/dashboard")
+		AssertRedirect("/profile")
 	if n := r.count(`SELECT count(*) FROM users WHERE id = $1 AND feed_opt_in`, fresh.ID); n != 0 {
 		t.Fatal("onboarding opted in while the flag is off")
 	}
@@ -205,10 +205,10 @@ func TestFeedOptInSetting(t *testing.T) {
 	yes := makeUser(t, r.app, "oi-yes@example.com", "user", true)
 	yc := browserFor(t, r.app, yes)
 	yc.Inertia("").Get("/onboarding").AssertOK().AssertInertia("Auth/Onboarding").PropEquals("socialEnabled", true)
-	yc.PostJSON("/onboarding", map[string]any{"nickname": "optyes", "feedOptIn": true}).AssertRedirect("/dashboard")
+	yc.PostJSON("/onboarding", map[string]any{"nickname": "optyes", "feedOptIn": true}).AssertRedirect("/profile")
 
 	no := makeUser(t, r.app, "oi-no@example.com", "user", true)
-	browserFor(t, r.app, no).PostJSON("/onboarding", map[string]any{"nickname": "optno"}).AssertRedirect("/dashboard")
+	browserFor(t, r.app, no).PostJSON("/onboarding", map[string]any{"nickname": "optno"}).AssertRedirect("/profile")
 
 	if n := r.count(`SELECT count(*) FROM users WHERE id IN ($1, $2) AND feed_opt_in`, yes.ID, no.ID); n != 1 ||
 		r.count(`SELECT count(*) FROM users WHERE id = $1 AND feed_opt_in`, yes.ID) != 1 {

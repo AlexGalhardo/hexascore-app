@@ -108,13 +108,13 @@ func TestRegisterAndVerifyEmail(t *testing.T) {
 	app := vukemtest.New(t, bootstrap.New)
 	c := app.Client(t).Inertia("")
 
-	c.Get("/dashboard").AssertRedirect("/login")
+	c.Get("/profile").AssertRedirect("/login")
 	c.Get("/login").AssertInertia("Auth/Login").PropEquals("auth.user", nil)
 
 	c.PostJSON("/signup", signUpForm(app, "Ana Silva", "ana@example.com", testPassword)).
 		AssertRedirect("/signup/check-email")
 	c.Get("/signup/check-email").AssertInertia("Auth/CheckEmail").PropEquals("auth.user", nil)
-	c.Get("/dashboard").AssertRedirect("/login") // sign-up does not log in
+	c.Get("/profile").AssertRedirect("/login") // sign-up does not log in
 	vukemtest.AssertDatabaseHas(t, app, "users", map[string]any{"email": "ana@example.com", "email_verified_at": nil})
 
 	verify := link(t, app, "ana@example.com")
@@ -133,11 +133,11 @@ func TestRegisterAndVerifyEmail(t *testing.T) {
 		AssertRedirect(verify)
 	c.Get(verify + "x").AssertForbidden() // tampered signature
 	c.Get(verify).AssertRedirect("/onboarding")
-	c.Get("/dashboard").AssertOK().
-		AssertInertia("Dashboard").
+	c.Get("/profile").AssertOK().
+		AssertInertia("Profile/Index").
 		PropEquals("auth.user.name", "Ana Silva").
 		HasProp("auth.user.email_verified_at")
-	c.Get(verify).AssertRedirect("/dashboard")
+	c.Get(verify).AssertRedirect("/profile")
 }
 
 // Signing up with an existing email answers exactly like a new one (same
@@ -205,12 +205,12 @@ func TestUnverifiedUsersSeeTheNotice(t *testing.T) {
 	c.PostJSON("/signup", signUpForm(app, "Uma", "uma@example.com", testPassword)).
 		AssertRedirect("/signup/check-email")
 	c.PostJSON("/login", map[string]any{"identifier": "uma@example.com", "password": testPassword}).
-		AssertRedirect("/dashboard")
-	c.Get("/dashboard").AssertRedirect("/verify-email")
+		AssertRedirect("/profile")
+	c.Get("/profile").AssertRedirect("/verify-email")
 	c.Get("/verify-email").AssertInertia("Auth/VerifyNotice").PropEquals("auth.user.email", "uma@example.com")
 
 	c.Get(link(t, app, "uma@example.com")).AssertRedirect("/onboarding")
-	c.Get("/dashboard").AssertInertia("Dashboard").PropEquals("auth.user.name", "Uma")
+	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("auth.user.name", "Uma")
 }
 
 // Sign-up is limited per address and per IP. The limit counts requests,
@@ -313,7 +313,7 @@ func TestSecurity_A07_ProvingTheEmailEndsSquatterAccess(t *testing.T) {
 	squatter.PostJSON("/signup", signUpForm(app, "Mallory", "vic@example.com", testPassword)).
 		AssertRedirect("/signup/check-email")
 	squatter.PostJSON("/login", map[string]any{"identifier": "vic@example.com", "password": testPassword, "remember": true}).
-		AssertRedirect("/dashboard")
+		AssertRedirect("/profile")
 	squatter.Get("/verify-email").AssertInertia("Auth/VerifyNotice")
 
 	userID := apiTokenFor(t, app, "vic@example.com")
@@ -332,7 +332,7 @@ func TestSecurity_A07_ProvingTheEmailEndsSquatterAccess(t *testing.T) {
 	device.PostJSON("/login", map[string]any{"identifier": "vic@example.com", "password": testPassword}).
 		AssertRedirect(verify)
 	device.Get(verify).AssertRedirect("/onboarding")
-	device.Get("/dashboard").AssertOK()
+	device.Get("/profile").AssertOK()
 
 	squatter.Get("/verify-email").AssertRedirect("/login")
 	vukemtest.AssertDatabaseMissing(t, app, "remember_tokens", map[string]any{"user_id": userID})
@@ -392,7 +392,7 @@ func TestExpiredVerificationLinkOffersANewOne(t *testing.T) {
 	vukemtest.AssertDatabaseHas(t, app, "users", map[string]any{"email": "exp@example.com", "email_verified_at": nil})
 }
 
-// Opening the link of an already verified account goes to the dashboard
+// Opening the link of an already verified account goes to the profile
 // and leaves the owner's other sessions alone.
 func TestVerifiedLinkKeepsOtherSessions(t *testing.T) {
 	t.Parallel()
@@ -405,12 +405,12 @@ func TestVerifiedLinkKeepsOtherSessions(t *testing.T) {
 	other.PostJSON("/login", map[string]any{"identifier": "done@example.com", "password": testPassword}).
 		AssertRedirect("/onboarding")
 
-	c.Get(link(t, app, "done@example.com")).AssertRedirect("/dashboard")
-	flash := fmt.Sprint(c.Get("/dashboard").AssertInertia("Dashboard").Page()["flash"])
+	c.Get(link(t, app, "done@example.com")).AssertRedirect("/profile")
+	flash := fmt.Sprint(c.Get("/profile").AssertInertia("Profile/Index").Page()["flash"])
 	if !strings.Contains(flash, "verified") {
 		t.Errorf("flash = %q, want the verified notice", flash)
 	}
-	other.Get("/dashboard").AssertOK()
+	other.Get("/profile").AssertOK()
 }
 
 // The link carries a hash of the address: once the email changes, a link
@@ -458,7 +458,7 @@ func TestSecurity_A07_LoginThrottle(t *testing.T) {
 	c.Get("/login").AssertRedirect("/")
 	c.PostJSON("/logout", nil).AssertRedirect("/")
 	c.Get("/").AssertInertia("Home/Index").PropEquals("auth.user", nil)
-	c.Get("/dashboard").AssertRedirect("/login")
+	c.Get("/profile").AssertRedirect("/login")
 
 	attacker := app.Client(t).Inertia("")
 	// Spaces and case do not open new buckets: they are the same account.
@@ -582,4 +582,13 @@ func TestSecurity_A07_LoginThrottleSharedAcrossIdentifiers(t *testing.T) {
 	}
 	attacker.PostJSON("/login", map[string]any{"identifier": "someone-else@example.com", "password": "guess"}).
 		AssertStatus(429)
+}
+
+func TestDashboardRedirectsToProfile(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	for prefix, want := range map[string]string{"": "/profile", "/pt-br": "/pt-br/profile"} {
+		app.Client(t).Get(prefix+"/dashboard").AssertStatus(http.StatusMovedPermanently).AssertHeader("Location", want)
+	}
 }

@@ -45,7 +45,7 @@ test.describe("passkeys", () => {
 		await signOut(page);
 		await open(page, `${prefix}/login`);
 		await page.getByRole("button", { name: t("auth.passkey") }).click();
-		await expect(page).toHaveURL(/\/dashboard/);
+		await expect(page).toHaveURL(/\/profile/);
 
 		await open(page, `${prefix}/profile`);
 		const remove = page

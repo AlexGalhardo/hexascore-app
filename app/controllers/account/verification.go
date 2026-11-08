@@ -23,7 +23,7 @@ func (*Handlers) Notice(c *web.Ctx) error {
 	}
 
 	if u.EmailVerified() {
-		return c.Redirect("/dashboard")
+		return c.Redirect("/profile")
 	}
 
 	return inertia.Render(c, "Auth/VerifyNotice", nil)
@@ -59,7 +59,7 @@ func (h *Handlers) Verify(c *web.Ctx) error {
 	if u.EmailVerified() {
 		inertia.Flash(c, "status", h.a.T(c.Context(), "auth.email_verified"))
 
-		return c.Redirect("/dashboard")
+		return c.Redirect("/profile")
 	}
 
 	if err := h.a.Signer.Verify(c.Request()); err != nil {
@@ -100,7 +100,7 @@ func (h *Handlers) Verify(c *web.Ctx) error {
 		return c.Redirect("/onboarding")
 	}
 
-	return c.Redirect("/dashboard")
+	return c.Redirect("/profile")
 }
 
 // Resend sends a new verification email.

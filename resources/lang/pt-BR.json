@@ -562,6 +562,13 @@
     "metaTitle": "Perfil",
     "title": "Seu perfil",
     "nav": "Seções do perfil",
+    "publicProfile": "Perfil público",
+    "shortcuts": {
+      "library": "Sua estante",
+      "libraryHelp": "Tudo que você marcou como quero, jogando, concluído ou abandonado.",
+      "lists": "Suas listas",
+      "listsHelp": "Listas ordenadas para compartilhar."
+    },
     "saved": "Salvo.",
     "details": {
       "title": "Dados da conta",
@@ -2359,20 +2366,6 @@
     "by": "Lista de {nickname}",
     "edited": "Editar lista",
     "limit": "Até {limit} listas por tipo."
-  },
-  "dashboard": {
-    "title": "Bem-vindo de volta, {name}",
-    "lead": "Continue de onde parou.",
-    "library": "Sua estante",
-    "libraryHelp": "Tudo que você marcou como quero, jogando, concluído ou abandonado.",
-    "lists": "Suas listas",
-    "listsHelp": "Listas ordenadas para compartilhar.",
-    "page": "Minha página",
-    "pageHelp": "O que as outras pessoas veem.",
-    "api": "Chaves de API",
-    "apiHelp": "Chaves, uso e a documentação para desenvolvedores.",
-    "verify": "Verifique seu e-mail para avaliar e manter listas.",
-    "twoFactor": "Autenticação em dois fatores"
   },
   "community": {
     "suggest": {

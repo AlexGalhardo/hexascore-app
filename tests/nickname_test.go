@@ -21,14 +21,14 @@ func TestLoginByNickname(t *testing.T) {
 
 	c := app.Client(t)
 	register(t, app, c, "ana@example.com")
-	c.PostJSON("/onboarding", map[string]any{"nickname": "analuiza"}).AssertRedirect("/dashboard")
+	c.PostJSON("/onboarding", map[string]any{"nickname": "analuiza"}).AssertRedirect("/profile")
 	c.PostJSON("/logout", nil).AssertRedirect("/")
 
 	// Nickname and email reach the same account; case is ignored.
 	app.Client(t).PostJSON("/login", map[string]any{"identifier": "AnaLuiza", "password": testPassword}).
-		AssertRedirect("/dashboard")
+		AssertRedirect("/profile")
 	app.Client(t).PostJSON("/login", map[string]any{"identifier": "ana@example.com", "password": testPassword}).
-		AssertRedirect("/dashboard")
+		AssertRedirect("/profile")
 
 	// Unknown identifier and wrong password answer alike.
 	wrong := app.Client(t).Inertia("").WithHeader("Referer", "/login")
@@ -49,10 +49,10 @@ func TestGoogleNewUserNeedsNickname(t *testing.T) {
 
 	c := app.Client(t)
 	signIn(t, c).AssertRedirect("/onboarding")
-	c.PostJSON("/onboarding", map[string]any{"nickname": "lialima"}).AssertRedirect("/dashboard")
+	c.PostJSON("/onboarding", map[string]any{"nickname": "lialima"}).AssertRedirect("/profile")
 	c.PostJSON("/logout", nil).AssertRedirect("/")
 
-	signIn(t, app.Client(t)).AssertRedirect("/dashboard")
+	signIn(t, app.Client(t)).AssertRedirect("/profile")
 }
 
 func TestVerifiedLoginWithoutNicknameGoesToOnboarding(t *testing.T) {
@@ -66,5 +66,5 @@ func TestVerifiedLoginWithoutNicknameGoesToOnboarding(t *testing.T) {
 	c.PostJSON("/signup", signUpForm(app, "Bia Souza", "bia@example.com", testPassword))
 	// Unverified users are not sent to onboarding: they still need the mail.
 	c.PostJSON("/login", map[string]any{"identifier": "bia@example.com", "password": testPassword}).
-		AssertRedirect("/dashboard")
+		AssertRedirect("/profile")
 }

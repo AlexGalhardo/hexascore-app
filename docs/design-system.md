@@ -402,12 +402,9 @@ Every Inertia page component in `resources/js/pages/` (33 components; `ls resour
 - Blocks: `h1`, "Mark all read" (when any unread), infinite list; each row is a localised sentence (`notifications.kind.<kind>`) with a locale-formatted date, bold when unread, and a "Mark read" button.
 - States: `notifications.empty`.
 
-#### Dashboard
+#### Dashboard (removed)
 
-- Route: `GET /dashboard` (logged in, verified). File: `pages/Dashboard.tsx`.
-- Purpose: post-login hub.
-- Blocks: `h1` "Welcome, name", lead text, verify-email prompt when unverified, a card link grid (Library, Lists, public page, API keys) each with a help line, and a two-factor suggestion link.
-- Note: not in the header or footer; reached after login and from `/two-factor`.
+- `GET /dashboard` answers 301 to `/profile`, which holds the library and lists shortcuts, the public profile link and the API keys section.
 
 ### 6.4 Account and billing
 
@@ -590,7 +587,7 @@ Listed only; none were changed.
 
 - G24: `Developer/ApiKeys` links to `/docs/api`, which returns 404 on production; the docs slugs are `authentication`, `errors`, `pagination`, `rate-limits`, `coverage`, `changelog`.
 - G25: SDD 09 §6.2 lists `Catalog/RecentChanges` (and `Defer`ed recent changes on the item page); no component exists and the route returns 404.
-- G26: `Dashboard` is not linked from the header, account menu or footer; `/dashboard` is only reached after login and from the two-factor page.
+- G26: closed; the dashboard page was removed and `/dashboard` redirects to `/profile`.
 - G27: `Lists/*` and `Library` have the CSR placeholder but no in-page skeletons; `RatingsDialog`, `EditionPicker` and `TimeToBeat` use plain "Loading" text.
 - G28: `Search/Index` and `Notifications` use `<Head>` directly instead of `<Seo>` (no `noindex` through the shared helper), and `Search` hard-codes `/search` as the form action (not locale prefixed).
 - G29: There is no user avatar upload (initial on `bg-accent-game` only) and no cover for editions or entities.

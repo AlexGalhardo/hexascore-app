@@ -134,7 +134,7 @@ func TestTwoFactorLogin(t *testing.T) {
 	c := app.Client(t).Inertia("")
 	// The password step ends on the /2fa page (owner 2026-11-07).
 	passwordStep(c, "ana2fa@example.com", true).AssertRedirect("/2fa")
-	c.Get("/dashboard").AssertRedirect("/login")
+	c.Get("/profile").AssertRedirect("/login")
 	c.Get("/2fa").AssertInertia("Auth/TwoFactorChallenge").PropEquals("auth.user", nil)
 
 	rejected(t, c, "/2fa", "/2fa", "Auth/TwoFactorChallenge", "code",
@@ -143,7 +143,7 @@ func TestTwoFactorLogin(t *testing.T) {
 	// The confirmation used the current step: the next one logs in.
 	code := totpCode(t, secret, 1)
 	c.PostJSON("/2fa", map[string]any{"code": code, "recovery_code": ""}).AssertRedirect("/onboarding")
-	c.Get("/dashboard").AssertInertia("Dashboard").PropEquals("auth.user.email", "ana2fa@example.com")
+	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("auth.user.email", "ana2fa@example.com")
 
 	if c.CookieValue("remember_web") == "" {
 		t.Error("remember me was asked at the password step but no cookie was set")
@@ -154,7 +154,7 @@ func TestTwoFactorLogin(t *testing.T) {
 	passwordStep(replay, "ana2fa@example.com", false).AssertRedirect("/2fa")
 	rejected(t, replay, "/2fa", "/2fa", "Auth/TwoFactorChallenge", "code",
 		map[string]any{"code": code, "recovery_code": ""})
-	replay.Get("/dashboard").AssertRedirect("/login")
+	replay.Get("/profile").AssertRedirect("/login")
 }
 
 func TestTwoFactorRecoveryCodes(t *testing.T) {

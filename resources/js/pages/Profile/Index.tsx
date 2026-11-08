@@ -1,4 +1,4 @@
-import { Head, Link, router, useForm } from "@inertiajs/react";
+import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 import ApiKeysSection, { type ApiKeysState } from "../../components/account/ApiKeysSection";
 import ProfileNav from "../../components/account/ProfileNav";
@@ -12,6 +12,7 @@ import { checkPassword, passwordAdvice } from "../../lib/password-policy";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 import { createPasskey } from "../../lib/webauthn";
+import type { SharedProps } from "../../types";
 
 interface SessionRow {
 	handle: string;
@@ -147,11 +148,11 @@ function Passkeys({ passwordSet, passkeys }: { passwordSet: boolean; passkeys: P
 					onChange={setPassword}
 				/>
 			) : (
-				<Link href={l("/auth/google/confirm")} className="font-medium underline">
+				<a href={l("/auth/google/confirm")} className="block w-fit font-medium underline">
 					{t("account.passkeys.confirmGoogle")}
-				</Link>
+				</a>
 			)}
-			<button type="button" className={button} onClick={() => void add()}>
+			<button type="button" className={`block ${button}`} onClick={() => void add()}>
 				{t("account.passkeys.add")}
 			</button>
 			{failed && (
@@ -176,6 +177,7 @@ export default function Index({
 }: Props) {
 	const t = useT();
 	const l = useLocalized();
+	const nickname = usePage<SharedProps>().props.auth?.user?.nickname;
 	const detailsForm = useForm({ name: details.name, locale: details.locale });
 	const passwordForm = useForm({ currentPassword: "", newPassword: "" });
 	const privacyForm = useForm(privacy);
@@ -217,7 +219,33 @@ export default function Index({
 	return (
 		<div className="w-full" data-testid="profile-page">
 			<Head title={t("account.metaTitle")} />
-			<h1 className="mb-6 text-2xl font-semibold">{t("account.title")}</h1>
+			<div className="mb-6 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+				<h1 className="text-2xl font-semibold">{t("account.title")}</h1>
+				{nickname && (
+					<a
+						href={l(`/u/${nickname.toLowerCase()}`)}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="font-medium underline"
+					>
+						{t("account.publicProfile")}
+					</a>
+				)}
+			</div>
+			<div className="mb-8 grid max-w-2xl gap-3 sm:grid-cols-2">
+				{(["library", "lists"] as const).map((key) => (
+					<Link
+						key={key}
+						href={l(`/${key}`)}
+						className="grid gap-1 rounded-lg border border-border bg-surface p-4 hover:border-fg focus-visible:outline-2 focus-visible:outline-offset-2"
+					>
+						<span className="font-semibold">{t(`account.shortcuts.${key}`)}</span>
+						<span className="text-sm text-muted">
+							{t(`account.shortcuts.${key}Help`)}
+						</span>
+					</Link>
+				))}
+			</div>
 			{/* A section menu on the left from lg up (owner 2026-11-03), the sections stacked on the right. */}
 			<div className="grid grid-cols-[minmax(0,1fr)] items-start gap-x-10 gap-y-4 lg:grid-cols-[13rem_minmax(0,1fr)]">
 				<ProfileNav items={navItems} label={t("account.nav")} />
