@@ -204,7 +204,7 @@ export default function Nav() {
 				<Icon name="settings" />
 				{t("nav.profile")}
 			</Link>
-			<Link href="/profile/api" className={menuItem}>
+			<Link href={localized("/profile#api", locale)} className={menuItem}>
 				<Icon name="key" />
 				{t("nav.api")}
 			</Link>

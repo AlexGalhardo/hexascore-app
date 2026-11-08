@@ -1,4 +1,4 @@
-// Package developer serves the API key management page /profile/api (SDD 09 §6.2, SDD 05 FR-05-2).
+// Package developer serves the API key actions of the /profile page (SDD 09 §6.2, SDD 05 FR-05-2).
 package developer
 
 import (
@@ -7,6 +7,7 @@ import (
 
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/errs"
+	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/web"
 
@@ -14,6 +15,9 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
 )
+
+// Path is where the key management lives: a section of /profile (the page /profile/api answers 301 here).
+const Path = "/profile#api"
 
 // ErrorLimit is the validation code on `name` when the user already has api.MaxLiveKeys live keys; the page
 // translates it (api.profile.keys.errors.limit).
@@ -27,20 +31,9 @@ type APIKeys struct {
 
 func (h *APIKeys) user(c *web.Ctx) (models.User, error) { return auth.User[models.User](c, h.Guard) }
 
-// Index renders Developer/ApiKeys with every key of the user. The plain key of a key created on the previous
-// request arrives only as the `newKey` flash, so it is shown once.
-func (h *APIKeys) Index(c *web.Ctx) error {
-	u, err := h.user(c)
-	if err != nil {
-		return err
-	}
-
-	keys, err := h.Keys.List(c.Context(), u.ID)
-	if err != nil {
-		return err
-	}
-
-	return inertia.Render(c, "Developer/ApiKeys", inertia.Props{"keys": keys, "maxKeys": api.MaxLiveKeys})
+// Index redirects the old key page to its section of /profile; bookmarks and docs links keep working.
+func (*APIKeys) Index(c *web.Ctx) error {
+	return c.RedirectStatus(http.StatusMovedPermanently, i18n.PathPrefix(c.Context())+Path)
 }
 
 // Create stores a key and flashes its plain value.
@@ -66,7 +59,7 @@ func (h *APIKeys) Create(c *web.Ctx) error {
 
 	inertia.Flash(c, "newKey", plain)
 
-	return c.Redirect("/profile/api")
+	return c.Redirect("/profile")
 }
 
 // Revoke revokes one of the user's keys; another user's key answers 404 like a missing one.
@@ -86,5 +79,5 @@ func (h *APIKeys) Revoke(c *web.Ctx) error {
 		return err
 	}
 
-	return c.Redirect("/profile/api")
+	return c.Redirect("/profile")
 }

@@ -1,9 +1,8 @@
-import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
+import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
-
-import Field from "../../components/Field";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
+import Field from "../Field";
 
 interface ApiKey {
 	id: string;
@@ -14,7 +13,7 @@ interface ApiKey {
 	createdAt: string;
 }
 
-interface Props {
+export interface ApiKeysState {
 	keys: ApiKey[];
 	maxKeys: number;
 }
@@ -25,7 +24,8 @@ const button =
 // Server codes on errors.name that have their own message; anything else is a length error.
 const NAME_ERRORS = new Set(["limit"]);
 
-export default function ApiKeys({ keys, maxKeys }: Props) {
+// The body of the "API keys" section of /profile; the section frame comes from the page.
+export default function ApiKeysSection({ keys, maxKeys }: ApiKeysState) {
 	const t = useT();
 	const l = useLocalized();
 	const flash = usePage().flash as { newKey?: string } | undefined;
@@ -52,11 +52,9 @@ export default function ApiKeys({ keys, maxKeys }: Props) {
 
 	return (
 		<>
-			<Head title={t("api.profile.metaTitle")} />
-			<h1 className="mb-2 text-2xl font-semibold">{t("api.profile.title")}</h1>
-			<p className="mb-6">
+			<p>
 				{t("api.profile.intro")}{" "}
-				<Link href="/docs/api" className="underline">
+				<Link href={l("/docs/authentication")} className="underline">
 					{t("api.profile.docsLink")}
 				</Link>
 			</p>
@@ -66,9 +64,9 @@ export default function ApiKeys({ keys, maxKeys }: Props) {
 					aria-labelledby="new-key-h"
 					className="mb-8 space-y-3 rounded-md border border-amber-500 p-4"
 				>
-					<h2 id="new-key-h" className="text-lg font-semibold">
+					<h3 id="new-key-h" className="text-lg font-semibold">
 						{t("api.profile.keys.createdTitle")}
-					</h2>
+					</h3>
 					<p role="alert">{t("api.profile.keys.createdWarning")}</p>
 					<code className="block break-all rounded-sm bg-black/5 p-2 dark:bg-white/10">
 						{newKey}
@@ -88,10 +86,10 @@ export default function ApiKeys({ keys, maxKeys }: Props) {
 				</section>
 			)}
 
-			<section aria-labelledby="keys-h" className="space-y-4">
-				<h2 id="keys-h" className="text-xl font-semibold">
+			<div className="space-y-4">
+				<h3 id="keys-h" className="text-lg font-semibold">
 					{t("api.profile.keys.title")}
-				</h2>
+				</h3>
 
 				<form onSubmit={create} className="flex flex-wrap items-end gap-3">
 					<Field
@@ -210,7 +208,7 @@ export default function ApiKeys({ keys, maxKeys }: Props) {
 						</table>
 					</section>
 				)}
-			</section>
+			</div>
 		</>
 	);
 }

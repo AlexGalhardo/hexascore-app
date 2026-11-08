@@ -152,7 +152,7 @@ export default function Index({ plans, currency, currencies, coverage }: Props) 
 									<Link
 										href={
 											user
-												? localized("/profile/api", locale)
+												? localized("/profile#api", locale)
 												: localized("/signup", locale)
 										}
 										className={btnClass("secondary", "w-full")}

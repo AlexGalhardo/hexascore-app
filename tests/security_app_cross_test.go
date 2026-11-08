@@ -32,8 +32,8 @@ func TestSecurity_A01_CrossSurfaceCredentials(t *testing.T) {
 	session := app.Client(t).Inertia("")
 	register(t, app, session, email)
 
-	session.PostJSON("/profile/api/keys", map[string]any{"name": "ci"}).AssertRedirect("/profile/api")
-	page := session.Get("/profile/api").AssertOK().AssertInertia("Developer/ApiKeys")
+	session.PostJSON("/profile/api/keys", map[string]any{"name": "ci"}).AssertRedirect("/profile")
+	page := session.Get("/profile").AssertOK().AssertInertia("Profile/Index")
 	flash, _ := page.Page()["flash"].(map[string]any)
 	plain, _ := flash["newKey"].(string)
 	if !api.WellFormed(plain) {

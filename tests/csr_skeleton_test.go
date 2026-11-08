@@ -17,7 +17,6 @@ func TestCSRSkeleton(t *testing.T) {
 
 	for _, tc := range []struct{ path, title string }{
 		{"/profile", "Profile"},
-		{"/profile/api", "API keys and usage"},
 		{"/billing", "Plan and billing"},
 		{"/me/notifications", "Notifications"},
 		{"/library", "Your library"},

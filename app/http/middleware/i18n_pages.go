@@ -20,7 +20,7 @@ var PageNamespaces = map[string][]string{
 	"/how-score-works": {"help."},
 	"/billing":         {"billing."},
 	"/pricing":         {"billing.", "coverage."},
-	"/profile/api":     {"api."},
+	"/profile":         {"api."},
 	"/contact":         {"contact."},
 	"/dashboard":       {"dashboard."},
 }

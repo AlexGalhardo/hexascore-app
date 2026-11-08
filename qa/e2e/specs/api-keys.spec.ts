@@ -17,7 +17,7 @@ test.describe("api keys", () => {
 
 		test("a key is shown once, listed by prefix, then revoked", async ({ page, prefix, t }) => {
 			await createVerifiedAccount(page, prefix, t);
-			await open(page, `${prefix}/profile/api`);
+			await open(page, `${prefix}/profile`);
 			await expect(page.getByText(t("api.profile.keys.empty"))).toBeVisible();
 			await expectNoSeriousA11yViolations(page);
 

@@ -68,9 +68,9 @@ func (r *keyRig) signIn(email string) *vukemtest.Client {
 func (r *keyRig) create(c *vukemtest.Client, name string) string {
 	r.t.Helper()
 
-	c.PostJSON("/profile/api/keys", map[string]any{"name": name}).AssertRedirect("/profile/api")
+	c.PostJSON("/profile/api/keys", map[string]any{"name": name}).AssertRedirect("/profile")
 
-	page := c.Get("/profile/api").AssertOK().AssertInertia("Developer/ApiKeys")
+	page := c.Get("/profile").AssertOK().AssertInertia("Profile/Index")
 	flash, _ := page.Page()["flash"].(map[string]any)
 
 	plain, _ := flash["newKey"].(string)
@@ -109,9 +109,9 @@ func TestKeysWebFlow(t *testing.T) {
 	plain := r.create(c, "production server")
 
 	// Shown once: the next visit no longer carries it.
-	c.Get("/profile/api").AssertInertia("Developer/ApiKeys").MissingFlash("newKey").
-		HasProp("keys", 1).PropEquals("keys.0.name", "production server").
-		PropEquals("keys.0.prefix", plain[:api.DisplayPrefixLen]).PropEquals("maxKeys", api.MaxLiveKeys)
+	c.Get("/profile").AssertInertia("Profile/Index").MissingFlash("newKey").
+		HasProp("apiKeys.keys", 1).PropEquals("apiKeys.keys.0.name", "production server").
+		PropEquals("apiKeys.keys.0.prefix", plain[:api.DisplayPrefixLen]).PropEquals("apiKeys.maxKeys", api.MaxLiveKeys)
 
 	if err := r.authenticate(plain); err != nil {
 		t.Fatalf("live key refused: %v", err)
@@ -129,32 +129,36 @@ func TestKeysWebFlow(t *testing.T) {
 		t.Fatalf("key refused after a foreign revoke: %v", err)
 	}
 
-	c.Delete("/profile/api/keys/" + id).AssertRedirect("/profile/api")
+	c.Delete("/profile/api/keys/" + id).AssertRedirect("/profile")
 
 	if err := r.authenticate(plain); !errors.Is(err, auth.ErrUnauthenticated) {
 		t.Fatalf("revoked key: err = %v, want ErrUnauthenticated", err)
 	}
 
-	c.Get("/profile/api").AssertInertia("Developer/ApiKeys").HasProp("keys.0.revokedAt")
+	c.Get("/profile").AssertInertia("Profile/Index").HasProp("apiKeys.keys.0.revokedAt")
 	c.Delete("/profile/api/keys/" + id).AssertNotFound()
 
-	r.app.Client(t).Inertia("").Get("/profile/api").AssertRedirect("/login")
+	r.app.Client(t).Inertia("").Get("/profile").AssertRedirect("/login")
+	for prefix, want := range map[string]string{"": "/profile#api", "/pt-br": "/pt-br/profile#api"} {
+		r.app.Client(t).Get(prefix+"/profile/api").AssertStatus(http.StatusMovedPermanently).
+			AssertHeader("Location", want)
+	}
 }
 
 func TestKeysNameAndCap(t *testing.T) {
 	r := newKeyRig(t)
-	c := r.signIn("cap@example.com").WithHeader("Referer", "/profile/api")
+	c := r.signIn("cap@example.com").WithHeader("Referer", "/profile")
 
-	c.PostJSON("/profile/api/keys", map[string]any{"name": "   "}).AssertRedirect("/profile/api")
-	c.Get("/profile/api").AssertInertia("Developer/ApiKeys").HasProp("errors.name").HasProp("keys", 0)
+	c.PostJSON("/profile/api/keys", map[string]any{"name": "   "}).AssertRedirect("/profile")
+	c.Get("/profile").AssertInertia("Profile/Index").HasProp("errors.name").HasProp("apiKeys.keys", 0)
 
 	for i := range api.MaxLiveKeys {
 		r.create(c, "key "+strconv.Itoa(i))
 	}
 
-	c.PostJSON("/profile/api/keys", map[string]any{"name": "one too many"}).AssertRedirect("/profile/api")
-	c.Get("/profile/api").AssertInertia("Developer/ApiKeys").PropEquals("errors.name", "limit").
-		HasProp("keys", api.MaxLiveKeys)
+	c.PostJSON("/profile/api/keys", map[string]any{"name": "one too many"}).AssertRedirect("/profile")
+	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("errors.name", "limit").
+		HasProp("apiKeys.keys", api.MaxLiveKeys)
 }
 
 func TestSecurity_A07_ApiKeyHashedAtRest(t *testing.T) {
