@@ -104,9 +104,10 @@ export default function Footer() {
 									</Link>
 								</li>
 								<li>
-									<Link href="/docs/reference" className={linkClass}>
+									{/* Scalar is outside Inertia: a <Link> would render its HTML in the error modal. */}
+									<a href="/docs/reference" className={linkClass}>
 										{t("footer.apiReference")}
-									</Link>
+									</a>
 								</li>
 							</ul>
 						</div>

@@ -67,3 +67,20 @@ test("CoverThumb prefixes the shared coversBase on both renditions", () => {
 	);
 	page.coversBase = "";
 });
+
+test("non-Inertia routes are never linked with an Inertia <Link>", async () => {
+	const { readFileSync, readdirSync } = await import("node:fs");
+	const { join } = await import("node:path");
+	const walk = (dir: string): string[] =>
+		readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+			e.isDirectory()
+				? walk(join(dir, e.name))
+				: /\.tsx$/.test(e.name) && !/\.test\./.test(e.name)
+					? [join(dir, e.name)]
+					: [],
+		);
+	const offenders = walk(join(__dirname, "..")).filter((f) =>
+		/<Link[^>]*href=["'{`]+\/?(docs\/reference|api\/|auth\/)/.test(readFileSync(f, "utf8")),
+	);
+	expect(offenders).toEqual([]);
+});
