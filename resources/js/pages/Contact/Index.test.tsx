@@ -6,6 +6,7 @@ import type { User } from "../../types";
 import Contact from "./Index";
 
 let user: User | null = null;
+let outcome: "onSuccess" | "onError" | null = null;
 
 vi.mock("@inertiajs/react", () => ({
 	Head: () => null,
@@ -18,7 +19,9 @@ vi.mock("@inertiajs/react", () => ({
 			processing: false,
 			setData: (key: keyof T, value: unknown) =>
 				setDataState((d) => ({ ...d, [key]: value })),
-			post: () => undefined,
+			post: (_url: string, opts: Record<string, () => void>) => {
+				if (outcome) opts[outcome]();
+			},
 			reset: () => undefined,
 		};
 	},
@@ -29,6 +32,7 @@ vi.mock("../../lib/useT", () => ({ useT: () => (key: string) => key }));
 beforeEach(() => {
 	cleanup();
 	user = null;
+	outcome = null;
 });
 
 const input = (name: string): HTMLInputElement =>
@@ -67,4 +71,22 @@ test("the honeypot stays hidden from assistive tech and the form is narrow", () 
 
 	expect(input("website").closest("[aria-hidden='true']")).not.toBeNull();
 	expect((container.firstElementChild as HTMLElement).className).toContain("max-w-xl");
+});
+
+test("the feedback sits below the send button, green on success and red on error", () => {
+	const { container } = render(<Contact topics={["question"]} formToken="tok" />);
+	const submit = screen.getByRole("button", { name: "contact.submit" });
+	const below = () => submit.nextElementSibling as HTMLElement;
+
+	outcome = "onSuccess";
+	fireEvent.submit(container.querySelector("form") as HTMLFormElement);
+	expect(below().textContent).toBe("contact.sent");
+	expect(below().className).toContain("bg-green-500");
+	expect(below().className).toContain("text-black");
+
+	outcome = "onError";
+	fireEvent.submit(container.querySelector("form") as HTMLFormElement);
+	expect(below().getAttribute("role")).toBe("alert");
+	expect(below().className).toContain("bg-red-500");
+	expect(container.querySelector("h1")?.nextElementSibling?.tagName).toBe("FORM");
 });

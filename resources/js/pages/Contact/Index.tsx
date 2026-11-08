@@ -19,7 +19,7 @@ interface Props {
 export default function Index({ topics, formToken }: Props) {
 	const t = useT();
 	const l = useLocalized();
-	const [sent, setSent] = useState(false);
+	const [result, setResult] = useState<"sent" | "error" | null>(null);
 	// Signed in: the server takes the sender from the session, so the fields only show who will be answered.
 	const user = usePage<SharedProps>().props.auth?.user ?? null;
 	const form = useForm({
@@ -35,12 +35,14 @@ export default function Index({ topics, formToken }: Props) {
 
 	const submit = (e: FormEvent) => {
 		e.preventDefault();
+		setResult(null);
 		form.post(l("/contact"), {
 			headers: turnstile.headers(),
 			onSuccess: () => {
-				setSent(true);
+				setResult("sent");
 				form.reset("message");
 			},
+			onError: () => setResult("error"),
 			onFinish: () => turnstile.reset(),
 		});
 	};
@@ -49,7 +51,6 @@ export default function Index({ topics, formToken }: Props) {
 		<div className="mx-auto w-full max-w-xl">
 			<Head title={t("contact.metaTitle")} />
 			<h1 className="mb-2 text-2xl font-semibold">{t("contact.title")}</h1>
-			{sent && <p role="status">{t("contact.sent")}</p>}
 			<form onSubmit={submit} className="space-y-4">
 				<Field
 					label={t(user?.nickname ? "auth.fields.nickname" : "contact.name")}
@@ -128,6 +129,14 @@ export default function Index({ topics, formToken }: Props) {
 				>
 					{t("contact.submit")}
 				</button>
+				{result && (
+					<p
+						role={result === "error" ? "alert" : "status"}
+						className={`mx-auto w-fit rounded-md px-4 py-2 text-center font-medium text-black ${result === "error" ? "bg-red-500" : "bg-green-500"}`}
+					>
+						{t(result === "error" ? "auth.errors.generic" : "contact.sent")}
+					</p>
+				)}
 			</form>
 		</div>
 	);
