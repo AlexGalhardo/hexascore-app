@@ -13,7 +13,7 @@ export default function Flash({
 	position = "bottom",
 }: {
 	message: string;
-	kind: "status" | "error";
+	kind: "status" | "warning" | "error";
 	position?: "top" | "bottom";
 }) {
 	const t = useT();
@@ -34,17 +34,22 @@ export default function Flash({
 
 	if (!open) return null;
 
-	const tone = kind === "error" ? "border-danger text-danger" : "border-border text-fg";
+	// The one place toasts are styled: vibrant background, black text, big bold uppercase.
+	const tone = {
+		status: "bg-green-500",
+		warning: "bg-yellow-400",
+		error: "bg-red-500",
+	}[kind];
 
 	return (
 		// biome-ignore lint/a11y/noStaticElementInteractions: hover and focus only pause the countdown, nothing is activated here
 		<div
-			role={kind === "error" ? "alert" : "status"}
+			role={kind === "status" ? "status" : "alert"}
 			onMouseEnter={() => setPaused(true)}
 			onMouseLeave={() => setPaused(false)}
 			onFocus={() => setPaused(true)}
 			onBlur={() => setPaused(false)}
-			className={`fixed right-4 ${position === "top" ? "top-20" : "bottom-4"} z-[70] flex max-w-sm items-start gap-3 rounded-md border bg-surface px-4 py-3 shadow-lg ${tone}`}
+			className={`fixed right-4 ${position === "top" ? "top-20" : "bottom-4"} z-[70] flex max-w-md items-start gap-3 rounded-md px-5 py-4 text-lg font-extrabold tracking-wide text-black uppercase shadow-xl ${tone}`}
 		>
 			<p>{message}</p>
 			<button

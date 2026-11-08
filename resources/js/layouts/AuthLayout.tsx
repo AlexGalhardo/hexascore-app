@@ -36,7 +36,9 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 		[],
 	);
 
-	const flash = page.flash as { status?: string; success?: string; error?: string } | undefined;
+	const flash = page.flash as
+		| { status?: string; success?: string; warning?: string; error?: string }
+		| undefined;
 	const success = flash?.success ?? flash?.status;
 
 	return (
@@ -54,6 +56,9 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 			</main>
 			{typeof success === "string" && (
 				<Flash message={success} kind="status" position="bottom" />
+			)}
+			{typeof flash?.warning === "string" && (
+				<Flash message={flash.warning} kind="warning" position="bottom" />
 			)}
 			{typeof flash?.error === "string" && (
 				<Flash message={flash.error} kind="error" position="bottom" />
