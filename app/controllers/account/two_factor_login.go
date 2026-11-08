@@ -1,10 +1,10 @@
 package account
 
 import (
-	"github.com/AlexGalhardo/vukem/i18n"
 	"net/http"
 
 	"github.com/AlexGalhardo/vukem/auth"
+	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/web"
 
