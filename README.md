@@ -3,7 +3,7 @@
 <h1><strong><a href="https://hexascore.app" style="text-decoration: none" target="_blank">HexaScore.app</a></strong></h1>
 
 [![CI](https://github.com/AlexGalhardo/hexascore-app/actions/workflows/ci.yml/badge.svg)](https://github.com/AlexGalhardo/hexascore-app/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 [![Go 1.27.3](https://img.shields.io/badge/go-1.27.3-00ADD8?logo=go&logoColor=white)](go.mod)
 <a href="https://github.com/AlexGalhardo/hexascore-app/releases"><img src="https://img.shields.io/github/v/release/AlexGalhardo/hexascore-app?include_prereleases&label=version" alt="Version"></a>
 <a href="https://scorecard.dev/viewer/?uri=github.com/AlexGalhardo/hexascore-app"><img src="https://api.scorecard.dev/projects/github.com/AlexGalhardo/hexascore-app/badge" alt="OpenSSF Scorecard"></a>
@@ -63,12 +63,12 @@ The commit-msg hook enabled by the setup script checks the header locally, and c
 
 ## Code of conduct
 
-To keep the community welcoming to everyone, please review and follow the [Code of Conduct](.github/CODE_OF_CONDUCT.md).
+To keep the community welcoming to everyone, please review and follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Security vulnerabilities
 
-If you discover a security vulnerability, please follow the [security policy](.github/SECURITY.md) instead of opening a public issue.
+If you discover a security vulnerability, please follow the [security policy](SECURITY.md) instead of opening a public issue.
 
 ## License
 
-HexaScore is open source software released under the [MIT license](LICENSE).
+HexaScore is open source software released under the [MIT license](LICENSE.md).

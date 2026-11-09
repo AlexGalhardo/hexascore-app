@@ -65,8 +65,8 @@ The commit-msg hook checks the header locally and commitlint checks it in CI.
 ## Reporting bugs and security issues
 
 - Bugs and feature ideas: open a [GitHub issue](https://github.com/AlexGalhardo/hexascore-app/issues) with steps to reproduce.
-- Security vulnerabilities: do not open a public issue; follow [SECURITY.md](.github/SECURITY.md).
+- Security vulnerabilities: do not open a public issue; follow [SECURITY.md](SECURITY.md).
 
 ## License
 
-By contributing you agree that your contributions are licensed under the [MIT license](LICENSE).
+By contributing you agree that your contributions are licensed under the [MIT license](LICENSE.md).
