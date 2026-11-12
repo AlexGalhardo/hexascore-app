@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate": "cd ../.. && go run ./cmd/app codegen:client -prefix /app/v1 -o packages/app-client/src/api.ts",
+    "generate": "cd ../.. && go run ./cmd/app codegen:client -style throw -prefix /app/v1 -o packages/app-client/src/api.ts",
     "typecheck": "tsc --noEmit && bun test src/index.test.ts",
     "test": "bun test src/index.test.ts"
   }

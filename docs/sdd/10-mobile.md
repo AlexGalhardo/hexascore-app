@@ -203,7 +203,7 @@ The Go app serves `GET /.well-known/assetlinks.json` [E12] via `r.Get` ([V1] "De
 - `bun run --cwd apps/mobile typecheck && bun run --cwd apps/mobile lint` → 0 errors.
 - `bun run --cwd apps/mobile test` → pass, with coverage ≥ 80 % on `src/rating`, `src/queue` and `src/auth`.
 - `vukem openapi:export -prefix /app/v1 | diff - openapi/app-v1.json` → empty ([V2]).
-- `vukem codegen:client -prefix /app/v1 -o packages/app-client/src/api.ts && git diff --exit-code packages/app-client` → no diff, then typecheck green ([V3] "The command": runs in warmup mode, no secrets needed in CI).
+- `vukem codegen:client -style throw -prefix /app/v1 -o packages/app-client/src/api.ts && git diff --exit-code packages/app-client` → no diff, then typecheck green ([V3] "The command": runs in warmup mode, no secrets needed in CI).
 - `maestro test .maestro/smoke/` (local QA stack) → `login`, `rate-item`, `add-to-list`, `offline-rating` and `deep-link` pass.
 - `curl -si http://localhost:3000/.well-known/assetlinks.json` → 200 `application/json`, package `app.hexascore`, both fingerprints.
 - `curl -si -H "X-App-Version: 0.0.1" -H "Authorization: Bearer $T" http://localhost:3000/app/v1/me` → 426 `app-upgrade-required`.

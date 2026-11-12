@@ -232,7 +232,7 @@ Versioning: the app sends `X-App-Version`; responses carry `X-App-Min-Version`; 
 | Document | Export | Consumers |
 | --- | --- | --- |
 | `openapi/api-v1.json` | `vukem openapi:export -prefix /api/v1` | Scalar; `@hexascore/sdk` (`@hey-api/openapi-ts` 0.99.0, `legacy/sdks/ts/openapi-ts.config.ts`); `hexascore` (openapi-python-client 0.29.1, `legacy/sdks/python/config.yml`) |
-| `openapi/app-v1.json` | `vukem openapi:export -prefix /app/v1` | `vukem codegen:client -prefix /app/v1 -o packages/app-client/src/api.ts` → private `@hexascore/app-client` |
+| `openapi/app-v1.json` | `vukem openapi:export -prefix /app/v1` | `vukem codegen:client -style throw -prefix /app/v1 -o packages/app-client/src/api.ts` → private `@hexascore/app-client` |
 
 Serving: `vukem.ServeOpenAPIWith(app, r, "/api/v1/openapi.json", vukem.OpenAPIOptions{PathPrefix: "/api/v1", InProduction: true})`; app document not served in production; `apidocs.Serve(app, r, "/docs/reference", apidocs.Config{SpecURL: "/api/v1/openapi.json", InProduction: true})` (`https://vukem.dev/docs/rest-apis/openapi` "API reference UI"). Translated Scalar chrome (D-06) is [NOT IN VUKEM DOCS]; fallback is English Scalar inside a translated page shell. `operationId` = `Op.Name`, camelCase `<verb><Noun>` (`list|get|search|lookup|create|delete|test`), groups named `api.v1.` and `app.v1.` so each document reuses names without `ErrDuplicateOperationID` (`https://vukem.dev/docs/rest-apis/openapi` "OpenAPI"). Title `HexaScore API`, version `API_VERSION`, scheme `apiKey` declared via `vukem.WithOpenAPI`. SDK version = API version; npm publication follows `legacy/docs/sdk-publish-npm.md` (trusted publishing).
 

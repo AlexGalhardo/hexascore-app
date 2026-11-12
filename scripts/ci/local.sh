@@ -284,7 +284,7 @@ job_openapi() {
 	local out
 	out=$(W "$(mktemp)")
 	docker run --rm --network host -e APP_ENV=development -e "APP_KEY=$(app_key)" -e DATABASE_URL -e API_HOST- \
-		"$IMG" codegen:client -prefix /app/v1 -o - >"$out"
+		"$IMG" codegen:client -style throw -prefix /app/v1 -o - >"$out"
 	git diff --no-index --exit-code packages/app-client/src/api.ts "$out" || { rm -f "$out"; return 1; }
 	rm -f "$out"
 	bun run --filter @hexascore/app-client typecheck test
