@@ -327,7 +327,7 @@ jobs:
             -e APP_KEY \
             -e DATABASE_URL \
             -e API_HOST- \
-            hexascore:ci codegen:client -prefix /app/v1 -o - >"$out"
+            hexascore:ci codegen:client -style throw -prefix /app/v1 -o - >"$out"
           if ! git diff --no-index --exit-code packages/app-client/src/api.ts "$out"; then
             rm -f "$out"
             exit 1

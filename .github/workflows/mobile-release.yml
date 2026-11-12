@@ -73,7 +73,7 @@ jobs:
           export APP_ENV=development APP_KEY="base64:$(openssl rand -base64 32)"
           unset API_HOST
           out=$(mktemp)
-          go run ./cmd/app codegen:client -prefix /app/v1 -o - >"$out"
+          go run ./cmd/app codegen:client -style throw -prefix /app/v1 -o - >"$out"
           git diff --no-index --exit-code packages/app-client/src/api.ts "$out"
           bun run --filter @hexascore/app-client typecheck test
 
