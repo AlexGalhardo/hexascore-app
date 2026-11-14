@@ -23,7 +23,7 @@ services:
   # ROADMAP says 1.0.2; E-002 found 1.0.4 as the latest stable tag, so 1.0.4 is pinned.
   # Dev-only credentials, not secrets; they must never be reused outside this file.
   rustfs:
-    image: rustfs/rustfs:1.0.4
+    image: rustfs/rustfs:1.0.5
     command: ["/data"]
     environment:
       RUSTFS_ACCESS_KEY: hexascore
