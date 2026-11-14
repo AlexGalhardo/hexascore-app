@@ -37,7 +37,7 @@ RUN tags="$(sed 's/#.*//' .buildtags 2>/dev/null | tr -s ', \t\r\n' ',' | sed 's
 
 # Node runs the self-contained SSR bundle; the Go binary starts and restarts it
 # (SSR_SUPERVISE, app/ssr/supervisor.go). Exact tag: node 26.13.0 LTS.
-FROM node:26.13.0-alpine3.24@sha256:c6ad9e9c1d80f6eb607c26b4b0a132ff7a2344fad1c78ea3baa2a7d4c8de6d94
+FROM node:26.13.0-alpine3.24@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216
 # Release name for the X-Hexascore-Version header (release.yml passes the tag;
 # Railway builds fall back to RAILWAY_GIT_COMMIT_SHA at runtime).
 ARG APP_VERSION=
